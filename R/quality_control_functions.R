@@ -10,16 +10,17 @@
 #' @param data Dataframe where the countries ISO codes are. Must contain a
 #'   variable called \code{country} where the ISO code resides.
 #'
-#' @param folder Folder where the maps are stored or where they will be stored,
-#'   by default the working directory. It must be a character.
+#' @param folder Folder route where the maps are stored or where they will be
+#'   stored, by default the working directory. It must be a character object and
+#'   it must end without \code{/}.
 #'
 #' @return Maps are downloaded (if needed) and a summary is returned indicating
-#'   number of maps downlaoded and number of maps present in the map folder.
+#'   number of maps downloaded and number of maps present in the map folder.
 
 # START
 # function declaration
 
-download_maps <- function(data, folder) {
+download_maps <- function(data, folder = getwd()) {
 
   # STEP 0
   # Data checks
@@ -30,7 +31,12 @@ download_maps <- function(data, folder) {
   }
   #   if data contains a country variable
   if (is.null(data$country)) {
-    stop('There is no country variable in this dataset')
+    stop('There is no country variable in this dataset\n')
+  }
+  #   if folder exists and is accesible
+  if (!file_test("-d", folder)) {
+    stop('Destination folder does not exist.\n
+         Please create destination folder before using this function\n')
   }
 
   # STEP 0.a
@@ -61,7 +67,7 @@ download_maps <- function(data, folder) {
         # STEP 5
         # Dowload file
         download.file(url_name,
-                      paste(folder, file_name, sep = ''),
+                      paste(folder, '/', file_name, sep = ''),
                       cacheOK = FALSE)
 
         # STEP 5.a
