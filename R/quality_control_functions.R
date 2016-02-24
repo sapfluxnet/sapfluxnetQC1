@@ -22,7 +22,13 @@
 download_maps <- function(data, folder) {
 
   # STEP 0
-  # Check if data contains a country variable
+  # Data checks
+  #   if data is a data.frame
+  if (!is.data.frame(data)) {
+    stop('Provided data object is not a data.frame.\n
+         Please check if it is the correct object\n')
+  }
+  #   if data contains a country variable
   if (is.null(data$country)) {
     stop('There is no country variable in this dataset')
   }
@@ -73,4 +79,5 @@ download_maps <- function(data, folder) {
   print(paste(length(list.files(folder, pattern = '.rds')),
               'maps now in', folder), sep = ' ')
 
+# END function
 }
