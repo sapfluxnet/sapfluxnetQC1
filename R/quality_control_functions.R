@@ -16,6 +16,8 @@
 #'
 #' @return Maps are downloaded (if needed) and a summary is returned indicating
 #'   number of maps downloaded and number of maps present in the map folder.
+#'
+#' @export
 
 # START
 # function declaration
@@ -140,6 +142,8 @@ download_maps <- function(data, folder = getwd()) {
 #'   logical variable indicating those sites with wrong coordinates.
 #'
 #' @import ggplot2
+#'
+#' @export
 
 
 # START
@@ -263,4 +267,9 @@ check_coordinates <- function(data, maps_folder,
   }
 
   return(results)
+
+# END FUNCTION
 }
+
+################################################################################
+
