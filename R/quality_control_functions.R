@@ -178,8 +178,8 @@ check_coordinates <- function(data, maps_folder,
   # STEP 1
   # Initialise results object
   results <- data.frame(
-    latitude = double(),
     longitude = double(),
+    latitude = double(),
     country = character(0),
     site_name = character(0),
     is_inside_country = logical(0),
@@ -193,6 +193,20 @@ check_coordinates <- function(data, maps_folder,
 
     # STEP 3
     # Get coordinates and transform them in SpatialPoints object
-    sp_points <- sp::SpatialPoints()
+    sp_points <- sp::SpatialPoints(
+      data[i, c('longitude', 'latitude')],
+      proj4string = sp::CRS(sp::proj4string(map_data))
+    )
+
+    # STEP 4
+    # Update results object, including the output of rgeos::gContains
+    res_tmp <- data.frame(
+      longitude = data$longitude[i],
+      latitude = data$latitude[i],
+      country = data$country[i],
+      site_name = site_name[i],
+      is_inside_country = rgeos::gContains(map_data, sp_points),
+      stringsAsFactors = FALSE
+    )
   }
 }
