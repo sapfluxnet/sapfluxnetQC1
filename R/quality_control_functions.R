@@ -129,8 +129,8 @@ download_maps <- function(data, folder = getwd()) {
 #'   working directory. It must be a character object and it must end
 #'   without \code{/}.
 #'
-#' @param plot Logical indicating if plots for coordinate are created and saved.
-#'   By default, plot are not saved.
+#' @param plot Logical indicating if plots for coordinate are created and saved
+#'   in the working directory. By default, plot are not saved.
 #'
 #' @param text_report Logical indicating if a text report is showed in the
 #'   console after checking coordinates. By default, a report is showed in the
@@ -138,6 +138,8 @@ download_maps <- function(data, folder = getwd()) {
 #'
 #' @return A data frame containing country, site name and is_inside_country
 #'   logical variable indicating those sites with wrong coordinates.
+#'
+#' @import ggplot2
 
 
 # START
@@ -208,5 +210,45 @@ check_coordinates <- function(data, maps_folder,
       is_inside_country = rgeos::gContains(map_data, sp_points),
       stringsAsFactors = FALSE
     )
+
+    results <- rbind(results, res_tmp)
+
+    # STEP 5
+    # Create and saving the plot if plot = TRUE and is_inside_country = FALSE
+
+    if (plot && !res_tmp$is_inside_country[1]) {
+      # 5.1 map data in adequate format to be able to plot
+      plot_data <- broom::tidy(map_data)
+      # 5.2 ggplot2 object
+      plot_map <- ggplot(plot_data, aes(x = long, y = lat)) +
+        geom_polygon(aes(group = group)) +
+        geom_point(aes(x = longitude, y = latitude),
+                   data = results[i,], size = 2, color = 'red', alpha = 0.7) +
+        coord_map() +
+        labs(title = paste(results[i, c('country')],
+                           results[i, c('site_name')], sep = ' - '))
+      # 5.3 see plot
+      print(plot_map)
+      # 5.4 save plot in working directory
+      ggsave(filename = paste(results[i, c('country')],
+                              results[i, c('site_name')], 'pdf', sep = '.'),
+             plot = plot_map, width = 6, height = 4, units = 'cm')
+    }
+  }
+
+  # STEP 6
+  # Create a console report with message if text_report is TRUE
+
+  if (text_report) {
+
+    # 6.1 Sum of wrong, correct and total coordinates checked
+    wrong_coordinates <- sum(!results$is_inside_country, na.rm = TRUE)
+    correct_coordinates <- sum(results$is_inside_country, na.rm = TRUE)
+    total_coordinates <- wrong_coordinates + correct_coordinates
+
+    # 6.2 messages
+    message(wrong_coordinates, ' wrong coordinates in data')
+    message(correct_coordinates, ' correct coordinates in data')
+    message(total_coordinates, ' coordinates checked')
   }
 }

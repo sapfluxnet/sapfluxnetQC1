@@ -14,8 +14,8 @@ site name variables must be present in the data object.}
 working directory. It must be a character object and it must end
 without \code{/}.}
 
-\item{plot}{Logical indicating if plots for coordinate are created and saved.
-By default, plot are not saved.}
+\item{plot}{Logical indicating if plots for coordinate are created and saved
+in the working directory. By default, plot are not saved.}
 
 \item{text_report}{Logical indicating if a text report is showed in the
 console after checking coordinates. By default, a report is showed in the
