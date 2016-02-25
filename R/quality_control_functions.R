@@ -65,25 +65,45 @@ download_maps <- function(data, folder = getwd()) {
                           sep = '')
 
         # STEP 5
-        # Dowload file
-        download.file(url_name,
-                      paste(folder, '/', file_name, sep = ''),
-                      cacheOK = FALSE)
+        # Dowload file (In case of download error, indicate it and
+        # try to skip to the next country)
+        possibleError <- tryCatch({
+          download.file(url_name,
+                        paste(folder, '/', file_name, sep = ''),
+                        cacheOK = FALSE)
+          # STEP 5.a
+          # Update downloaded maps count
+          downloaded_maps <- downloaded_maps + 1
+        },
+        error = function(e) {
+          message('Download for ', file_name,
+                  ' failed, check if ISO code are correct and/or if
+                  network connection is active
+                  An empty file has been created with the bad iso code.')
+        },
+        warning = function(e) {
+          message('Download for ', file_name,
+                  ' failed, check if ISO code are correct and/or if
+                  network connection is active
+                  An empty file has been created with the bad iso code.')
+        }
+        )
 
-        # STEP 5.a
-        # Update downloaded maps count
-        downloaded_maps <- downloaded_maps + 1
+        if (inherits(possibleError, "error")) {
+          next
+        }
       }
     }
   }
 
   # STEP 6
   # Return a summary of downloaded maps and existent maps
-  print(paste(existent_maps, 'already downloaded and saved in', folder),
-        sep = ' ')
-  print(paste(downloaded_maps, 'new maps downloaded'), sep = ' ')
-  print(paste(length(list.files(folder, pattern = '.rds')),
-              'maps now in', folder), sep = ' ')
+  message(existent_maps, ' maps already downloaded and saved in ', folder)
+  message(downloaded_maps, ' new maps downloaded')
+  message(length(list.files(folder, pattern = '.rds')) - (existent_maps + downloaded_maps),
+          ' empty maps created due to download error')
+  message(length(list.files(folder, pattern = '.rds')),
+          ' maps now in ', folder)
 
-# END function
+  # END function
 }
