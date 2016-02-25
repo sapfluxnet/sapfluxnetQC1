@@ -4,18 +4,19 @@
 \alias{download_maps}
 \title{Download maps for countries included in the database}
 \usage{
-download_maps(data, folder)
+download_maps(data, folder = getwd())
 }
 \arguments{
-\item{data}{Dataframe where the countries ISO codes are. Must contain a
+\item{data}{Data frame where the countries ISO codes are. Must contain a
 variable called \code{country} where the ISO code resides.}
 
-\item{folder}{Folder where the maps are stored or where they will be stored,
-by default the working directory. It must be a character.}
+\item{folder}{Folder route where the maps are stored or where they will be
+stored, by default the working directory. It must be a character object and
+it must end without \code{/}.}
 }
 \value{
 Maps are downloaded (if needed) and a summary is returned indicating
-  number of maps downlaoded and number of maps present in the map folder.
+  number of maps downloaded and number of maps present in the map folder.
 }
 \description{
 \code{download_maps} fetch maps from \url{http://www.gadm.org/}.
@@ -23,5 +24,8 @@ Maps are downloaded (if needed) and a summary is returned indicating
 \details{
 This function fetch maps from \url{http://www.gadm.org/} if the map it's not
 already present in the maps folder (by default, the working directory).
+}
+\seealso{
+Other Quality.Check.Functions: \code{\link{check_coordinates}}
 }
 

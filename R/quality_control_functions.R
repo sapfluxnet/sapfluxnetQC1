@@ -7,7 +7,7 @@
 #'
 #' @family Quality Check Functions
 #'
-#' @param data Dataframe where the countries ISO codes are. Must contain a
+#' @param data Data frame where the countries ISO codes are. Must contain a
 #'   variable called \code{country} where the ISO code resides.
 #'
 #' @param folder Folder route where the maps are stored or where they will be
@@ -106,4 +106,43 @@ download_maps <- function(data, folder = getwd()) {
           ' maps now in ', folder)
 
   # END function
+}
+
+################################################################################
+
+#' Site coordinates checking
+#'
+#' \code{check_coordinates} verifies if provided coordinates are within
+#' country declared in metadata form.
+#'
+#' This function uses maps previously downloaded with
+#' \code{\link{download_maps}} to check if the provided coordinates are within
+#' the country limits. It only creates a data frame containing country, site
+#' and a logical variable indicating if coordinates are correct.
+#'
+#' @family Quality Check Functions
+#'
+#' @param data Data frame with data. At least, longitude, latitude, country and
+#'   site name variables must be present in the data object.
+#'
+#' @param folder Folder route where the maps are stored, by default the working
+#'   directory. It must be a character object and it must end without \code{/}.
+#'
+#' @param plot Logical indicating if plots for coordinate are created and saved.
+#'   By default, plot are not saved.
+#'
+#' @param text_report Logical indicating if a text report is showed in the
+#'   console after checking coordinates. By default, a report is showed in the
+#'   console.
+#'
+#' @return A data frame containing country, site name and is_inside_country
+#'   logical variable indicating those sites with wrong coordinates.
+
+
+# START
+# Function declaration
+
+check_coordinates <- function(data, folder, plot = FALSE, text_report = TRUE){
+
+
 }
