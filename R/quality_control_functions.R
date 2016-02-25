@@ -125,8 +125,9 @@ download_maps <- function(data, folder = getwd()) {
 #' @param data Data frame with data. At least, longitude, latitude, country and
 #'   site name variables must be present in the data object.
 #'
-#' @param folder Folder route where the maps are stored, by default the working
-#'   directory. It must be a character object and it must end without \code{/}.
+#' @param maps_folder Folder route where the maps are stored, by default the
+#'   working directory. It must be a character object and it must end
+#'   without \code{/}.
 #'
 #' @param plot Logical indicating if plots for coordinate are created and saved.
 #'   By default, plot are not saved.
@@ -142,8 +143,56 @@ download_maps <- function(data, folder = getwd()) {
 # START
 # Function declaration
 
-check_coordinates <- function(data, folder, plot = FALSE, text_report = TRUE){
+check_coordinates <- function(data, maps_folder,
+                              plot = FALSE, text_report = TRUE){
 
   # STEP 0
   # Argument checks
+  #   if data is a data.frame
+  if (!is.data.frame(data)) {
+    stop('Provided data object is not a data.frame.\n
+         Please check if it is the correct object\n')
+  }
+  #   if data contains a longitude variable
+  if (is.null(data$longitude)) {
+    stop('There is no longitude variable in this dataset\n')
+  }
+  #   if data contains a latitude variable
+  if (is.null(data$latitude)) {
+    stop('There is no latitude variable in this dataset\n')
+  }
+  #   if data contains a country variable
+  if (is.null(data$country)) {
+    stop('There is no country variable in this dataset\n')
+  }
+  #   if data contains a site_name variable
+  if (is.null(data$site_name)) {
+    stop('There is no site_name variable in this dataset\n')
+  }
+  #   if folder exists and is accesible
+  if (!file_test("-d", folder)) {
+    stop('Destination folder does not exist.\n
+         Please create destination folder before using this function\n')
+  }
+
+  # STEP 1
+  # Initialise results object
+  results <- data.frame(
+    latitude = double(),
+    longitude = double(),
+    country = character(0),
+    site_name = character(0),
+    is_inside_country = logical(0),
+    stringsAsFactors = FALSE
+  )
+
+  # STEP 2
+  # Begin the for loop and read the map file
+  for (i in 1:length(data[,1])) {
+    map_data <- readRDS(paste(folder, '/', data$country, '_adm0.rds', sep = ''))
+
+    # STEP 3
+    # Get coordinates and transform them in SpatialPoints object
+    sp_points <- sp::SpatialPoints()
+  }
 }

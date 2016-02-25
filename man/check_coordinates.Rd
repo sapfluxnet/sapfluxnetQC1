@@ -4,14 +4,15 @@
 \alias{check_coordinates}
 \title{Site coordinates checking}
 \usage{
-check_coordinates(data, folder, plot = FALSE, text_report = TRUE)
+check_coordinates(data, maps_folder, plot = FALSE, text_report = TRUE)
 }
 \arguments{
 \item{data}{Data frame with data. At least, longitude, latitude, country and
 site name variables must be present in the data object.}
 
-\item{folder}{Folder route where the maps are stored, by default the working
-directory. It must be a character object and it must end without \code{/}.}
+\item{maps_folder}{Folder route where the maps are stored, by default the
+working directory. It must be a character object and it must end
+without \code{/}.}
 
 \item{plot}{Logical indicating if plots for coordinate are created and saved.
 By default, plot are not saved.}
