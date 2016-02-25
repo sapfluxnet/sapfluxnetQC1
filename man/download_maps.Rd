@@ -22,7 +22,7 @@ Maps are downloaded (if needed) and a summary is returned indicating
 \code{download_maps} fetch maps from \url{http://www.gadm.org/}.
 }
 \details{
-This function fetch maps from \url{http://www.gadm.org/} if the map it's not
+This function fetch maps from \url{http://www.gadm.org/} if the map is not
 already present in the maps folder (by default, the working directory).
 }
 \seealso{
