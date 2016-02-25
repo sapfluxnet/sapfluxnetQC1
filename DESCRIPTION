@@ -13,3 +13,7 @@ Imports:
     rgeos,
     ggplot2,
     broom
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
