@@ -23,7 +23,7 @@
 download_maps <- function(data, folder = getwd()) {
 
   # STEP 0
-  # Data checks
+  # Argument checks
   #   if data is a data.frame
   if (!is.data.frame(data)) {
     stop('Provided data object is not a data.frame.\n
@@ -144,5 +144,6 @@ download_maps <- function(data, folder = getwd()) {
 
 check_coordinates <- function(data, folder, plot = FALSE, text_report = TRUE){
 
-
+  # STEP 0
+  # Argument checks
 }
