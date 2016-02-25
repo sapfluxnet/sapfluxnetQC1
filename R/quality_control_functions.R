@@ -12,7 +12,7 @@
 #'
 #' @param folder Folder route where the maps are stored or where they will be
 #'   stored, by default the working directory. It must be a character object and
-#'   it must end without \code{/}.
+#'   it must end \bold{without} \code{/}.
 #'
 #' @return Maps are downloaded (if needed) and a summary is returned indicating
 #'   number of maps downloaded and number of maps present in the map folder.
@@ -127,7 +127,7 @@ download_maps <- function(data, folder = getwd()) {
 #'
 #' @param maps_folder Folder route where the maps are stored, by default the
 #'   working directory. It must be a character object and it must end
-#'   without \code{/}.
+#'   \bold{without} \code{/}.
 #'
 #' @param plot Logical indicating if plots for coordinate are created and saved
 #'   in the working directory. By default, plot are not saved.
@@ -153,28 +153,31 @@ check_coordinates <- function(data, maps_folder,
   #   if data is a data.frame
   if (!is.data.frame(data)) {
     stop('Provided data object is not a data.frame.\n
-         Please check if it is the correct object\n')
+         Please verify if it is the correct object\n')
   }
   #   if data contains a longitude variable
   if (is.null(data$longitude)) {
-    stop('There is no longitude variable in this dataset\n')
+    stop('There is no longitude variable in this dataset\n
+         Please verify if it is the correct data\n')
   }
   #   if data contains a latitude variable
   if (is.null(data$latitude)) {
-    stop('There is no latitude variable in this dataset\n')
+    stop('There is no latitude variable in this dataset\n
+         Please verify if it is the correct data\n')
   }
   #   if data contains a country variable
   if (is.null(data$country)) {
-    stop('There is no country variable in this dataset\n')
+    stop('There is no country variable in this dataset\n
+         Please verify if it is the correct data\n')
   }
   #   if data contains a site_name variable
   if (is.null(data$site_name)) {
-    stop('There is no site_name variable in this dataset\n')
+    stop('There is no site_name variable in this dataset\n
+         Please verify if it is the correct data\n')
   }
   #   if folder exists and is accesible
-  if (!file_test("-d", folder)) {
-    stop('Destination folder does not exist.\n
-         Please create destination folder before using this function\n')
+  if (!file_test("-d", maps_folder)) {
+    stop('Maps folder does not exist, please verify the folder provided')
   }
 
   # STEP 1
@@ -191,7 +194,14 @@ check_coordinates <- function(data, maps_folder,
   # STEP 2
   # Begin the for loop and read the map file
   for (i in 1:length(data[,1])) {
-    map_data <- readRDS(paste(folder, '/', data$country, '_adm0.rds', sep = ''))
+
+    map_data <- readRDS(paste(maps_folder, '/', data$country[i],
+                              '_adm0.rds', sep = ''))
+
+    # 2.1 message to indicate status of loop, to avoid confussion if it takes
+    #     a long time
+    message('Checking ', data$country[i], '-', data$site_name[i])
+
 
     # STEP 3
     # Get coordinates and transform them in SpatialPoints object
@@ -206,7 +216,7 @@ check_coordinates <- function(data, maps_folder,
       longitude = data$longitude[i],
       latitude = data$latitude[i],
       country = data$country[i],
-      site_name = site_name[i],
+      site_name = data$site_name[i],
       is_inside_country = rgeos::gContains(map_data, sp_points),
       stringsAsFactors = FALSE
     )
@@ -251,4 +261,6 @@ check_coordinates <- function(data, maps_folder,
     message(correct_coordinates, ' correct coordinates in data')
     message(total_coordinates, ' coordinates checked')
   }
+
+  return(results)
 }

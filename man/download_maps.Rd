@@ -12,7 +12,7 @@ variable called \code{country} where the ISO code resides.}
 
 \item{folder}{Folder route where the maps are stored or where they will be
 stored, by default the working directory. It must be a character object and
-it must end without \code{/}.}
+it must end \bold{without} \code{/}.}
 }
 \value{
 Maps are downloaded (if needed) and a summary is returned indicating

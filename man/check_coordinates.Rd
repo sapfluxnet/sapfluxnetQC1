@@ -12,7 +12,7 @@ site name variables must be present in the data object.}
 
 \item{maps_folder}{Folder route where the maps are stored, by default the
 working directory. It must be a character object and it must end
-without \code{/}.}
+\bold{without} \code{/}.}
 
 \item{plot}{Logical indicating if plots for coordinate are created and saved
 in the working directory. By default, plot are not saved.}
