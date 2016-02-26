@@ -12,7 +12,8 @@ Imports:
     sp,
     rgeos,
     ggplot2,
-    broom
+    broom,
+    magrittr
 Suggests:
     knitr,
     rmarkdown

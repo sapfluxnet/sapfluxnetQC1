@@ -16,11 +16,13 @@ are explained. This workflow involves the use of the functions developed in the
 ## Data retrieving
 
 Data is located in a SQL database (a MySQL database at the time of writing), so
-the first thing to do is retrieve the data:
+the first thing to do is retrieve the data using the `RMySQL` package:
 
 ```{r database_access, eval = FALSE}
 # Load libraries
-library(RMySQL)
+library(sapfluxnetr) # metadata QC functions
+library(RMySQL) # database access
+library(magrittr) # pipes to code more easily
 
 # Connect to the database to obtain site coordinates, country
 # and stand name.
@@ -39,61 +41,58 @@ res <- dbSendQuery(
 )
 
 # Fetch data into a data_frame
-data_check_coord = fetch(res, n=-1)
+data = fetch(res, n=-1)
 
 # Check data
-data_check_coord
+data
 
 # Close database connection and cleaning workspace
 dbDisconnect(mydb)
 rm(list = c('mydb', 'res'))
 ```
 
+In the database query, using `*` indicates that all the variables of the table
+are retrieved:
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+    'SELECT * FROM sfnform_metadataform'
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+Instead of all of them, we can select only those variables that we need:
 
-## Vignette Info
+    'SELECT longitude, latitude, country, site_name 
+     FROM sfnform_metadataform'
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+In the last example, only longitude, latitude, country and site_name are
+retrieved.
 
-## Styles
+## Quality Control 1: Coordinates checking workflow
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+The first step in the metadata quality control is to verify if the provided
+coordinates are correct. For that, `sapfluxnetr` package offers two functions
+that used together return a report of possible coordinates errors:
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+  1. `download_maps`
+  
+  2. `check_coordinates`
 
-## Figures
+Using this functions is easy^[Especially if using `magrittr` pipes]:
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+```{r coord_check_wf, eval = FALSE}
+coord_report <- 
+  data %T>%   # with data
+  download_maps(folder = 'maps_folder_name') %>%    # download the maps
+  check_coordinates(maps_folder = 'maps_folder_name',
+                    plot = TRUE, text_report = TRUE)  # and finally, check coords
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+# View report
+coord_report
+
+# show only wrong coordinates
+library(dplyr)
+
+coord_report %>%
+  filter(!is_inside_country)
+
+# show only correct coordinates
+coord_report %>%
+  filter(is_inside_country)
 ```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
