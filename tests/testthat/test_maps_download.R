@@ -1,6 +1,6 @@
 library(sapfluxnetr)
 
-context('Argument checks')
+context('Maps argument checks')
 
 test_that('arguments error are correct', {
 
@@ -16,7 +16,7 @@ test_that('arguments error are correct', {
                  'Destination folder does not exist.')
 })
 
-context('Download')
+context('Maps Download')
 
 test_that('download works', {
 

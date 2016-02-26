@@ -4,7 +4,8 @@
 \alias{check_coordinates}
 \title{Site coordinates checking}
 \usage{
-check_coordinates(data, maps_folder, plot = FALSE, text_report = TRUE)
+check_coordinates(data, maps_folder = getwd(), plot = FALSE,
+  text_report = TRUE)
 }
 \arguments{
 \item{data}{Data frame with data. At least, longitude, latitude, country and

@@ -72,7 +72,7 @@ download_maps <- function(data, folder = getwd()) {
         possibleError <- tryCatch({
           download.file(url_name,
                         file.path(folder, file_name),
-                        cacheOK = FALSE)
+                        cacheOK = FALSE, quiet = TRUE)
           # STEP 5.a
           # Update downloaded maps count
           downloaded_maps <- downloaded_maps + 1
@@ -149,7 +149,7 @@ download_maps <- function(data, folder = getwd()) {
 # START
 # Function declaration
 
-check_coordinates <- function(data, maps_folder,
+check_coordinates <- function(data, maps_folder = getwd(),
                               plot = FALSE, text_report = TRUE){
 
   # STEP 0
@@ -244,8 +244,8 @@ check_coordinates <- function(data, maps_folder,
       # 5.3 see plot
       print(plot_map)
       # 5.4 save plot in working directory
-      ggsave(filename = paste(results[i, c('country')],
-                              results[i, c('site_name')], 'pdf', sep = '.'),
+      ggsave(filename = paste(results[i, c('country')], '_',
+                              results[i, c('site_name')], '.pdf', sep = ''),
              plot = plot_map, width = 6, height = 4, units = 'cm')
     }
   }
