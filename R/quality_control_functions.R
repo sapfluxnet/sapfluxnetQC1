@@ -71,7 +71,7 @@ download_maps <- function(data, folder = getwd()) {
         # try to skip to the next country)
         possibleError <- tryCatch({
           download.file(url_name,
-                        paste(folder, '/', file_name, sep = ''),
+                        file.path(folder, file_name),
                         cacheOK = FALSE)
           # STEP 5.a
           # Update downloaded maps count
@@ -199,8 +199,8 @@ check_coordinates <- function(data, maps_folder,
   # Begin the for loop and read the map file
   for (i in 1:length(data[,1])) {
 
-    map_data <- readRDS(paste(maps_folder, '/', data$country[i],
-                              '_adm0.rds', sep = ''))
+    file_name <- paste(data$country[i], '_adm0.rds', sep = '')
+    map_data <- readRDS(file.path(maps_folder, file_name))
 
     # 2.1 message to indicate status of loop, to avoid confussion if it takes
     #     a long time

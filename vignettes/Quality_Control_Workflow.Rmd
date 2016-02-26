@@ -96,3 +96,7 @@ coord_report %>%
 coord_report %>%
   filter(is_inside_country)
 ```
+
+With `plot = TRUE`, plots of wrong site coordinates are saved in the working
+directory and showed in the plot panel of RStudio. This can be convenient to
+check if the results are correct, and to help with the coordinates fixing step.
