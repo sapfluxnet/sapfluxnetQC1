@@ -273,3 +273,163 @@ check_coordinates <- function(data, maps_folder = getwd(),
 
 ################################################################################
 
+#' Coordinates sign test
+#'
+#' \code{coord_sign_test} is an internal function to test if site coordinates
+#' signs are interchanged. It's needed by \code{\link{fix_latlong_errors}}
+#' function.
+#'
+#' Country coordinates sign is established by this function and testing if
+#' provided site coordinates are correct is made
+#'
+#' @family Quality Check Functions
+#'
+#' @param data Data frame with data coming from \code{\link{check_coordinates}}
+#'   (with latitude, longitude, country and is_inside_country variables).
+#'
+#' @param maps_folder Folder route where the maps are stored, by default the
+#'   working directory. It must be a character object and it must end
+#'   \bold{without} \code{/}.
+#'
+#' @return Same data frame provided, with a two new columns, \code{lat_changed}
+#'   and \code{long_changed}, two logicals indicating if the coordinates are
+#'   sign exchanged
+
+# START
+# Function declaration
+
+coord_sign_test <- function(data, maps_folder) {
+
+  # STEP 0
+  # Arguments check
+  #   if data is a data.frame
+  if (!is.data.frame(data)) {
+    stop('Provided data object is not a data.frame.\n
+         Please verify if it is the correct object\n')
+  }
+  #   if data contains a longitude variable
+  if (is.null(data$longitude)) {
+    stop('There is no longitude variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+  #   if data contains a latitude variable
+  if (is.null(data$latitude)) {
+    stop('There is no latitude variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+  #   if data contains a country variable
+  if (is.null(data$country)) {
+    stop('There is no country variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+  #   if data contains a is_inside_country variable
+  if (is.null(data$is_inside_country)) {
+    stop('There is no is_inside_country variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+
+  # STEP 1
+  # Initialise result vectors, and start for loop
+  lat_changed <- logical()
+  long_changed <- logical()
+
+  for (i in 1:length(data[,1])) {
+
+    # STEP 2
+    # Check if is_inside_country is FALSE, and if it is, read the map data
+    if (!data$is_inside_country[i]) {
+      file_name <- paste(data$country[i], '_adm0.rds', sep = '')
+
+      # 2.1 map data is read and transformed to tidy format, to easy check signs
+      country_map <- broom::tidy(readRDS(file.path(maps_folder, file_name)))
+
+      # STEP 3
+      # Establish the main sign of country latitude and longitude
+
+      # 3.1 latitude
+      if (all(country_map$lat < 0)) {
+        country_lat <- 'negative'
+      } else {
+        if (all(country_map$lat >= 0)) {
+          country_lat <- 'positive'
+        } else {
+          country_lat <- 'mixed'
+        }
+      }
+
+      # 3.2 longitude
+      if (all(country_map$long < 0)) {
+        country_long <- 'negative'
+      } else {
+        if (all(country_map$long >= 0)) {
+          country_long <- 'positive'
+        } else {
+          country_long <- 'mixed'
+        }
+      }
+
+      # STEP 4
+      # Testing if provided coordinates are sign exchanged
+
+      # 4.1 latitude
+      if ( data_latitude[i] < 0) {
+        if (country_lat == 'positive') {
+          lat_changed <- c(lat_changed, TRUE)
+        }
+        if (country_lat == 'negative') {
+          lat_changed <- c(lat_changed, FALSE)
+        }
+        if (country_lat == 'mixed') {
+          lat_changed <- c(lat_changed, NA)
+        }
+      } else {
+        if (country_lat == 'positive') {
+          lat_changed <- c(lat_changed, FALSE)
+        }
+        if (country_lat == 'negative') {
+          lat_changed <- c(lat_changed, TRUE)
+        }
+        if (country_lat == 'mixed') {
+          lat_changed <- c(lat_changed, NA)
+        }
+      }
+
+      # 4.2 longitude
+      if ( data_longitude[i] < 0) {
+        if (country_long == 'positive') {
+          long_changed <- c(long_changed, TRUE)
+        }
+        if (country_long == 'negative') {
+          long_changed <- c(long_changed, FALSE)
+        }
+        if (country_long == 'mixed') {
+          long_changed <- c(long_changed, NA)
+        }
+      } else {
+        if (country_long == 'positive') {
+          long_changed <- c(long_changed, FALSE)
+        }
+        if (country_long == 'negative') {
+          long_changed <- c(long_changed, TRUE)
+        }
+        if (country_long == 'mixed') {
+          long_changed <- c(long_changed, NA)
+        }
+      }
+    } else {
+
+      # STEP 5
+      # If is_inside_country is not FALSE, coordinates are ok
+      lat_changed <- c(lat_changed, FALSE)
+      long_changed <- c(long_changed, FALSE)
+    }
+  }
+
+  # STEP 6
+  # Create the returned data frame
+  res_data <- cbind(data, lat_changed, long_changed)
+
+  # STEP 7
+  # Return the results
+  return(res_data)
+}
