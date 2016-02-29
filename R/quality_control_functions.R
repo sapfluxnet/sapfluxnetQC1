@@ -437,3 +437,34 @@ coord_sign_test <- function(data, maps_folder) {
 
 # END FUNCTION
 }
+
+
+################################################################################
+
+#' Fixing sign errors in coordinates
+#'
+#' \code{fix_latlong_errors} makes possible to fix known errors in latitude and
+#' longitude coordinates, as exchanged signs.
+#'
+#' This function calls to another internal functions that fixes different kinds
+#' of coordinates errors. At the moment, only exchanged signs in coordinates
+#' errors are allowed to be fixed.
+#' If \code{sign_errors = TRUE} is specified, \code{\link{coord_sign_test}} is
+#' called, fixing any sign exchange error present in the metadata.
+#'
+#' @family Quality Check Functions
+#'
+#' @param data Data frame with data coming from \code{\link{check_coordinates}}
+#'   (with latitude, longitude, country and is_inside_country variables).
+#'
+#' @param maps_folder Folder route where the maps are stored, by default the
+#'   working directory. It must be a character object and it must end
+#'   \bold{without} \code{/}.
+#'
+#' @param sign_errors Logical indicating if sign errors must be checked and
+#'   fixed. If TRUE (default), \code{\link{coord_sign_test}} is internally
+#'   called.
+#'
+#' @return Same data frame provided, with coordinates tested and fixed
+#'
+#' @export
