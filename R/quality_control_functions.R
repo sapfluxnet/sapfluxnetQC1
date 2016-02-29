@@ -294,6 +294,8 @@ check_coordinates <- function(data, maps_folder = getwd(),
 #' @return Same data frame provided, with a two new columns, \code{lat_changed}
 #'   and \code{long_changed}, two logicals indicating if the coordinates are
 #'   sign exchanged
+#'
+#' @export
 
 # START
 # Function declaration
@@ -372,7 +374,7 @@ coord_sign_test <- function(data, maps_folder) {
       # Testing if provided coordinates are sign exchanged
 
       # 4.1 latitude
-      if ( data_latitude[i] < 0) {
+      if ( data$latitude[i] < 0) {
         if (country_lat == 'positive') {
           lat_changed <- c(lat_changed, TRUE)
         }
@@ -395,7 +397,7 @@ coord_sign_test <- function(data, maps_folder) {
       }
 
       # 4.2 longitude
-      if ( data_longitude[i] < 0) {
+      if ( data$longitude[i] < 0) {
         if (country_long == 'positive') {
           long_changed <- c(long_changed, TRUE)
         }
@@ -432,4 +434,6 @@ coord_sign_test <- function(data, maps_folder) {
   # STEP 7
   # Return the results
   return(res_data)
+
+# END FUNCTION
 }
