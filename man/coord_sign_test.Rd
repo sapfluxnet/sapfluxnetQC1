@@ -4,7 +4,7 @@
 \alias{coord_sign_test}
 \title{Coordinates sign test}
 \usage{
-coord_sign_test(data, maps_folder)
+coord_sign_test(data, maps_folder = getwd())
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{check_coordinates}}
@@ -30,6 +30,7 @@ provided site coordinates are correct is made
 }
 \seealso{
 Other Quality.Check.Functions: \code{\link{check_coordinates}},
-  \code{\link{download_maps}}
+  \code{\link{download_maps}},
+  \code{\link{fix_latlong_errors}}
 }
 

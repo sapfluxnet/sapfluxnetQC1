@@ -3,4 +3,5 @@
 export(check_coordinates)
 export(coord_sign_test)
 export(download_maps)
+export(fix_latlong_errors)
 import(ggplot2)

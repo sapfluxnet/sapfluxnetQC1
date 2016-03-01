@@ -300,7 +300,7 @@ check_coordinates <- function(data, maps_folder = getwd(),
 # START
 # Function declaration
 
-coord_sign_test <- function(data, maps_folder) {
+coord_sign_test <- function(data, maps_folder = getwd()) {
 
   # STEP 0
   # Arguments check
@@ -446,11 +446,11 @@ coord_sign_test <- function(data, maps_folder) {
 #' \code{fix_latlong_errors} makes possible to fix known errors in latitude and
 #' longitude coordinates, as exchanged signs.
 #'
-#' This function calls to another internal functions that fixes different kinds
-#' of coordinates errors. At the moment, only exchanged signs in coordinates
-#' errors are allowed to be fixed.
+#' This function calls to other internal functions in order to fix different
+#' kinds of coordinates errors. At the moment, only exchanged signs in
+#' coordinates errors are allowed to be fixed.
 #' If \code{sign_errors = TRUE} is specified, \code{\link{coord_sign_test}} is
-#' called, fixing any sign exchange error present in the metadata.
+#' called to establish possible sign error and, if any, they are fixed.
 #'
 #' @family Quality Check Functions
 #'
@@ -468,3 +468,66 @@ coord_sign_test <- function(data, maps_folder) {
 #' @return Same data frame provided, with coordinates tested and fixed
 #'
 #' @export
+
+# START
+# Function declaration
+fix_latlong_errors <- function(data, maps_folder, sign_errors = TRUE) {
+
+  # STEP 0
+  # Argument checks
+  #   if data is a data.frame
+  if (!is.data.frame(data)) {
+    stop('Provided data object is not a data.frame.\n
+         Please verify if it is the correct object\n')
+  }
+  #   if data contains a longitude variable
+  if (is.null(data$longitude)) {
+    stop('There is no longitude variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+  #   if data contains a latitude variable
+  if (is.null(data$latitude)) {
+    stop('There is no latitude variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+  #   if data contains a country variable
+  if (is.null(data$country)) {
+    stop('There is no country variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+  #   if data contains a is_inside_country variable
+  if (is.null(data$is_inside_country)) {
+    stop('There is no is_inside_country variable in this dataset\n
+         Please verify if it is the correct data\n')
+  }
+
+  # STEP 1
+  # Initialising results objects
+  results <- data
+
+  # STEP 2
+  # Fixing sign errors if sign_errors = TRUE
+  if(sign_errors) {
+
+    # 2.1 Are signs interchanged?
+    sign_test_data <- coord_sign_test(data, maps_folder)
+
+    # 2.2 Fix them if they are
+    # latitude
+    results$latitude[which(sign_test_data$lat_changed == TRUE)] <-
+      results$latitude[which(sign_test_data$lat_changed == TRUE)] * (-1)
+    # longitude
+    results$longitude[which(sign_test_data$long_changed == TRUE)] <-
+      results$longitude[which(sign_test_data$long_changed == TRUE)] * (-1)
+  }
+
+  # STEP 3 to STEP n
+  # Here will appear other functions to fix other kind of coordinates errors
+
+  # FINAL STEP
+  # Returning the results
+
+  return(results)
+
+# END FUNCTION
+}
