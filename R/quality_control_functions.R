@@ -512,13 +512,22 @@ fix_latlong_errors <- function(data, maps_folder, sign_errors = TRUE) {
     # 2.1 Are signs interchanged?
     sign_test_data <- coord_sign_test(data, maps_folder)
 
-    # 2.2 Fix them if they are
+    # 2.2 Fix them if they are (multiply by -1)
     # latitude
     results$latitude[which(sign_test_data$lat_changed == TRUE)] <-
       results$latitude[which(sign_test_data$lat_changed == TRUE)] * (-1)
     # longitude
     results$longitude[which(sign_test_data$long_changed == TRUE)] <-
       results$longitude[which(sign_test_data$long_changed == TRUE)] * (-1)
+
+    # 2.3 Console output indicating fixes and no-fixes
+    message(sum(sign_test_data$lat_changed == TRUE, na.rm = TRUE),
+            ' latitude sign errors fixed.\n',
+            sum(sign_test_data$long_changed == TRUE, na.rm = TRUE),
+            ' longitude sign errors fixed.\n',
+            sum(is.na(sign_test_data$lat_changed)) +
+              sum(is.na(sign_test_data$long_changed)),
+            ' unable to fix due to country borders sharing positive and negative coordinates.\n')
   }
 
   # STEP 3 to STEP n
