@@ -533,9 +533,8 @@ fix_latlong_errors <- function(data, maps_folder, sign_errors = TRUE) {
   # STEP 3 to STEP n
   # Here will appear other functions to fix other kind of coordinates errors
 
-  # FINAL STEP
+  # n+1 STEP
   # Returning the results
-
   return(results)
 
 # END FUNCTION
