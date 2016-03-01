@@ -280,7 +280,19 @@ check_coordinates <- function(data, maps_folder = getwd(),
 #' function.
 #'
 #' Country coordinates sign is established by this function and testing if
-#' provided site coordinates are correct is made
+#' provided site coordinates are correct is made.
+#'
+#' @section Special countries:
+#' There are special countries where border coordinates for longitude, latitude
+#' or both have negative and positive values. In this case, the normal approach
+#' of \code{coord_sign_test} is not appropriate, and several tests involving
+#' the internal use of \code{\link{check_coordinates}} must be made. If
+#' \code{special_countries = TRUE} is specified, then tests are made trying to
+#' dilucidate if only a change in the sign of one, latitude or longitude, is
+#' needed or, in the contrary, changing both of them is needed. There is one
+#' case that can not be covered by this approach: when changing sign of one of
+#' the coordinates \bold{AND} changing both coordinates seem to fix the issue,
+#' as the correct option can not be assured.
 #'
 #' @family Quality Check Functions
 #'
@@ -291,6 +303,10 @@ check_coordinates <- function(data, maps_folder = getwd(),
 #'   working directory. It must be a character object and it must end
 #'   \bold{without} \code{/}.
 #'
+#' @param special_countries Logical indicating if the special approach to
+#'   countries having positive and negative coordinates must be used. See
+#'   \emph{Special countries} section for details.
+#'
 #' @return Same data frame provided, with a two new columns, \code{lat_changed}
 #'   and \code{long_changed}, two logicals indicating if the coordinates are
 #'   sign exchanged
@@ -300,7 +316,8 @@ check_coordinates <- function(data, maps_folder = getwd(),
 # START
 # Function declaration
 
-coord_sign_test <- function(data, maps_folder = getwd()) {
+coord_sign_test <- function(data, maps_folder = getwd(),
+                            special_countries = FALSE) {
 
   # STEP 0
   # Arguments check
@@ -432,12 +449,77 @@ coord_sign_test <- function(data, maps_folder = getwd()) {
   res_data <- cbind(data, lat_changed, long_changed)
 
   # STEP 7
+  # Special countries approach
+  if (special_countries) {
+
+    # 7.1 Start for loop and check if lat_changed or long_changed is NA
+    for (j in 1:length(res_data[,1])) {
+      if (is.na(res_data$lat_changed[j] || is.na(res_data$long_changed[j]))) {
+
+        # 7.2 data frame to use check_coordinates
+        check_data_long <- data.frame(
+          longitude = res_data$longitude[j] * -1,
+          latitude = res_data$longitude[j],
+          country = res_data$country[j],
+          site_name = res_data$site_name[j]
+        )
+
+        check_data_lat <- data.frame(
+          longitude = res_data$longitude[j],
+          latitude = res_data$longitude[j] * -1,
+          country = res_data$country[j],
+          site_name = res_data$site_name[j]
+        )
+
+        check_data_both <- data.frame(
+          longitude = res_data$longitude[j] * -1,
+          latitude = res_data$longitude[j] * -1,
+          country = res_data$country[j],
+          site_name = res_data$site_name[j]
+        )
+
+        # 7.3 coordinates check
+        sp_co_long <- check_coordinates(check_data_long, maps_folder,
+                                        plot = FALSE,
+                                        text_report = FALSE)$is_inside_country
+        sp_co_lat <- check_coordinates(check_data_lat, maps_folder,
+                                        plot = FALSE,
+                                        text_report = FALSE)$is_inside_country
+        sp_co_both <- check_coordinates(check_data_both, maps_folder,
+                                        plot = FALSE,
+                                        text_report = FALSE)$is_inside_country
+
+        # 7.4 Si both y long o lat son true, parate y descansa
+        # si solo long o lat are true, make the changes in the lat_changed o
+        # long_changed para reflejarlo
+
+      }
+    }
+  }
+
+  # STEP 8
   # Return the results
   return(res_data)
 
 # END FUNCTION
 }
 
+################################################################################
+
+#' Fixing sign errors when country has positive and negative lat/long coordinates
+#'
+#' \code{coord_sign_posneg_test} complements \code{\link{coord_sign_test}} for
+#' those countries with positive and negative coordinates in longitude, latitude
+#' or both (See details about limitations in this approach).
+#'
+#' This function must be launched after \code{\link{coord_sign_test}}, as it
+#' relies in columns (\code{lat_changed} and \code{long_changed}) created by
+#' this function. Also, it uses \code{\link{check_coordinates}} function trying
+#' to dilucidate if only a change in the sign of one, latitude or longitude, is
+#' needed or, on the contrary, it needs changing both of them.
+#' There is one case that can not be covered by this approach: when changing
+#' sign of one of the coordinates \bold{AND} changing both coordinates seem to
+#' fix the issue, as the correct option can not be assured.
 
 ################################################################################
 

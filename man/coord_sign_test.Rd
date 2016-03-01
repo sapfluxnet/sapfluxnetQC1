@@ -13,6 +13,10 @@ coord_sign_test(data, maps_folder = getwd())
 \item{maps_folder}{Folder route where the maps are stored, by default the
 working directory. It must be a character object and it must end
 \bold{without} \code{/}.}
+
+\item{special_countries}{Logical indicating if the special approach to
+countries having positive and negative coordinates must be used. See
+\emph{Special countries} section for details.}
 }
 \value{
 Same data frame provided, with a two new columns, \code{lat_changed}
@@ -26,7 +30,20 @@ function.
 }
 \details{
 Country coordinates sign is established by this function and testing if
-provided site coordinates are correct is made
+provided site coordinates are correct is made.
+}
+\section{Special countries}{
+
+There are special countries where border coordinates for longitude, latitude
+or both have negative and positive values. In this case, the normal approach
+of \code{coord_sign_test} is not appropriate, and several tests involving
+the internal use of \code{\link{check_coordinates}} must be made. If
+\code{special_countries = TRUE} is specified, then tests are made trying to
+dilucidate if only a change in the sign of one, latitude or longitude, is
+needed or, in the contrary, changing both of them is needed. There is one
+case that can not be covered by this approach: when changing sign of one of
+the coordinates \bold{AND} changing both coordinates seem to fix the issue,
+as the correct option can not be assured.
 }
 \seealso{
 Other Quality.Check.Functions: \code{\link{check_coordinates}},
