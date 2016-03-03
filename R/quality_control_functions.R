@@ -459,16 +459,24 @@ coord_sign_test <- function(data, maps_folder = getwd(),
       long_na <- is.na(res_data$long_changed[j])
 
       # 7.2 CASE 1 only one changed
-
+      # 7.2.1 data frame
       if (lat_na && !long_na) {
 
-        # 7.2.1 data frame
-        check_data_lat <- data.frame(
-          longitude = res_data$longitude[j],
-          latitude = res_data$latitude[j] * -1,
-          country = res_data$country[j],
-          site_name = res_data$site_name[j]
-        )
+        if (res_data$long_changed[j]) {
+          check_data_lat <- data.frame(
+            longitude = res_data$longitude[j] * -1,
+            latitude = res_data$latitude[j] * -1,
+            country = res_data$country[j],
+            site_name = res_data$site_name[j]
+          )
+        } else {
+          check_data_lat <- data.frame(
+            longitude = res_data$longitude[j],
+            latitude = res_data$latitude[j] * -1,
+            country = res_data$country[j],
+            site_name = res_data$site_name[j]
+          )
+        }
 
         # 7.2.2 check
         res_data$lat_changed[j] <- check_coordinates(
@@ -480,12 +488,21 @@ coord_sign_test <- function(data, maps_folder = getwd(),
       if (!lat_na && long_na) {
 
         # 7.2.3 data frame
-        check_data_long <- data.frame(
-          longitude = res_data$longitude[j] * -1,
-          latitude = res_data$latitude[j],
-          country = res_data$country[j],
-          site_name = res_data$site_name[j]
-        )
+        if (res_data$lat_changed[j]) {
+          check_data_lat <- data.frame(
+            longitude = res_data$longitude[j] * -1,
+            latitude = res_data$latitude[j] * -1,
+            country = res_data$country[j],
+            site_name = res_data$site_name[j]
+          )
+        } else {
+          check_data_lat <- data.frame(
+            longitude = res_data$longitude[j] * -1,
+            latitude = res_data$latitude[j],
+            country = res_data$country[j],
+            site_name = res_data$site_name[j]
+          )
+        }
 
         # 7.2.4 check
         res_data$long_changed[j] <- check_coordinates(
