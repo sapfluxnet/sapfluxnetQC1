@@ -4,7 +4,8 @@
 \alias{fix_latlong_errors}
 \title{Fixing sign errors when country has positive and negative lat/long coordinates}
 \usage{
-fix_latlong_errors(data, maps_folder, sign_errors = TRUE)
+fix_latlong_errors(data, maps_folder, sign_errors = TRUE,
+  special_countries = TRUE)
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{check_coordinates}}
@@ -17,6 +18,10 @@ working directory. It must be a character object and it must end
 \item{sign_errors}{Logical indicating if sign errors must be checked and
 fixed. If TRUE (default), \code{\link{coord_sign_test}} is internally
 called.}
+
+\item{special_countries}{Logical indicating if the special approach to
+countries having positive and negative coordinates must be used. See
+\emph{Special countries} section for details.}
 }
 \value{
 Same data frame provided, with coordinates tested and fixed
@@ -43,8 +48,26 @@ longitude coordinates, as exchanged signs.
 This function calls to other internal functions in order to fix different
 kinds of coordinates errors. At the moment, only exchanged signs in
 coordinates errors are allowed to be fixed.
+}
+\section{Sign errors}{
+
 If \code{sign_errors = TRUE} is specified, \code{\link{coord_sign_test}} is
-called to establish possible sign error and, if any, they are fixed.
+called to establish possible sign error and, if any, they are fixed. This fix
+can be done with or without special countries (see next section)
+}
+
+\section{Special countries}{
+
+There are special countries where border coordinates for longitude, latitude
+or both have negative and positive values. In this case, the normal approach
+of \code{coord_sign_test} is not appropriate, and several tests involving
+the internal use of \code{\link{check_coordinates}} must be made. If
+\code{special_countries = TRUE} is specified, then tests are made trying to
+dilucidate if only a change in the sign of one, latitude or longitude, is
+needed or, in the contrary, changing both of them is needed. There is one
+case that can not be covered by this approach: when changing sign of one of
+the coordinates \bold{AND} changing both coordinates seem to fix the issue,
+as the correct option can not be assured.
 }
 \seealso{
 Other Quality.Check.Functions: \code{\link{check_coordinates}},

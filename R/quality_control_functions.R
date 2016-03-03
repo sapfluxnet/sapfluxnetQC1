@@ -465,7 +465,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         # 7.2.1 data frame
         check_data_lat <- data.frame(
           longitude = res_data$longitude[j],
-          latitude = res_data$longitude[j] * -1,
+          latitude = res_data$latitude[j] * -1,
           country = res_data$country[j],
           site_name = res_data$site_name[j]
         )
@@ -482,7 +482,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         # 7.2.3 data frame
         check_data_long <- data.frame(
           longitude = res_data$longitude[j] * -1,
-          latitude = res_data$longitude[j],
+          latitude = res_data$latitude[j],
           country = res_data$country[j],
           site_name = res_data$site_name[j]
         )
@@ -501,21 +501,21 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         # 7.3.1 data frames
         check_data_lat <- data.frame(
           longitude = res_data$longitude[j],
-          latitude = res_data$longitude[j] * -1,
+          latitude = res_data$latitude[j] * -1,
           country = res_data$country[j],
           site_name = res_data$site_name[j]
         )
 
         check_data_long <- data.frame(
           longitude = res_data$longitude[j] * -1,
-          latitude = res_data$longitude[j],
+          latitude = res_data$latitude[j],
           country = res_data$country[j],
           site_name = res_data$site_name[j]
         )
 
         check_data_both <- data.frame(
           longitude = res_data$longitude[j] * -1,
-          latitude = res_data$longitude[j] * -1,
+          latitude = res_data$latitude[j] * -1,
           country = res_data$country[j],
           site_name = res_data$site_name[j]
         )
@@ -601,8 +601,23 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 #' This function calls to other internal functions in order to fix different
 #' kinds of coordinates errors. At the moment, only exchanged signs in
 #' coordinates errors are allowed to be fixed.
+#'
+#' @section Sign errors:
 #' If \code{sign_errors = TRUE} is specified, \code{\link{coord_sign_test}} is
-#' called to establish possible sign error and, if any, they are fixed.
+#' called to establish possible sign error and, if any, they are fixed. This fix
+#' can be done with or without special countries (see next section)
+#'
+#' @section Special countries:
+#' There are special countries where border coordinates for longitude, latitude
+#' or both have negative and positive values. In this case, the normal approach
+#' of \code{coord_sign_test} is not appropriate, and several tests involving
+#' the internal use of \code{\link{check_coordinates}} must be made. If
+#' \code{special_countries = TRUE} is specified, then tests are made trying to
+#' dilucidate if only a change in the sign of one, latitude or longitude, is
+#' needed or, in the contrary, changing both of them is needed. There is one
+#' case that can not be covered by this approach: when changing sign of one of
+#' the coordinates \bold{AND} changing both coordinates seem to fix the issue,
+#' as the correct option can not be assured.
 #'
 #' @family Quality Check Functions
 #'
@@ -617,13 +632,19 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 #'   fixed. If TRUE (default), \code{\link{coord_sign_test}} is internally
 #'   called.
 #'
+#' @param special_countries Logical indicating if the special approach to
+#'   countries having positive and negative coordinates must be used. See
+#'   \emph{Special countries} section for details.
+#'
 #' @return Same data frame provided, with coordinates tested and fixed
 #'
 #' @export
 
 # START
 # Function declaration
-fix_latlong_errors <- function(data, maps_folder, sign_errors = TRUE) {
+fix_latlong_errors <- function(data, maps_folder,
+                               sign_errors = TRUE,
+                               special_countries = TRUE) {
 
   # STEP 0
   # Argument checks
@@ -662,7 +683,8 @@ fix_latlong_errors <- function(data, maps_folder, sign_errors = TRUE) {
   if(sign_errors) {
 
     # 2.1 Are signs interchanged?
-    sign_test_data <- coord_sign_test(data, maps_folder)
+    sign_test_data <- coord_sign_test(data, maps_folder,
+                                      special_countries = special_countries)
 
     # 2.2 Fix them if they are (multiply by -1)
     # latitude
