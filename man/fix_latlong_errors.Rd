@@ -2,10 +2,10 @@
 % Please edit documentation in R/quality_control_functions.R
 \name{fix_latlong_errors}
 \alias{fix_latlong_errors}
-\title{Fixing sign errors when country has positive and negative lat/long coordinates}
+\title{Fixing sign errors in coordinates}
 \usage{
 fix_latlong_errors(data, maps_folder, sign_errors = TRUE,
-  special_countries = TRUE)
+  special_countries = FALSE)
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{check_coordinates}}
@@ -27,27 +27,16 @@ countries having positive and negative coordinates must be used. See
 Same data frame provided, with coordinates tested and fixed
 }
 \description{
-\code{coord_sign_posneg_test} complements \code{\link{coord_sign_test}} for
-those countries with positive and negative coordinates in longitude, latitude
-or both (See details about limitations in this approach).
-}
-\details{
-This function must be launched after \code{\link{coord_sign_test}}, as it
-relies in columns (\code{lat_changed} and \code{long_changed}) created by
-this function. Also, it uses \code{\link{check_coordinates}} function trying
-to dilucidate if only a change in the sign of one, latitude or longitude, is
-needed or, on the contrary, it needs changing both of them.
-There is one case that can not be covered by this approach: when changing
-sign of one of the coordinates \bold{AND} changing both coordinates seem to
-fix the issue, as the correct option can not be assured.
-Fixing sign errors in coordinates
-
 \code{fix_latlong_errors} makes possible to fix known errors in latitude and
 longitude coordinates, as exchanged signs.
-
+}
+\details{
 This function calls to other internal functions in order to fix different
 kinds of coordinates errors. At the moment, only exchanged signs in
-coordinates errors are allowed to be fixed.
+coordinates errors are considered to be fixed.\newline
+
+After the fixes are applied, \code{\link{check_coordinates}} is called to
+update \code{is_inside_country} variable.
 }
 \section{Sign errors}{
 

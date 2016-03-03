@@ -593,23 +593,6 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 
 ################################################################################
 
-#' Fixing sign errors when country has positive and negative lat/long coordinates
-#'
-#' \code{coord_sign_posneg_test} complements \code{\link{coord_sign_test}} for
-#' those countries with positive and negative coordinates in longitude, latitude
-#' or both (See details about limitations in this approach).
-#'
-#' This function must be launched after \code{\link{coord_sign_test}}, as it
-#' relies in columns (\code{lat_changed} and \code{long_changed}) created by
-#' this function. Also, it uses \code{\link{check_coordinates}} function trying
-#' to dilucidate if only a change in the sign of one, latitude or longitude, is
-#' needed or, on the contrary, it needs changing both of them.
-#' There is one case that can not be covered by this approach: when changing
-#' sign of one of the coordinates \bold{AND} changing both coordinates seem to
-#' fix the issue, as the correct option can not be assured.
-
-################################################################################
-
 #' Fixing sign errors in coordinates
 #'
 #' \code{fix_latlong_errors} makes possible to fix known errors in latitude and
@@ -617,7 +600,10 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 #'
 #' This function calls to other internal functions in order to fix different
 #' kinds of coordinates errors. At the moment, only exchanged signs in
-#' coordinates errors are allowed to be fixed.
+#' coordinates errors are considered to be fixed.\newline
+#'
+#' After the fixes are applied, \code{\link{check_coordinates}} is called to
+#' update \code{is_inside_country} variable.
 #'
 #' @section Sign errors:
 #' If \code{sign_errors = TRUE} is specified, \code{\link{coord_sign_test}} is
@@ -661,7 +647,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 # Function declaration
 fix_latlong_errors <- function(data, maps_folder,
                                sign_errors = TRUE,
-                               special_countries = TRUE) {
+                               special_countries = FALSE) {
 
   # STEP 0
   # Argument checks
@@ -726,7 +712,12 @@ fix_latlong_errors <- function(data, maps_folder,
 
   # n+1 STEP
   # Returning the results
-  return(results)
+  return(suppressMessages(
+    check_coordinates(results, maps_folder,
+                      plot = FALSE, text_report = FALSE))
+  )
 
 # END FUNCTION
 }
+
+################################################################################
