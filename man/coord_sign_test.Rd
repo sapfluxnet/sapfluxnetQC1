@@ -4,7 +4,7 @@
 \alias{coord_sign_test}
 \title{Coordinates sign test}
 \usage{
-coord_sign_test(data, maps_folder = getwd())
+coord_sign_test(data, maps_folder = getwd(), special_countries = FALSE)
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{check_coordinates}}

@@ -452,11 +452,34 @@ coord_sign_test <- function(data, maps_folder = getwd(),
   # Special countries approach
   if (special_countries) {
 
-    # 7.1 Start for loop and check if lat_changed or long_changed is NA
+    # 7.1 Start for loop and check if lat_changed and/or long_changed is NA
     for (j in 1:length(res_data[,1])) {
-      if (is.na(res_data$lat_changed[j] || is.na(res_data$long_changed[j]))) {
 
-        # 7.2 data frame to use check_coordinates
+      lat_na <- is.na(res_data$lat_changed[j])
+      long_na <- is.na(res_data$long_changed[j])
+
+      # 7.2 CASE 1 only one changed
+
+      if (lat_na && !long_na) {
+
+        # 7.2.1 data frame
+        check_data_lat <- data.frame(
+          longitude = res_data$longitude[j],
+          latitude = res_data$longitude[j] * -1,
+          country = res_data$country[j],
+          site_name = res_data$site_name[j]
+        )
+
+        # 7.2.2 check
+        res_data$lat_changed[j] <- check_coordinates(
+          check_data_lat, maps_folder,
+          plot = FALSE,
+          text_report = FALSE)$is_inside_country[1]
+      }
+
+      if (!lat_na && long_na) {
+
+        # 7.2.3 data frame
         check_data_long <- data.frame(
           longitude = res_data$longitude[j] * -1,
           latitude = res_data$longitude[j],
@@ -464,9 +487,28 @@ coord_sign_test <- function(data, maps_folder = getwd(),
           site_name = res_data$site_name[j]
         )
 
+        # 7.2.4 check
+        res_data$long_changed[j] <- check_coordinates(
+          check_data_long, maps_folder,
+          plot = FALSE,
+          text_report = FALSE)$is_inside_country[1]
+      }
+
+      # 7.3 CASE 2 Both border coordinates with positive and negative values
+
+      if (lat_na && long_na) {
+
+        # 7.3.1 data frames
         check_data_lat <- data.frame(
           longitude = res_data$longitude[j],
           latitude = res_data$longitude[j] * -1,
+          country = res_data$country[j],
+          site_name = res_data$site_name[j]
+        )
+
+        check_data_long <- data.frame(
+          longitude = res_data$longitude[j] * -1,
+          latitude = res_data$longitude[j],
           country = res_data$country[j],
           site_name = res_data$site_name[j]
         )
@@ -478,21 +520,49 @@ coord_sign_test <- function(data, maps_folder = getwd(),
           site_name = res_data$site_name[j]
         )
 
-        # 7.3 coordinates check
-        sp_co_long <- check_coordinates(check_data_long, maps_folder,
-                                        plot = FALSE,
-                                        text_report = FALSE)$is_inside_country
-        sp_co_lat <- check_coordinates(check_data_lat, maps_folder,
-                                        plot = FALSE,
-                                        text_report = FALSE)$is_inside_country
-        sp_co_both <- check_coordinates(check_data_both, maps_folder,
-                                        plot = FALSE,
-                                        text_report = FALSE)$is_inside_country
+        # 7.3.2 checks
+        lat_check <- check_coordinates(
+          check_data_lat, maps_folder,
+          plot = FALSE,
+          text_report = FALSE)$is_inside_country[1]
 
-        # 7.4 Si both y long o lat son true, parate y descansa
-        # si solo long o lat are true, make the changes in the lat_changed o
-        # long_changed para reflejarlo
+        long_check <- check_coordinates(
+          check_data_long, maps_folder,
+          plot = FALSE,
+          text_report = FALSE)$is_inside_country[1]
 
+        both_check <- check_coordinates(
+          check_data_both, maps_folder,
+          plot = FALSE,
+          text_report = FALSE)$is_inside_country[1]
+
+        # 7.3.3 Changing both fix the problem
+        if (both_check && (!lat_check && !long_check)) {
+          res_data$lat_changed[j] <- TRUE
+          res_data$long_changed[j] <- TRUE
+        }
+
+        # 7.3.4 Changing only latitude fix the problem
+        if (lat_check && (!both_check && !long_check)) {
+          res_data$lat_changed[j] <- TRUE
+          res_data$long_changed[j] <- FALSE
+        }
+
+        # 7.3.5 Changing only longitude fix the problem
+        if (long_check && (!both_check && !lat_check)) {
+          res_data$lat_changed[j] <- FALSE
+          res_data$long_changed[j] <- TRUE
+        }
+
+        # 7.3.6 Special case, when changing both coordinates fix, but also
+        #       changing only latitude and/or longitude separately fix the
+        #       issue. In this case, there is no solution as there is no
+        #       certainty about the correct solution
+        if ((both_check && (lat_check || long_check)) &&
+            (both_check && (lat_check && long_check))) {
+          message('No certainty about correct solution in ',
+                  res_data$country[j], '-', res_data$site_name[j])
+        }
       }
     }
   }
