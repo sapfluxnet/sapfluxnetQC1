@@ -645,7 +645,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 
 # START
 # Function declaration
-fix_latlong_errors <- function(data, maps_folder,
+fix_latlong_errors <- function(data, maps_folder = getwd(),
                                sign_errors = TRUE,
                                special_countries = FALSE) {
 
@@ -655,6 +655,11 @@ fix_latlong_errors <- function(data, maps_folder,
   if (!is.data.frame(data)) {
     stop('Provided data object is not a data.frame.\n
          Please verify if it is the correct object\n')
+  }
+  #   if folder exists and is accesible
+  if (!file_test("-d", maps_folder)) {
+    stop('maps_folder location does not exist or is not accessible.\n
+         Please check provided folder name\n')
   }
   #   if data contains a longitude variable
   if (is.null(data$longitude)) {

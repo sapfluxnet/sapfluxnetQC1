@@ -1,6 +1,6 @@
 library(sapfluxnetr)
 
-context('Coordinates argument checks')
+context('B1. Coordinates argument checks')
 
 test_that('argument errors are correct', {
 
@@ -21,7 +21,7 @@ test_that('argument errors are correct', {
   expect_error(check_coordinates(foo_data[,c(1:3)]), 'There is no site_name variable')
 })
 
-context('Coordinates check')
+context('B2. Coordinates check')
 
 test_that('checking is correct', {
 
@@ -37,7 +37,7 @@ test_that('checking is correct', {
   expect_message(check_coordinates(foo_data[1,]), '1 correct coordinates in data')
 })
 
-context('Plotting wrong coordinates and report presence')
+context('B3. Plotting wrong coordinates and report presence')
 
 test_that('wrong coordinates are plotted correctly', {
 
@@ -64,7 +64,4 @@ test_that('report is present and is a data.frame', {
   foo_report <- check_coordinates(foo_data[1,])
 
   expect_is(foo_report, 'data.frame')
-
-  file.remove('CRI_adm0.rds', 'ITA_adm0.rds', 'NZL_adm0.rds', 'CHE_adm0.rds',
-              'BRA_adm0.rds', 'ITA_ble.pdf', 'Rplots.pdf')
 })
