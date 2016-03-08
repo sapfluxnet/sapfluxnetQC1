@@ -33,7 +33,7 @@ longitude coordinates, as exchanged signs.
 \details{
 This function calls to other internal functions in order to fix different
 kinds of coordinates errors. At the moment, only exchanged signs in
-coordinates errors are considered to be fixed.\newline
+coordinates errors are considered to be fixed.
 
 After the fixes are applied, \code{\link{check_coordinates}} is called to
 update \code{is_inside_country} variable.
@@ -61,6 +61,7 @@ as the correct option can not be assured.
 \seealso{
 Other Quality.Check.Functions: \code{\link{check_coordinates}},
   \code{\link{coord_sign_test}},
-  \code{\link{download_maps}}
+  \code{\link{download_maps}},
+  \code{\link{qc_suitable_range}}
 }
 

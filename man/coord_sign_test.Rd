@@ -48,6 +48,7 @@ as the correct option can not be assured.
 \seealso{
 Other Quality.Check.Functions: \code{\link{check_coordinates}},
   \code{\link{download_maps}},
-  \code{\link{fix_latlong_errors}}
+  \code{\link{fix_latlong_errors}},
+  \code{\link{qc_suitable_range}}
 }
 

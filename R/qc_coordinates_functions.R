@@ -600,7 +600,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 #'
 #' This function calls to other internal functions in order to fix different
 #' kinds of coordinates errors. At the moment, only exchanged signs in
-#' coordinates errors are considered to be fixed.\newline
+#' coordinates errors are considered to be fixed.
 #'
 #' After the fixes are applied, \code{\link{check_coordinates}} is called to
 #' update \code{is_inside_country} variable.

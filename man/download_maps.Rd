@@ -28,6 +28,7 @@ already present in the maps folder (by default, the working directory).
 \seealso{
 Other Quality.Check.Functions: \code{\link{check_coordinates}},
   \code{\link{coord_sign_test}},
-  \code{\link{fix_latlong_errors}}
+  \code{\link{fix_latlong_errors}},
+  \code{\link{qc_suitable_range}}
 }
 
