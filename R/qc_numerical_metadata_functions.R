@@ -26,7 +26,7 @@
 
 
 # START
-# function declaration
+# Function declaration
 
 qc_suitable_range <- function(data, variables, ranges) {
 
