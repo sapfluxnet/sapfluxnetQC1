@@ -186,14 +186,7 @@ check_coordinates <- function(data, maps_folder = getwd(),
 
   # STEP 1
   # Initialise results object
-  results <- data.frame(
-    longitude = double(),
-    latitude = double(),
-    country = character(0),
-    site_name = character(0),
-    is_inside_country = logical(0),
-    stringsAsFactors = FALSE
-  )
+  results <- vector()
 
   # STEP 2
   # Begin the for loop and read the map file
@@ -216,36 +209,29 @@ check_coordinates <- function(data, maps_folder = getwd(),
 
     # STEP 4
     # Update results object, including the output of rgeos::gContains
-    res_tmp <- data.frame(
-      longitude = data$longitude[i],
-      latitude = data$latitude[i],
-      country = data$country[i],
-      site_name = data$site_name[i],
-      is_inside_country = rgeos::gContains(map_data, sp_points),
-      stringsAsFactors = FALSE
-    )
+    res_tmp <- rgeos::gContains(map_data, sp_points)
 
-    results <- rbind(results, res_tmp)
+    results <- c(results, res_tmp)
 
     # STEP 5
     # Create and saving the plot if plot = TRUE and is_inside_country = FALSE
 
-    if (plot && !res_tmp$is_inside_country[1]) {
+    if (plot && !res_tmp) {
       # 5.1 map data in adequate format to be able to plot
       plot_data <- broom::tidy(map_data)
       # 5.2 ggplot2 object
       plot_map <- ggplot(plot_data, aes(x = long, y = lat)) +
         geom_polygon(aes(group = group)) +
         geom_point(aes(x = longitude, y = latitude),
-                   data = results[i,], size = 2, color = 'red', alpha = 0.7) +
+                   data = data[i,], size = 2, color = 'red', alpha = 0.7) +
         coord_map() +
-        labs(title = paste(results[i, c('country')],
-                           results[i, c('site_name')], sep = ' - '))
+        labs(title = paste(data[i, c('country')],
+                           data[i, c('site_name')], sep = ' - '))
       # 5.3 see plot
       print(plot_map)
       # 5.4 save plot in working directory
-      ggsave(filename = paste(results[i, c('country')], '_',
-                              results[i, c('site_name')], '.pdf', sep = ''),
+      ggsave(filename = paste(data[i, c('country')], '_',
+                              data[i, c('site_name')], '.pdf', sep = ''),
              plot = plot_map, width = 6, height = 4, units = 'cm')
     }
   }
@@ -256,8 +242,8 @@ check_coordinates <- function(data, maps_folder = getwd(),
   if (text_report) {
 
     # 6.1 Sum of wrong, correct and total coordinates checked
-    wrong_coordinates <- sum(!results$is_inside_country, na.rm = TRUE)
-    correct_coordinates <- sum(results$is_inside_country, na.rm = TRUE)
+    wrong_coordinates <- sum(!results, na.rm = TRUE)
+    correct_coordinates <- sum(results, na.rm = TRUE)
     total_coordinates <- wrong_coordinates + correct_coordinates
 
     # 6.2 messages
@@ -266,7 +252,12 @@ check_coordinates <- function(data, maps_folder = getwd(),
     message(total_coordinates, ' coordinates checked')
   }
 
-  return(results)
+  # STEP 7
+  # Create a new variable in data with the results of the checks
+  data$is_inside_country <- results
+
+  # 7.1 Return data with the new variable
+  return(data)
 
 # END FUNCTION
 }
