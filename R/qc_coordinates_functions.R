@@ -480,14 +480,14 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 
         # 7.2.3 data frame
         if (res_data$lat_changed[j]) {
-          check_data_lat <- data.frame(
+          check_data_long <- data.frame(
             longitude = res_data$longitude[j] * -1,
             latitude = res_data$latitude[j] * -1,
             country = res_data$country[j],
             site_name = res_data$site_name[j]
           )
         } else {
-          check_data_lat <- data.frame(
+          check_data_long <- data.frame(
             longitude = res_data$longitude[j] * -1,
             latitude = res_data$latitude[j],
             country = res_data$country[j],
