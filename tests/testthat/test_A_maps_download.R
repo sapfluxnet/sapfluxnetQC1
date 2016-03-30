@@ -5,7 +5,7 @@ context('A1. Maps argument checks')
 test_that('arguments error are correct', {
 
   foo_data <- data.frame(x = rnorm(5,1,1),
-                         country = c(rep('IRE', 2), rep('IRL', 3)))
+                         si_country = c(rep('IRE', 2), rep('IRL', 3)))
 
   foo_wrong_data <- data.frame(x = rnorm(5,1,1),
                                y = rpois(5,1))
@@ -21,7 +21,7 @@ context('A2. Maps Download')
 test_that('download works', {
 
   foo_data <- data.frame(x = rnorm(5,1,1),
-                         country = c(rep('IRE', 2), rep('IRL', 3)))
+                         si_country = c(rep('IRE', 2), rep('IRL', 3)))
 
   expect_message(download_maps(foo_data), '1 new maps downloaded')
   file.remove('IRE_adm0.rds')

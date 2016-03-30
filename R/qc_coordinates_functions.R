@@ -32,7 +32,7 @@ download_maps <- function(data, folder = getwd()) {
          Please check if it is the correct object\n')
   }
   #   if data contains a country variable
-  if (is.null(data$country)) {
+  if (is.null(data$si_country)) {
     stop('There is no country variable in this dataset\n')
   }
   #   if folder exists and is accesible
@@ -49,7 +49,7 @@ download_maps <- function(data, folder = getwd()) {
   # STEP 1
   # Begin for loop, and check if country code is NA, and if it is, don't do
   # anything with that value
-  for (code in data$country) {
+  for (code in data$si_country) {
     if (!is.na(code)) {
 
       # STEP 2
@@ -160,22 +160,22 @@ check_coordinates <- function(data, maps_folder = getwd(),
          Please verify if it is the correct object\n')
   }
   #   if data contains a longitude variable
-  if (is.null(data$longitude)) {
+  if (is.null(data$si_long)) {
     stop('There is no longitude variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a latitude variable
-  if (is.null(data$latitude)) {
+  if (is.null(data$si_lat)) {
     stop('There is no latitude variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a country variable
-  if (is.null(data$country)) {
+  if (is.null(data$si_country)) {
     stop('There is no country variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a site_name variable
-  if (is.null(data$site_name)) {
+  if (is.null(data$si_code)) {
     stop('There is no site_name variable in this dataset\n
          Please verify if it is the correct data\n')
   }
@@ -192,18 +192,18 @@ check_coordinates <- function(data, maps_folder = getwd(),
   # Begin the for loop and read the map file
   for (i in 1:length(data[,1])) {
 
-    file_name <- paste(data$country[i], '_adm0.rds', sep = '')
+    file_name <- paste(data$si_country[i], '_adm0.rds', sep = '')
     map_data <- readRDS(file.path(maps_folder, file_name))
 
     # 2.1 message to indicate status of loop, to avoid confussion if it takes
     #     a long time
-    message('Checking ', data$country[i], '-', data$site_name[i])
+    message('Checking ', data$si_country[i], '-', data$si_code[i])
 
 
     # STEP 3
     # Get coordinates and transform them in SpatialPoints object
     sp_points <- sp::SpatialPoints(
-      data[i, c('longitude', 'latitude')],
+      data[i, c('si_long', 'si_lat')],
       proj4string = sp::CRS(sp::proj4string(map_data))
     )
 
@@ -222,16 +222,16 @@ check_coordinates <- function(data, maps_folder = getwd(),
       # 5.2 ggplot2 object
       plot_map <- ggplot(plot_data, aes(x = long, y = lat)) +
         geom_polygon(aes(group = group)) +
-        geom_point(aes(x = longitude, y = latitude),
+        geom_point(aes(x = si_long, y = si_lat),
                    data = data[i,], size = 2, color = 'red', alpha = 0.7) +
         coord_map() +
-        labs(title = paste(data[i, c('country')],
-                           data[i, c('site_name')], sep = ' - '))
+        labs(title = paste(data[i, c('si_country')],
+                           data[i, c('si_code')], sep = ' - '))
       # 5.3 see plot
       print(plot_map)
       # 5.4 save plot in working directory
-      ggsave(filename = paste(data[i, c('country')], '_',
-                              data[i, c('site_name')], '.pdf', sep = ''),
+      ggsave(filename = paste(data[i, c('si_country')], '_',
+                              data[i, c('si_code')], '.pdf', sep = ''),
              plot = plot_map, width = 6, height = 4, units = 'cm')
     }
   }
@@ -318,17 +318,17 @@ coord_sign_test <- function(data, maps_folder = getwd(),
          Please verify if it is the correct object\n')
   }
   #   if data contains a longitude variable
-  if (is.null(data$longitude)) {
+  if (is.null(data$si_long)) {
     stop('There is no longitude variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a latitude variable
-  if (is.null(data$latitude)) {
+  if (is.null(data$si_lat)) {
     stop('There is no latitude variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a country variable
-  if (is.null(data$country)) {
+  if (is.null(data$si_country)) {
     stop('There is no country variable in this dataset\n
          Please verify if it is the correct data\n')
   }
@@ -348,7 +348,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
     # STEP 2
     # Check if is_inside_country is FALSE, and if it is, read the map data
     if (!data$is_inside_country[i]) {
-      file_name <- paste(data$country[i], '_adm0.rds', sep = '')
+      file_name <- paste(data$si_country[i], '_adm0.rds', sep = '')
 
       # 2.1 map data is read and transformed to tidy format, to easy check signs
       country_map <- broom::tidy(readRDS(file.path(maps_folder, file_name)))
@@ -382,7 +382,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
       # Testing if provided coordinates are sign exchanged
 
       # 4.1 latitude
-      if ( data$latitude[i] < 0) {
+      if ( data$si_lat[i] < 0) {
         if (country_lat == 'positive') {
           lat_changed <- c(lat_changed, TRUE)
         }
@@ -405,7 +405,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
       }
 
       # 4.2 longitude
-      if ( data$longitude[i] < 0) {
+      if ( data$si_long[i] < 0) {
         if (country_long == 'positive') {
           long_changed <- c(long_changed, TRUE)
         }
@@ -455,17 +455,17 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 
         if (res_data$long_changed[j]) {
           check_data_lat <- data.frame(
-            longitude = res_data$longitude[j] * -1,
-            latitude = res_data$latitude[j] * -1,
-            country = res_data$country[j],
-            site_name = res_data$site_name[j]
+            si_long = res_data$si_long[j] * -1,
+            si_lat = res_data$si_lat[j] * -1,
+            si_country = res_data$si_country[j],
+            si_code = res_data$si_code[j]
           )
         } else {
           check_data_lat <- data.frame(
-            longitude = res_data$longitude[j],
-            latitude = res_data$latitude[j] * -1,
-            country = res_data$country[j],
-            site_name = res_data$site_name[j]
+            si_long = res_data$si_long[j],
+            si_lat = res_data$si_lat[j] * -1,
+            si_country = res_data$si_country[j],
+            si_code = res_data$si_code[j]
           )
         }
 
@@ -481,17 +481,17 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         # 7.2.3 data frame
         if (res_data$lat_changed[j]) {
           check_data_long <- data.frame(
-            longitude = res_data$longitude[j] * -1,
-            latitude = res_data$latitude[j] * -1,
-            country = res_data$country[j],
-            site_name = res_data$site_name[j]
+            si_long = res_data$si_long[j] * -1,
+            si_lat = res_data$si_lat[j] * -1,
+            si_country = res_data$si_country[j],
+            si_code = res_data$si_code[j]
           )
         } else {
           check_data_long <- data.frame(
-            longitude = res_data$longitude[j] * -1,
-            latitude = res_data$latitude[j],
-            country = res_data$country[j],
-            site_name = res_data$site_name[j]
+            si_long = res_data$si_long[j] * -1,
+            si_lat = res_data$si_lat[j],
+            si_country = res_data$si_country[j],
+            si_code = res_data$si_code[j]
           )
         }
 
@@ -508,24 +508,24 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 
         # 7.3.1 data frames
         check_data_lat <- data.frame(
-          longitude = res_data$longitude[j],
-          latitude = res_data$latitude[j] * -1,
-          country = res_data$country[j],
-          site_name = res_data$site_name[j]
+          si_long = res_data$si_long[j],
+          si_lat = res_data$si_lat[j] * -1,
+          si_country = res_data$si_country[j],
+          si_code = res_data$si_code[j]
         )
 
         check_data_long <- data.frame(
-          longitude = res_data$longitude[j] * -1,
-          latitude = res_data$latitude[j],
-          country = res_data$country[j],
-          site_name = res_data$site_name[j]
+          si_long = res_data$si_long[j] * -1,
+          si_lat = res_data$si_lat[j],
+          si_country = res_data$si_country[j],
+          si_code = res_data$si_code[j]
         )
 
         check_data_both <- data.frame(
-          longitude = res_data$longitude[j] * -1,
-          latitude = res_data$latitude[j] * -1,
-          country = res_data$country[j],
-          site_name = res_data$site_name[j]
+          si_long = res_data$si_long[j] * -1,
+          si_lat = res_data$si_lat[j] * -1,
+          si_country = res_data$si_country[j],
+          si_code = res_data$si_code[j]
         )
 
         # 7.3.2 checks
@@ -569,7 +569,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         if ((both_check && (lat_check || long_check)) &&
             (both_check && (lat_check && long_check))) {
           message('No certainty about correct solution in ',
-                  res_data$country[j], '-', res_data$site_name[j])
+                  res_data$si_country[j], '-', res_data$si_code[j])
         }
       }
     }
@@ -653,17 +653,17 @@ fix_latlong_errors <- function(data, maps_folder = getwd(),
          Please check provided folder name\n')
   }
   #   if data contains a longitude variable
-  if (is.null(data$longitude)) {
+  if (is.null(data$si_long)) {
     stop('There is no longitude variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a latitude variable
-  if (is.null(data$latitude)) {
+  if (is.null(data$si_lat)) {
     stop('There is no latitude variable in this dataset\n
          Please verify if it is the correct data\n')
   }
   #   if data contains a country variable
-  if (is.null(data$country)) {
+  if (is.null(data$si_country)) {
     stop('There is no country variable in this dataset\n
          Please verify if it is the correct data\n')
   }
@@ -687,11 +687,11 @@ fix_latlong_errors <- function(data, maps_folder = getwd(),
 
     # 2.2 Fix them if they are (multiply by -1)
     # latitude
-    results$latitude[which(sign_test_data$lat_changed == TRUE)] <-
-      results$latitude[which(sign_test_data$lat_changed == TRUE)] * (-1)
+    results$si_lat[which(sign_test_data$lat_changed == TRUE)] <-
+      results$si_lat[which(sign_test_data$lat_changed == TRUE)] * (-1)
     # longitude
-    results$longitude[which(sign_test_data$long_changed == TRUE)] <-
-      results$longitude[which(sign_test_data$long_changed == TRUE)] * (-1)
+    results$si_long[which(sign_test_data$long_changed == TRUE)] <-
+      results$si_long[which(sign_test_data$long_changed == TRUE)] * (-1)
 
     # 2.3 Console output indicating fixes and no-fixes
     message(sum(sign_test_data$lat_changed == TRUE, na.rm = TRUE),
