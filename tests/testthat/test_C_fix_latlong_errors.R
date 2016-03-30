@@ -6,7 +6,7 @@ foo_data <- data.frame(
   si_long = c(84.4800, 8.6100, 174.4924, 7.0000, 48.0000),
   si_lat = c(10.1800, 39.9000, -36.7959, 46.0000, 23.0000),
   si_country = c('CRI', 'ITA', 'NZL', 'CHE', 'BRA'),
-  si_code = c('bla', 'ble', 'bli', 'blo', 'blu'),
+  si_name = c('bla', 'ble', 'bli', 'blo', 'blu'),
   is_inside_country = c(FALSE, TRUE, TRUE, FALSE, FALSE)
 )
 

@@ -26,17 +26,45 @@ qc_site_col <- function(data) {
 
 
   # STEP 1
-  # Data dictionary to allow checks
+  # Data dictionary to allow checks and vector with names of data
   dic <- data.frame(
-    variables = c(''),
-    class = c('')
+    variables = c('si_name', 'si_country', 'si_contact_firstname',
+                  'si_contact_lastname', 'si_contact_email', 'si_contact_institution',
+                  'si_addcontr_firstname', 'si_addcontr_lastname',
+                  'si_addcontr_email', 'si_addcontr_institution', 'si_lat',
+                  'si_long', 'si_elev', 'si_igbp', 'si_paper', 'si_dist_mgmt',
+                  'si_flux_network', 'si_dendro_network', 'si_remarks', 'si_code'),
+    class = c('character', 'character', 'character',
+              'character', 'character', 'character',
+              'character', 'character',
+              'character', 'character', 'numeric',
+              'numeric', 'numeric', 'character', 'character', 'character',
+              'logical', 'logical', 'character', 'character')
   )
 
-  # STEP 2
-  # Checks
+  data_variables <- names(data)
 
-  # 2.1 Are there all the variables?
-  if (!identical(sort(names(data), sort(dic$variables)))) {
-    message('Oh oh! Something is wrong here!')
+  # 1.1 Initiate result objects
+  presence_res <- vector()
+  classes_res <- vector()
+
+  # STEP 2
+  # Checks (presence and class)
+  for (name in data_variables) {
+    p_res <- name %in% dic$variables
+    presence_res <- c(presence_res, p_res)
+    c_res <- identical(class(data[[name]]),
+                       as.character(dic$class[dic$variable == name]))
+    classes_res <- c(classes_res, c_res)
   }
+
+  # STEP 3
+  # Create and return the result object
+  result <- data.frame(Variable = data_variables,
+                       PresenceOK = presence_res,
+                       ClassOK = classes_res)
+
+  return(result)
+
+  # END FUNCTION
 }

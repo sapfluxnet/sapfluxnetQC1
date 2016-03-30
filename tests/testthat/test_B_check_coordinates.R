@@ -8,7 +8,7 @@ test_that('argument errors are correct', {
     si_long = rnorm(5),
     si_lat = rnorm(5),
     si_country = c('CRI', 'ITA', 'NZL', 'CHE', 'BRA'),
-    si_code = c('bla', 'ble', 'bli', 'blo', 'blu')
+    si_name = c('bla', 'ble', 'bli', 'blo', 'blu')
   )
 
   expect_error(check_coordinates(foo_data, 'foo_folder'),
@@ -29,7 +29,7 @@ test_that('checking is correct', {
     si_long = c(-84, rnorm(4, 0, 0.1)),
     si_lat = c(10, rnorm(4, 0, 0.1)),
     si_country = c('CRI', 'ITA', 'NZL', 'CHE', 'BRA'),
-    si_code = c('bla', 'ble', 'bli', 'blo', 'blu')
+    si_name = c('bla', 'ble', 'bli', 'blo', 'blu')
   )
   download_maps(foo_data)
 
@@ -45,7 +45,7 @@ test_that('wrong coordinates are plotted correctly', {
     si_long = c(-84, rnorm(4, 0, 0.1)),
     si_lat = c(10, rnorm(4, 0, 0.1)),
     si_country = c('CRI', 'ITA', 'NZL', 'CHE', 'BRA'),
-    si_code = c('bla', 'ble', 'bli', 'blo', 'blu')
+    si_name = c('bla', 'ble', 'bli', 'blo', 'blu')
   )
   foo_report <- check_coordinates(foo_data[1:2,], plot = TRUE)
 
@@ -59,7 +59,7 @@ test_that('report is present and is a data.frame', {
     si_long = c(-84, rnorm(4, 0, 0.1)),
     si_lat = c(10, rnorm(4, 0, 0.1)),
     si_country = c('CRI', 'ITA', 'NZL', 'CHE', 'BRA'),
-    si_code = c('bla', 'ble', 'bli', 'blo', 'blu')
+    si_name = c('bla', 'ble', 'bli', 'blo', 'blu')
   )
   foo_report <- check_coordinates(foo_data[1,])
 

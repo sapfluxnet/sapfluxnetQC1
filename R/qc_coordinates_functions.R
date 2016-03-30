@@ -175,7 +175,7 @@ check_coordinates <- function(data, maps_folder = getwd(),
          Please verify if it is the correct data\n')
   }
   #   if data contains a site_name variable
-  if (is.null(data$si_code)) {
+  if (is.null(data$si_name)) {
     stop('There is no site_name variable in this dataset\n
          Please verify if it is the correct data\n')
   }
@@ -197,7 +197,7 @@ check_coordinates <- function(data, maps_folder = getwd(),
 
     # 2.1 message to indicate status of loop, to avoid confussion if it takes
     #     a long time
-    message('Checking ', data$si_country[i], '-', data$si_code[i])
+    message('Checking ', data$si_country[i], '-', data$si_name[i])
 
 
     # STEP 3
@@ -226,12 +226,12 @@ check_coordinates <- function(data, maps_folder = getwd(),
                    data = data[i,], size = 2, color = 'red', alpha = 0.7) +
         coord_map() +
         labs(title = paste(data[i, c('si_country')],
-                           data[i, c('si_code')], sep = ' - '))
+                           data[i, c('si_name')], sep = ' - '))
       # 5.3 see plot
       print(plot_map)
       # 5.4 save plot in working directory
       ggsave(filename = paste(data[i, c('si_country')], '_',
-                              data[i, c('si_code')], '.pdf', sep = ''),
+                              data[i, c('si_name')], '.pdf', sep = ''),
              plot = plot_map, width = 6, height = 4, units = 'cm')
     }
   }
@@ -458,14 +458,14 @@ coord_sign_test <- function(data, maps_folder = getwd(),
             si_long = res_data$si_long[j] * -1,
             si_lat = res_data$si_lat[j] * -1,
             si_country = res_data$si_country[j],
-            si_code = res_data$si_code[j]
+            si_name = res_data$si_name[j]
           )
         } else {
           check_data_lat <- data.frame(
             si_long = res_data$si_long[j],
             si_lat = res_data$si_lat[j] * -1,
             si_country = res_data$si_country[j],
-            si_code = res_data$si_code[j]
+            si_name = res_data$si_name[j]
           )
         }
 
@@ -484,14 +484,14 @@ coord_sign_test <- function(data, maps_folder = getwd(),
             si_long = res_data$si_long[j] * -1,
             si_lat = res_data$si_lat[j] * -1,
             si_country = res_data$si_country[j],
-            si_code = res_data$si_code[j]
+            si_name = res_data$si_name[j]
           )
         } else {
           check_data_long <- data.frame(
             si_long = res_data$si_long[j] * -1,
             si_lat = res_data$si_lat[j],
             si_country = res_data$si_country[j],
-            si_code = res_data$si_code[j]
+            si_name = res_data$si_name[j]
           )
         }
 
@@ -511,21 +511,21 @@ coord_sign_test <- function(data, maps_folder = getwd(),
           si_long = res_data$si_long[j],
           si_lat = res_data$si_lat[j] * -1,
           si_country = res_data$si_country[j],
-          si_code = res_data$si_code[j]
+          si_name = res_data$si_name[j]
         )
 
         check_data_long <- data.frame(
           si_long = res_data$si_long[j] * -1,
           si_lat = res_data$si_lat[j],
           si_country = res_data$si_country[j],
-          si_code = res_data$si_code[j]
+          si_name = res_data$si_name[j]
         )
 
         check_data_both <- data.frame(
           si_long = res_data$si_long[j] * -1,
           si_lat = res_data$si_lat[j] * -1,
           si_country = res_data$si_country[j],
-          si_code = res_data$si_code[j]
+          si_name = res_data$si_name[j]
         )
 
         # 7.3.2 checks
@@ -569,7 +569,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         if ((both_check && (lat_check || long_check)) &&
             (both_check && (lat_check && long_check))) {
           message('No certainty about correct solution in ',
-                  res_data$si_country[j], '-', res_data$si_code[j])
+                  res_data$si_country[j], '-', res_data$si_name[j])
         }
       }
     }
