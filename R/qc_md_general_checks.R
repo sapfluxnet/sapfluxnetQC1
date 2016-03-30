@@ -47,22 +47,35 @@ qc_site_col <- function(data) {
   # 1.1 Initiate result objects
   presence_res <- vector()
   classes_res <- vector()
+  na_res <- vector()
 
   # STEP 2
   # Checks (presence and class)
-  for (name in data_variables) {
-    p_res <- name %in% dic$variables
+  for (name in dic$variables) {
+    # presence
+    p_res <- name %in% data_variables
     presence_res <- c(presence_res, p_res)
+    # class
     c_res <- identical(class(data[[name]]),
                        as.character(dic$class[dic$variable == name]))
     classes_res <- c(classes_res, c_res)
+    # NAs
+    if (p_res) {
+      n_res <- is.na(data[[name]])
+      na_res <- c(na_res, n_res)
+    } else {
+      n_res <- NA
+      na_res <- c(na_res, n_res)
+    }
+
   }
 
   # STEP 3
   # Create and return the result object
-  result <- data.frame(Variable = data_variables,
+  result <- data.frame(Variable = dic$variables,
                        PresenceOK = presence_res,
-                       ClassOK = classes_res)
+                       ClassOK = classes_res,
+                       IsNA = na_res)
 
   return(result)
 
