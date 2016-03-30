@@ -37,7 +37,7 @@ the country limits. It only creates a data frame containing country, site
 and a logical variable indicating if coordinates are correct.
 }
 \seealso{
-Other Quality.Check.Functions: \code{\link{coord_sign_test}},
+Other Quality Check Functions: \code{\link{coord_sign_test}},
   \code{\link{download_maps}},
   \code{\link{fix_latlong_errors}},
   \code{\link{qc_suitable_range}}

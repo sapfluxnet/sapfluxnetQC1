@@ -59,7 +59,7 @@ the coordinates \bold{AND} changing both coordinates seem to fix the issue,
 as the correct option can not be assured.
 }
 \seealso{
-Other Quality.Check.Functions: \code{\link{check_coordinates}},
+Other Quality Check Functions: \code{\link{check_coordinates}},
   \code{\link{coord_sign_test}},
   \code{\link{download_maps}},
   \code{\link{qc_suitable_range}}

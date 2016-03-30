@@ -2,9 +2,13 @@
 
 export(check_coordinates)
 export(coord_sign_test)
+export(dl_metadata)
 export(download_maps)
 export(fix_latlong_errors)
 export(qc_species_verification)
 export(qc_suitable_range)
+import(dplyr)
 import(ggplot2)
+import(readxl)
+import(tidyr)
 import(tpl)

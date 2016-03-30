@@ -31,7 +31,7 @@ objects are not of the same length, an informative error appears and function
 stops.
 }
 \seealso{
-Other Quality.Check.Functions: \code{\link{check_coordinates}},
+Other Quality Check Functions: \code{\link{check_coordinates}},
   \code{\link{coord_sign_test}},
   \code{\link{download_maps}},
   \code{\link{fix_latlong_errors}}

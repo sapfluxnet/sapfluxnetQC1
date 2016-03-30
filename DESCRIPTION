@@ -13,7 +13,10 @@ Imports:
     rgeos,
     ggplot2,
     broom,
-    magrittr
+    magrittr,
+    readxl,
+    dplyr,
+    tidyr
 Suggests:
     knitr,
     rmarkdown,
