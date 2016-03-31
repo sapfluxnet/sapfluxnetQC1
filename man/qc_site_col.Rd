@@ -22,4 +22,7 @@ First qaulity check before continue to more complex checks. Here we are
 simply testing if all the columns are there with the correct classes
 (numerical for numerical values, character for text fields, etc.).
 }
+\seealso{
+Other Quality Checks Functions: \code{\link{create_dic}}
+}
 
