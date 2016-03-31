@@ -245,7 +245,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE) {
     # 1.1.4 If long format is needed, gather time!!
     if (long) {
       res <- res %>%
-        gather(Plant, Sapflow_value, -TIMESTAMP)
+        dplyr::gather(Plant, Sapflow_value, -TIMESTAMP)
 
       # 1.1.5 return long format
       return(res)
@@ -270,7 +270,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE) {
     # 1.2.4 If long format is needed, gather time!!
     if (long) {
       res <- res %>%
-        gather(Variable, Value, -TIMESTAMP)
+        dplyr::gather(Variable, Value, -TIMESTAMP)
 
       # 1.2.5 return long format
       return(res)
