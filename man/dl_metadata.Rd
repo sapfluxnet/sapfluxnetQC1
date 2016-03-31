@@ -28,4 +28,8 @@ This function make use of dplyr, tidyr and readxl packages in order to
 retrieve and format the metadata. It's intended to be used as first step
 to load the metadata and start the metadata quality check.
 }
+\seealso{
+Other Data Loading Functions: \code{\link{dl_data}},
+  \code{\link{remove_dupcols}}
+}
 

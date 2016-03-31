@@ -1,3 +1,40 @@
+#' Remove columns with duplicate names
+#'
+#' \code{remove_dupcols} is an internal function to use inside of the \code{dl_*}
+#' functions. It checks for duplicate column names and drop them
+#'
+#' When exporting from excel files, sometimes cell fomatting makes empty columns
+#' and rows to be read and loaded in R. If that is the case, any try to transform
+#' and to shape the data faces a "duplicate column names error". This can be
+#' solved by the correct formatting of the excel files, but this can not be
+#' always achieved, hence this function.
+#'
+#' @family Data Loading Functions
+#'
+#' @param data Data frame in which check for duplicate column names
+#'
+#' @return \code{remove_dupcols} returns the loaded data with duplicate columns
+#'   removed, if any.
+#'
+
+# START
+# Function declaration
+
+remove_dupcols <- function(data) {
+
+  # STEP 0
+  # Argument checking
+
+  # STEP 1
+  # Check for duplicate columns and drop them if any
+  if (any(duplicated(names(data)))) {
+    res <- data[!duplicated(names(data))]
+    return(res)
+  } else { return(data) }
+
+  # END FUNCTION
+}
+
 #' Loading metadata from xls/xlsx
 #'
 #' \code{dl_metadata} function loads the metadata sheets from xls/xlsx file.
@@ -59,6 +96,8 @@ dl_metadata <- function(file_name, sheet_name){
   if (sheet_name == 'site_md') {
     # read the sheet
     res <- readxl::read_excel(file_name, sheet_name, skip = 1) %>%
+      # check for duplicate columns
+      remove_dupcols() %>%
       # select only the name and the value of the variables
       dplyr::select(Variable, Value) %>%
       # in case of the read_excel function gets more rows filled with NA's, remove them
@@ -74,6 +113,8 @@ dl_metadata <- function(file_name, sheet_name){
   if (any(sheet_name == 'stand_md', sheet_name == 'environmental_md')) {
     # read the sheet
     res <- readxl::read_excel(file_name, sheet_name) %>%
+      # check for duplicate columns
+      remove_dupcols() %>%
       # select only the name and the value of the variables
       dplyr::select(Variable, Value) %>%
       # in case of the read_excel function gets more rows filled with NA's, remove them
@@ -89,6 +130,8 @@ dl_metadata <- function(file_name, sheet_name){
   if (sheet_name == 'plant_md') {
     # read the sheet
     res <- readxl::read_excel(file_name, sheet_name) %>%
+      # check for duplicate columns
+      remove_dupcols() %>%
       # select only the name and the value of the variables
       dplyr::select(-Description, -Units) %>%
       # in case of the read_excel function gets more rows filled with NA's, remove them
@@ -112,6 +155,8 @@ dl_metadata <- function(file_name, sheet_name){
   if (sheet_name == 'species_md') {
     # read the sheet
     res <- readxl::read_excel(file_name, sheet_name) %>%
+      # check for duplicate columns
+      remove_dupcols() %>%
       # select only the name and the value of the variables
       dplyr::select(-Description, -Units) %>%
       # in case of the read_excel function gets more rows filled with NA's, remove them
@@ -127,6 +172,113 @@ dl_metadata <- function(file_name, sheet_name){
 
     # 1.4.1 return the species metadata
     return(res)
+  }
+
+  # END FUNCTION
+}
+
+#' Loading data from xls/xlsx
+#'
+#' This function make use of dplyr, tidyr and readxl packages in order to
+#' retrieve and format the data.
+#'
+#' In case of data to be in the xls/xlsx file, instead of separate csv files,
+#' this function is used to retrieve the raw data (sapflow and environmental).
+#'
+#' @family Data Loading Functions
+#'
+#' @param file_name Character vector indicating the name of the xls/xlsx file
+#'   containing the data.
+#'
+#' @param sheet_name Character vector indicating the name of the sheet to be
+#'   loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}.
+#'
+#' @param long Logical indicating if returned data must be in \code{long} format
+#'
+#' @return \code{dl_data} returns sapflow or environmental data in wide format,
+#'   ready to pipe it in the quality checks for raw data. If \code{long = TRUE}
+#'   data is returned in long format, ready for plotting.
+#'
+#' @import dplyr
+#' @import tidyr
+#' @import readxl
+#'
+#' @export
+
+# START
+# Function declaration
+
+dl_data <- function(file_name, sheet_name, long = FALSE) {
+
+  # STEP 0
+  # Argument checking
+  # check if file name is a character and it exist
+  if (!is.character(file_name)) {
+    stop('File name is not provided as character')
+  }
+
+  if (!file_test("-f", file_name)) {
+    stop('File does not exist, please check if file name has been correctly provided')
+  }
+
+  # check if sheet name is one of the five kinds of metadata allowed
+  accepted_sheets <- c('sapflow_hd', 'environmental_hd')
+
+  if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
+    stop('Provided sheet name is not a character or is not a metadata sheet
+         Please see function help')
+  }
+
+  # STEP 1
+  # Loading and shaping the data
+
+  # 1.1 sapflow data
+  if (sheet_name == 'sapflow_hd') {
+    res <- readxl::read_excel(file_name, sheet_name, skip = 4) %>%
+      # 1.1.2 Check and remove duplicate columns
+      remove_dupcols() %>%
+      # 1.1.3 Remove any extra column that could be created in the read_excel step.
+      #       This is achieved with a regular expression indicating that we select
+      #       those variables that have TIME or end with a number
+      dplyr::select(matches("(TIME|^.+?\\d$)"))
+
+    # 1.1.4 If long format is needed, gather time!!
+    if (long) {
+      res <- res %>%
+        gather(Plant, Sapflow_value, -TIMESTAMP)
+
+      # 1.1.5 return long format
+      return(res)
+
+    } else {
+      # or return wide format
+      return(res)
+    }
+
+  } else {
+    # 1.2 environmental data
+    res <- readxl::read_excel(file_name, sheet_name, skip = 3) %>%
+      # 1.2.2 check and remove duplicate columns
+      remove_dupcols() %>%
+      # 1.2.3 Remove any extra column that could be created in the read_excel step.
+      #       This is achieved with a regular expression indicating that we select
+      #       the environmental variables and the TIMESTAMP
+      dplyr::select(matches(
+        "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
+      ))
+
+    # 1.2.4 If long format is needed, gather time!!
+    if (long) {
+      res <- res %>%
+        gather(Variable, Value, -TIMESTAMP)
+
+      # 1.2.5 return long format
+      return(res)
+
+    } else {
+      # or return wide format
+      return(res)
+    }
   }
 
   # END FUNCTION

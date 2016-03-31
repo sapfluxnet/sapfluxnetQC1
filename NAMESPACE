@@ -2,6 +2,7 @@
 
 export(check_coordinates)
 export(coord_sign_test)
+export(dl_data)
 export(dl_metadata)
 export(download_maps)
 export(fix_latlong_errors)
