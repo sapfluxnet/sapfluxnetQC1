@@ -1,3 +1,4 @@
+################################################################################
 #' Download maps for countries included in the database
 #'
 #' \code{download_maps} fetch maps from \url{http://www.gadm.org/}.
@@ -111,7 +112,6 @@ download_maps <- function(data, folder = getwd()) {
 }
 
 ################################################################################
-
 #' Site coordinates checking
 #'
 #' \code{check_coordinates} verifies if provided coordinates are within
@@ -263,7 +263,6 @@ check_coordinates <- function(data, maps_folder = getwd(),
 }
 
 ################################################################################
-
 #' Coordinates sign test
 #'
 #' \code{coord_sign_test} is an internal function to test if site coordinates
@@ -583,7 +582,6 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 }
 
 ################################################################################
-
 #' Fixing sign errors in coordinates
 #'
 #' \code{fix_latlong_errors} makes possible to fix known errors in latitude and

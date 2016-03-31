@@ -1,3 +1,4 @@
+################################################################################
 #' Remove columns with duplicate names
 #'
 #' \code{remove_dupcols} is an internal function to use inside of the \code{dl_*}
@@ -35,6 +36,7 @@ remove_dupcols <- function(data) {
   # END FUNCTION
 }
 
+################################################################################
 #' Loading metadata from xls/xlsx
 #'
 #' \code{dl_metadata} function loads the metadata sheets from xls/xlsx file.
@@ -177,6 +179,7 @@ dl_metadata <- function(file_name, sheet_name){
   # END FUNCTION
 }
 
+################################################################################
 #' Loading data from xls/xlsx
 #'
 #' This function make use of dplyr, tidyr and readxl packages in order to

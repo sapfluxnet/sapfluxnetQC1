@@ -1,3 +1,4 @@
+################################################################################
 #' Variable dictionaries for metadata
 #'
 #' \code{create_dic} creates a dictionary containing metadata variable names
@@ -121,8 +122,7 @@ create_dic <- function(metadata) {
   # END FUNCTION
 }
 
-
-
+################################################################################
 #' Site metadata column check
 #'
 #' \code{qc_site_col} checks if all the site metadata columns were

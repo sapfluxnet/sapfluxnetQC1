@@ -1,3 +1,4 @@
+################################################################################
 #' Verify provided species names (spelling and correctness)
 #'
 #' \code{qc_species_verification} uses \code{tpl} package

@@ -1,3 +1,4 @@
+################################################################################
 #' Find if provided values of a numerical variable are in a suitable range
 #'
 #' \code{qc_suitable_range} is used to determine if a variable has strange
