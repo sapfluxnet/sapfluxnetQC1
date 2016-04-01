@@ -4,16 +4,15 @@
 \alias{create_dic}
 \title{Variable dictionaries for metadata}
 \usage{
-create_dic(metadata)
+create_dic(dic_name)
 }
 \arguments{
-\item{metadata}{Name of the metadata sheet of which dictionary is needed.
+\item{dic_name}{Name of the metadata sheet of which dictionary is needed.
 It must be one of \code{site_md}, \code{stand_md}, \code{species_md},
 \code{plant_md} or \code{environmental_md}.}
 }
 \value{
-A data frame containing two columns, \code{Name} and \code{Class} for
-  the selected kind of metadata.
+A named list, variable names being the index and class the value
 }
 \description{
 \code{create_dic} creates a dictionary containing metadata variable names
@@ -27,6 +26,6 @@ compare. This function works inside of \code{\link{qc_col_class}}, so there
 is no need to call it directly
 }
 \seealso{
-Other Quality Checks Functions: \code{\link{qc_site_col}}
+Other Quality Checks Functions: \code{\link{qc_md_cols}}
 }
 
