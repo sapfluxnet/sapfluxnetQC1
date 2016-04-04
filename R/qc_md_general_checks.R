@@ -24,7 +24,14 @@ create_dic <- function(dic_name) {
 
   # STEP 0
   # Argument checking
+  # check if dictionary name is one of the five kinds of metadata allowed
+  accepted_sheets <- c('site_md', 'stand_md', 'species_md',
+                       'plant_md', 'environmental_md')
 
+  if (!is.character(dic_name) || !(dic_name %in% accepted_sheets)) {
+    stop('Provided dicitonary name is not a character or is not a valid name.
+         Please see function help for information about valid dictionary names')
+  }
 
   # STEP 1
   # Get the kind of metadata and populate the dictionary
@@ -140,7 +147,19 @@ qc_md_cols <- function(metadata, dic) {
 
   # STEP 0
   # Argument checks
+  # metadata is a data frame?
+  if (!is.data.frame(metadata)) {
+    stop('Metadata object is not a data frame')
+  }
 
+  # check if dictionary name is one of the five kinds of metadata allowed
+  accepted_sheets <- c('site_md', 'stand_md', 'species_md',
+                       'plant_md', 'environmental_md')
+
+  if (!is.character(dic_name) || !(dic_name %in% accepted_sheets)) {
+    stop('Provided dicitonary name is not a character or is not a valid name.
+         Please see function help for information about valid dictionary names')
+  }
 
   # STEP 1
   # Initialise result objects and dictionary

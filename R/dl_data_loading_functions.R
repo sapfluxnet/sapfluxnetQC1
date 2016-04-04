@@ -25,6 +25,10 @@ remove_dupcols <- function(data) {
 
   # STEP 0
   # Argument checking
+  # data is a data_frame
+  if (!is.data.frame(data)) {
+    stop('Data is not a data frame')
+  }
 
   # STEP 1
   # Check for duplicate columns and drop them if any
