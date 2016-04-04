@@ -1,7 +1,7 @@
 ################################################################################
 #' Download maps for countries included in the database
 #'
-#' \code{download_maps} fetch maps from \url{http://www.gadm.org/}.
+#' \code{qc_download_maps} fetch maps from \url{http://www.gadm.org/}.
 #'
 #' This function fetch maps from \url{http://www.gadm.org/} if the map is not
 #' already present in the maps folder (by default, the working directory).
@@ -23,7 +23,7 @@
 # START
 # function declaration
 
-download_maps <- function(data, folder = getwd()) {
+qc_download_maps <- function(data, folder = getwd()) {
 
   # STEP 0
   # Argument checks
@@ -114,11 +114,11 @@ download_maps <- function(data, folder = getwd()) {
 ################################################################################
 #' Site coordinates checking
 #'
-#' \code{check_coordinates} verifies if provided coordinates are within
+#' \code{qc_check_coordinates} verifies if provided coordinates are within
 #' country declared in metadata form.
 #'
 #' This function uses maps previously downloaded with
-#' \code{\link{download_maps}} to check if the provided coordinates are within
+#' \code{\link{qc_download_maps}} to check if the provided coordinates are within
 #' the country limits. It only creates a data frame containing country, site
 #' and a logical variable indicating if coordinates are correct.
 #'
@@ -149,7 +149,7 @@ download_maps <- function(data, folder = getwd()) {
 # START
 # Function declaration
 
-check_coordinates <- function(data, maps_folder = getwd(),
+qc_check_coordinates <- function(data, maps_folder = getwd(),
                               plot = FALSE, text_report = TRUE){
 
   # STEP 0
@@ -265,8 +265,8 @@ check_coordinates <- function(data, maps_folder = getwd(),
 ################################################################################
 #' Coordinates sign test
 #'
-#' \code{coord_sign_test} is an internal function to test if site coordinates
-#' signs are interchanged. It's needed by \code{\link{fix_latlong_errors}}
+#' \code{qc_coord_sign_test} is an internal function to test if site coordinates
+#' signs are interchanged. It's needed by \code{\link{qc_fix_latlong_errors}}
 #' function.
 #'
 #' Country coordinates sign is established by this function and testing if
@@ -275,8 +275,8 @@ check_coordinates <- function(data, maps_folder = getwd(),
 #' @section Special countries:
 #' There are special countries where border coordinates for longitude, latitude
 #' or both have negative and positive values. In this case, the normal approach
-#' of \code{coord_sign_test} is not appropriate, and several tests involving
-#' the internal use of \code{\link{check_coordinates}} must be made. If
+#' of \code{qc_coord_sign_test} is not appropriate, and several tests involving
+#' the internal use of \code{\link{qc_check_coordinates}} must be made. If
 #' \code{special_countries = TRUE} is specified, then tests are made trying to
 #' dilucidate if only a change in the sign of one, latitude or longitude, is
 #' needed or, in the contrary, changing both of them is needed. There is one
@@ -286,7 +286,7 @@ check_coordinates <- function(data, maps_folder = getwd(),
 #'
 #' @family Quality Check Functions
 #'
-#' @param data Data frame with data coming from \code{\link{check_coordinates}}
+#' @param data Data frame with data coming from \code{\link{qc_check_coordinates}}
 #'   (with latitude, longitude, country and is_inside_country variables).
 #'
 #' @param maps_folder Folder route where the maps are stored, by default the
@@ -306,7 +306,7 @@ check_coordinates <- function(data, maps_folder = getwd(),
 # START
 # Function declaration
 
-coord_sign_test <- function(data, maps_folder = getwd(),
+qc_coord_sign_test <- function(data, maps_folder = getwd(),
                             special_countries = FALSE) {
 
   # STEP 0
@@ -469,7 +469,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         }
 
         # 7.2.2 check
-        res_data$lat_changed[j] <- check_coordinates(
+        res_data$lat_changed[j] <- qc_check_coordinates(
           check_data_lat, maps_folder,
           plot = FALSE,
           text_report = FALSE)$is_inside_country[1]
@@ -495,7 +495,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         }
 
         # 7.2.4 check
-        res_data$long_changed[j] <- check_coordinates(
+        res_data$long_changed[j] <- qc_check_coordinates(
           check_data_long, maps_folder,
           plot = FALSE,
           text_report = FALSE)$is_inside_country[1]
@@ -528,17 +528,17 @@ coord_sign_test <- function(data, maps_folder = getwd(),
         )
 
         # 7.3.2 checks
-        lat_check <- check_coordinates(
+        lat_check <- qc_check_coordinates(
           check_data_lat, maps_folder,
           plot = FALSE,
           text_report = FALSE)$is_inside_country[1]
 
-        long_check <- check_coordinates(
+        long_check <- qc_check_coordinates(
           check_data_long, maps_folder,
           plot = FALSE,
           text_report = FALSE)$is_inside_country[1]
 
-        both_check <- check_coordinates(
+        both_check <- qc_check_coordinates(
           check_data_both, maps_folder,
           plot = FALSE,
           text_report = FALSE)$is_inside_country[1]
@@ -584,26 +584,26 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 ################################################################################
 #' Fixing sign errors in coordinates
 #'
-#' \code{fix_latlong_errors} makes possible to fix known errors in latitude and
+#' \code{qc_fix_latlong_errors} makes possible to fix known errors in latitude and
 #' longitude coordinates, as exchanged signs.
 #'
 #' This function calls to other internal functions in order to fix different
 #' kinds of coordinates errors. At the moment, only exchanged signs in
 #' coordinates errors are considered to be fixed.
 #'
-#' After the fixes are applied, \code{\link{check_coordinates}} is called to
+#' After the fixes are applied, \code{\link{qc_check_coordinates}} is called to
 #' update \code{is_inside_country} variable.
 #'
 #' @section Sign errors:
-#' If \code{sign_errors = TRUE} is specified, \code{\link{coord_sign_test}} is
+#' If \code{sign_errors = TRUE} is specified, \code{\link{qc_coord_sign_test}} is
 #' called to establish possible sign error and, if any, they are fixed. This fix
 #' can be done with or without special countries (see next section)
 #'
 #' @section Special countries:
 #' There are special countries where border coordinates for longitude, latitude
 #' or both have negative and positive values. In this case, the normal approach
-#' of \code{coord_sign_test} is not appropriate, and several tests involving
-#' the internal use of \code{\link{check_coordinates}} must be made. If
+#' of \code{qc_coord_sign_test} is not appropriate, and several tests involving
+#' the internal use of \code{\link{qc_check_coordinates}} must be made. If
 #' \code{special_countries = TRUE} is specified, then tests are made trying to
 #' dilucidate if only a change in the sign of one, latitude or longitude, is
 #' needed or, in the contrary, changing both of them is needed. There is one
@@ -613,7 +613,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 #'
 #' @family Quality Check Functions
 #'
-#' @param data Data frame with data coming from \code{\link{check_coordinates}}
+#' @param data Data frame with data coming from \code{\link{qc_check_coordinates}}
 #'   (with latitude, longitude, country and is_inside_country variables).
 #'
 #' @param maps_folder Folder route where the maps are stored, by default the
@@ -621,7 +621,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 #'   \bold{without} \code{/}.
 #'
 #' @param sign_errors Logical indicating if sign errors must be checked and
-#'   fixed. If TRUE (default), \code{\link{coord_sign_test}} is internally
+#'   fixed. If TRUE (default), \code{\link{qc_coord_sign_test}} is internally
 #'   called.
 #'
 #' @param special_countries Logical indicating if the special approach to
@@ -634,7 +634,7 @@ coord_sign_test <- function(data, maps_folder = getwd(),
 
 # START
 # Function declaration
-fix_latlong_errors <- function(data, maps_folder = getwd(),
+qc_fix_latlong_errors <- function(data, maps_folder = getwd(),
                                sign_errors = TRUE,
                                special_countries = FALSE) {
 
@@ -680,7 +680,7 @@ fix_latlong_errors <- function(data, maps_folder = getwd(),
   if(sign_errors) {
 
     # 2.1 Are signs interchanged?
-    sign_test_data <- coord_sign_test(data, maps_folder,
+    sign_test_data <- qc_coord_sign_test(data, maps_folder,
                                       special_countries = special_countries)
 
     # 2.2 Fix them if they are (multiply by -1)
@@ -707,7 +707,7 @@ fix_latlong_errors <- function(data, maps_folder = getwd(),
   # n+1 STEP
   # Returning the results
   return(suppressMessages(
-    check_coordinates(results, maps_folder,
+    qc_check_coordinates(results, maps_folder,
                       plot = FALSE, text_report = FALSE))
   )
 
