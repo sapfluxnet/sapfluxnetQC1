@@ -36,6 +36,6 @@ against plant metadata.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
-  \code{\link{qc_md_cols}}
+  \code{\link{qc_md_cols}}, \code{\link{qc_pl_treatments}}
 }
 

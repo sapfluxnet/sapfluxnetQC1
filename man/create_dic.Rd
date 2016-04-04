@@ -27,6 +27,7 @@ is no need to call it directly
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{qc_md_cols}},
+  \code{\link{qc_pl_treatments}},
   \code{\link{qc_species_verification}}
 }
 

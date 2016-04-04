@@ -31,6 +31,7 @@ state.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
+  \code{\link{qc_pl_treatments}},
   \code{\link{qc_species_verification}}
 }
 
