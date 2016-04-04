@@ -1,7 +1,7 @@
 ################################################################################
 #' Verify provided species names (spelling and correctness)
 #'
-#' \code{qc_species_verification} uses \code{tpl} package
+#' \code{qc_species_names} uses \code{tpl} package
 #' (\code{\link{https://github.com/gustavobio/tpl}}) to verify the species
 #' introduced by the contributors and fix spelling errors.
 #'
@@ -32,7 +32,7 @@
 # START
 # Function declaration
 
-qc_species_verification <- function(species, conservatism = 0.9) {
+qc_species_names <- function(species, conservatism = 0.9) {
 
   # STEP 0
   # Argument checks
@@ -66,4 +66,62 @@ qc_species_verification <- function(species, conservatism = 0.9) {
   }
 
 # END FUNCTION
+}
+
+################################################################################
+#' Check if sp_name and sp_ntrees coincides with plants specified in plant_md
+#'
+#' \code{qc_species_verification} checks for coincidence in the number and species
+#' names between species_md and plant_md
+#'
+#' In order to check if provided species metadata coincides with provided plant
+#' metadata, species names and number of plants in each species are checked
+#' against plant metadata.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param species_md Data frame containing species metadata.
+#'
+#' @param plant_md Data frame containing plant metadata.
+#'
+#' @return No idea for the moment
+#'
+#' @import dplyr
+#'
+#' @export
+
+# START
+# Function declaration
+
+qc_species_verification <- function(species_md, plant_md) {
+
+  # STEP 0
+  # Argument checks
+
+  # STEP 1
+  # Extract number and species names information from species_md
+  sp_md <- species_md %>%
+    dplyr::select(sp_name, sp_ntrees) %>%
+    dplyr::rename(sp_names = sp_name, sp_n_trees = sp_ntrees) %>%
+    dplyr::arrange(sp_names)
+
+  # STEP 2
+  # Extract number and species names information from plant_md
+  pl_md <- plant_md %>%
+    dplyr::select(pl_species) %>%
+    dplyr::group_by(pl_species) %>%
+    dplyr::summarize(pl_n_trees = n()) %>%
+    dplyr::rename(sp_names = pl_species) %>%
+    dplyr::arrange(sp_names)
+
+  # STEP 3
+  # Compare both metadata to look for errors and generate result object
+  res <- dplyr::full_join(sp_md, pl_md, by = sp_names) %>%
+    dplyr::mutate(coincidence = (sp_n_trees == pl_n_trees))
+
+  # STEP 4
+  # Return the results object
+  return(res)
+
+  # END FUNCTION
 }

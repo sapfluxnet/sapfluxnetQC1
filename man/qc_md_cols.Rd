@@ -30,6 +30,7 @@ workflow. This function returns a summary of the metadata columns and their
 state.
 }
 \seealso{
-Other Quality Checks Functions: \code{\link{create_dic}}
+Other Quality Checks Functions: \code{\link{create_dic}},
+  \code{\link{qc_species_verification}}
 }
 
