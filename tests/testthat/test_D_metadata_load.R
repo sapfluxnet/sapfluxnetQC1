@@ -22,3 +22,36 @@ test_that('Error raises in case of bad arguments', {
 })
 
 file.remove('foo.data')
+
+# xlsx file
+xlsx_name <- 'foo.xlsx'
+
+site_md <- suppressMessages(dl_metadata(xlsx_name, 'site_md'))
+stand_md <- dl_metadata(xlsx_name, 'stand_md', si_code_loc = site_md)
+species_md <- dl_metadata(xlsx_name, 'species_md', si_code_loc = site_md)
+plant_md <- dl_metadata(xlsx_name, 'plant_md', si_code_loc = site_md)
+env_md <- dl_metadata(xlsx_name, 'environmental_md', si_code_loc = site_md)
+
+test_that('function returns data frames', {
+  expect_is(site_md, 'data.frame')
+  expect_is(stand_md, 'data.frame')
+  expect_is(species_md, 'data.frame')
+  expect_is(plant_md, 'data.frame')
+  expect_is(env_md, 'data.frame')
+})
+
+test_that('si_code is correctly inserted in all metadata', {
+  expect_identical(site_md$si_code, 'ESP_VAL_SOR')
+  expect_identical(stand_md$si_code, 'ESP_VAL_SOR')
+  expect_true(all(species_md$si_code == 'ESP_VAL_SOR'))
+  expect_true(all(plant_md$si_code == 'ESP_VAL_SOR'))
+  expect_identical(env_md$si_code, 'ESP_VAL_SOR')
+})
+
+test_that('each metadata object has the correct number of variables', {
+  expect_equal(length(names(site_md)), 20)
+  expect_equal(length(names(stand_md)), 17)
+  expect_equal(length(names(species_md)), 5)
+  expect_equal(length(names(plant_md)), 24)
+  expect_equal(length(names(env_md)), 17)
+})
