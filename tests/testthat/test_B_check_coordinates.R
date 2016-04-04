@@ -31,7 +31,7 @@ test_that('checking is correct', {
     si_country = c('CRI', 'ITA', 'NZL', 'CHE', 'BRA'),
     si_name = c('bla', 'ble', 'bli', 'blo', 'blu')
   )
-  download_maps(foo_data)
+  qc_download_maps(foo_data)
 
   expect_message(qc_check_coordinates(foo_data[2:5,]), '4 wrong coordinates in data')
   expect_message(qc_check_coordinates(foo_data[1,]), '1 correct coordinates in data')
