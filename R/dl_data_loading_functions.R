@@ -58,6 +58,10 @@ remove_dupcols <- function(data) {
 #'   loaded. It must be one of \code{site_md}, \code{stand_md}, \code{species_md},
 #'   \code{plant_md} or \code{environmental_md}.
 #'
+#' @param si_code_loc Name of the object containing the site metadata, in order
+#'   to obtain si_code variable to include it in other metadata objects. Default
+#'   to \code{NULL}, as the first metadata to load must be the site metadata.
+#'
 #' @return The function returns a data_frame with the corresponding metadata
 #'   (site, stand, species, plant or environmental) in "wide" format, with
 #'   metadata variables as columns, ready to be feeded to quality check
@@ -72,7 +76,7 @@ remove_dupcols <- function(data) {
 # START
 # Function declaration
 
-dl_metadata <- function(file_name, sheet_name){
+dl_metadata <- function(file_name, sheet_name, si_code_loc = NULL){
 
   # STEP 0
   # Argument checking
@@ -93,6 +97,15 @@ dl_metadata <- function(file_name, sheet_name){
   if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
     stop('Provided sheet name is not a character or is not a metadata sheet
          Please see function help')
+  }
+
+  # check for si_code_loc and if NULL set si_code to NA
+  if (is.null(si_code_loc)) {
+    si_code_txt <- NA
+    message('si_code_loc set to NULL. If loading other metadata than site_md,
+            please indicate the object containing the site metadata.')
+  } else {
+    si_code_txt <- si_code_loc$si_code[1]
   }
 
   # STEP 1
@@ -126,7 +139,9 @@ dl_metadata <- function(file_name, sheet_name){
       # in case of the read_excel function gets more rows filled with NA's, remove them
       dplyr::filter(!is.na(Variable)) %>%
       # spread the variables to their own columns, getting back their class
-      tidyr::spread(Variable, Value, convert = TRUE)
+      tidyr::spread(Variable, Value, convert = TRUE) %>%
+      # adding the si_code
+      dplyr::mutate(si_code = si_code_txt)
 
     # 1.2.1 return the stand or environmental metadata
     return(res)
@@ -150,7 +165,9 @@ dl_metadata <- function(file_name, sheet_name){
       dplyr::select(-Indexes) %>%
       dplyr::filter(!is.na(pl_age) | !is.na(pl_azimut_int) |
                       !is.na(pl_bark_thick) | !is.na(pl_code) |
-                      !is.na(pl_dbh))
+                      !is.na(pl_dbh)) %>%
+      # adding the si_code
+      dplyr::mutate(si_code = si_code_txt)
 
     # 1.3.1 return the plant metadata
     return(res)
@@ -174,7 +191,9 @@ dl_metadata <- function(file_name, sheet_name){
       # clean the resulting data
       dplyr::select(-Indexes) %>%
       dplyr::filter(!is.na(sp_basal_area_perc) | !is.na(sp_leaf_habit) |
-                      !is.na(sp_name) | !is.na(sp_ntrees))
+                      !is.na(sp_name) | !is.na(sp_ntrees)) %>%
+      # adding the si_code
+      dplyr::mutate(si_code = si_code_txt)
 
     # 1.4.1 return the species metadata
     return(res)

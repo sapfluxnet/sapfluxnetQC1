@@ -62,7 +62,8 @@ create_dic <- function(dic_name) {
                 st_aspect = 'character', st_terrain = 'character',
                 st_soil_depth = c('numeric', 'integer'), st_soil_texture = 'character',
                 st_sand_perc = c('numeric', 'integer'), st_silt_perc = c('numeric', 'integer'),
-                st_clay_perc = c('numeric', 'integer'), st_remarks = 'character')
+                st_clay_perc = c('numeric', 'integer'), st_remarks = 'character',
+                si_code = 'character')
 
     # 1.2.1 return dic
     return(dic)
@@ -71,7 +72,8 @@ create_dic <- function(dic_name) {
   # 1.3 Species metadata
   if (dic_name == 'species_md') {
     dic <- list(sp_name = 'character', sp_ntrees = c('numeric', 'integer'),
-                sp_leaf_habit = 'character', sp_basal_area_perc = c('numeric', 'integer'))
+                sp_leaf_habit = 'character', sp_basal_area_perc = c('numeric', 'integer'),
+                si_code = 'character')
 
     # 1.3.1 return dic
     return(dic)
@@ -90,7 +92,7 @@ create_dic <- function(dic_name) {
                 pl_sens_length = c('numeric', 'integer'), pl_sens_hgt = c('numeric', 'integer'),
                 pl_sens_timestep = c('numeric', 'integer'), pl_radial_int = 'character',
                 pl_azimut_int = 'character', pl_remarks = 'character',
-                pl_code = 'character')
+                pl_code = 'character', si_code = 'character')
 
     # 1.4.1 return dic
     return(dic)
@@ -105,7 +107,8 @@ create_dic <- function(dic_name) {
                 env_netrad = 'character', env_ws = 'character',
                 env_precip = 'character', env_swc_shallow_depth = c('numeric', 'integer'),
                 env_swc_deep_depth = c('numeric', 'integer'), env_plant_watpot = 'character',
-                env_leafarea_seasonal = 'character', env_remarks = 'character')
+                env_leafarea_seasonal = 'character', env_remarks = 'character',
+                si_code = 'character')
 
     # 1.5.1 return dic
     return(dic)
@@ -156,7 +159,7 @@ qc_md_cols <- function(metadata, dic) {
   accepted_sheets <- c('site_md', 'stand_md', 'species_md',
                        'plant_md', 'environmental_md')
 
-  if (!is.character(dic_name) || !(dic_name %in% accepted_sheets)) {
+  if (!is.character(dic) || !(dic %in% accepted_sheets)) {
     stop('Provided dicitonary name is not a character or is not a valid name.
          Please see function help for information about valid dictionary names')
   }

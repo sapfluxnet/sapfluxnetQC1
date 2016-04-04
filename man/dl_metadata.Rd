@@ -4,7 +4,7 @@
 \alias{dl_metadata}
 \title{Loading metadata from xls/xlsx}
 \usage{
-dl_metadata(file_name, sheet_name)
+dl_metadata(file_name, sheet_name, si_code_loc = NULL)
 }
 \arguments{
 \item{file_name}{Character vector indicating the name of the xls/xlsx file
@@ -13,6 +13,10 @@ containing the metadata.}
 \item{sheet_name}{Character vector indicating the name of the sheet to be
 loaded. It must be one of \code{site_md}, \code{stand_md}, \code{species_md},
 \code{plant_md} or \code{environmental_md}.}
+
+\item{si_code_loc}{Name of the object containing the site metadata, in order
+to obtain si_code variable to include it in other metadata objects. Default
+to \code{NULL}, as the first metadata to load must be the site metadata.}
 }
 \value{
 The function returns a data_frame with the corresponding metadata
