@@ -84,7 +84,9 @@ qc_species_names <- function(species, conservatism = 0.9) {
 #'
 #' @param plant_md Data frame containing plant metadata.
 #'
-#' @return No idea for the moment
+#' @return A data frame with the species provided in plant and species metadata,
+#'   as well as the number of trees of each species in both metadata. Last column,
+#'   \code{coincidence}, is the result of checking both numbers.
 #'
 #' @import dplyr
 #'
@@ -116,7 +118,7 @@ qc_species_verification <- function(species_md, plant_md) {
 
   # STEP 3
   # Compare both metadata to look for errors and generate result object
-  res <- dplyr::full_join(sp_md, pl_md, by = sp_names) %>%
+  res <- dplyr::full_join(sp_md, pl_md, by = 'sp_names') %>%
     dplyr::mutate(coincidence = (sp_n_trees == pl_n_trees))
 
   # STEP 4

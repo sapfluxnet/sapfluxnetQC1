@@ -12,7 +12,9 @@ qc_species_verification(species_md, plant_md)
 \item{plant_md}{Data frame containing plant metadata.}
 }
 \value{
-No idea for the moment
+A data frame with the species provided in plant and species metadata,
+  as well as the number of trees of each species in both metadata. Last column,
+  \code{coincidence}, is the result of checking both numbers.
 }
 \description{
 \code{qc_species_verification} checks for coincidence in the number and species
