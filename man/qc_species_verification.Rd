@@ -13,8 +13,9 @@ qc_species_verification(species_md, plant_md)
 }
 \value{
 A data frame with the species provided in plant and species metadata,
-  as well as the number of trees of each species in both metadata. Last column,
-  \code{coincidence}, is the result of checking both numbers.
+  as well as the number of trees of each species in both metadata.
+  \code{coincidence} column indicates result of checking both numbers and
+  presence of the same species.
 }
 \description{
 \code{qc_species_verification} checks for coincidence in the number and species
@@ -24,6 +25,14 @@ names between species_md and plant_md
 In order to check if provided species metadata coincides with provided plant
 metadata, species names and number of plants in each species are checked
 against plant metadata.
+}
+\section{Coincidence}{
+
+  Possible values of \code{coincidence} column in results data frame are:
+  \code{TRUE}, indicating both metadata have the same species and the number
+  of trees are the same; \code{FALSE} indicates that both metadata have the
+  same species, but the number of trees are no the same; finally,
+  \code{NA} indicates that the species are not the same in both metadata.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},

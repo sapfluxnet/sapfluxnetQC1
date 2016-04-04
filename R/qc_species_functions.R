@@ -43,7 +43,7 @@ qc_species_names <- function(species, conservatism = 0.9) {
   # Warning if conservatism is under 0.75
   if (conservatism < 0.75) {
     message('Conservatism value for spelling algorithm is under 0.75',
-            ' and this can be cause of specie name changes.',
+            ' and this can be cause of species name changes.',
             ' Maybe manual fix of some species should be done')
   }
 
@@ -78,6 +78,13 @@ qc_species_names <- function(species, conservatism = 0.9) {
 #' metadata, species names and number of plants in each species are checked
 #' against plant metadata.
 #'
+#' @section Coincidence:
+#'   Possible values of \code{coincidence} column in results data frame are:
+#'   \code{TRUE}, indicating both metadata have the same species and the number
+#'   of trees are the same; \code{FALSE} indicates that both metadata have the
+#'   same species, but the number of trees are no the same; finally,
+#'   \code{NA} indicates that the species are not the same in both metadata.
+#'
 #' @family Quality Checks Functions
 #'
 #' @param species_md Data frame containing species metadata.
@@ -85,8 +92,9 @@ qc_species_names <- function(species, conservatism = 0.9) {
 #' @param plant_md Data frame containing plant metadata.
 #'
 #' @return A data frame with the species provided in plant and species metadata,
-#'   as well as the number of trees of each species in both metadata. Last column,
-#'   \code{coincidence}, is the result of checking both numbers.
+#'   as well as the number of trees of each species in both metadata.
+#'   \code{coincidence} column indicates result of checking both numbers and
+#'   presence of the same species.
 #'
 #' @import dplyr
 #'
@@ -99,6 +107,9 @@ qc_species_verification <- function(species_md, plant_md) {
 
   # STEP 0
   # Argument checks
+  if (!is.data.frame(species_md) | !is.data.frame(plant_md)) {
+    message('One or both metadata objects is/are not data frame/s')
+  }
 
   # STEP 1
   # Extract number and species names information from species_md
