@@ -42,28 +42,13 @@ create_dic <- function(dic_name) {
                 si_flux_network = 'logical', si_dendro_network = 'logical',
                 si_remarks = 'character', si_code = 'character')
 
-    # dic <- data.frame(
-    #   Name = c('si_name', 'si_country', 'si_contact_firstname',
-    #            'si_contact_lastname', 'si_contact_email', 'si_contact_institution',
-    #            'si_addcontr_firstname', 'si_addcontr_lastname',
-    #            'si_addcontr_email', 'si_addcontr_institution', 'si_lat',
-    #            'si_long', 'si_elev', 'si_igbp', 'si_paper', 'si_dist_mgmt',
-    #            'si_flux_network', 'si_dendro_network', 'si_remarks', 'si_code'),
-    #   Class = c('character', 'character', 'character',
-    #             'character', 'character', 'character',
-    #             'character', 'character',
-    #             'character', 'character', 'numeric',
-    #             'numeric', 'numeric', 'character', 'character', 'character',
-    #             'logical', 'logical', 'character', 'character')
-    # )
-
     # 1.1.1 return dic
     return(dic)
   }
 
   # 1.2 stand metadata
   if (dic_name == 'stand_md'){
-    dic <- list(st_code = 'character', st_growth_condition = 'character',
+    dic <- list(st_name = 'character', st_growth_condition = 'character',
                 st_treatment = 'character', st_age = c('numeric', 'integer'),
                 st_height = c('numeric', 'integer'), st_density = c('numeric', 'integer'),
                 st_basal_area = c('numeric', 'integer'), st_lai = c('numeric', 'integer'),
@@ -71,17 +56,6 @@ create_dic <- function(dic_name) {
                 st_soil_depth = c('numeric', 'integer'), st_soil_texture = 'character',
                 st_sand_perc = c('numeric', 'integer'), st_silt_perc = c('numeric', 'integer'),
                 st_clay_perc = c('numeric', 'integer'), st_remarks = 'character')
-
-    # dic <- data.frame(
-    #   Name = c('st_age', 'st_aspect', 'st_basal_area', 'st_clay_perc',
-    #            'st_code', 'st_density', 'st_growth_condition', 'st_height',
-    #            'st_lai', 'st_remarks', 'st_sand_perc', 'st_silt_perc',
-    #            'st_soil_depth', 'st_soil_texture', 'st_terrain', 'st_treatment'),
-    #   Class = c('numeric', 'character', 'numeric', 'numeric',
-    #             'character', 'character', 'character', 'numeric',
-    #             'numeric', 'character', 'numeric', 'numeric',
-    #             'numeric', 'character', 'character', 'character')
-    # )
 
     # 1.2.1 return dic
     return(dic)
@@ -92,18 +66,13 @@ create_dic <- function(dic_name) {
     dic <- list(sp_name = 'character', sp_ntrees = c('numeric', 'integer'),
                 sp_leaf_habit = 'character', sp_basal_area_perc = c('numeric', 'integer'))
 
-    # dic <- data.frame(
-    #   Name = c('sp_basal_area_perc', 'sp_leaf_habit', 'sp_name', 'sp_ntrees'),
-    #   Class = c('numeric', 'character', 'character', 'numeric')
-    # )
-
     # 1.3.1 return dic
     return(dic)
   }
 
   # 1.4 Plant metadata
   if (dic_name == 'plant_md') {
-    dic <- list(pl_code = 'character', pl_species = 'character',
+    dic <- list(pl_name = 'character', pl_species = 'character',
                 pl_treatment = 'character', pl_dbh = c('numeric', 'integer'),
                 pl_height = c('numeric', 'integer'), pl_age = c('numeric', 'integer'),
                 pl_social = 'character', pl_sapw_area = c('numeric', 'integer'),
@@ -113,22 +82,8 @@ create_dic <- function(dic_name) {
                 pl_sens_cor_zero = 'character', pl_sap_units = 'character',
                 pl_sens_length = c('numeric', 'integer'), pl_sens_hgt = c('numeric', 'integer'),
                 pl_sens_timestep = c('numeric', 'integer'), pl_radial_int = 'character',
-                pl_azimut_int = 'character', pl_remarks = 'character')
-
-    # dic <- data.frame(
-    #   Name = c('pl_age', 'pl_azimut_int', 'pl_bark_thick', 'pl_code',
-    #            'pl_dbh', 'pl_height', 'pl_leaf_area', 'pl_radial_int',
-    #            'pl_remarks', 'pl_sap_units', 'pl_sapw_area', 'pl_sapw_depth',
-    #            'pl_sens_cor_grad', 'pl_sens_cor_zero', 'pl_sens_hgt',
-    #            'pl_sens_length', 'pl_sens_man', 'pl_sens_meth',
-    #            'pl_sens_timestep', 'pl_social', 'pl_species', 'pl_treatment'),
-    #   Class = c('numeric', 'character', 'numeric', 'character',
-    #             'numeric', 'numeric', 'numeric', 'character',
-    #             'character', 'character', 'numeric', 'numeric',
-    #             'character', 'character', 'numeric',
-    #             'numeric', 'character', 'character',
-    #             'numeric', 'character', 'character', 'character')
-    # )
+                pl_azimut_int = 'character', pl_remarks = 'character',
+                pl_code = 'character')
 
     # 1.4.1 return dic
     return(dic)
@@ -144,19 +99,6 @@ create_dic <- function(dic_name) {
                 env_precip = 'character', env_swc_shallow_depth = c('numeric', 'integer'),
                 env_swc_deep_depth = c('numeric', 'integer'), env_plant_watpot = 'character',
                 env_leafarea_seasonal = 'character', env_remarks = 'character')
-
-    # dic <- data.frame(
-    #   Name = c('env_leafarea_seasonal', 'env_netrad', 'env_plant_watpot',
-    #            'env_remarks', 'env_ppdf_in', 'env_precip',
-    #            'env_rh', 'env_swc_deep_depth', 'env_swc_shallow_depth',
-    #            'env_sw_in', 'env_ta', 'env_time_daylight',
-    #            'env_timestep', 'env_time_zone', 'env_vpd', 'env_ws'),
-    #   Class = c('character', 'character', 'character',
-    #             'character', 'character', 'character',
-    #             'character', 'numeric', 'numeric',
-    #             'character', 'character', 'logical',
-    #             'numeric', 'character', 'character', 'character')
-    # )
 
     # 1.5.1 return dic
     return(dic)
