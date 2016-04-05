@@ -92,7 +92,8 @@ create_dic <- function(dic_name) {
                 pl_sens_length = c('numeric', 'integer'), pl_sens_hgt = c('numeric', 'integer'),
                 pl_sens_timestep = c('numeric', 'integer'), pl_radial_int = 'character',
                 pl_azimut_int = 'character', pl_remarks = 'character',
-                pl_code = 'character', si_code = 'character')
+                pl_code = 'character', si_code = 'character',
+                pl_sens_calib = 'logical')
 
     # 1.4.1 return dic
     return(dic)

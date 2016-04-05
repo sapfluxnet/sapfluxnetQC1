@@ -18,9 +18,10 @@ A data frame with the information about the different treatments if
 provided in the plant metadata.
 }
 \details{
-This function recopiles all declared treatments and look for mispelling errors
-in the treatments (i.e. \code{Drought} and \code{drought}) that can be cause
-of later analysis errors.
+This function summarizes the treatments declared in the plant metadata to
+look for mispelling and concordance errors. At the moment, function only
+returns an informative data frame, but the search for spelling errors and
+fixes must be done at hand, as there is no automatized way of doing it.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
