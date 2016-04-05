@@ -10,8 +10,8 @@ qc_pl_treatments(plant_md)
 \item{plant_md}{Data frame containing the plant metadata}
 }
 \value{
-A data frame with the information about the different treeatments if
-  any
+A data frame with the information about the different treatments if
+  any.
 }
 \description{
 \code{qc_pl_treatments} function looks for spelling errors in treatments
