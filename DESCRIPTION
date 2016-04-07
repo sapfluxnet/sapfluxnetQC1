@@ -16,7 +16,8 @@ Imports:
     magrittr,
     readxl,
     dplyr,
-    tidyr
+    tidyr,
+    stringr
 Suggests:
     knitr,
     rmarkdown,
