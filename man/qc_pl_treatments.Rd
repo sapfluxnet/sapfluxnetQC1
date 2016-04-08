@@ -25,7 +25,7 @@ fixes must be done at hand, as there is no automatized way of doing it.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
-  \code{\link{qc_md_cols}},
+  \code{\link{qc_factor_values}}, \code{\link{qc_md_cols}},
   \code{\link{qc_species_verification}}
 }
 
