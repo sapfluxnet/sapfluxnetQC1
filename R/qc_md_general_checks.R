@@ -150,7 +150,7 @@ qc_site_dics <- function(variable) {
   # valid variables for site_md
   accepted_vars <- c('si_country', 'si_dist_mgmt', 'si_igbp')
   if (!(variable %in% accepted_vars)) {
-    stop('Variable provided is not adequate for creating a dictionary.
+    stop('Variable provided (', variable,') is not adequate for creating a dictionary.
          Please see "Accepted variables" section of the function help.')
   }
 
@@ -246,7 +246,7 @@ qc_stand_dics <- function(variable) {
   accepted_vars <- c('st_growth_condition', 'st_aspect',
                      'st_terrain', 'st_soil_texture')
   if (!(variable %in% accepted_vars)) {
-    stop('Variable provided is not adequate for creating a dictionary.
+    stop('Variable provided (', variable,') is not adequate for creating a dictionary.
          Please see "Accepted variables" section of the function help.')
   }
 
@@ -322,7 +322,7 @@ qc_species_dics <- function(variable = 'sp_leaf_habit') {
   # valid variables for site_md
   accepted_vars <- c('sp_leaf_habit')
   if (!(variable %in% accepted_vars)) {
-    stop('Variable provided is not adequate for creating a dictionary.
+    stop('Variable provided (', variable,') is not adequate for creating a dictionary.
          Please see "Accepted variables" section of the function help.')
   }
 
@@ -372,7 +372,7 @@ qc_plant_dics <- function(variable) {
                      'pl_sens_cor_grad', 'pl_sens_cor_zero',
                      'pl_sap_units', 'pl_radial_int', 'pl_azimut_int')
   if (!(variable %in% accepted_vars)) {
-    stop('Variable provided is not adequate for creating a dictionary.
+    stop('Variable provided (', variable,') is not adequate for creating a dictionary.
          Please see "Accepted variables" section of the function help.')
   }
 
@@ -495,7 +495,7 @@ qc_env_dics <- function(variable) {
                      'env_sw_in', 'env_ppfd_in', 'env_netrad', 'env_ws',
                      'env_precip', 'env_plant_watpot', 'env_leafarea_seasonal')
   if (!(variable %in% accepted_vars)) {
-    stop('Variable provided is not adequate for creating a dictionary.
+    stop('Variable provided (', variable,') is not adequate for creating a dictionary.
          Please see "Accepted variables" section of the function help.')
   }
 
@@ -596,7 +596,7 @@ qc_md_cols <- function(metadata, dic) {
                        'plant_md', 'environmental_md')
 
   if (!is.character(dic) || !(dic %in% accepted_sheets)) {
-    stop('Provided dicitonary name is not a character or is not a valid name.
+    stop('Provided dictionary name is not a character or is not a valid name.
          Please see function help for information about valid dictionary names')
   }
 
