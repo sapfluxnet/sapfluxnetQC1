@@ -35,3 +35,30 @@ test_that('function returns data frames', {
   expect_is(env_data, 'data.frame')
   expect_is(env_data_long, 'data.frame')
 })
+
+context('E2. Metadata load')
+
+site_md <- suppressMessages(dl_metadata(file_name, 'site_md'))
+stand_md <- dl_metadata(file_name, 'stand_md', si_code_loc = site_md)
+species_md <- dl_metadata(file_name, 'species_md', si_code_loc = site_md)
+plant_md <- dl_metadata(file_name, 'plant_md', si_code_loc = site_md)
+env_md <- dl_metadata(file_name, 'environmental_md', si_code_loc = site_md)
+
+test_that('metadata loaded are data frames', {
+  expect_is(site_md, 'data.frame')
+  expect_is(stand_md, 'data.frame')
+  expect_is(species_md, 'data.frame')
+  expect_is(plant_md, 'data.frame')
+  expect_is(env_md, 'data.frame')
+})
+
+test_that('metadata errors produces the adequate messages', {
+  expect_error(dl_metadata(file_name, 'ste_md'),
+               'Provided sheet name is not')
+  expect_message(dl_metadata(file_name, 'site_md'),
+                 'si_code_loc set to NULL')
+  expect_error(dl_metadata('inexistent_file', 'stand_md', si_code_loc = site_md),
+               'File does not exist,')
+  expect_error(dl_metadata(25, 'stand_md', si_code_loc = site_md),
+               'File name is not provided as character')
+})
