@@ -663,7 +663,8 @@ qc_md_cols <- function(metadata, dic) {
 #'   to check.
 #'
 #' @return A data frame with variable names, check result and NA presence as
-#'   columns
+#'   columns, as well as a column (Metadata) indicating the kind of metadata
+#'   variables checked.
 #'
 #' @export
 
@@ -681,6 +682,7 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
   var_name <- vector()
   res_check <- vector()
   na_presence <- vector()
+  metadata <- vector()
 
   # STEP 2
   # Walk through metadata files and check variables
@@ -689,9 +691,11 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
     si_names <- c('si_country', 'si_dist_mgmt', 'si_igbp')
     si_checks <- sapply(si_names, function(x) { site[[x]] %in% qc_site_dics(x) })
     si_nas <- sapply(si_names, function(x) { any(is.na(site[[x]])) })
+    si_metadata <- rep('site', length(si_names))
     var_name <- c(var_name, si_names)
     res_check <- c(res_check, si_checks)
     na_presence <- c(na_presence, si_nas)
+    metadata <- c(metadata, si_metadata)
   }
 
   # 2.2 stand
@@ -700,9 +704,11 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
                   'st_terrain', 'st_soil_texture')
     st_checks <- sapply(st_names, function(x) { stand[[x]] %in% qc_stand_dics(x) })
     st_nas <- sapply(st_names, function(x) { any(is.na(stand[[x]])) })
+    st_metadata <- rep('stand', length(st_names))
     var_name <- c(var_name, st_names)
     res_check <- c(res_check, st_checks)
     na_presence <- c(na_presence, st_nas)
+    metadata <- c(metadata, st_metadata)
   }
 
   # 2.3 species
@@ -712,9 +718,11 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
       all(species[[x]] %in% qc_species_dics(x))
     })
     sp_nas <- sapply(sp_names, function(x) { any(is.na(species[[x]])) })
+    sp_metadata <- rep('species', length(sp_names))
     var_name <- c(var_name, sp_names)
     res_check <- c(res_check, sp_checks)
     na_presence <- c(na_presence, sp_nas)
+    metadata <- c(metadata, sp_metadata)
   }
 
   # 2.4 plant
@@ -726,9 +734,11 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
       all(plant[[x]] %in% qc_plant_dics(x))
     })
     pl_nas <- sapply(pl_names, function(x) { any(is.na(plant[[x]])) })
+    pl_metadata <- rep('plant', length(pl_names))
     var_name <- c(var_name, pl_names)
     res_check <- c(res_check, pl_checks)
     na_presence <- c(na_presence, pl_nas)
+    metadata <- c(metadata, pl_metadata)
   }
 
   # 2.5 environmental
@@ -738,15 +748,18 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
                    'env_precip', 'env_plant_watpot', 'env_leafarea_seasonal')
     env_checks <- sapply(env_names, function(x) { environmental[[x]] %in% qc_env_dics(x) })
     env_nas <- sapply(env_names, function(x) { any(is.na(environmental[[x]])) })
+    env_metadata <- rep('environmental', length(env_names))
     var_name <- c(var_name, env_names)
     res_check <- c(res_check, env_checks)
     na_presence <- c(na_presence, env_nas)
+    metadata <- c(metadata, env_metadata)
   }
 
   # 3. Generate the results data frame and return it
   res_data <- data.frame(Variable = var_name,
                          Check_result = res_check,
-                         NA_presence = na_presence)
+                         NA_presence = na_presence,
+                         Metadata = metadata)
 
   return(res_data)
 
