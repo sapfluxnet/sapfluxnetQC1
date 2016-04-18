@@ -73,3 +73,37 @@ test_that('results are correct', {
   expect_true(factor_res_2$NA_presence[9])
 })
 
+context('G3. Environmental data presence')
+
+env_data <- dl_data(file_name, 'environmental_hd')
+env_md <- dl_metadata(file_name, 'environmental_md', si_code_loc = site_md)
+good_env_presence <- qc_env_vars_presence(env_data, env_md)
+bad_env_presence <- qc_env_vars_presence(env_data, site_md)
+env_data$ta <- NULL
+env_md$rh <- NA
+regular_env_presence <- qc_env_vars_presence(env_data, env_md)
+
+
+test_that('argument checks work', {
+  expect_error(qc_env_vars_presence('not a dataframe', env_md),
+                 'Data and/or metadata objects are not data frames')
+  expect_error(qc_env_vars_presence(env_data, 'not a data frame'),
+                 'Data and/or metadata objects are not data frames')
+  expect_error(qc_env_vars_presence('not a data frame', 'not a data frame'),
+                 'Data and/or metadata objects are not data frames')
+})
+
+test_that('result is a data frame', {
+  expect_is(good_env_presence, 'data.frame')
+})
+
+test_that('results are correct', {
+  expect_true(all(good_env_presence$Md_presence == good_env_presence$Data_presence))
+  expect_true(all(good_env_presence$Concordance))
+  expect_false(all(bad_env_presence$Md_presence == bad_env_presence$Data_presence))
+  expect_false(all(bad_env_presence$Concordance))
+  expect_false(all(bad_env_presence$Md_presence))
+  expect_false(all(regular_env_presence$Md_presence == regular_env_presence$Data_presence))
+  expect_false(all(regular_env_presence$Concordance))
+  expect_true(any(regular_env_presence$Concordance))
+})

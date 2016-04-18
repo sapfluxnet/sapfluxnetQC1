@@ -26,8 +26,9 @@ compare. This function works inside of \code{\link{qc_col_class}}, so there
 is no need to call it directly
 }
 \seealso{
-Other Quality Checks Functions: \code{\link{qc_factor_values}},
-  \code{\link{qc_md_cols}}, \code{\link{qc_pl_treatments}},
+Other Quality Checks Functions: \code{\link{qc_env_vars_presence}},
+  \code{\link{qc_factor_values}}, \code{\link{qc_md_cols}},
+  \code{\link{qc_pl_treatments}},
   \code{\link{qc_species_verification}}
 }
 

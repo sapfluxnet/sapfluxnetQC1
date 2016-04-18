@@ -765,3 +765,93 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
 
   # END FUNCTION
 }
+
+################################################################################
+#' Check for environmental variables presence
+#'
+#' \code{qc_env_vars_presence} function checks if environmental variables stated
+#' in metadata (environmental_md sheet) are really present in the environmental
+#' data.
+#'
+#' The function get all the names of the possible environmental variables and
+#' check the presence in metadata and data. If there is any inconsistency
+#' between them.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the environmental data
+#'
+#' @param metadata Data frame containing the environmental metadata
+#'
+#' @return A data frame with four columns: Variable name, Presence in metadata,
+#'   Presence in data and Concordance.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_env_vars_presence <- function(data, metadata) {
+
+  # STEP 0
+  # Argument checking
+  # Check if objects are data frames
+  if (!is.data.frame(data) | !is.data.frame(metadata)) {
+    stop('Data and/or metadata objects are not data frames')
+  }
+
+  # STEP 1
+  # Create accepted variables names and results vectors
+  accepted_vars <- c('env_ta', 'env_rh', 'env_vpd', 'env_sw_in', 'env_ppfd_in',
+                     'env_netrad', 'env_ws', 'env_precip', 'env_swc_shallow_depth',
+                     'env_swc_deep_depth')
+  md_res <- vector()
+  hd_res <- vector()
+  concordance <- vector()
+
+  # STEP 2
+  # Check which variables are in metadata
+  for (var in accepted_vars) {
+    if (any(is.null(metadata[[var]]),
+            is.na(metadata[[var]]),
+            metadata[[var]] == 'Not provided')) {
+      md <- FALSE
+      md_res <- c(md_res, md)
+    } else {
+      md <- TRUE
+      md_res <- c(md_res, md)
+    }
+    # STEP 3
+    # Check which variables are in data
+    # Warning: in data, variables have the "env_" part stripped, so we need to
+    # strip that part in var. Also in swc_* variables, the _depth part must
+    # be removed
+    if(stringr::str_replace_all(var, "(env_)|(_depth)", '') %in% names(data)) {
+      hd <- TRUE
+      hd_res <- c(hd_res, hd)
+    } else {
+      hd <- FALSE
+      hd_res <- c(hd_res, hd)
+    }
+  }
+
+  # STEP 4
+  # Check for concordance between metadata and data
+  # for (i in 1:length(md_res)) {
+  #   c_res <- md_res[i] == hd_res[i]
+  #   concordance <- c(concordance, c_res)
+  # }
+  concordance <- sapply(1:length(md_res), function(x){
+    md_res[x] == hd_res[x]
+  })
+
+  # STEP 5
+  # Build results data frame and return it
+  df_res <- data.frame(Name = accepted_vars,
+                       Md_presence = md_res,
+                       Data_presence = hd_res,
+                       Concordance = concordance)
+
+  return(df_res)
+
+  # END FUNCTION
+}
