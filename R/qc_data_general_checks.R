@@ -13,8 +13,6 @@
 #'
 #' @return A message indicating if TIMESTAMP is correct or not
 #'
-#' @import lubridate
-#'
 #' @export
 
 # START
@@ -63,10 +61,6 @@ qc_is_timestamp <- function(data) {
 #'
 #' @return A data frame summarizing the errors found, indicating the interval
 #'   and its duration (in seconds).
-#'
-#' @import lubridate
-#'
-#' @import dplyr
 #'
 #' @export
 

@@ -96,8 +96,6 @@ qc_species_names <- function(species, conservatism = 0.9) {
 #'   \code{coincidence} column indicates result of checking both numbers and
 #'   presence of the same species.
 #'
-#' @import dplyr
-#'
 #' @export
 
 # START

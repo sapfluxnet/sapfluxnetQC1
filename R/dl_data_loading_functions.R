@@ -67,10 +67,6 @@ remove_dupcols <- function(data) {
 #'   metadata variables as columns, ready to be feeded to quality check
 #'   functions.
 #'
-#' @import dplyr
-#' @import tidyr
-#' @import readxl
-#'
 #' @export
 
 # START
@@ -224,10 +220,6 @@ dl_metadata <- function(file_name, sheet_name, si_code_loc = NULL){
 #' @return \code{dl_data} returns sapflow or environmental data in wide format,
 #'   ready to pipe it in the quality checks for raw data. If \code{long = TRUE}
 #'   data is returned in long format, ready for plotting.
-#'
-#' @import dplyr
-#' @import tidyr
-#' @import readxl
 #'
 #' @export
 

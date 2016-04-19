@@ -16,8 +16,6 @@
 #' @return A data frame with the information about the different treatments if
 #'   any.
 #'
-#' @import dplyr
-#'
 #' @export
 
 # START
