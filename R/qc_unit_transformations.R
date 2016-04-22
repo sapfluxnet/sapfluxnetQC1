@@ -6,7 +6,7 @@
 #'
 #' @family Quality Checks Functions
 #'
-#' @param pl_data Data frame containing the plant metadata
+#' @param pl_metadata Data frame containing the plant metadata
 #'
 #' @return A data frame with extracted plant metadata variables as columns and
 #'   individual plants as rows.
@@ -17,23 +17,24 @@
 
 # START
 # Function declaration
-qc_pl_units_helper <- function(pl_data) {
+qc_pl_units_helper <- function(pl_metadata) {
 
   # STEP 0
   # Argument checks
   # Is pl_data a data frame?
-  if (!is.data.frame(pl_data)) {
+  if (!is.data.frame(pl_metadata)) {
     stop('Provided pl_data object is not a data frame')
   }
   # Is the correct metadata? (Check for pl_code variable)
-  if (is.null(pl_data$pl_code)) {
+  if (is.null(pl_metadata$pl_code)) {
     stop('pl_code variable is missing from pl_data')
   }
 
   # STEP 1
   # Extract the desired variables
-  res <- pl_data %>%
-    dplyr::select(pl_code, pl_sapw_units, pl_sapw_area, pl_leaf_area)
+  res <- pl_metadata %>%
+    dplyr::select(pl_code, pl_sapw_units, pl_sapw_area, pl_leaf_area,
+                  pl_dbh, pl_sapw_depth, pl_bark_thick)
 
   # STEP 2
   # Return the results
@@ -84,11 +85,46 @@ qc_pl_units_helper <- function(pl_data) {
 #' \code{pl_dbh} are provided, sapwood area value can be estimated and used
 #' in the unit conversion.
 #'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the sap flow measurements
+#'
+#' @param pl_metadata Data frame containing the plant metadata
+#'
+#' @param output_units Character vector indicating the kind of output units.
+#'   Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
+#'   See details to obtain more information
+#'
+#' @export
 
 # START
 # Function declaration
-qc_sapw_conversion <- function() {
+qc_sapw_conversion <- function(data, pl_metadata, output_units = 'plant') {
 
   # STEP 0
   # Arguments checking
+  # Are data and pl_metadata data frames?
+  if (any(!is.data.frame(data), !is.data.frame(pl_metadata))) {
+    stop('data and/or pl_metadata objects are not data frames')
+  }
+  # Is output units a character vector?
+  if (!is.character(output_units)) {
+    stop('output_units value is not a character vector')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # per plant units output
+  if (output_units == 'plant') {
+
+    # 1.1 obtain the metadata variables to know the input units
+    metadata_vars <- qc_pl_units_helper(pl_metadata)
+
+    # 1.2
+
+  }
 }
