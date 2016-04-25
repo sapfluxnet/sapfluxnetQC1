@@ -4,7 +4,16 @@
 \alias{qc_sapw_conversion}
 \title{Sap flow units transformation}
 \usage{
-qc_sapw_conversion()
+qc_sapw_conversion(data, pl_metadata, output_units = "plant")
+}
+\arguments{
+\item{data}{Data frame containing the sap flow measurements}
+
+\item{pl_metadata}{Data frame containing the plant metadata}
+
+\item{output_units}{Character vector indicating the kind of output units.
+Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
+See details to obtain more information}
 }
 \description{
 Function to transform between sap flow units
@@ -53,5 +62,16 @@ variables from plant metadata are needed.
 If \code{pl_sapw_area} is not available but \code{pl_sapw_depth} and
 \code{pl_dbh} are provided, sapwood area value can be estimated and used
 in the unit conversion.
+}
+\seealso{
+Other Quality Checks Functions: \code{\link{create_dic}},
+  \code{\link{qc_env_vars_presence}},
+  \code{\link{qc_factor_values}},
+  \code{\link{qc_get_pl_md}},
+  \code{\link{qc_is_timestamp}}, \code{\link{qc_md_cols}},
+  \code{\link{qc_pl_treatments}},
+  \code{\link{qc_sapw_area_calculator}},
+  \code{\link{qc_species_verification}},
+  \code{\link{qc_timestamp_errors}}
 }
 

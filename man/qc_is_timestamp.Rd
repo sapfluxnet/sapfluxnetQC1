@@ -23,9 +23,11 @@ checks if the contributor followed the mandatory format.
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_env_vars_presence}},
-  \code{\link{qc_factor_values}}, \code{\link{qc_md_cols}},
+  \code{\link{qc_factor_values}},
+  \code{\link{qc_get_pl_md}}, \code{\link{qc_md_cols}},
   \code{\link{qc_pl_treatments}},
-  \code{\link{qc_pl_units_helper}},
+  \code{\link{qc_sapw_area_calculator}},
+  \code{\link{qc_sapw_conversion}},
   \code{\link{qc_species_verification}},
   \code{\link{qc_timestamp_errors}}
 }
