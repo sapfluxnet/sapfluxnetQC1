@@ -4,12 +4,13 @@
 \alias{qc_sapw_conversion}
 \title{Sap flow units transformation}
 \usage{
-qc_sapw_conversion(data, pl_metadata, output_units = "plant")
+qc_sapw_conversion(data, sapw_md, output_units = "plant")
 }
 \arguments{
 \item{data}{Data frame containing the sap flow measurements}
 
-\item{pl_metadata}{Data frame containing the plant metadata}
+\item{sapw_md}{Data frame containing the sapwood metadata, as obtained from
+\code{\link{qc_get_sapw_md}} or \code{\link{qc_sapw_area_calculator}}.}
 
 \item{output_units}{Character vector indicating the kind of output units.
 Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
@@ -24,14 +25,14 @@ Sap flow accepted units can be of two kinds, \code{per sapwood area} and
 must be done to allow data integration and analysis.
 This function can return three kind of units:
 \describe{
-  \item{Per sapwood  area}{
-  In this case, units returned are \eqn{m³/m²·s}
+  \item{\bold{Per sapwood  area}}{
+  In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
   }
-  \item{Per plant}{
-  In this case, units returned are \eqn{m³/s}
+  \item{\bold{Per plant}}{
+  In this case, units returned are \eqn{cm³·h⁻¹}
   }
-  \item{Per leaf area unit}{
-  In this case, units returned are \eqn{m³/m²·s}
+  \item{\bold{Per leaf area unit}}{
+  In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
   }
 }
 }
@@ -60,14 +61,15 @@ variables from plant metadata are needed.
 \section{\code{pl_sapw_area}}{
 
 If \code{pl_sapw_area} is not available but \code{pl_sapw_depth} and
-\code{pl_dbh} are provided, sapwood area value can be estimated and used
-in the unit conversion.
+\code{pl_dbh} are provided, sapwood area value can be estimated by means of
+\code{\link{qc_sapw_area_calculator}} function previous to the use of this
+function.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_env_vars_presence}},
   \code{\link{qc_factor_values}},
-  \code{\link{qc_get_pl_md}},
+  \code{\link{qc_get_sapw_md}},
   \code{\link{qc_is_timestamp}}, \code{\link{qc_md_cols}},
   \code{\link{qc_pl_treatments}},
   \code{\link{qc_sapw_area_calculator}},

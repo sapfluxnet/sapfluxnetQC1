@@ -8,10 +8,10 @@ qc_sapw_area_calculator(pl_vars)
 }
 \arguments{
 \item{pl_vars}{Data frame containing the needed variables, usually the result
-of \code{\link{qc_get_pl_md}}.}
+of \code{\link{qc_get_sapw_md}}.}
 }
 \value{
-A data frame, exactly as returned by \code{\link{qc_get_pl_md}},
+A data frame, exactly as returned by \code{\link{qc_get_sapw_md}},
   but with the variable pl_sapw_area_est filled with the estimated values.
 }
 \description{
@@ -35,7 +35,7 @@ The area of a ring is \eqn{\pi(R² - r²)}, where \code{R} is the radius
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_env_vars_presence}},
   \code{\link{qc_factor_values}},
-  \code{\link{qc_get_pl_md}},
+  \code{\link{qc_get_sapw_md}},
   \code{\link{qc_is_timestamp}}, \code{\link{qc_md_cols}},
   \code{\link{qc_pl_treatments}},
   \code{\link{qc_sapw_conversion}},

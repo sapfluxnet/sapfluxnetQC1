@@ -1,7 +1,7 @@
 ################################################################################
 #' Helper function for unit conversion
 #'
-#' \code{qc_get_pl_md} allows to extract all necessary variables from plant
+#' \code{qc_get_sapw_md} allows to extract all necessary variables from plant
 #' metadata in order to be able to convert sap flow units.
 #'
 #' @family Quality Checks Functions
@@ -18,7 +18,7 @@
 
 # START
 # Function declaration
-qc_get_pl_md <- function(pl_metadata) {
+qc_get_sapw_md <- function(pl_metadata) {
 
   # STEP 0
   # Argument checks
@@ -65,9 +65,9 @@ qc_get_pl_md <- function(pl_metadata) {
 #' @family Quality Checks Functions
 #'
 #' @param pl_vars Data frame containing the needed variables, usually the result
-#'   of \code{\link{qc_get_pl_md}}.
+#'   of \code{\link{qc_get_sapw_md}}.
 #'
-#' @return A data frame, exactly as returned by \code{\link{qc_get_pl_md}},
+#' @return A data frame, exactly as returned by \code{\link{qc_get_sapw_md}},
 #'   but with the variable pl_sapw_area_est filled with the estimated values.
 #'
 #' @export
@@ -142,6 +142,633 @@ qc_sapw_area_calculator <- function(pl_vars) {
 }
 
 ################################################################################
+#' Unit conversion
+#'
+#' Conversion of sap flow units to sapwood level
+#' (cm³·cm⁻²·h⁻¹), plant level (cm³·h⁻¹) or leaf area level (cm³·cm⁻²·h⁻¹)
+#'
+#' @family Unit conversion
+#'
+#' @param x Numeric value in which the conversion must be done
+#'
+#' @param sapw_area Numeric value with the plant sapwood area in cm²
+#'
+#' @param leaf_area Numeric value with the plant leaf area in m²
+#'
+#' @param output_units Character vector indicating the kind of output units.
+#'   Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
+#'
+#' @return A numeric value resulting from unit conversion
+#'
+#' @export
+
+# START
+# Function declaration
+qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area)/(leaf_area*10000)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from cm³·m⁻²·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*0.36
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*0.36
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*1e-4*0.36)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from dm³·dm⁻²·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*10
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*10
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*1e-3)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from dm³·dm⁻²·s⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*36000
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*36000
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*3.6)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from mm³·mm⁻²·s⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*360
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*360
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*0.036)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from g·m⁻²·s⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_g_m_s <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*1e-4*3.6
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*1e-4*3.6
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*1e-11)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from kg·m⁻²·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*1e-1
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*1e-1
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*1e-5)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from kg·m⁻²·s⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x*360
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*sapw_area*360
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*sapw_area*0.036)/(leaf_area)
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from cm³·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_cm_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- x/sapw_area
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*1e-4)/leaf_area
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from dm³·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_dm_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- (x*1e3)/sapw_area
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*1e3
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*1e-1)/leaf_area
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from cm³·s⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_cm_s <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- (x*3600)/sapw_area
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*3600
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*0.36)/leaf_area
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from g·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_g_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- (x*1e-3)/sapw_area
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*1e-3
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*1e-7)/leaf_area
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
+#' @describeIn qc_cm_cm_h Conversion of sap flow units from kg·h⁻¹
+#'
+#' @export
+
+# START
+# Function declaration
+qc_kg_h <- function(x, sapw_area, leaf_area, output_units) {
+
+  # STEP 0
+  # Arguments checking
+  # Are values numeric?
+  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+    stop('x, sapw_area and/or leaf_area are not numeric values')
+  }
+  # Is output units a valid value?
+  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+    stop('output_units = "', output_units, '" is not a valid value. See function ',
+         'help (?qc_sapw_conversion) for a list of valid values')
+  }
+
+  # STEP 1
+  # Sapwood
+  if (output_units == 'sapwood') {
+    res <- (x*1e3)/sapw_area
+    return(res)
+  } else {
+
+    # STEP 2
+    # Plant
+    if (output_units == 'plant') {
+      res <- x*1e3
+      return(res)
+    } else {
+
+      # STEP 3
+      # Leaf area
+      if (output_units == 'leaf') {
+        res <- (x*1e-1)/leaf_area
+        return(res)
+      }
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
 #' Sap flow units transformation
 #'
 #' Function to transform between sap flow units
@@ -151,14 +778,14 @@ qc_sapw_area_calculator <- function(pl_vars) {
 #' must be done to allow data integration and analysis.
 #' This function can return three kind of units:
 #' \describe{
-#'   \item{Per sapwood  area}{
-#'   In this case, units returned are \eqn{m³/m²·s}
+#'   \item{\bold{Per sapwood  area}}{
+#'   In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
 #'   }
-#'   \item{Per plant}{
-#'   In this case, units returned are \eqn{m³/s}
+#'   \item{\bold{Per plant}}{
+#'   In this case, units returned are \eqn{cm³·h⁻¹}
 #'   }
-#'   \item{Per leaf area unit}{
-#'   In this case, units returned are \eqn{m³/m²·s}
+#'   \item{\bold{Per leaf area unit}}{
+#'   In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
 #'   }
 #' }
 #'
@@ -180,14 +807,16 @@ qc_sapw_area_calculator <- function(pl_vars) {
 #'
 #' @section \code{pl_sapw_area}:
 #' If \code{pl_sapw_area} is not available but \code{pl_sapw_depth} and
-#' \code{pl_dbh} are provided, sapwood area value can be estimated and used
-#' in the unit conversion.
+#' \code{pl_dbh} are provided, sapwood area value can be estimated by means of
+#' \code{\link{qc_sapw_area_calculator}} function previous to the use of this
+#' function.
 #'
 #' @family Quality Checks Functions
 #'
 #' @param data Data frame containing the sap flow measurements
 #'
-#' @param pl_metadata Data frame containing the plant metadata
+#' @param sapw_md Data frame containing the sapwood metadata, as obtained from
+#'   \code{\link{qc_get_sapw_md}} or \code{\link{qc_sapw_area_calculator}}.
 #'
 #' @param output_units Character vector indicating the kind of output units.
 #'   Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
@@ -197,12 +826,12 @@ qc_sapw_area_calculator <- function(pl_vars) {
 
 # START
 # Function declaration
-qc_sapw_conversion <- function(data, pl_metadata, output_units = 'plant') {
+qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant') {
 
   # STEP 0
   # Arguments checking
   # Are data and pl_metadata data frames?
-  if (any(!is.data.frame(data), !is.data.frame(pl_metadata))) {
+  if (any(!is.data.frame(data), !is.data.frame(sapw_md))) {
     stop('data and/or pl_metadata objects are not data frames')
   }
   # Is output units a character vector?
@@ -216,13 +845,56 @@ qc_sapw_conversion <- function(data, pl_metadata, output_units = 'plant') {
   }
 
   # STEP 1
-  # per plant units output
-  if (output_units == 'plant') {
+  # Needed objects
 
-    # 1.1 obtain the metadata variables to know the input units
-    metadata_vars <- qc_get_pl_md(pl_metadata)
+  # 1.1 create a list/dictionary with the conversion functions
+  funs_list <- list(
+    '“cm3 cm-2 h-1”' = sapfluxnetr::qc_cm_cm_h,
+    '“cm3 m-2 s-1”' = sapfluxnetr::qc_cm_m_s,
+    '“dm3 dm-2 h-1”' = sapfluxnetr::qc_dm_dm_h,
+    '“dm3 dm-2 s-1”' = sapfluxnetr::qc_dm_dm_s,
+    '“mm3 mm-2 s-1”' = sapfluxnetr::qc_mm_mm_s,
+    '“g m-2 s-1”' = sapfluxnetr::qc_g_m_s,
+    '“kg m-2 h-1”' = sapfluxnetr::qc_kg_m_h,
+    '“kg m-2 s-1”' = sapfluxnetr::qc_kg_m_s,
+    '“cm3 s-1”' = sapfluxnetr::qc_cm_s,
+    '“cm3 h-1”' = sapfluxnetr::qc_cm_h,
+    '“dm3 h-1”' = sapfluxnetr::qc_dm_h,
+    '“g h-1”' = sapfluxnetr::qc_g_h,
+    '“kg h-1”' = sapfluxnetr::qc_kg_h
+  )
 
-    # 1.2
+  # 1.2 TIMESTAMP variable is not needed, drop it
+  data_tmp <- data
+  data_tmp$TIMESTAMP <- NULL
 
+  # 1.3 Results data frame
+  res_df <- data.frame(TIMESTAMP = data$TIMESTAMP)
+
+  # STEP 2
+  # Loop for each plant/tree
+  for (code in names(data_tmp)) {
+
+    # 3.1 units, sapw area and leaf area values
+    sapw_units <- as.character(sapw_md[sapw_md[,'pl_code'] == code, 'pl_sap_units'])
+    sapw_area <- as.numeric(sapw_md[sapw_md[,'pl_code'] == code, 'pl_sapw_area'])
+    leaf_area <- as.numeric(sapw_md[sapw_md[,'pl_code'] == code, 'pl_leaf_area'])
+
+    # 3.2 vapply to convert all the plant measures
+    plant_res <- vapply(
+      data_tmp[[code]],
+      funs_list[[sapw_units]],
+      numeric(1),
+      sapw_area = sapw_area, leaf_area = leaf_area, output_units = output_units
+    )
+
+    # 3.3 add the plant results to the data frame results
+    res_df[[code]] <- plant_res
   }
+
+  # STEP 4
+  # Return the results
+  return(res_df)
+
+  # END FUNCTION
 }
