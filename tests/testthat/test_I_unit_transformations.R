@@ -1,21 +1,21 @@
 library(sapfluxnetr)
 
-context('I1. qc_get_pl_md')
+context('I1. qc_get_sapw_md')
 
 suppressMessages(pl_data <- dl_metadata('foo.xlsx', 'plant_md'))
 pl_data_bad <- pl_data
 pl_data_bad$pl_code <- NULL
 
 test_that('argument checks work', {
-  expect_error(qc_get_pl_md(c('a','b','c')),
+  expect_error(qc_get_sapw_md(c('a','b','c')),
                'Provided pl_data object is not a data frame')
-  expect_error(qc_get_pl_md(pl_data_bad),
+  expect_error(qc_get_sapw_md(pl_data_bad),
                'pl_code variable is missing from pl_data')
 })
 
 test_that('result is a data frame with the correct variables', {
-  expect_is(qc_get_pl_md(pl_data), 'data.frame')
-  expect_true(all(names(qc_get_pl_md(pl_data) %in% c(
+  expect_is(qc_get_sapw_md(pl_data), 'data.frame')
+  expect_true(all(names(qc_get_sapw_md(pl_data) %in% c(
     'pl_code', 'pl_sap_units', 'pl_sapw_area', 'pl_leaf_area',
     'pl_dbh', 'pl_sapw_depth', 'pl_bark_thick', 'pl_sapw_area_est'
   ))))
@@ -63,3 +63,20 @@ test_that('function works', {
   expect_equal(sum(is.na(qc_sapw_area_calculator(pl_data_bad_6)$pl_sapw_area_est)), 5)
 })
 
+context('I3. Unit conversion')
+
+test_that('argument checks works', {
+  expect_error(qc_sapw_conversion('not a data frame', qc_get_sapw_md(pl_data), 'plant'),
+               'data and/or pl_metadata objects are not data frames')
+  expect_error(qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'),
+                                  'not a data frame', 'plant'),
+               'data and/or pl_metadata objects are not data frames')
+  expect_error(
+    qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'), qc_get_sapw_md(pl_data), 25),
+    'output_units value is not a character vector'
+  )
+  expect_error(
+    qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'), qc_get_sapw_md(pl_data), '25'),
+    'output_units = "'
+  )
+})

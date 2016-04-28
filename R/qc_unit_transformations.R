@@ -864,11 +864,11 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant') {
     '“kg h-1”' = sapfluxnetr::qc_kg_h
   )
 
-  # 1.2 TIMESTAMP variable is not needed, drop it
+  # 1.2 TIMESTAMP variable is not needed for the loop, drop it
   data_tmp <- data
   data_tmp$TIMESTAMP <- NULL
 
-  # 1.3 Results data frame
+  # 1.3 Results data frame, here TIMESTAMP is needed
   res_df <- data.frame(TIMESTAMP = data$TIMESTAMP)
 
   # STEP 2
