@@ -416,21 +416,21 @@ qc_g_m_s <- function(x, sapw_area, leaf_area, output_units) {
   # STEP 1
   # Sapwood
   if (output_units == 'sapwood') {
-    res <- x*1e-4*3.6
+    res <- x*0.36
     return(res)
   } else {
 
     # STEP 2
     # Plant
     if (output_units == 'plant') {
-      res <- x*sapw_area*1e-4*3.6
+      res <- x*sapw_area*0.36
       return(res)
     } else {
 
       # STEP 3
       # Leaf area
       if (output_units == 'leaf') {
-        res <- (x*sapw_area*1e-11)/(leaf_area)
+        res <- (x*sapw_area*0.36*1e-4)/(leaf_area)
         return(res)
       }
     }
@@ -698,21 +698,21 @@ qc_g_h <- function(x, sapw_area, leaf_area, output_units) {
   # STEP 1
   # Sapwood
   if (output_units == 'sapwood') {
-    res <- (x*1e-3)/sapw_area
+    res <- x/sapw_area
     return(res)
   } else {
 
     # STEP 2
     # Plant
     if (output_units == 'plant') {
-      res <- x*1e-3
+      res <- x
       return(res)
     } else {
 
       # STEP 3
       # Leaf area
       if (output_units == 'leaf') {
-        res <- (x*1e-7)/leaf_area
+        res <- (x*1e-4)/leaf_area
         return(res)
       }
     }

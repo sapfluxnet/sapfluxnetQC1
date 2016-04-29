@@ -80,3 +80,87 @@ test_that('argument checks works', {
     'output_units = "'
   )
 })
+
+test_data <- data.frame(TIMESTAMP = c(1, 2, 3, 4, 5, 6),
+                        pl_cm_cm_h = c(1, 2, 5, 10, 100, 1000),
+                        pl_cm_m_s = c(2.7778, 5.5556, 13.8889, 27.7778, 277.7778, 2777.7778),
+                        pl_dm_dm_h = c(0.1, 0.2, 0.5, 1, 10, 100),
+                        pl_dm_dm_s = c(2.777778e-05, 5.555556e-05, 0.0001388889, 0.0002777778, 0.002777778, 0.02777778),
+                        pl_mm_mm_s = c(0.002777778, 0.005555556, 0.01388889, 0.02777778, 0.2777778, 2.777778),
+                        pl_g_m_s = c(2.7778, 5.5556, 13.8889, 27.7778, 277.7778, 2777.7778),
+                        pl_kg_m_h = c(10, 20, 50, 100, 1000, 10000),
+                        pl_kg_m_s = c(0.002777778, 0.005555556, 0.01388889, 0.02777778, 0.2777778, 2.777778),
+                        pl_cm_s = c(0.05555556, 0.1111111, 0.2777778, 0.5555556, 5.555556, 55.55556),
+                        pl_cm_h = c(200, 400, 1000, 2000, 20000, 200000),
+                        pl_dm_h = c(0.2, 0.4, 1, 2, 20, 200),
+                        pl_g_h = c(200, 400, 1000, 2000, 20000, 200000),
+                        pl_kg_h = c(0.2, 0.4, 1, 2, 20, 200))
+
+test_sapw_md <- data.frame(pl_code = c('pl_cm_cm_h', 'pl_cm_m_s', 'pl_dm_dm_h',
+                                       'pl_dm_dm_s', 'pl_mm_mm_s', 'pl_g_m_s',
+                                       'pl_kg_m_h', 'pl_kg_m_s', 'pl_cm_s',
+                                       'pl_cm_h', 'pl_dm_h', 'pl_g_h', 'pl_kg_h'),
+                           pl_sapw_area = rep(200, 13),
+                           pl_leaf_area = rep(14, 13),
+                           pl_sap_units = c('“cm3 cm-2 h-1”', '“cm3 m-2 s-1”',
+                                            '“dm3 dm-2 h-1”', '“dm3 dm-2 s-1”',
+                                            '“mm3 mm-2 s-1”', '“g m-2 s-1”',
+                                            '“kg m-2 h-1”', '“kg m-2 s-1”',
+                                            '“cm3 s-1”', '“cm3 h-1”', '“dm3 h-1”',
+                                            '“g h-1”', '“kg h-1”'))
+
+test_expected_sapw <- c(1, 2, 5, 10, 100, 1000)
+test_expected_plant <- c(200, 400, 1000, 2000, 20000, 200000)
+test_expected_leafarea <- c(0.0014, 0.0029, 0.0071, 0.0143, 0.1429, 1.4288)
+
+test_results_plant <- round(qc_sapw_conversion(test_data, test_sapw_md,
+                                         output_units = 'plant'), 1)
+test_results_sapw <- round(qc_sapw_conversion(test_data, test_sapw_md,
+                                         output_units = 'sapwood'), 1)
+test_results_leafarea <- round(qc_sapw_conversion(test_data, test_sapw_md,
+                                         output_units = 'leaf'), 4)
+
+test_that('conversion is made correctly', {
+  # plant
+  expect_equal(test_results_plant$pl_cm_cm_h, test_expected_plant)
+  expect_equal(test_results_plant$pl_cm_m_s, test_expected_plant)
+  expect_equal(test_results_plant$pl_dm_dm_h, test_expected_plant)
+  expect_equal(test_results_plant$pl_dm_dm_s, test_expected_plant)
+  expect_equal(test_results_plant$pl_mm_mm_s, test_expected_plant)
+  expect_equal(test_results_plant$pl_g_m_s, test_expected_plant)
+  expect_equal(test_results_plant$pl_kg_m_h, test_expected_plant)
+  expect_equal(test_results_plant$pl_kg_m_s, test_expected_plant)
+  expect_equal(test_results_plant$pl_cm_s, test_expected_plant)
+  expect_equal(test_results_plant$pl_cm_h, test_expected_plant)
+  expect_equal(test_results_plant$pl_dm_h, test_expected_plant)
+  expect_equal(test_results_plant$pl_g_h, test_expected_plant)
+  expect_equal(test_results_plant$pl_kg_h, test_expected_plant)
+  # sapw
+  expect_equal(test_results_sapw$pl_cm_cm_h, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_cm_m_s, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_dm_dm_h, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_dm_dm_s, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_mm_mm_s, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_g_m_s, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_kg_m_h, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_kg_m_s, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_cm_s, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_cm_h, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_dm_h, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_g_h, test_expected_sapw)
+  expect_equal(test_results_sapw$pl_kg_h, test_expected_sapw)
+  # leafarea
+  expect_equal(test_results_leafarea$pl_cm_cm_h, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_cm_m_s, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_dm_dm_h, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_dm_dm_s, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_mm_mm_s, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_g_m_s, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_kg_m_h, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_kg_m_s, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_cm_s, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_cm_h, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_dm_h, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_g_h, test_expected_leafarea, tolerance = 0.001)
+  expect_equal(test_results_leafarea$pl_kg_h, test_expected_leafarea, tolerance = 0.001)
+})
