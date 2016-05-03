@@ -11,13 +11,19 @@
 #' @param data Data frame containing the data (sapflow or environmental). It
 #'   must have a \code{TIMESTAMP} variable.
 #'
-#' @return A message indicating if TIMESTAMP is correct or not
+#' @param verbose Logical indicating if messages of success and warnings of
+#'   failures must be presented. Default is \code{TRUE}. In order to use
+#'   inside another function, is recommended to set \code{verbose = FALSE}.
+#'
+#' @return A message/warning indicating if TIMESTAMP is correct or not. Also
+#'   an invisible logical object is returned, indicating succes (TRUE) or
+#'   failure (FALSE).
 #'
 #' @export
 
 # START
 # Function declaration
-qc_is_timestamp <- function(data) {
+qc_is_timestamp <- function(data, verbose = TRUE) {
 
   # STEP 0
   # Argument checking
@@ -33,10 +39,10 @@ qc_is_timestamp <- function(data) {
   # STEP 1
   # Check TIMESTAMP format
   if(lubridate::is.POSIXt(data$TIMESTAMP)) {
-    message('TIMESTAMP is in the correct format')
+    if (verbose) {message('TIMESTAMP is in the correct format')}
     return(invisible(TRUE))
   } else {
-    warning('WARNING: TIMESTAMP is NOT in the correct format')
+    if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
     return(invisible(FALSE))
   }
 

@@ -4,14 +4,20 @@
 \alias{qc_is_timestamp}
 \title{TimeStamp format check}
 \usage{
-qc_is_timestamp(data)
+qc_is_timestamp(data, verbose = TRUE)
 }
 \arguments{
 \item{data}{Data frame containing the data (sapflow or environmental). It
 must have a \code{TIMESTAMP} variable.}
+
+\item{verbose}{Logical indicating if messages of success and warnings of
+failures must be presented. Default is \code{TRUE}. In order to use
+inside another function, is recommended to set \code{verbose = FALSE}.}
 }
 \value{
-A message indicating if TIMESTAMP is correct or not
+A message/warning indicating if TIMESTAMP is correct or not. Also
+  an invisible logical object is returned, indicating succes (TRUE) or
+  failure (FALSE).
 }
 \description{
 Function to check if the format of the timestamp is the correct one
