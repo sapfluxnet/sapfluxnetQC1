@@ -34,8 +34,10 @@ qc_is_timestamp <- function(data) {
   # Check TIMESTAMP format
   if(lubridate::is.POSIXt(data$TIMESTAMP)) {
     message('TIMESTAMP is in the correct format')
+    return(invisible(TRUE))
   } else {
     warning('WARNING: TIMESTAMP is NOT in the correct format')
+    return(invisible(FALSE))
   }
 
   # END FUNCTION
