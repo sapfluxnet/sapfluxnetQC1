@@ -2,16 +2,17 @@
 % Please edit documentation in R/dl_data_loading_functions.R
 \name{dl_data}
 \alias{dl_data}
-\title{Loading data from xls/xlsx}
+\title{Loading data from xls/xlsx ann csv files}
 \usage{
 dl_data(file_name, sheet_name, long = FALSE)
 }
 \arguments{
-\item{file_name}{Character vector indicating the name of the xls/xlsx file
+\item{file_name}{Character vector indicating the name of the file
 containing the data.}
 
 \item{sheet_name}{Character vector indicating the name of the sheet to be
-loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}.}
+loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}. It
+is only used if origin file is an xlsx file}
 
 \item{long}{Logical indicating if returned data must be in \code{long} format}
 }
@@ -21,15 +22,17 @@ loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}.}
   data is returned in long format, ready for plotting.
 }
 \description{
-This function make use of dplyr, tidyr and readxl packages in order to
-retrieve and format the data.
+Detecting file type and load data from files.
 }
 \details{
-In case of data to be in the xls/xlsx file, instead of separate csv files,
-this function is used to retrieve the raw data (sapflow and environmental).
+This function make use of dplyr, tidyr and readxl packages in order to
+retrieve and format the data. Also, in the case of csv files it uses
+data.table package.
 }
 \seealso{
-Other Data Loading Functions: \code{\link{dl_metadata}},
+Other Data Loading Functions: \code{\link{dl_dec_char_detect}},
+  \code{\link{dl_metadata}},
+  \code{\link{dl_na_char_generator}},
   \code{\link{remove_dupcols}}
 }
 

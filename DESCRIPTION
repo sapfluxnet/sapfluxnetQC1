@@ -18,9 +18,10 @@ Imports:
     dplyr,
     tidyr,
     stringr,
-    lubridate
+    lubridate,
+    testthat,
+    data.table
 Suggests:
     knitr,
-    rmarkdown,
-    testthat
+    rmarkdown
 VignetteBuilder: knitr

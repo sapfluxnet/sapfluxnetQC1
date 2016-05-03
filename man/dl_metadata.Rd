@@ -34,6 +34,8 @@ to load the metadata and start the metadata quality check.
 }
 \seealso{
 Other Data Loading Functions: \code{\link{dl_data}},
+  \code{\link{dl_dec_char_detect}},
+  \code{\link{dl_na_char_generator}},
   \code{\link{remove_dupcols}}
 }
 

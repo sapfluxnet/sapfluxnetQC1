@@ -17,6 +17,7 @@
 #' @return \code{remove_dupcols} returns the loaded data with duplicate columns
 #'   removed, if any.
 #'
+#' @export
 
 # START
 # Function declaration
@@ -38,6 +39,121 @@ remove_dupcols <- function(data) {
   } else { return(data) }
 
   # END FUNCTION
+}
+
+################################################################################
+#' Create a characters vector for NA values
+#'
+#' Generation of a character vector with the possible na characters found in
+#' csv files in order to load data with data.table::fread
+#'
+#' Sometimes, csv files exported from excel files have some characters in the
+#' cells, causing data columns to be interpreted as characters or factors
+#' instead of numeric. This function compile an exhaustive list of those
+#' characters in order to transform them in NAs at the moment of reading the
+#' data.
+#'
+#' @family Data Loading Functions
+#'
+#' @return A character vector with the text strings to be converted to NAs, in
+#'   order to use it in data.table::fread function.
+#'
+#' @export
+
+dl_na_char_generator <- function() {
+
+  # STEP 1
+  # Return a character vector with values to be converted to NA
+  return(c(
+    # Usual
+    '', 'NA',
+    # Numeric NAs
+    '-9999',
+    # Excel errors (castilian)
+    "#\xadVALOR!", "#\xadDIV/0!", "VERDADERO", 'FALSO', '#\xadREF!',
+    # Excel errors (english)
+    '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!'
+    )
+  )
+}
+
+################################################################################
+#' Decimal character detection
+#'
+#' Decimal character detection to csv files loading with data.table::fread
+#'
+#' With data coming from any place in the world, data loading functions have to
+#' cope with different decimal characters, separator characters...
+#' \code{\link[data.table]{fread}} can autodetect separator character at loading
+#' data, but decimal character must be specified in order to load correct data.
+#' This function aims to provide an easy way to autodetect decimal character to
+#' automatize data loading proccess.
+#'
+#' @section Algorithm:
+#' The process to determine the decimal character is as follows:
+#' \enumerate{
+#'   \item 1000 rows and 4 variables are sampled from the data.
+#'   \item For each variable, number of dots (\code{.}) and commas (\code{,})
+#'   are calculated.
+#'   \item If the number of dots is larger than the commas, dot is selected as
+#'   decimal character. If the number of commas is larger than the dots, comma
+#'   is selected as decimal character.
+#' }
+#'
+#' @family Data Loading Functions
+#'
+#' @param file Character vector indicating the name (and route) of the file in
+#'   which the decimal character must be guessed.
+#'
+#' @return A character vector containing the decimal character, to use in the
+#'   fread order to load the data.
+#'
+#' @export
+
+dl_dec_char_detect <- function(file) {
+
+  # STEP 0
+  # Argument checking
+
+  # STEP 1
+  # Load file sample
+  sample_data <- data.table::fread(
+    file, skip = 'TIMESTAMP', data.table = FALSE, na.strings = dl_na_char_generator(),
+    select = c(2,3,4,5), nrows = 1000, header = FALSE
+  )
+
+  # STEP 2
+  # Sum of commas and dots
+  commas <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
+                       pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
+    sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
+               pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
+    sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
+               pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
+    sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
+               pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE)
+
+  dots <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
+                     pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
+    sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
+               pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
+    sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
+               pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
+    sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
+               pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE)
+
+  # STEP 3
+  # Deciding which is the decimal character adn returning it
+  if (commas > dots) {
+    return(',')
+  }
+  if (dots > commas) {
+    return('.')
+  }
+  if (dots == commas) {
+    stop('Dots & commas have the same appearance.',
+         ' Unable to detect decimal character')
+  }
 }
 
 ################################################################################
@@ -201,21 +317,22 @@ dl_metadata <- function(file_name, sheet_name, si_code_loc = NULL){
 }
 
 ################################################################################
-#' Loading data from xls/xlsx
+#' Loading data from xls/xlsx ann csv files
+#'
+#' Detecting file type and load data from files.
 #'
 #' This function make use of dplyr, tidyr and readxl packages in order to
-#' retrieve and format the data.
-#'
-#' In case of data to be in the xls/xlsx file, instead of separate csv files,
-#' this function is used to retrieve the raw data (sapflow and environmental).
+#' retrieve and format the data. Also, in the case of csv files it uses
+#' data.table package.
 #'
 #' @family Data Loading Functions
 #'
-#' @param file_name Character vector indicating the name of the xls/xlsx file
+#' @param file_name Character vector indicating the name of the file
 #'   containing the data.
 #'
 #' @param sheet_name Character vector indicating the name of the sheet to be
-#'   loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}.
+#'   loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}. It
+#'   is only used if origin file is an xlsx file
 #'
 #' @param long Logical indicating if returned data must be in \code{long} format
 #'
@@ -252,56 +369,115 @@ dl_data <- function(file_name, sheet_name, long = FALSE) {
   }
 
   # STEP 1
-  # Loading and shaping the data
+  # Is xlsx?
+  if (stringr::str_detect(file_name, "^.+\\.xls(x)?$")) {
 
-  # 1.1 sapflow data
-  if (sheet_name == 'sapflow_hd') {
-    res <- readxl::read_excel(file_name, sheet_name, skip = 4) %>%
-      # 1.1.2 Check and remove duplicate columns
-      remove_dupcols() %>%
-      # 1.1.3 Remove any extra column that could be created in the read_excel step.
-      #       This is achieved with a regular expression indicating that we select
-      #       those variables that have TIME or end with a number
-      dplyr::select(matches("(TIME|^.+?\\d$)"))
+    # STEP 2
+    # Loading and shaping the data
+    # 2.1 sapflow data
+    if (sheet_name == 'sapflow_hd') {
+      res <- readxl::read_excel(file_name, sheet_name, skip = 4) %>%
+        # 2.1.2 Check and remove duplicate columns
+        remove_dupcols() %>%
+        # 2.1.3 Remove any extra column that could be created in the read_excel step.
+        #       This is achieved with a regular expression indicating that we select
+        #       those variables that have TIME or end with a number
+        dplyr::select(matches("(TIME|^.+?\\d$)"))
 
-    # 1.1.4 If long format is needed, gather time!!
-    if (long) {
-      res <- res %>%
-        tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
+      # 2.1.4 If long format is needed, gather time!!
+      if (long) {
+        res <- res %>%
+          tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
 
-      # 1.1.5 return long format
-      return(res)
+        # 2.1.5 return long format
+        return(res)
 
-    } else {
-      # or return wide format
-      return(res)
-    }
-
-  } else {
-    # 1.2 environmental data
-    res <- readxl::read_excel(file_name, sheet_name, skip = 3) %>%
-      # 1.2.2 check and remove duplicate columns
-      remove_dupcols() %>%
-      # 1.2.3 Remove any extra column that could be created in the read_excel step.
-      #       This is achieved with a regular expression indicating that we select
-      #       the environmental variables and the TIMESTAMP
-      dplyr::select(matches(
-        "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
-      ))
-
-    # 1.2.4 If long format is needed, gather time!!
-    if (long) {
-      res <- res %>%
-        tidyr::gather(Variable, Value, -TIMESTAMP)
-
-      # 1.2.5 return long format
-      return(res)
+      } else {
+        # or return wide format
+        return(res)
+      }
 
     } else {
-      # or return wide format
-      return(res)
+      # 2.2 environmental data
+      res <- readxl::read_excel(file_name, sheet_name, skip = 3) %>%
+        # 2.2.2 check and remove duplicate columns
+        remove_dupcols() %>%
+        # 2.2.3 Remove any extra column that could be created in the read_excel step.
+        #       This is achieved with a regular expression indicating that we select
+        #       the environmental variables and the TIMESTAMP
+        dplyr::select(matches(
+          "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
+        ))
+
+      # 1.2.4 If long format is needed, gather time!!
+      if (long) {
+        res <- res %>%
+          tidyr::gather(Variable, Value, -TIMESTAMP)
+
+        # 1.2.5 return long format
+        return(res)
+
+      } else {
+        # or return wide format
+        return(res)
+      }
     }
   }
 
+  # STEP 3
+  # Is csv file?
+  if (stringr::str_detect(file_name, "^.+\\.csv$")) {
+
+    # STEP 4
+    # Loading and shaping the data
+    # 4.1 sapflow data
+    if (sheet_name == 'sapflow_hd') {
+      res <- data.table::fread(
+        file_name, skip = 'TIMESTAMP', data.table = FALSE,
+        na.strings = dl_na_char_generator(),
+        dec = dl_dec_char_detect(file_name)
+      ) %>%
+        remove_dupcols() %>%
+        dplyr::select(matches('(TIME|^.+?\\d$)'))
+
+      # 4.1.1 If long format is needed, gather time!!
+      if (long) {
+        res <- res %>%
+          tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
+
+        # 4.1.2 return long format
+        return(res)
+
+      } else {
+        # or return wide format
+        return(res)
+      }
+    } else {
+
+      # 4.2 environmental data
+      res <- data.table::fread(
+        file_name, skip = 'TIMESTAMP', data.table = FALSE,
+        na.strings = dl_na_char_generator(),
+        dec = dl_dec_char_detect(file_name)
+      ) %>%
+        remove_dupcols() %>%
+        dplyr::select(matches(
+          "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
+        ))
+
+      # 4.2.1 If long format is needed, gather time!!
+      if (long) {
+        res <- res %>%
+          tidyr::gather(Variable, Value, -TIMESTAMP)
+
+        # 4.1.2 return long format
+        return(res)
+
+      } else {
+        # or return wide format
+        return(res)
+      }
+    }
+  }
   # END FUNCTION
 }

@@ -26,6 +26,8 @@ always achieved, hence this function.
 }
 \seealso{
 Other Data Loading Functions: \code{\link{dl_data}},
-  \code{\link{dl_metadata}}
+  \code{\link{dl_dec_char_detect}},
+  \code{\link{dl_metadata}},
+  \code{\link{dl_na_char_generator}}
 }
 
