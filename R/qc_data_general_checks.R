@@ -92,14 +92,18 @@ qc_as_timestamp <- function(data) {
 
   # STEP 0
   # Argument checking
-  # If data is data frame, it contains a TIMESTAMP variable?
-  if (is.data.frame(data) & is.null(data$TIMESTAMP)) {
-    stop('Data have no TIMESTAMP variable')
+  # Data is a vector or a data frame
+  if (!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
+    stop('Data is not a data frame or a vector')
   }
 
   # STEP 1
   # Data frame
   if (is.data.frame(data)) {
+    # Data contains a TIMESTAMP variable?
+    if (is.null(data$TIMESTAMP)) {
+      stop('Data have no TIMESTAMP variable')
+    }
     timestamp <- data$TIMESTAMP
 
     # 1.1 if already in format, inform and return the data unaltered
@@ -121,7 +125,7 @@ qc_as_timestamp <- function(data) {
 
     # 1.3 Check if the fix worked. If yes, message and return data
     # with the new TIMESTAMP
-    if (qc_is_timestamp(res)) {
+    if (qc_is_timestamp(res, verbose = FALSE)) {
       message('TIMESTAMP succesfully fixed. A sample: ', res[1])
       data$TIMESTAMP <- res
       return(data)
@@ -129,12 +133,10 @@ qc_as_timestamp <- function(data) {
       error('Unable to format correctly the TIMESTAMP, please ',
             'revise manually.')
     }
-  }
+  } else {
 
-  # STEP 2
-  # Vector
-  if (is.vector(data)) {
-
+    # STEP 2
+    # Vector
     # 2.1 If already in format, inform and return the data unaltered
     if (qc_is_timestamp(data, verbose = FALSE)) {
       message('TIMESTAMP is already in format')
@@ -154,7 +156,7 @@ qc_as_timestamp <- function(data) {
 
     # 1.3 Check if the fix worked. If yes, message and return data
     # with the new TIMESTAMP
-    if (qc_is_timestamp(res)) {
+    if (qc_is_timestamp(res, verbose = FALSE)) {
       message('TIMESTAMP succesfully fixed. A sample: ', res[1])
       return(res)
     } else {
