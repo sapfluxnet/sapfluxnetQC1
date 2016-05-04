@@ -50,6 +50,108 @@ qc_is_timestamp <- function(data, verbose = TRUE) {
 }
 
 ################################################################################
+#' Fixing known errors in TIMESTAMP format
+#'
+#' Converting known bad TIMESTAMP formats to POSIXt
+#'
+#' When loading data from csv files, depending on the office version and
+#' workflow to introduce TIMESTAMP and data, TIMESTAMP can result in the wrong
+#' format (lost of seconds, for example). This function checks for known
+#' formatting errors and try to fix them.
+#'
+#' @family Data Loading Functions
+#'
+#' @param data Data frame containing TIMESTAMP variable. Also it can be a vector
+#'   with TIMESTAMP values
+#'
+#' @return An object of the same type of input (data frame or vector) with the
+#'   fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
+#'   appears and none fix is made, returning data as entered.
+#'   If TIMESTAMP can not be fixed, an error is raised.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_as_timestamp <- function(data) {
+
+  # STEP 0
+  # Argument checking
+  # If data is data frame, it contains a TIMESTAMP variable?
+  if (is.data.frame(data) & !is.null(data$TIMESTAMP)) {
+    stop('Data have no TIMESTAMP variable')
+  }
+
+  # STEP 1
+  # Data frame
+  if (is.data.frame(data)) {
+    timestamp <- data$TIMESTAMP
+
+    # 1.1 if already in format, inform and return the data unaltered
+    if (qc_is_timestamp(timestamp, verbose = FALSE)) {
+      message('TIMESTAMP is already in format')
+      return(data)
+    } else {
+
+      # 1.2 If not in format, try to fix it using the known bad formats
+      res <- lubridate::parse_date_time(
+        timestamp,
+        c(# csv without seconds, in european and usa formats
+          "%d%m%y %H:%M", "%y%m%d %H:%M",
+          # csv with seconds, but / present, in european and usa formats
+          "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
+          )
+      )
+    }
+
+    # 1.3 Check if the fix worked. If yes, message and return data
+    # with the new TIMESTAMP
+    if (qc_is_timestamp(res)) {
+      message('TIMESTAMP succesfully fixed. A sample: ', res[1])
+      data$TIMESTAMP <- res
+      return(data)
+    } else {
+      error('Unable to format correctly the TIMESTAMP, please ',
+            'revise manually.')
+    }
+  }
+
+  # STEP 2
+  # Vector
+  if (is.vector(data)) {
+
+    # 2.1 If already in format, inform and return the data unaltered
+    if (qc_is_timestamp(data, verbose = FALSE)) {
+      message('TIMESTAMP is already in format')
+      return(data)
+    } else {
+
+      # 1.2 If not in format, try to fix it using the known bad formats
+      res <- lubridate::parse_date_time(
+        data,
+        c(# csv without seconds, in european and usa formats
+          "%d%m%y %H:%M", "%y%m%d %H:%M",
+          # csv with seconds, but / present, in european and usa formats
+          "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
+        )
+      )
+    }
+
+    # 1.3 Check if the fix worked. If yes, message and return data
+    # with the new TIMESTAMP
+    if (qc_is_timestamp(res)) {
+      message('TIMESTAMP succesfully fixed. A sample: ', res[1])
+      return(res)
+    } else {
+      error('Unable to format correctly the TIMESTAMP, please ',
+            'revise manually.')
+    }
+  }
+
+  # END FUNCTION
+}
+
+################################################################################
 #' TimeStamp errors localization
 #'
 #' Function to pinpoint errors in the timestamp

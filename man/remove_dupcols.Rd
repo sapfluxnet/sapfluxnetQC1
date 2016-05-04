@@ -28,6 +28,7 @@ always achieved, hence this function.
 Other Data Loading Functions: \code{\link{dl_data}},
   \code{\link{dl_dec_char_detect}},
   \code{\link{dl_metadata}},
-  \code{\link{dl_na_char_generator}}
+  \code{\link{dl_na_char_generator}},
+  \code{\link{qc_as_timestamp}}
 }
 
