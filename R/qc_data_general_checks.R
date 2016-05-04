@@ -8,15 +8,16 @@
 #'
 #' @family Quality Checks Functions
 #'
-#' @param data Data frame containing the data (sapflow or environmental). It
-#'   must have a \code{TIMESTAMP} variable.
+#' @param data Data frame containing the data (sapflow or environmental). Also
+#'   a vector with the TIMESTAMP values. If data frame, \bold{it must contain} a
+#'   TIMESTAMP variable
 #'
 #' @param verbose Logical indicating if messages of success and warnings of
 #'   failures must be presented. Default is \code{TRUE}. In order to use
 #'   inside another function, is recommended to set \code{verbose = FALSE}.
 #'
 #' @return A message/warning indicating if TIMESTAMP is correct or not. Also
-#'   an invisible logical object is returned, indicating succes (TRUE) or
+#'   an invisible logical object is returned, indicating success (TRUE) or
 #'   failure (FALSE).
 #'
 #' @export
@@ -28,22 +29,36 @@ qc_is_timestamp <- function(data, verbose = TRUE) {
   # STEP 0
   # Argument checking
   # is data a data frame?
-  if(!is.data.frame(data)) {
-    stop('Data provided is not a data frame')
-  }
-  # have data a TIMESTAMP variable?
-  if(is.null(data$TIMESTAMP)) {
-    stop('TIMESTAMP variable is missing in the data provided')
+  if(!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
+    stop('Data provided is not a data frame or a vector')
   }
 
   # STEP 1
-  # Check TIMESTAMP format
-  if(lubridate::is.POSIXt(data$TIMESTAMP)) {
-    if (verbose) {message('TIMESTAMP is in the correct format')}
-    return(invisible(TRUE))
+  # Data frame
+  if (is.data.frame(data)) {
+    # have data a TIMESTAMP variable?
+    if(is.null(data$TIMESTAMP)) {
+      stop('TIMESTAMP variable is missing in the data provided')
+    }
+    # Check TIMESTAMP format
+    if(lubridate::is.POSIXt(data$TIMESTAMP)) {
+      if (verbose) {message('TIMESTAMP is in the correct format')}
+      return(invisible(TRUE))
+    } else {
+      if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
+      return(invisible(FALSE))
+    }
   } else {
-    if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
-    return(invisible(FALSE))
+
+    # STEP 2
+    # Vector
+    if(lubridate::is.POSIXt(data)) {
+      if (verbose) {message('TIMESTAMP is in the correct format')}
+      return(invisible(TRUE))
+    } else {
+      if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
+      return(invisible(FALSE))
+    }
   }
 
   # END FUNCTION
@@ -78,7 +93,7 @@ qc_as_timestamp <- function(data) {
   # STEP 0
   # Argument checking
   # If data is data frame, it contains a TIMESTAMP variable?
-  if (is.data.frame(data) & !is.null(data$TIMESTAMP)) {
+  if (is.data.frame(data) & is.null(data$TIMESTAMP)) {
     stop('Data have no TIMESTAMP variable')
   }
 
