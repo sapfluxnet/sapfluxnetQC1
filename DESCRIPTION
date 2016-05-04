@@ -19,9 +19,9 @@ Imports:
     tidyr,
     stringr,
     lubridate,
-    testthat,
     data.table
 Suggests:
     knitr,
+    testthat,
     rmarkdown
 VignetteBuilder: knitr
