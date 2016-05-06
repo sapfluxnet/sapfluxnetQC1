@@ -135,7 +135,7 @@ df_received_to_accepted <- function(remove = FALSE) {
 
     if (!all(md5_ok, na.rm = TRUE)) {
       warning('md5sums are not the same for original and copied files. ',
-              'Please revise manually the files.',
+              'Please revise the files manually.',
               ' Skipping to the next site code (if any)')
       next
     }
