@@ -48,13 +48,13 @@ df_folder_structure <- function(parent_dir = '.') {
 }
 
 ################################################################################
-#' Move from received to raw data folders
+#' Move from received to accepted data folders
 #'
 #' Check if data file/s already exists and create the folder structure needed to
 #' store them.
 #'
 #' The first step after receiving a data set is to move it from received folder
-#' to raw folder (\code{Data/site_code/site_code_Raw/}).
+#' to accepted folder (\code{Data/site_code/site_code_accepted/}).
 #'
 #' @family Data Flow
 #'
@@ -67,16 +67,23 @@ df_folder_structure <- function(parent_dir = '.') {
 
 # START
 # Function declaration
-df_received_to_raw <- function(remove = FALSE) {
+df_received_to_accepted <- function(remove = FALSE) {
+
+  # STEP 0
+  # Argument checking
+  # is remove logical?
+  if (!is.logical(remove)) {
+    stop('remove parameter provided but not logical (TRUE or FALSE)')
+  }
 
   # STEP 1
   # Obtaining the file names in the received folder.
-  files <- list.files('.', pattern = "(environmental|sapflow)\\.csv$|_metadata\\.xls(x)?$")
+  files <- list.files('Received_data', pattern = "(environmental|sapflow)\\.csv$|_metadata\\.xls(x)?$")
 
   # STEP 2
   # Extract site code from file names
   codes <- unique(stringr::str_replace(
-    files, "(environmental|sapflow)\\.csv$|_metadata\\.xls(x)?$", ""
+    files, "(_environmental|_sapflow)\\.csv$|_metadata\\.xls(x)?$", ""
   ))
 
   # STEP 2
@@ -84,11 +91,16 @@ df_received_to_raw <- function(remove = FALSE) {
   for (code in codes) {
 
     # 2.1 path and file names
-    path <- file.path('..', 'Data', code)
-    path_raw <- file.path(path, 'Raw')
-    file_names <- c(file.path(path_raw, paste(code, 'metadata.xlsx')),
-                    file.path(path_raw, paste(code, 'environmental.csv')),
-                    file.path(path_raw, paste(code, 'sapflow.csv')))
+    path <- file.path('Data', code)
+    path_accepted <- file.path(path, 'Accepted')
+    file_names <- c(file.path(path_accepted, paste(code, '_metadata.xlsx', sep = '')),
+                    file.path(path_accepted, paste(code, '_metadata.xls', sep = '')),
+                    file.path(path_accepted, paste(code, '_environmental.csv', sep = '')),
+                    file.path(path_accepted, paste(code, '_sapflow.csv', sep = '')))
+    from_files <- c(file.path('Received_data', paste(code, '_metadata.xlsx', sep = '')),
+                    file.path('Received_data', paste(code, '_metadata.xls', sep = '')),
+                    file.path('Received_data', paste(code, '_environmental.csv', sep = '')),
+                    file.path('Received_data', paste(code, '_sapflow.csv', sep = '')))
 
     # 2.2 check presence
     if (dir.exists(path)) {
@@ -97,23 +109,48 @@ df_received_to_raw <- function(remove = FALSE) {
       if (any(file.exists(file_names))) {
         warning('One or more files already exist. ',
                 'Not copying any file, manual intervention needed.')
-        break
+        next
       } else {
-        # aquí iria la copia de los archivos cuando el directorio existe
-        break
+
+        # 2.3 copy the files if directory exists but files don't
+        file.copy(from = from_files, to = path_accepted, overwrite = FALSE)
       }
     } else {
 
       # STEP 3
       # Creating the data folder structure for site
-      dir.create(path)
-      dir.create(path_raw)
+      # dir.create(path)
+      dir.create(path_accepted, recursive = TRUE)
       dir.create(file.path(path, 'Lvl_1'))
       dir.create(file.path(path, 'Lvl_2'))
 
       # STEP 4
-      # Copy data to raw folder
-      file.copy()
+      # Copy data to accepted folder
+      file.copy(from = from_files, to = path_accepted, overwrite = FALSE)
+    }
+
+    # STEP 5
+    # Check if copy has been done correctly by comparing file md5sums
+    md5_ok <- tools::md5sum(from_files) == tools::md5sum(file_names)
+
+    if (!all(md5_ok, na.rm = TRUE)) {
+      warning('md5sums are not the same for original and copied files. ',
+              'Please revise manually the files.',
+              ' Skipping to the next site code (if any)')
+      next
+    }
+
+    # STEP 6
+    # Remove from files
+    if (remove & all(md5_ok, na.rm = TRUE)) {
+      message('Removing the received files...')
+      file.remove(from_files)
+      message('DONE!')
+    } else {
+      warning('remove argument set to FALSE, data will be left ',
+              'in Received Data folder')
     }
   }
+
+  # END FUNCTION
 }

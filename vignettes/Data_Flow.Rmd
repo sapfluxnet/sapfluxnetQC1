@@ -1,0 +1,45 @@
+---
+title: "Data Flow Documentation"
+author: "Sapfluxnet Team"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+Data flow starts the moment a contributor send his/her data to the system.
+This vignette aims to document this data flow and the functions of the
+`sapfluxnetr` package that make it possible.  
+
+Figure 1 summarises the project folder tree:  
+
+<img src="Project_folders_tree.svg" alt="Fig. 1" style="width: 500px;"/>
+
+## Received_data folder
+
+Each dataset submitted by contributors starts in the `Received_data` folder.
+Here data is stored temporarily until it is moved to the
+`Data/site_code/Accepted` folder by executing `df_received_to_accepted` function
+in the `sapfluxnetr` package.
+
+## `df_received_to_accepted`
+
+Figure 2 summarises the reasoning behind `df_received_to_accepted` function:
+
+<img src="df_received_to_accepted.svg" alt="Fig. 2" style="width: 500px;"/>
+
+Site codes are extracted from file names, and the `Data` subfolders specific for
+the sites are created. A warning is raised if folders already exists. If it is
+the case, also the previous existence of the files is checked, and if they
+exist, another warning is raised and the copy proccess is stopped.  
+If files do not exist, they are copied to the `Data/site_code/Accepted` folder,
+and a md5 checksum is made to ensure the integrity of the copies. Again, if
+the checksum fails, a warning is raised and the proccess stops.  
+Finally, depending on the value of the `remove` argument of the function, the
+files in te `Received_data` folders are dropped (with a message) or not
+(with a warning). All the proccess is logged at message level (messages,
+warnings and errors).

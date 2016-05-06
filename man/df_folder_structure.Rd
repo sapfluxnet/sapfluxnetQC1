@@ -4,11 +4,11 @@
 \alias{df_folder_structure}
 \title{Initial project folder structure}
 \usage{
-df_folder_structure(parent_dir = getwd())
+df_folder_structure(parent_dir = ".")
 }
 \arguments{
 \item{parent_dir}{Character vector indicating the parent directory where
-the structure must be built. Default to current working directory.}
+the structure must be built. Default to current directory.}
 }
 \value{
 Nothing, dirs are created if they do not exist, or a warning is raised
@@ -20,5 +20,8 @@ Create the folder tree skeleton for SAPFLUXNET project
 \details{
 This functions only need to be called once, as it creates the needed folder
 structure to recreate SAPFLUXNET project in any environment.
+}
+\seealso{
+Other Data Flow: \code{\link{df_received_to_accepted}}
 }
 

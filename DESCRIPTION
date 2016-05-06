@@ -19,7 +19,8 @@ Imports:
     tidyr,
     stringr,
     lubridate,
-    data.table
+    data.table,
+    tools
 Suggests:
     knitr,
     testthat,
