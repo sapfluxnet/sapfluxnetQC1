@@ -1,7 +1,7 @@
 Package: sapfluxnetr
 Type: Package
 Title: Package with functions related to sapfluxnet project data
-Version: 0.0.1
+Version: 0.0.2
 Author: Who wrote it
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
