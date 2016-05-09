@@ -34,7 +34,7 @@ qc_pl_treatments <- function(plant_md) {
   # Check if pl_treatment is a NA vector (there are no treatments), so the
   # treatment comprobation is not necessary
   if (all(is.na(plant_md$pl_treatment))) {
-    stop("No treatments found, all values for pl_treatment are NA's")
+    warning("No treatments found, all values for pl_treatment are NA's")
   }
 
   # STEP 2
