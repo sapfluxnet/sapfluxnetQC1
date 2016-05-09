@@ -4,7 +4,7 @@
 \alias{qc_site_dics}
 \title{Dictionary creation for site_md variables}
 \usage{
-qc_site_dics(variable)
+qc_site_dics(variable, parent_logger = "test")
 }
 \arguments{
 \item{variable}{Variable name in which the dictionary is needed as character

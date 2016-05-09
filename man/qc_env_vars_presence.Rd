@@ -4,7 +4,7 @@
 \alias{qc_env_vars_presence}
 \title{Check for environmental variables presence}
 \usage{
-qc_env_vars_presence(data, metadata)
+qc_env_vars_presence(data, metadata, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the environmental data}

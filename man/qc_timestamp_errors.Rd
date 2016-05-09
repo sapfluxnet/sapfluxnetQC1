@@ -4,7 +4,7 @@
 \alias{qc_timestamp_errors}
 \title{TimeStamp errors localization}
 \usage{
-qc_timestamp_errors(data, timestep = 15)
+qc_timestamp_errors(data, timestep = 15, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the data (sapflow or environmental). It

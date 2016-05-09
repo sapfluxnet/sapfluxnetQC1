@@ -32,40 +32,54 @@
 # START
 # Function declaration
 
-qc_species_names <- function(species, conservatism = 0.9) {
+qc_species_names <- function(species, conservatism = 0.9,
+                             parent_logging = 'test') {
 
-  # STEP 0
-  # Argument checks
-  # Is species a character vector?
-  if (!is.vector(species, 'character')) {
-    stop('species object is not a character vector, please verify data object')
-  }
-  # Warning if conservatism is under 0.75
-  if (conservatism < 0.75) {
-    message('Conservatism value for spelling algorithm is under 0.75',
-            ' and this can be cause of species name changes.',
-            ' Maybe manual fix of some species should be done')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Check species in The Plant List with tpl package
-  # suggestion.distance can be set to 0.75 to be a little less conservative
-  # than in the default options, but be careful, a lower value can be source of
-  # specie change.
-  res_df <- tpl::tpl.get(species, suggestion.distance = conservatism)
+    # STEP 0
+    # Argument checks
+    # Is species a character vector?
+    if (!is.vector(species, 'character')) {
+      stop('species object is not a character vector, please verify data object')
+    }
+    # Warning if conservatism is under 0.75
+    if (conservatism < 0.75) {
+      message('Conservatism value for spelling algorithm is under 0.75',
+              ' and this can be cause of species name changes.',
+              ' Maybe manual fix of some species should be done')
+    }
 
-  # STEP 2
-  # Be sure that no NAs have been introduced
-  if (any(is.na(res_df$name))) {
-    stop('NAs have been generated, please try again with a lower value of conservatism')
-  } else {
+    # STEP 1
+    # Check species in The Plant List with tpl package
+    # suggestion.distance can be set to 0.75 to be a little less conservative
+    # than in the default options, but be careful, a lower value can be source of
+    # specie change.
+    res_df <- tpl::tpl.get(species, suggestion.distance = conservatism)
 
-    # STEP 3
-    # Return the character vector with the names corrected
-    return(res_df$name)
-  }
+    # STEP 2
+    # Be sure that no NAs have been introduced
+    if (any(is.na(res_df$name))) {
+      stop('NAs have been generated, please try again with a lower value of conservatism')
+    } else {
 
-# END FUNCTION
+      # STEP 3
+      # Return the character vector with the names corrected
+      return(res_df$name)
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))})
+
 }
 
 ################################################################################
@@ -101,38 +115,52 @@ qc_species_names <- function(species, conservatism = 0.9) {
 # START
 # Function declaration
 
-qc_species_verification <- function(species_md, plant_md) {
+qc_species_verification <- function(species_md, plant_md,
+                                    parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checks
-  if (!is.data.frame(species_md) | !is.data.frame(plant_md)) {
-    message('One or both metadata objects is/are not data frame/s')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Extract number and species names information from species_md
-  sp_md <- species_md %>%
-    dplyr::select(sp_name, sp_ntrees) %>%
-    dplyr::rename(sp_names = sp_name, sp_n_trees = sp_ntrees) %>%
-    dplyr::arrange(sp_names)
+    # STEP 0
+    # Argument checks
+    if (!is.data.frame(species_md) | !is.data.frame(plant_md)) {
+      message('One or both metadata objects is/are not data frame/s')
+    }
 
-  # STEP 2
-  # Extract number and species names information from plant_md
-  pl_md <- plant_md %>%
-    dplyr::select(pl_species) %>%
-    dplyr::group_by(pl_species) %>%
-    dplyr::summarize(pl_n_trees = n()) %>%
-    dplyr::rename(sp_names = pl_species) %>%
-    dplyr::arrange(sp_names)
+    # STEP 1
+    # Extract number and species names information from species_md
+    sp_md <- species_md %>%
+      dplyr::select(sp_name, sp_ntrees) %>%
+      dplyr::rename(sp_names = sp_name, sp_n_trees = sp_ntrees) %>%
+      dplyr::arrange(sp_names)
 
-  # STEP 3
-  # Compare both metadata to look for errors and generate result object
-  res <- dplyr::full_join(sp_md, pl_md, by = 'sp_names') %>%
-    dplyr::mutate(coincidence = (sp_n_trees == pl_n_trees))
+    # STEP 2
+    # Extract number and species names information from plant_md
+    pl_md <- plant_md %>%
+      dplyr::select(pl_species) %>%
+      dplyr::group_by(pl_species) %>%
+      dplyr::summarize(pl_n_trees = n()) %>%
+      dplyr::rename(sp_names = pl_species) %>%
+      dplyr::arrange(sp_names)
 
-  # STEP 4
-  # Return the results object
-  return(res)
+    # STEP 3
+    # Compare both metadata to look for errors and generate result object
+    res <- dplyr::full_join(sp_md, pl_md, by = 'sp_names') %>%
+      dplyr::mutate(coincidence = (sp_n_trees == pl_n_trees))
 
-  # END FUNCTION
+    # STEP 4
+    # Return the results object
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_species_verification', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_species_verification', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_species_verification', sep = '.'))})
+
 }

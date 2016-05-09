@@ -4,7 +4,7 @@
 \alias{qc_is_timestamp}
 \title{TimeStamp format check}
 \usage{
-qc_is_timestamp(data, verbose = TRUE)
+qc_is_timestamp(data, verbose = TRUE, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the data (sapflow or environmental). Also

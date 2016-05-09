@@ -4,7 +4,8 @@
 \alias{qc_coord_sign_test}
 \title{Coordinates sign test}
 \usage{
-qc_coord_sign_test(data, maps_folder = getwd(), special_countries = FALSE)
+qc_coord_sign_test(data, maps_folder = getwd(), special_countries = FALSE,
+  parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{qc_check_coordinates}}

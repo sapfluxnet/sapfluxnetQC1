@@ -73,18 +73,21 @@ log_sapfluxnet_action <- function(msg, handler, ...) {
 #'
 #' @param logger Name of the logger
 #'
+#' @param level Level of log in character form: "FINEST", "DEBUG", "WARNING" or
+#'   "ERROR".
+#'
 #' @export
 
 # START
 # Function declaration
-log_sapfluxnet_setup <- function(file_name, logger) {
+log_sapfluxnet_setup <- function(file_name, logger, level = "DEBUG") {
 
   # STEP 1
   # Setting up the handler
   logging::addHandler(
     log_sapfluxnet_action, file = file_name,
     logger = logger, formatter = log_sapfluxnet_format,
-    level = 'DEBUG'
+    level = level
   )
 
   # STEP 2

@@ -5,7 +5,7 @@
 \title{Metadata factor variables check}
 \usage{
 qc_factor_values(site = NULL, stand = NULL, species = NULL,
-  plant = NULL, environmental = NULL)
+  plant = NULL, environmental = NULL, parent_logger = "test")
 }
 \arguments{
 \item{site, stand, species, plant, environmental}{Data frames with the metadata

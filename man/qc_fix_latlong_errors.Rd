@@ -5,7 +5,7 @@
 \title{Fixing sign errors in coordinates}
 \usage{
 qc_fix_latlong_errors(data, maps_folder = getwd(), sign_errors = TRUE,
-  special_countries = FALSE)
+  special_countries = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{qc_check_coordinates}}

@@ -22,23 +22,35 @@
 # START
 # Function declaration
 
-remove_dupcols <- function(data) {
+remove_dupcols <- function(data, parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checking
-  # data is a data_frame
-  if (!is.data.frame(data)) {
-    stop('Data is not a data frame')
-  }
+  # Using callin handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Check for duplicate columns and drop them if any
-  if (any(duplicated(names(data)))) {
-    res <- data[!duplicated(names(data))]
-    return(res)
-  } else { return(data) }
+    # STEP 0
+    # Argument checking
+    # data is a data_frame
+    if (!is.data.frame(data)) {
+      stop('Data is not a data frame')
+    }
 
-  # END FUNCTION
+    # STEP 1
+    # Check for duplicate columns and drop them if any
+    if (any(duplicated(names(data)))) {
+      res <- data[!duplicated(names(data))]
+      return(res)
+    } else { return(data) }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'remove_dupcols', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'remove_dupcols', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'remove_dupcols', sep = '.'))})
 }
 
 ################################################################################
@@ -60,21 +72,35 @@ remove_dupcols <- function(data) {
 #'
 #' @export
 
-dl_na_char_generator <- function() {
+dl_na_char_generator <- function(parent_logger = 'test') {
 
-  # STEP 1
-  # Return a character vector with values to be converted to NA
-  return(c(
-    # Usual
-    '', 'NA',
-    # Numeric NAs
-    '-9999',
-    # Excel errors (castilian)
-    "#\xadVALOR!", "#\xadDIV/0!", "VERDADERO", 'FALSO', '#\xadREF!',
-    # Excel errors (english)
-    '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!'
+  # Use calling handlers to logging
+  withCallingHandlers({
+
+    # STEP 1
+    # Return a character vector with values to be converted to NA
+    return(c(
+      # Usual
+      '', 'NA',
+      # Numeric NAs
+      '-9999',
+      # Excel errors (castilian)
+      "#\xadVALOR!", "#\xadDIV/0!", "VERDADERO", 'FALSO', '#\xadREF!',
+      # Excel errors (english)
+      '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!'
     )
-  )
+    )
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'dl_na_char_generator', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'dl_na_char_generator', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'dl_na_char_generator', sep = '.'))})
 }
 
 ################################################################################
@@ -110,50 +136,63 @@ dl_na_char_generator <- function() {
 #'
 #' @export
 
-dl_dec_char_detect <- function(file) {
+dl_dec_char_detect <- function(file, parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checking
+  # Using calling handlers to logging
+  withCallingHandlers({
+    # STEP 0
+    # Argument checking
 
-  # STEP 1
-  # Load file sample
-  sample_data <- data.table::fread(
-    file, skip = 'TIMESTAMP', data.table = FALSE, na.strings = dl_na_char_generator(),
-    select = c(2,3,4,5), nrows = 1000, header = FALSE
-  )
+    # STEP 1
+    # Load file sample
+    sample_data <- data.table::fread(
+      file, skip = 'TIMESTAMP', data.table = FALSE, na.strings = dl_na_char_generator(),
+      select = c(2,3,4,5), nrows = 1000, header = FALSE
+    )
 
-  # STEP 2
-  # Sum of commas and dots
-  commas <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
-                       pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
-    sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
-               pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
-    sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
-               pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
-    sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
-               pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE)
+    # STEP 2
+    # Sum of commas and dots
+    commas <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
+                         pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
+      sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
+                 pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
+      sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
+                 pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
+      sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
+                 pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE)
 
-  dots <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
-                     pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
-    sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
-               pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
-    sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
-               pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
-    sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
-               pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE)
+    dots <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
+                       pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
+      sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
+                 pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
+      sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
+                 pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
+      sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
+                 pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE)
 
-  # STEP 3
-  # Deciding which is the decimal character adn returning it
-  if (commas > dots) {
-    return(',')
-  }
-  if (dots > commas) {
-    return('.')
-  }
-  if (dots == commas) {
-    stop('Dots & commas have the same appearance.',
-         ' Unable to detect decimal character')
-  }
+    # STEP 3
+    # Deciding which is the decimal character adn returning it
+    if (commas > dots) {
+      return(',')
+    }
+    if (dots > commas) {
+      return('.')
+    }
+    if (dots == commas) {
+      stop('Dots & commas have the same appearance.',
+           ' Unable to detect decimal character')
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'dl_dec_char_detect', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'dl_dec_char_detect', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'dl_dec_char_detect', sep = '.'))})
 }
 
 ################################################################################
@@ -190,130 +229,144 @@ dl_dec_char_detect <- function(file) {
 # START
 # Function declaration
 
-dl_metadata <- function(file_name, sheet_name, si_code_loc = NULL){
+dl_metadata <- function(file_name, sheet_name,
+                        si_code_loc = NULL, parent_logger = 'test'){
 
-  # STEP 0
-  # Argument checking
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # check if file name is a character and it exist
-  if (!is.character(file_name)) {
-    stop('File name is not provided as character')
-  }
+    # STEP 0
+    # Argument checking
 
-  if (!file_test("-f", file_name)) {
-    stop('File does not exist, please check if file name has been correctly provided')
-  }
+    # check if file name is a character and it exist
+    if (!is.character(file_name)) {
+      stop('File name is not provided as character')
+    }
 
-  # check if sheet name is one of the five kinds of metadata allowed
-  accepted_sheets <- c('site_md', 'stand_md', 'species_md',
-                       'plant_md', 'environmental_md')
+    if (!file_test("-f", file_name)) {
+      stop('File does not exist, please check if file name has been correctly provided')
+    }
 
-  if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
-    stop('Provided sheet name is not a character or is not a metadata sheet
-         Please see function help')
-  }
+    # check if sheet name is one of the five kinds of metadata allowed
+    accepted_sheets <- c('site_md', 'stand_md', 'species_md',
+                         'plant_md', 'environmental_md')
 
-  # check for si_code_loc and if NULL set si_code to NA
-  if (is.null(si_code_loc)) {
-    si_code_txt <- NA
-    message('si_code_loc set to NULL. If loading other metadata than site_md,
-            please indicate the object containing the site metadata.')
-  } else {
-    si_code_txt <- si_code_loc$si_code[1]
-  }
+    if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
+      stop('Provided sheet name is not a character or is not a metadata sheet
+           Please see function help')
+    }
 
-  # STEP 1
-  # Load metadata and tidy it
+    # check for si_code_loc and if NULL set si_code to NA
+    if (is.null(si_code_loc)) {
+      si_code_txt <- NA
+      message('si_code_loc set to NULL. If loading other metadata than site_md,
+              please indicate the object containing the site metadata.')
+    } else {
+      si_code_txt <- si_code_loc$si_code[1]
+    }
 
-  # 1.1 If sheet is site_md we have to skip first line
-  if (sheet_name == 'site_md') {
-    # read the sheet
-    res <- readxl::read_excel(file_name, sheet_name, skip = 1) %>%
-      # check for duplicate columns
-      remove_dupcols() %>%
-      # select only the name and the value of the variables
-      dplyr::select(Variable, Value) %>%
-      # in case of the read_excel function gets more rows filled with NA's, remove them
-      dplyr::filter(!is.na(Variable)) %>%
-      # spread the variables to their own columns, getting back their class
-      tidyr::spread(Variable, Value, convert = TRUE)
+    # STEP 1
+    # Load metadata and tidy it
 
-    # 1.1.1 return the site metadata
-    return(res)
-  }
+    # 1.1 If sheet is site_md we have to skip first line
+    if (sheet_name == 'site_md') {
+      # read the sheet
+      res <- readxl::read_excel(file_name, sheet_name, skip = 1) %>%
+        # check for duplicate columns
+        remove_dupcols() %>%
+        # select only the name and the value of the variables
+        dplyr::select(Variable, Value) %>%
+        # in case of the read_excel function gets more rows filled with NA's, remove them
+        dplyr::filter(!is.na(Variable)) %>%
+        # spread the variables to their own columns, getting back their class
+        tidyr::spread(Variable, Value, convert = TRUE)
 
-  # 1.2 If sheet is stand or environmental, load as it is
-  if (any(sheet_name == 'stand_md', sheet_name == 'environmental_md')) {
-    # read the sheet
-    res <- readxl::read_excel(file_name, sheet_name) %>%
-      # check for duplicate columns
-      remove_dupcols() %>%
-      # select only the name and the value of the variables
-      dplyr::select(Variable, Value) %>%
-      # in case of the read_excel function gets more rows filled with NA's, remove them
-      dplyr::filter(!is.na(Variable)) %>%
-      # spread the variables to their own columns, getting back their class
-      tidyr::spread(Variable, Value, convert = TRUE) %>%
-      # adding the si_code
-      dplyr::mutate(si_code = si_code_txt)
+      # 1.1.1 return the site metadata
+      return(res)
+    }
 
-    # 1.2.1 return the stand or environmental metadata
-    return(res)
-  }
+    # 1.2 If sheet is stand or environmental, load as it is
+    if (any(sheet_name == 'stand_md', sheet_name == 'environmental_md')) {
+      # read the sheet
+      res <- readxl::read_excel(file_name, sheet_name) %>%
+        # check for duplicate columns
+        remove_dupcols() %>%
+        # select only the name and the value of the variables
+        dplyr::select(Variable, Value) %>%
+        # in case of the read_excel function gets more rows filled with NA's, remove them
+        dplyr::filter(!is.na(Variable)) %>%
+        # spread the variables to their own columns, getting back their class
+        tidyr::spread(Variable, Value, convert = TRUE) %>%
+        # adding the si_code
+        dplyr::mutate(si_code = si_code_txt)
 
-  # 1.3 If sheet is plant_md we need to take extra steps to tidy the data
-  if (sheet_name == 'plant_md') {
-    # read the sheet
-    res <- readxl::read_excel(file_name, sheet_name) %>%
-      # check for duplicate columns
-      remove_dupcols() %>%
-      # select only the name and the value of the variables
-      dplyr::select(-Description, -Units) %>%
-      # in case of the read_excel function gets more rows filled with NA's, remove them
-      dplyr::filter(!is.na(Variable)) %>%
-      # gather the species columns in one to be able to spread it afterwards
-      tidyr::gather('Indexes', 'Values', -Variable) %>%
-      # spread the variables to their own columns, getting back their class
-      tidyr::spread(Variable, Values, convert = TRUE) %>%
-      # clean the resulting data
-      dplyr::select(-Indexes) %>%
-      dplyr::filter(!is.na(pl_age) | !is.na(pl_azimut_int) |
-                      !is.na(pl_bark_thick) | !is.na(pl_code) |
-                      !is.na(pl_dbh)) %>%
-      # adding the si_code
-      dplyr::mutate(si_code = si_code_txt)
+      # 1.2.1 return the stand or environmental metadata
+      return(res)
+    }
 
-    # 1.3.1 return the plant metadata
-    return(res)
-  }
+    # 1.3 If sheet is plant_md we need to take extra steps to tidy the data
+    if (sheet_name == 'plant_md') {
+      # read the sheet
+      res <- readxl::read_excel(file_name, sheet_name) %>%
+        # check for duplicate columns
+        remove_dupcols() %>%
+        # select only the name and the value of the variables
+        dplyr::select(-Description, -Units) %>%
+        # in case of the read_excel function gets more rows filled with NA's, remove them
+        dplyr::filter(!is.na(Variable)) %>%
+        # gather the species columns in one to be able to spread it afterwards
+        tidyr::gather('Indexes', 'Values', -Variable) %>%
+        # spread the variables to their own columns, getting back their class
+        tidyr::spread(Variable, Values, convert = TRUE) %>%
+        # clean the resulting data
+        dplyr::select(-Indexes) %>%
+        dplyr::filter(!is.na(pl_age) | !is.na(pl_azimut_int) |
+                        !is.na(pl_bark_thick) | !is.na(pl_code) |
+                        !is.na(pl_dbh)) %>%
+        # adding the si_code
+        dplyr::mutate(si_code = si_code_txt)
 
-  # 1.4 If sheet is species_md, we need to take the same extra steps as before,
-  #     but with different final filter
-  if (sheet_name == 'species_md') {
-    # read the sheet
-    res <- readxl::read_excel(file_name, sheet_name) %>%
-      # check for duplicate columns
-      remove_dupcols() %>%
-      # select only the name and the value of the variables
-      dplyr::select(-Description, -Units) %>%
-      # in case of the read_excel function gets more rows filled with NA's, remove them
-      dplyr::filter(!is.na(Variable)) %>%
-      # gather the species columns in one to be able to spread it afterwards
-      tidyr::gather('Indexes', 'Values', -Variable) %>%
-      # spread the variables to their own columns, getting back their class
-      tidyr::spread(Variable, Values, convert = TRUE) %>%
-      # clean the resulting data
-      dplyr::select(-Indexes) %>%
-      dplyr::filter(!is.na(sp_basal_area_perc) | !is.na(sp_leaf_habit) |
-                      !is.na(sp_name) | !is.na(sp_ntrees)) %>%
-      # adding the si_code
-      dplyr::mutate(si_code = si_code_txt)
+      # 1.3.1 return the plant metadata
+      return(res)
+    }
 
-    # 1.4.1 return the species metadata
-    return(res)
-  }
+    # 1.4 If sheet is species_md, we need to take the same extra steps as before,
+    #     but with different final filter
+    if (sheet_name == 'species_md') {
+      # read the sheet
+      res <- readxl::read_excel(file_name, sheet_name) %>%
+        # check for duplicate columns
+        remove_dupcols() %>%
+        # select only the name and the value of the variables
+        dplyr::select(-Description, -Units) %>%
+        # in case of the read_excel function gets more rows filled with NA's, remove them
+        dplyr::filter(!is.na(Variable)) %>%
+        # gather the species columns in one to be able to spread it afterwards
+        tidyr::gather('Indexes', 'Values', -Variable) %>%
+        # spread the variables to their own columns, getting back their class
+        tidyr::spread(Variable, Values, convert = TRUE) %>%
+        # clean the resulting data
+        dplyr::select(-Indexes) %>%
+        dplyr::filter(!is.na(sp_basal_area_perc) | !is.na(sp_leaf_habit) |
+                        !is.na(sp_name) | !is.na(sp_ntrees)) %>%
+        # adding the si_code
+        dplyr::mutate(si_code = si_code_txt)
 
-  # END FUNCTION
+      # 1.4.1 return the species metadata
+      return(res)
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'dl_metadata', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'dl_metadata', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'dl_metadata', sep = '.'))})
+
 }
 
 ################################################################################
@@ -347,137 +400,151 @@ dl_metadata <- function(file_name, sheet_name, si_code_loc = NULL){
 # START
 # Function declaration
 
-dl_data <- function(file_name, sheet_name, long = FALSE) {
+dl_data <- function(file_name, sheet_name, long = FALSE,
+                    parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checking
-  # check if file name is a character and it exist
-  if (!is.character(file_name)) {
-    stop('File name is not provided as character')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  if (!file_test("-f", file_name)) {
-    stop('File does not exist, please check if file name has been correctly provided')
-  }
+    # STEP 0
+    # Argument checking
+    # check if file name is a character and it exist
+    if (!is.character(file_name)) {
+      stop('File name is not provided as character')
+    }
 
-  # check if sheet name is one of the five kinds of metadata allowed
-  accepted_sheets <- c('sapflow_hd', 'environmental_hd')
+    if (!file_test("-f", file_name)) {
+      stop('File does not exist, please check if file name has been correctly provided')
+    }
 
-  if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
-    stop('Provided sheet name is not a character or is not a metadata sheet
-         Please see function help')
-  }
+    # check if sheet name is one of the five kinds of metadata allowed
+    accepted_sheets <- c('sapflow_hd', 'environmental_hd')
 
-  # STEP 1
-  # Is xlsx?
-  if (stringr::str_detect(file_name, "^.+\\.xls(x)?$")) {
+    if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
+      stop('Provided sheet name is not a character or is not a metadata sheet
+           Please see function help')
+    }
 
-    # STEP 2
-    # Loading and shaping the data
-    # 2.1 sapflow data
-    if (sheet_name == 'sapflow_hd') {
-      res <- readxl::read_excel(file_name, sheet_name, skip = 4) %>%
-        # 2.1.2 Check and remove duplicate columns
-        remove_dupcols() %>%
-        # 2.1.3 Remove any extra column that could be created in the read_excel step.
-        #       This is achieved with a regular expression indicating that we select
-        #       those variables that have TIME or end with a number
-        dplyr::select(matches("(TIME|^.+?\\d$)"))
+    # STEP 1
+    # Is xlsx?
+    if (stringr::str_detect(file_name, "^.+\\.xls(x)?$")) {
 
-      # 2.1.4 If long format is needed, gather time!!
-      if (long) {
-        res <- res %>%
-          tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
+      # STEP 2
+      # Loading and shaping the data
+      # 2.1 sapflow data
+      if (sheet_name == 'sapflow_hd') {
+        res <- readxl::read_excel(file_name, sheet_name, skip = 4) %>%
+          # 2.1.2 Check and remove duplicate columns
+          remove_dupcols() %>%
+          # 2.1.3 Remove any extra column that could be created in the read_excel step.
+          #       This is achieved with a regular expression indicating that we select
+          #       those variables that have TIME or end with a number
+          dplyr::select(matches("(TIME|^.+?\\d$)"))
 
-        # 2.1.5 return long format
-        return(res)
+        # 2.1.4 If long format is needed, gather time!!
+        if (long) {
+          res <- res %>%
+            tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
 
-      } else {
-        # or return wide format
-        return(res)
-      }
+          # 2.1.5 return long format
+          return(res)
 
-    } else {
-      # 2.2 environmental data
-      res <- readxl::read_excel(file_name, sheet_name, skip = 3) %>%
-        # 2.2.2 check and remove duplicate columns
-        remove_dupcols() %>%
-        # 2.2.3 Remove any extra column that could be created in the read_excel step.
-        #       This is achieved with a regular expression indicating that we select
-        #       the environmental variables and the TIMESTAMP
-        dplyr::select(matches(
-          "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
-        ))
-
-      # 1.2.4 If long format is needed, gather time!!
-      if (long) {
-        res <- res %>%
-          tidyr::gather(Variable, Value, -TIMESTAMP)
-
-        # 1.2.5 return long format
-        return(res)
+        } else {
+          # or return wide format
+          return(res)
+        }
 
       } else {
-        # or return wide format
-        return(res)
+        # 2.2 environmental data
+        res <- readxl::read_excel(file_name, sheet_name, skip = 3) %>%
+          # 2.2.2 check and remove duplicate columns
+          remove_dupcols() %>%
+          # 2.2.3 Remove any extra column that could be created in the read_excel step.
+          #       This is achieved with a regular expression indicating that we select
+          #       the environmental variables and the TIMESTAMP
+          dplyr::select(matches(
+            "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
+          ))
+
+        # 1.2.4 If long format is needed, gather time!!
+        if (long) {
+          res <- res %>%
+            tidyr::gather(Variable, Value, -TIMESTAMP)
+
+          # 1.2.5 return long format
+          return(res)
+
+        } else {
+          # or return wide format
+          return(res)
+        }
       }
     }
-  }
 
-  # STEP 3
-  # Is csv file?
-  if (stringr::str_detect(file_name, "^.+\\.csv$")) {
+    # STEP 3
+    # Is csv file?
+    if (stringr::str_detect(file_name, "^.+\\.csv$")) {
 
-    # STEP 4
-    # Loading and shaping the data
-    # 4.1 sapflow data
-    if (sheet_name == 'sapflow_hd') {
-      res <- data.table::fread(
-        file_name, skip = 'TIMESTAMP', data.table = FALSE,
-        na.strings = dl_na_char_generator(),
-        dec = dl_dec_char_detect(file_name)
-      ) %>%
-        remove_dupcols() %>%
-        dplyr::select(matches('(TIME|^.+?\\d$)'))
+      # STEP 4
+      # Loading and shaping the data
+      # 4.1 sapflow data
+      if (sheet_name == 'sapflow_hd') {
+        res <- data.table::fread(
+          file_name, skip = 'TIMESTAMP', data.table = FALSE,
+          na.strings = dl_na_char_generator(),
+          dec = dl_dec_char_detect(file_name)
+        ) %>%
+          remove_dupcols() %>%
+          dplyr::select(matches('(TIME|^.+?\\d$)'))
 
-      # 4.1.1 If long format is needed, gather time!!
-      if (long) {
-        res <- res %>%
-          tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
+        # 4.1.1 If long format is needed, gather time!!
+        if (long) {
+          res <- res %>%
+            tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
 
-        # 4.1.2 return long format
-        return(res)
+          # 4.1.2 return long format
+          return(res)
 
+        } else {
+          # or return wide format
+          return(res)
+        }
       } else {
-        # or return wide format
-        return(res)
-      }
-    } else {
 
-      # 4.2 environmental data
-      res <- data.table::fread(
-        file_name, skip = 'TIMESTAMP', data.table = FALSE,
-        na.strings = dl_na_char_generator(),
-        dec = dl_dec_char_detect(file_name)
-      ) %>%
-        remove_dupcols() %>%
-        dplyr::select(matches(
-          "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
-        ))
+        # 4.2 environmental data
+        res <- data.table::fread(
+          file_name, skip = 'TIMESTAMP', data.table = FALSE,
+          na.strings = dl_na_char_generator(),
+          dec = dl_dec_char_detect(file_name)
+        ) %>%
+          remove_dupcols() %>%
+          dplyr::select(matches(
+            "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
+          ))
 
-      # 4.2.1 If long format is needed, gather time!!
-      if (long) {
-        res <- res %>%
-          tidyr::gather(Variable, Value, -TIMESTAMP)
+        # 4.2.1 If long format is needed, gather time!!
+        if (long) {
+          res <- res %>%
+            tidyr::gather(Variable, Value, -TIMESTAMP)
 
-        # 4.1.2 return long format
-        return(res)
+          # 4.1.2 return long format
+          return(res)
 
-      } else {
-        # or return wide format
-        return(res)
+        } else {
+          # or return wide format
+          return(res)
+        }
       }
     }
-  }
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'dl_data', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'dl_data', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'dl_data', sep = '.'))})
+
 }

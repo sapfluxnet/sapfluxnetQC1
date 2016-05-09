@@ -4,7 +4,7 @@
 \alias{dl_na_char_generator}
 \title{Create a characters vector for NA values}
 \usage{
-dl_na_char_generator()
+dl_na_char_generator(parent_logger = "test")
 }
 \value{
 A character vector with the text strings to be converted to NAs, in

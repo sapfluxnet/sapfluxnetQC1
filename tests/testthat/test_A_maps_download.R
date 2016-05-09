@@ -1,5 +1,10 @@
 library(sapfluxnetr)
 
+###################################################
+# logging                                         #
+log_sapfluxnet_setup('test.log', 'test', "DEBUG") #
+###################################################
+
 context('A1. Maps argument checks')
 
 test_that('arguments error are correct', {

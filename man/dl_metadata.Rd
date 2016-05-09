@@ -4,7 +4,8 @@
 \alias{dl_metadata}
 \title{Loading metadata from xls/xlsx}
 \usage{
-dl_metadata(file_name, sheet_name, si_code_loc = NULL)
+dl_metadata(file_name, sheet_name, si_code_loc = NULL,
+  parent_logger = "test")
 }
 \arguments{
 \item{file_name}{Character vector indicating the name of the xls/xlsx file

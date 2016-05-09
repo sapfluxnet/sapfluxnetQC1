@@ -4,7 +4,7 @@
 \alias{qc_suitable_range}
 \title{Find if provided values of a numerical variable are in a suitable range}
 \usage{
-qc_suitable_range(data, variables, ranges)
+qc_suitable_range(data, variables, ranges, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the variables to check}

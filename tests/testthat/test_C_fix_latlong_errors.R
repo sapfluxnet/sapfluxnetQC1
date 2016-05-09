@@ -30,11 +30,11 @@ test_that('results are a dataframe', {
 })
 
 test_that('results are correct (without special countries)', {
-  expect_message(qc_fix_latlong_errors(foo_data), '0 latitude sign errors fixed.\n2 longitude sign errors fixed.\n1 unable to fix due to country borders sharing positive and negative coordinates.\n\n')
+  expect_message(qc_fix_latlong_errors(foo_data), '0 latitude sign errors fixed. 2 longitude sign errors fixed. 1 unable to fix due to country borders sharing positive and negative coordinates.\n')
 })
 
 test_that('results are correct (with special countries', {
-  expect_message(qc_fix_latlong_errors(foo_data), '0 latitude sign errors fixed.\n2 longitude sign errors fixed.\n1 unable to fix due to country borders sharing positive and negative coordinates.\n\n')
+  expect_message(qc_fix_latlong_errors(foo_data), '0 latitude sign errors fixed. 2 longitude sign errors fixed. 1 unable to fix due to country borders sharing positive and negative coordinates.\n')
 })
 
 file.remove('CRI_adm0.rds', 'ITA_adm0.rds', 'NZL_adm0.rds', 'CHE_adm0.rds',

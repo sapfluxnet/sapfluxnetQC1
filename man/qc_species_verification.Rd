@@ -4,7 +4,7 @@
 \alias{qc_species_verification}
 \title{Check if sp_name and sp_ntrees coincides with plants specified in plant_md}
 \usage{
-qc_species_verification(species_md, plant_md)
+qc_species_verification(species_md, plant_md, parent_logger = "test")
 }
 \arguments{
 \item{species_md}{Data frame containing species metadata.}

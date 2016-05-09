@@ -18,31 +18,44 @@
 
 # START
 # Function declaration
-qc_get_sapw_md <- function(pl_metadata) {
+qc_get_sapw_md <- function(pl_metadata, parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checks
-  # Is pl_data a data frame?
-  if (!is.data.frame(pl_metadata)) {
-    stop('Provided pl_data object is not a data frame')
-  }
-  # Is the correct metadata? (Check for pl_code variable)
-  if (is.null(pl_metadata$pl_code)) {
-    stop('pl_code variable is missing from pl_data')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Extract the desired variables
-  res <- pl_metadata %>%
-    dplyr::select(pl_code, pl_sap_units, pl_sapw_area, pl_leaf_area,
-                  pl_dbh, pl_sapw_depth, pl_bark_thick) %>%
-    dplyr::mutate(pl_sapw_area_est = 0)
+    # STEP 0
+    # Argument checks
+    # Is pl_data a data frame?
+    if (!is.data.frame(pl_metadata)) {
+      stop('Provided pl_data object is not a data frame')
+    }
+    # Is the correct metadata? (Check for pl_code variable)
+    if (is.null(pl_metadata$pl_code)) {
+      stop('pl_code variable is missing from pl_data')
+    }
 
-  # STEP 2
-  # Return the results
-  return(res)
+    # STEP 1
+    # Extract the desired variables
+    res <- pl_metadata %>%
+      dplyr::select(pl_code, pl_sap_units, pl_sapw_area, pl_leaf_area,
+                    pl_dbh, pl_sapw_depth, pl_bark_thick) %>%
+      dplyr::mutate(pl_sapw_area_est = 0)
 
-  # END FUNCTION
+    # STEP 2
+    # Return the results
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_get_sapw_md', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_get_sapw_md', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_get_sapw_md', sep = '.'))})
+
 }
 
 ################################################################################
@@ -74,71 +87,84 @@ qc_get_sapw_md <- function(pl_metadata) {
 
 # START
 # Function declaration
-qc_sapw_area_calculator <- function(pl_vars) {
+qc_sapw_area_calculator <- function(pl_vars, parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checking
-  # is pl_vars a data frame?
-  if (!is.data.frame(pl_vars)) {
-    stop('Provided pl_vars object is not a data frame')
-  }
-  # has pl_vars the necessary variables?
-  if (!all(c('pl_sapw_depth', 'pl_dbh',
-             'pl_bark_thick', 'pl_sapw_area') %in% names(pl_vars))) {
-    stop('Provided pl_vars object has not the needed variables to make ',
-         'the conversion')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Helper function to use in vapply
-  helper <- function(i) {
-    # mandatory variables + bark
-    depth_dbh_bark <- all(!is.na(pl_vars$pl_sapw_depth[i]),
-                          !is.na(pl_vars$pl_dbh[i]),
-                          !is.na(pl_vars$pl_bark_thick[i]))
-    # mandatory variables only
-    depth_dbh <- all(!is.na(pl_vars$pl_sapw_depth[i]),
-                     !is.na(pl_vars$pl_dbh[i]),
-                     is.na(pl_vars$pl_bark_thick[i]))
+    # STEP 0
+    # Argument checking
+    # is pl_vars a data frame?
+    if (!is.data.frame(pl_vars)) {
+      stop('Provided pl_vars object is not a data frame')
+    }
+    # has pl_vars the necessary variables?
+    if (!all(c('pl_sapw_depth', 'pl_dbh',
+               'pl_bark_thick', 'pl_sapw_area') %in% names(pl_vars))) {
+      stop('Provided pl_vars object has not the needed variables to make ',
+           'the conversion')
+    }
+
+    # STEP 1
+    # Helper function to use in vapply
+    helper <- function(i) {
+      # mandatory variables + bark
+      depth_dbh_bark <- all(!is.na(pl_vars$pl_sapw_depth[i]),
+                            !is.na(pl_vars$pl_dbh[i]),
+                            !is.na(pl_vars$pl_bark_thick[i]))
+      # mandatory variables only
+      depth_dbh <- all(!is.na(pl_vars$pl_sapw_depth[i]),
+                       !is.na(pl_vars$pl_dbh[i]),
+                       is.na(pl_vars$pl_bark_thick[i]))
 
 
-    # if there is a sapwood area value, return it
-    if (!is.na(pl_vars$pl_sapw_area[i])) {
-      return(pl_vars$pl_sapw_area[i])
-    } else {
-      # if all mandatory variables and bark thickness are present, return the
-      # estimate
-      if (depth_dbh_bark) {
-        return(pi*(((pl_vars$pl_dbh[i] / 2) - (pl_vars$pl_bark_thick[i]*0.1))^2 - ((pl_vars$pl_dbh[i] / 2) - (pl_vars$pl_bark_thick[i]*0.1) - pl_vars$pl_sapw_depth[i])^2))
+      # if there is a sapwood area value, return it
+      if (!is.na(pl_vars$pl_sapw_area[i])) {
+        return(pl_vars$pl_sapw_area[i])
       } else {
-        # if all mandatory variables are present, but no bark thickness value
-        # return estimate with a message
-        if (depth_dbh) {
-          message(pl_vars$pl_code[i], ' has no bark thickness value.',
-                  ' Estimate of sapwood area must be taken with caution')
-          return(pi*(((pl_vars$pl_dbh[i] / 2))^2 - ((pl_vars$pl_dbh[i] / 2) - pl_vars$pl_sapw_depth[i])^2))
+        # if all mandatory variables and bark thickness are present, return the
+        # estimate
+        if (depth_dbh_bark) {
+          return(pi*(((pl_vars$pl_dbh[i] / 2) - (pl_vars$pl_bark_thick[i]*0.1))^2 - ((pl_vars$pl_dbh[i] / 2) - (pl_vars$pl_bark_thick[i]*0.1) - pl_vars$pl_sapw_depth[i])^2))
         } else {
-          # if one or more mandatory variables are missing, return NA with a
-          # messege
-          message(pl_vars$pl_code[i], ' has no sapwood depth and/or ',
-                  'dbh values.', ' Estimate of sapwood area ',
-                  'can not be calculated. Returning NA.')
-          return(NA)
+          # if all mandatory variables are present, but no bark thickness value
+          # return estimate with a message
+          if (depth_dbh) {
+            message(pl_vars$pl_code[i], ' has no bark thickness value.',
+                    ' Estimate of sapwood area must be taken with caution')
+            return(pi*(((pl_vars$pl_dbh[i] / 2))^2 - ((pl_vars$pl_dbh[i] / 2) - pl_vars$pl_sapw_depth[i])^2))
+          } else {
+            # if one or more mandatory variables are missing, return NA with a
+            # messege
+            message(pl_vars$pl_code[i], ' has no sapwood depth and/or ',
+                    'dbh values.', ' Estimate of sapwood area ',
+                    'can not be calculated. Returning NA.')
+            return(NA)
+          }
         }
       }
     }
-  }
 
-  # STEP 2
-  # Calculate the estimates, if possible
-  res_vec <- vapply(seq_along(pl_vars$pl_code), helper, numeric(1))
+    # STEP 2
+    # Calculate the estimates, if possible
+    res_vec <- vapply(seq_along(pl_vars$pl_code), helper, numeric(1))
 
-  # STEP 3
-  # Return the results
-  pl_vars$pl_sapw_area_est <- res_vec
-  return(pl_vars)
+    # STEP 3
+    # Return the results
+    pl_vars$pl_sapw_area_est <- res_vec
+    return(pl_vars)
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_sapw_area_calculator', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_sapw_area_calculator', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_sapw_area_calculator', sep = '.'))})
+
 }
 
 ################################################################################
@@ -164,44 +190,58 @@ qc_sapw_area_calculator <- function(pl_vars) {
 
 # START
 # Function declaration
-qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units,
+                       parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area)/(leaf_area*10000)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area)/(leaf_area*10000)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_cm_cm_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_cm_cm_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_cm_cm_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -211,44 +251,58 @@ qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units) {
+qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units,
+                      parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*0.36
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*0.36
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*0.36
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*1e-4*0.36)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*0.36
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*1e-4*0.36)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_cm_m_s', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_cm_m_s', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_cm_m_s', sep = '.'))})
+
 }
 
 ################################################################################
@@ -258,44 +312,58 @@ qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units,
+                       parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*10
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*10
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*10
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*1e-3)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*10
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*1e-3)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_dm_dm_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_dm_dm_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_dm_dm_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -305,44 +373,58 @@ qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units) {
+qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units,
+                       parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*36000
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*36000
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*36000
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*3.6)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*36000
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*3.6)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_dm_dm_s', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_dm_dm_s', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_dm_dm_s', sep = '.'))})
+
 }
 
 ################################################################################
@@ -352,44 +434,58 @@ qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units) {
+qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units,
+                       parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*360
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*360
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*360
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*0.036)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*360
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*0.036)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_mm_mm_s', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_mm_mm_s', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_mm_mm_s', sep = '.'))})
+
 }
 
 ################################################################################
@@ -399,44 +495,58 @@ qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_g_m_s <- function(x, sapw_area, leaf_area, output_units) {
+qc_g_m_s <- function(x, sapw_area, leaf_area, output_units,
+                     parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*0.36
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*0.36
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*0.36
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*0.36*1e-4)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*0.36
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*0.36*1e-4)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_g_m_s', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_g_m_s', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_g_m_s', sep = '.'))})
+
 }
 
 ################################################################################
@@ -446,44 +556,58 @@ qc_g_m_s <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units,
+                      parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*1e-1
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*1e-1
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*1e-1
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*1e-5)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*1e-1
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*1e-5)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_kg_m_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_kg_m_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_kg_m_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -493,44 +617,58 @@ qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units) {
+qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units,
+                      parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x*360
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*sapw_area*360
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x*360
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*sapw_area*0.036)/(leaf_area)
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*sapw_area*360
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*sapw_area*0.036)/(leaf_area)
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_kg_m_s', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_kg_m_s', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_kg_m_s', sep = '.'))})
+
 }
 
 ################################################################################
@@ -540,44 +678,58 @@ qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_cm_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_cm_h <- function(x, sapw_area, leaf_area, output_units,
+                    parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x/sapw_area
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x/sapw_area
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*1e-4)/leaf_area
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*1e-4)/leaf_area
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_cm_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_cm_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_cm_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -587,44 +739,58 @@ qc_cm_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_dm_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_dm_h <- function(x, sapw_area, leaf_area, output_units,
+                    parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- (x*1e3)/sapw_area
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*1e3
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- (x*1e3)/sapw_area
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*1e-1)/leaf_area
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*1e3
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*1e-1)/leaf_area
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_dm_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_dm_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_dm_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -634,44 +800,58 @@ qc_dm_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_cm_s <- function(x, sapw_area, leaf_area, output_units) {
+qc_cm_s <- function(x, sapw_area, leaf_area, output_units,
+                    parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- (x*3600)/sapw_area
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*3600
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- (x*3600)/sapw_area
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*0.36)/leaf_area
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*3600
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*0.36)/leaf_area
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_cm_s', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_cm_s', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_cm_s', sep = '.'))})
+
 }
 
 ################################################################################
@@ -681,44 +861,58 @@ qc_cm_s <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_g_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_g_h <- function(x, sapw_area, leaf_area, output_units,
+                   parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- x/sapw_area
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- x/sapw_area
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*1e-4)/leaf_area
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*1e-4)/leaf_area
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_g_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_g_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_g_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -728,44 +922,58 @@ qc_g_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_kg_h <- function(x, sapw_area, leaf_area, output_units) {
+qc_kg_h <- function(x, sapw_area, leaf_area, output_units,
+                    parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are values numeric?
-  if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
-    stop('x, sapw_area and/or leaf_area are not numeric values')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Sapwood
-  if (output_units == 'sapwood') {
-    res <- (x*1e3)/sapw_area
-    return(res)
-  } else {
+    # STEP 0
+    # Arguments checking
+    # Are values numeric?
+    if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
+      stop('x, sapw_area and/or leaf_area are not numeric values')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-    # STEP 2
-    # Plant
-    if (output_units == 'plant') {
-      res <- x*1e3
+    # STEP 1
+    # Sapwood
+    if (output_units == 'sapwood') {
+      res <- (x*1e3)/sapw_area
       return(res)
     } else {
 
-      # STEP 3
-      # Leaf area
-      if (output_units == 'leaf') {
-        res <- (x*1e-1)/leaf_area
+      # STEP 2
+      # Plant
+      if (output_units == 'plant') {
+        res <- x*1e3
         return(res)
+      } else {
+
+        # STEP 3
+        # Leaf area
+        if (output_units == 'leaf') {
+          res <- (x*1e-1)/leaf_area
+          return(res)
+        }
       }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_kg_h', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_kg_h', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_kg_h', sep = '.'))})
+
 }
 
 ################################################################################
@@ -826,75 +1034,90 @@ qc_kg_h <- function(x, sapw_area, leaf_area, output_units) {
 
 # START
 # Function declaration
-qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant') {
+qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
+                               parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # Are data and pl_metadata data frames?
-  if (any(!is.data.frame(data), !is.data.frame(sapw_md))) {
-    stop('data and/or pl_metadata objects are not data frames')
-  }
-  # Is output units a character vector?
-  if (!is.character(output_units)) {
-    stop('output_units value is not a character vector')
-  }
-  # Is output units a valid value?
-  if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
-    stop('output_units = "', output_units, '" is not a valid value. See function ',
-         'help (?qc_sapw_conversion) for a list of valid values')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Needed objects
+    # STEP 0
+    # Arguments checking
+    # Are data and pl_metadata data frames?
+    if (any(!is.data.frame(data), !is.data.frame(sapw_md))) {
+      stop('data and/or pl_metadata objects are not data frames')
+    }
+    # Is output units a character vector?
+    if (!is.character(output_units)) {
+      stop('output_units value is not a character vector')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('plant', 'sapwood', 'leaf'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_sapw_conversion) for a list of valid values')
+    }
 
-  # 1.1 create a list/dictionary with the conversion functions
-  funs_list <- list(
-    '“cm3 cm-2 h-1”' = sapfluxnetr::qc_cm_cm_h,
-    '“cm3 m-2 s-1”' = sapfluxnetr::qc_cm_m_s,
-    '“dm3 dm-2 h-1”' = sapfluxnetr::qc_dm_dm_h,
-    '“dm3 dm-2 s-1”' = sapfluxnetr::qc_dm_dm_s,
-    '“mm3 mm-2 s-1”' = sapfluxnetr::qc_mm_mm_s,
-    '“g m-2 s-1”' = sapfluxnetr::qc_g_m_s,
-    '“kg m-2 h-1”' = sapfluxnetr::qc_kg_m_h,
-    '“kg m-2 s-1”' = sapfluxnetr::qc_kg_m_s,
-    '“cm3 s-1”' = sapfluxnetr::qc_cm_s,
-    '“cm3 h-1”' = sapfluxnetr::qc_cm_h,
-    '“dm3 h-1”' = sapfluxnetr::qc_dm_h,
-    '“g h-1”' = sapfluxnetr::qc_g_h,
-    '“kg h-1”' = sapfluxnetr::qc_kg_h
-  )
+    # STEP 1
+    # Needed objects
 
-  # 1.2 TIMESTAMP variable is not needed for the loop, drop it
-  data_tmp <- data
-  data_tmp$TIMESTAMP <- NULL
-
-  # 1.3 Results data frame, here TIMESTAMP is needed
-  res_df <- data.frame(TIMESTAMP = data$TIMESTAMP)
-
-  # STEP 2
-  # Loop for each plant/tree
-  for (code in names(data_tmp)) {
-
-    # 3.1 units, sapw area and leaf area values
-    sapw_units <- as.character(sapw_md[sapw_md[,'pl_code'] == code, 'pl_sap_units'])
-    sapw_area <- as.numeric(sapw_md[sapw_md[,'pl_code'] == code, 'pl_sapw_area'])
-    leaf_area <- as.numeric(sapw_md[sapw_md[,'pl_code'] == code, 'pl_leaf_area'])
-
-    # 3.2 vapply to convert all the plant measures
-    plant_res <- vapply(
-      data_tmp[[code]],
-      funs_list[[sapw_units]],
-      numeric(1),
-      sapw_area = sapw_area, leaf_area = leaf_area, output_units = output_units
+    # 1.1 create a list/dictionary with the conversion functions
+    funs_list <- list(
+      '“cm3 cm-2 h-1”' = sapfluxnetr::qc_cm_cm_h,
+      '“cm3 m-2 s-1”' = sapfluxnetr::qc_cm_m_s,
+      '“dm3 dm-2 h-1”' = sapfluxnetr::qc_dm_dm_h,
+      '“dm3 dm-2 s-1”' = sapfluxnetr::qc_dm_dm_s,
+      '“mm3 mm-2 s-1”' = sapfluxnetr::qc_mm_mm_s,
+      '“g m-2 s-1”' = sapfluxnetr::qc_g_m_s,
+      '“kg m-2 h-1”' = sapfluxnetr::qc_kg_m_h,
+      '“kg m-2 s-1”' = sapfluxnetr::qc_kg_m_s,
+      '“cm3 s-1”' = sapfluxnetr::qc_cm_s,
+      '“cm3 h-1”' = sapfluxnetr::qc_cm_h,
+      '“dm3 h-1”' = sapfluxnetr::qc_dm_h,
+      '“g h-1”' = sapfluxnetr::qc_g_h,
+      '“kg h-1”' = sapfluxnetr::qc_kg_h
     )
 
-    # 3.3 add the plant results to the data frame results
-    res_df[[code]] <- plant_res
-  }
+    # 1.2 TIMESTAMP variable is not needed for the loop, drop it
+    data_tmp <- data
+    data_tmp$TIMESTAMP <- NULL
 
-  # STEP 4
-  # Return the results
-  return(res_df)
+    # 1.3 Results data frame, here TIMESTAMP is needed
+    res_df <- data.frame(TIMESTAMP = data$TIMESTAMP)
 
-  # END FUNCTION
+    # STEP 2
+    # Loop for each plant/tree
+    for (code in names(data_tmp)) {
+
+      # 3.1 units, sapw area and leaf area values
+      sapw_units <- as.character(sapw_md[sapw_md[,'pl_code'] == code, 'pl_sap_units'])
+      sapw_area <- as.numeric(sapw_md[sapw_md[,'pl_code'] == code, 'pl_sapw_area'])
+      leaf_area <- as.numeric(sapw_md[sapw_md[,'pl_code'] == code, 'pl_leaf_area'])
+
+      # 3.2 vapply to convert all the plant measures
+      plant_res <- vapply(
+        data_tmp[[code]],
+        funs_list[[sapw_units]],
+        numeric(1),
+        sapw_area = sapw_area, leaf_area = leaf_area, output_units = output_units,
+        parent_logger = parent_logger
+      )
+
+      # 3.3 add the plant results to the data frame results
+      res_df[[code]] <- plant_res
+    }
+
+    # STEP 4
+    # Return the results
+    return(res_df)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_sapw_conversion', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_sapw_conversion', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_sapw_conversion', sep = '.'))})
+
 }

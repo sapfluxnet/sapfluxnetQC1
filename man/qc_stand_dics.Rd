@@ -4,7 +4,7 @@
 \alias{qc_stand_dics}
 \title{Dictionary creation for stand_md variables}
 \usage{
-qc_stand_dics(variable)
+qc_stand_dics(variable, parent_logger = "test")
 }
 \arguments{
 \item{variable}{Variable name in which the dictionary is needed as character

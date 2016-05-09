@@ -21,33 +21,46 @@
 # START
 # Function declaration
 
-qc_pl_treatments <- function(plant_md) {
+qc_pl_treatments <- function(plant_md, parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checks
-  # Is plant_md a data frame and have a pl_treatment variable?
-  if (!is.data.frame(plant_md) | is.null(plant_md$pl_treatment)) {
-    stop('Data object is not a data frame or it not contains any variable called pl_treatment')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Check if pl_treatment is a NA vector (there are no treatments), so the
-  # treatment comprobation is not necessary
-  if (all(is.na(plant_md$pl_treatment))) {
-    warning("No treatments found, all values for pl_treatment are NA's")
-  }
+    # STEP 0
+    # Argument checks
+    # Is plant_md a data frame and have a pl_treatment variable?
+    if (!is.data.frame(plant_md) | is.null(plant_md$pl_treatment)) {
+      stop('Data object is not a data frame or it not contains any variable called pl_treatment')
+    }
 
-  # STEP 2
-  # Extract the unique treatments and summarise the results
-  res <- plant_md %>%
-    dplyr::select(pl_treatment) %>%
-    dplyr::group_by(pl_treatment) %>%
-    dplyr::arrange(pl_treatment) %>%
-    dplyr::summarize(n = n())
+    # STEP 1
+    # Check if pl_treatment is a NA vector (there are no treatments), so the
+    # treatment comprobation is not necessary
+    if (all(is.na(plant_md$pl_treatment))) {
+      warning("No treatments found, all values for pl_treatment are NA's")
+    }
 
-  # STEP 3
-  # Return the results data frame
-  return(res)
+    # STEP 2
+    # Extract the unique treatments and summarise the results
+    res <- plant_md %>%
+      dplyr::select(pl_treatment) %>%
+      dplyr::group_by(pl_treatment) %>%
+      dplyr::arrange(pl_treatment) %>%
+      dplyr::summarize(n = n())
 
-  # END FUNCTION
+    # STEP 3
+    # Return the results data frame
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_pl_treatments', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_pl_treatments', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_pl_treatments', sep = '.'))})
+
 }

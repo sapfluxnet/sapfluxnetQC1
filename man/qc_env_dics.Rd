@@ -4,7 +4,7 @@
 \alias{qc_env_dics}
 \title{Dictionary creation for environmental_md variables}
 \usage{
-qc_env_dics(variable)
+qc_env_dics(variable, parent_logger = "test")
 }
 \arguments{
 \item{variable}{Variable name in which the dictionary is needed as character

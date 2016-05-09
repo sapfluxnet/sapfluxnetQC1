@@ -4,12 +4,15 @@
 \alias{log_sapfluxnet_setup}
 \title{Setup handler}
 \usage{
-log_sapfluxnet_setup(file_name, logger)
+log_sapfluxnet_setup(file_name, logger, level = "DEBUG")
 }
 \arguments{
 \item{file_name}{Name of the file in which the log will be saved}
 
 \item{logger}{Name of the logger}
+
+\item{level}{Level of log in character form: "FINEST", "DEBUG", "WARNING" or
+"ERROR".}
 }
 \description{
 Setting up the SAPFLUXNET Project log handler

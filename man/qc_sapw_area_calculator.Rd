@@ -4,7 +4,7 @@
 \alias{qc_sapw_area_calculator}
 \title{Sapwood area calculator}
 \usage{
-qc_sapw_area_calculator(pl_vars)
+qc_sapw_area_calculator(pl_vars, parent_logger = "test")
 }
 \arguments{
 \item{pl_vars}{Data frame containing the needed variables, usually the result

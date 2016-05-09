@@ -4,7 +4,7 @@
 \alias{qc_plant_dics}
 \title{Dictionary creation for plant_md variables}
 \usage{
-qc_plant_dics(variable)
+qc_plant_dics(variable, parent_logger = "test")
 }
 \arguments{
 \item{variable}{Variable name in which the dictionary is needed as character

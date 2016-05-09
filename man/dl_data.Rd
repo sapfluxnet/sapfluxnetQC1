@@ -4,7 +4,7 @@
 \alias{dl_data}
 \title{Loading data from xls/xlsx ann csv files}
 \usage{
-dl_data(file_name, sheet_name, long = FALSE)
+dl_data(file_name, sheet_name, long = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{file_name}{Character vector indicating the name of the file

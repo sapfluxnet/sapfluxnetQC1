@@ -4,7 +4,7 @@
 \alias{remove_dupcols}
 \title{Remove columns with duplicate names}
 \usage{
-remove_dupcols(data)
+remove_dupcols(data, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame in which check for duplicate column names}

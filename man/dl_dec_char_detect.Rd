@@ -4,7 +4,7 @@
 \alias{dl_dec_char_detect}
 \title{Decimal character detection}
 \usage{
-dl_dec_char_detect(file)
+dl_dec_char_detect(file, parent_logger = "test")
 }
 \arguments{
 \item{file}{Character vector indicating the name (and route) of the file in

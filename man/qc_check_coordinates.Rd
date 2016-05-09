@@ -5,7 +5,7 @@
 \title{Site coordinates checking}
 \usage{
 qc_check_coordinates(data, maps_folder = getwd(), plot = FALSE,
-  text_report = TRUE)
+  text_report = TRUE, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame with data. At least, longitude, latitude, country and

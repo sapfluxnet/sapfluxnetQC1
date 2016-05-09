@@ -4,7 +4,7 @@
 \alias{qc_as_timestamp}
 \title{Fixing known errors in TIMESTAMP format}
 \usage{
-qc_as_timestamp(data)
+qc_as_timestamp(data, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing TIMESTAMP variable. Also it can be a vector

@@ -4,7 +4,8 @@
 \alias{qc_sapw_conversion}
 \title{Sap flow units transformation}
 \usage{
-qc_sapw_conversion(data, sapw_md, output_units = "plant")
+qc_sapw_conversion(data, sapw_md, output_units = "plant",
+  parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the sap flow measurements}

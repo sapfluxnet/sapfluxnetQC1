@@ -28,32 +28,45 @@
 
 # START
 # Function declaration
-qc_email_check <- function(data) {
+qc_email_check <- function(data, parent_logging = 'test') {
 
-  # STEP 0
-  # Argument checks
-  # Has data valid email variables
-  if (is.null(data$si_contact_email) & is.null(data$si_addcontr_email)) {
-    stop('Data provided has not valid email variables')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Initialize pattern
-  emilio_pattern <- "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"
+    # STEP 0
+    # Argument checks
+    # Has data valid email variables
+    if (is.null(data$si_contact_email) & is.null(data$si_addcontr_email)) {
+      stop('Data provided has not valid email variables')
+    }
 
-  # Initialize email directions object
-  emilio_vec <- c(data$si_contact_email, data$si_addcontr_email)
+    # STEP 1
+    # Initialize pattern
+    emilio_pattern <- "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"
 
-  # STEP 2
-  # Check the email
-  emilio_res <- stringr::str_detect(string = emilio_vec, pattern = emilio_pattern)
+    # Initialize email directions object
+    emilio_vec <- c(data$si_contact_email, data$si_addcontr_email)
 
-  # STEP 3
-  # Results object
-  emilio_df <- data.frame(email = emilio_vec, Is_correct = emilio_res)
+    # STEP 2
+    # Check the email
+    emilio_res <- stringr::str_detect(string = emilio_vec, pattern = emilio_pattern)
 
-  # 3.1 return de results
-  return(emilio_df)
+    # STEP 3
+    # Results object
+    emilio_df <- data.frame(email = emilio_vec, Is_correct = emilio_res)
 
-  # END FUNCTION
+    # 3.1 return de results
+    return(emilio_df)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_email_check', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_email_check', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_email_check', sep = '.'))})
+
 }

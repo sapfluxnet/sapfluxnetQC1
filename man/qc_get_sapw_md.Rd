@@ -4,7 +4,7 @@
 \alias{qc_get_sapw_md}
 \title{Helper function for unit conversion}
 \usage{
-qc_get_sapw_md(pl_metadata)
+qc_get_sapw_md(pl_metadata, parent_logger = "test")
 }
 \arguments{
 \item{pl_metadata}{Data frame containing the plant metadata}

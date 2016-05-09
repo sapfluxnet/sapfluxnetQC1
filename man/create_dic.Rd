@@ -4,7 +4,7 @@
 \alias{create_dic}
 \title{Variable dictionaries for metadata}
 \usage{
-create_dic(dic_name)
+create_dic(dic_name, parent_logger = "test")
 }
 \arguments{
 \item{dic_name}{Name of the metadata sheet of which dictionary is needed.

@@ -4,7 +4,7 @@
 \alias{qc_pl_treatments}
 \title{Check plant treatments for misspelling and concordance errors}
 \usage{
-qc_pl_treatments(plant_md)
+qc_pl_treatments(plant_md, parent_logger = "test")
 }
 \arguments{
 \item{plant_md}{Data frame containing the plant metadata}

@@ -4,7 +4,7 @@
 \alias{qc_md_cols}
 \title{Metadata columns check}
 \usage{
-qc_md_cols(metadata, dic)
+qc_md_cols(metadata, dic, parent_logger = "test")
 }
 \arguments{
 \item{metadata}{Data frame containing the metadata in which the test will be

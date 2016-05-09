@@ -4,3 +4,4 @@
 .Ruserdata
 inst/doc
 sapfluxnetr.Rproj
+tests/testthat/test.log

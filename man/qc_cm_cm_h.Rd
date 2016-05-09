@@ -16,31 +16,31 @@
 \alias{qc_mm_mm_s}
 \title{Unit conversion}
 \usage{
-qc_cm_cm_h(x, sapw_area, leaf_area, output_units)
+qc_cm_cm_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_cm_m_s(x, sapw_area, leaf_area, output_units)
+qc_cm_m_s(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_dm_dm_h(x, sapw_area, leaf_area, output_units)
+qc_dm_dm_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_dm_dm_s(x, sapw_area, leaf_area, output_units)
+qc_dm_dm_s(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_mm_mm_s(x, sapw_area, leaf_area, output_units)
+qc_mm_mm_s(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_g_m_s(x, sapw_area, leaf_area, output_units)
+qc_g_m_s(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_kg_m_h(x, sapw_area, leaf_area, output_units)
+qc_kg_m_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_kg_m_s(x, sapw_area, leaf_area, output_units)
+qc_kg_m_s(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_cm_h(x, sapw_area, leaf_area, output_units)
+qc_cm_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_dm_h(x, sapw_area, leaf_area, output_units)
+qc_dm_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_cm_s(x, sapw_area, leaf_area, output_units)
+qc_cm_s(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_g_h(x, sapw_area, leaf_area, output_units)
+qc_g_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 
-qc_kg_h(x, sapw_area, leaf_area, output_units)
+qc_kg_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 }
 \arguments{
 \item{x}{Numeric value in which the conversion must be done}

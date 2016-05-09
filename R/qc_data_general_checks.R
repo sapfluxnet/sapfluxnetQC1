@@ -24,44 +24,58 @@
 
 # START
 # Function declaration
-qc_is_timestamp <- function(data, verbose = TRUE) {
+qc_is_timestamp <- function(data, verbose = TRUE,
+                            parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checking
-  # is data a data frame?
-  if(!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
-    stop('Data provided is not a data frame or a vector')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Data frame
-  if (is.data.frame(data)) {
-    # have data a TIMESTAMP variable?
-    if(is.null(data$TIMESTAMP)) {
-      stop('TIMESTAMP variable is missing in the data provided')
+    # STEP 0
+    # Argument checking
+    # is data a data frame?
+    if(!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
+      stop('Data provided is not a data frame or a vector')
     }
-    # Check TIMESTAMP format
-    if(lubridate::is.POSIXt(data$TIMESTAMP)) {
-      if (verbose) {message('TIMESTAMP is in the correct format')}
-      return(invisible(TRUE))
+
+    # STEP 1
+    # Data frame
+    if (is.data.frame(data)) {
+      # have data a TIMESTAMP variable?
+      if(is.null(data$TIMESTAMP)) {
+        stop('TIMESTAMP variable is missing in the data provided')
+      }
+      # Check TIMESTAMP format
+      if(lubridate::is.POSIXt(data$TIMESTAMP)) {
+        if (verbose) {message('TIMESTAMP is in the correct format')}
+        return(invisible(TRUE))
+      } else {
+        if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
+        return(invisible(FALSE))
+      }
     } else {
-      if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
-      return(invisible(FALSE))
-    }
-  } else {
 
-    # STEP 2
-    # Vector
-    if(lubridate::is.POSIXt(data)) {
-      if (verbose) {message('TIMESTAMP is in the correct format')}
-      return(invisible(TRUE))
-    } else {
-      if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
-      return(invisible(FALSE))
+      # STEP 2
+      # Vector
+      if(lubridate::is.POSIXt(data)) {
+        if (verbose) {message('TIMESTAMP is in the correct format')}
+        return(invisible(TRUE))
+      } else {
+        if (verbose) {warning('WARNING: TIMESTAMP is NOT in the correct format')}
+        return(invisible(FALSE))
+      }
     }
-  }
 
-  # END FUNCTION
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_is_timestamp', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_is_timestamp', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_is_timestamp', sep = '.'))})
+
 }
 
 ################################################################################
@@ -88,84 +102,97 @@ qc_is_timestamp <- function(data, verbose = TRUE) {
 
 # START
 # Function declaration
-qc_as_timestamp <- function(data) {
+qc_as_timestamp <- function(data, parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checking
-  # Data is a vector or a data frame
-  if (!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
-    stop('Data is not a data frame or a vector')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Data frame
-  if (is.data.frame(data)) {
-    # Data contains a TIMESTAMP variable?
-    if (is.null(data$TIMESTAMP)) {
-      stop('Data have no TIMESTAMP variable')
+    # STEP 0
+    # Argument checking
+    # Data is a vector or a data frame
+    if (!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
+      stop('Data is not a data frame or a vector')
     }
-    timestamp <- data$TIMESTAMP
 
-    # 1.1 if already in format, inform and return the data unaltered
-    if (qc_is_timestamp(timestamp, verbose = FALSE)) {
-      message('TIMESTAMP is already in format')
-      return(data)
-    } else {
+    # STEP 1
+    # Data frame
+    if (is.data.frame(data)) {
+      # Data contains a TIMESTAMP variable?
+      if (is.null(data$TIMESTAMP)) {
+        stop('Data have no TIMESTAMP variable')
+      }
+      timestamp <- data$TIMESTAMP
 
-      # 1.2 If not in format, try to fix it using the known bad formats
-      res <- lubridate::parse_date_time(
-        timestamp,
-        c(# csv without seconds, in european and usa formats
-          "%d%m%y %H:%M", "%y%m%d %H:%M",
-          # csv with seconds, but / present, in european and usa formats
-          "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
+      # 1.1 if already in format, inform and return the data unaltered
+      if (qc_is_timestamp(timestamp, verbose = FALSE)) {
+        message('TIMESTAMP is already in format')
+        return(data)
+      } else {
+
+        # 1.2 If not in format, try to fix it using the known bad formats
+        res <- lubridate::parse_date_time(
+          timestamp,
+          c(# csv without seconds, in european and usa formats
+            "%d%m%y %H:%M", "%y%m%d %H:%M",
+            # csv with seconds, but / present, in european and usa formats
+            "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
           )
-      )
-    }
-
-    # 1.3 Check if the fix worked. If yes, message and return data
-    # with the new TIMESTAMP
-    if (qc_is_timestamp(res, verbose = FALSE)) {
-      message('TIMESTAMP succesfully fixed. A sample: ', res[1])
-      data$TIMESTAMP <- res
-      return(data)
-    } else {
-      error('Unable to format correctly the TIMESTAMP, please ',
-            'revise manually.')
-    }
-  } else {
-
-    # STEP 2
-    # Vector
-    # 2.1 If already in format, inform and return the data unaltered
-    if (qc_is_timestamp(data, verbose = FALSE)) {
-      message('TIMESTAMP is already in format')
-      return(data)
-    } else {
-
-      # 1.2 If not in format, try to fix it using the known bad formats
-      res <- lubridate::parse_date_time(
-        data,
-        c(# csv without seconds, in european and usa formats
-          "%d%m%y %H:%M", "%y%m%d %H:%M",
-          # csv with seconds, but / present, in european and usa formats
-          "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
         )
-      )
-    }
+      }
 
-    # 1.3 Check if the fix worked. If yes, message and return data
-    # with the new TIMESTAMP
-    if (qc_is_timestamp(res, verbose = FALSE)) {
-      message('TIMESTAMP succesfully fixed. A sample: ', res[1])
-      return(res)
+      # 1.3 Check if the fix worked. If yes, message and return data
+      # with the new TIMESTAMP
+      if (qc_is_timestamp(res, verbose = FALSE)) {
+        message('TIMESTAMP succesfully fixed. A sample: ', res[1])
+        data$TIMESTAMP <- res
+        return(data)
+      } else {
+        error('Unable to format correctly the TIMESTAMP, please ',
+              'revise manually.')
+      }
     } else {
-      error('Unable to format correctly the TIMESTAMP, please ',
-            'revise manually.')
-    }
-  }
 
-  # END FUNCTION
+      # STEP 2
+      # Vector
+      # 2.1 If already in format, inform and return the data unaltered
+      if (qc_is_timestamp(data, verbose = FALSE)) {
+        message('TIMESTAMP is already in format')
+        return(data)
+      } else {
+
+        # 1.2 If not in format, try to fix it using the known bad formats
+        res <- lubridate::parse_date_time(
+          data,
+          c(# csv without seconds, in european and usa formats
+            "%d%m%y %H:%M", "%y%m%d %H:%M",
+            # csv with seconds, but / present, in european and usa formats
+            "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
+          )
+        )
+      }
+
+      # 1.3 Check if the fix worked. If yes, message and return data
+      # with the new TIMESTAMP
+      if (qc_is_timestamp(res, verbose = FALSE)) {
+        message('TIMESTAMP succesfully fixed. A sample: ', res[1])
+        return(res)
+      } else {
+        error('Unable to format correctly the TIMESTAMP, please ',
+              'revise manually.')
+      }
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_as_timestamp', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_as_timestamp', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_as_timestamp', sep = '.'))})
+
 }
 
 ################################################################################
@@ -193,42 +220,56 @@ qc_as_timestamp <- function(data) {
 
 # START
 # Function declaration
-qc_timestamp_errors <- function(data, timestep = 15) {
+qc_timestamp_errors <- function(data, timestep = 15,
+                                parent_logger = 'test') {
 
-  # STEP 0
-  # Arguments checking
-  # is data a data frame?
-  if(!is.data.frame(data)) {
-    stop('Data provided is not a data frame')
-  }
-  # have data a TIMESTAMP variable?
-  if(is.null(data$TIMESTAMP)) {
-    stop('TIMESTAMP variable is missing in the data provided')
-  }
-  # is timestep numeric?
-  if(!is.numeric(timestep)) {
-    stop('Provided timestep is not numeric')
-  }
+  # Using calling handlers to logging
+  withCallingHandlers({
 
-  # STEP 1
-  # Initiate required values
-  # 1.1 length in seconds of the expected interval
-  length_seconds <- timestep * 60
+    # STEP 0
+    # Arguments checking
+    # is data a data frame?
+    if(!is.data.frame(data)) {
+      stop('Data provided is not a data frame')
+    }
+    # have data a TIMESTAMP variable?
+    if(is.null(data$TIMESTAMP)) {
+      stop('TIMESTAMP variable is missing in the data provided')
+    }
+    # is timestep numeric?
+    if(!is.numeric(timestep)) {
+      stop('Provided timestep is not numeric')
+    }
 
-  # STEP 2
-  # Create the results object
-  res <- dplyr::data_frame(Interval = lubridate::int_diff(data$TIMESTAMP),
-                           Int_length = lubridate::int_length(Interval)) %>%
-    # step neede to maintain the interval format
-    dplyr::mutate(Interval = as.character(Interval)) %>%
-    # drop the length values equal to the timestep plus/minus 59 seconds
-    dplyr::filter(Int_length > (length_seconds + 59) | Int_length < (length_seconds - 59))
+    # STEP 1
+    # Initiate required values
+    # 1.1 length in seconds of the expected interval
+    length_seconds <- timestep * 60
 
-  # STEP 3
-  # Return the results
-  return(res)
+    # STEP 2
+    # Create the results object
+    res <- dplyr::data_frame(Interval = lubridate::int_diff(data$TIMESTAMP),
+                             Int_length = lubridate::int_length(Interval)) %>%
+      # step neede to maintain the interval format
+      dplyr::mutate(Interval = as.character(Interval)) %>%
+      # drop the length values equal to the timestep plus/minus 59 seconds
+      dplyr::filter(Int_length > (length_seconds + 59) | Int_length < (length_seconds - 59))
 
-  # END FUNCTION
+    # STEP 3
+    # Return the results
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_timestamp_errors', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_timestamp_errors', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_timestamp_errors', sep = '.'))})
+
 }
 
 ################################################################################

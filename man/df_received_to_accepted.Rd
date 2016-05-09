@@ -4,7 +4,7 @@
 \alias{df_received_to_accepted}
 \title{Move from received to accepted data folders}
 \usage{
-df_received_to_accepted(remove = FALSE)
+df_received_to_accepted(remove = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{remove}{Logical indicating if files in received folder are dropped after

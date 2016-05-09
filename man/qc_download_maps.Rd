@@ -4,7 +4,7 @@
 \alias{qc_download_maps}
 \title{Download maps for countries included in the database}
 \usage{
-qc_download_maps(data, folder = getwd())
+qc_download_maps(data, folder = getwd(), parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame where the countries ISO codes are. Must contain a

@@ -4,7 +4,7 @@
 \alias{df_folder_structure}
 \title{Initial project folder structure}
 \usage{
-df_folder_structure(parent_dir = ".")
+df_folder_structure(parent_dir = ".", parent_logger = "test")
 }
 \arguments{
 \item{parent_dir}{Character vector indicating the parent directory where
