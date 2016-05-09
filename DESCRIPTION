@@ -20,7 +20,8 @@ Imports:
     stringr,
     lubridate,
     data.table,
-    tools
+    tools,
+    logging
 Suggests:
     knitr,
     testthat,
