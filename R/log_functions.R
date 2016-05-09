@@ -22,7 +22,7 @@ log_sapfluxnet_format <- function(record) {
   # STEP 1
   # Formatting with sprintf
   sprintf(
-    '  <line time= "%s" level="%s" description="sapfluxnetLog:%s">\n <line message="%s">\n',
+    'time= "%s" level="%s" description="sapfluxnetLog:%s" message="%s"\n',
     record$timestamp, record$levelname, record$logger, record$msg
   )
 
@@ -44,13 +44,16 @@ log_sapfluxnet_format <- function(record) {
 
 # START
 # Function declaration
-log_sapfluxnet_action <- function(msg, handler) {
+log_sapfluxnet_action <- function(msg, handler, ...) {
 
   # STEP 1
   # Check if file exists, as this is an action for writing log to file
   if (!exists('file', envir = handler)) {
     stop('Handler with sapfluxnet "action" must have a "file" element\n')
   }
+
+  if (length(list(...)) && "dry" %in% names(list(...)))
+    return(exists("file", envir = handler))
 
   # STEP 2
   # Write log to the file with cat
@@ -79,15 +82,15 @@ log_sapfluxnet_setup <- function(file_name, logger) {
   # STEP 1
   # Setting up the handler
   logging::addHandler(
-    'sapfluxnet',
     log_sapfluxnet_action, file = file_name,
-    logger = logger, formatter = log_sapfluxnet_format
+    logger = logger, formatter = log_sapfluxnet_format,
+    level = 'DEBUG'
   )
 
   # STEP 2
   # Add a line to the log file indicating date and time of the setup
   cat(
-    paste('##### ', Sys.time(), ' #####', sep = ' '),
+    paste('##### ', Sys.time(), ' #####\n', sep = ' '),
     file = file_name, append = TRUE
   )
 

@@ -4,7 +4,7 @@
 \alias{log_sapfluxnet_action}
 \title{Logging handler action}
 \usage{
-log_sapfluxnet_action(msg, handler)
+log_sapfluxnet_action(msg, handler, ...)
 }
 \arguments{
 \item{msg}{The final formatted message to be output}
