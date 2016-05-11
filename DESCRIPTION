@@ -21,9 +21,9 @@ Imports:
     lubridate,
     data.table,
     tools,
-    logging
+    logging,
+    rmarkdown
 Suggests:
     knitr,
-    testthat,
-    rmarkdown
+    testthat
 VignetteBuilder: knitr

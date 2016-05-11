@@ -169,7 +169,7 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
                              function(x){paste(x, '\n', sep = '')},
                              character(1))
 
-      message("Files copied to ", path_accepted, ':\n', files_copied)
+      message("List of files copied to ", path_accepted, ':\n', files_copied)
 
     }
 

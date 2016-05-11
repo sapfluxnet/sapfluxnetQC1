@@ -93,7 +93,7 @@ log_sapfluxnet_setup <- function(file_name, logger, level = "DEBUG") {
   # STEP 2
   # Add a line to the log file indicating date and time of the setup
   cat(
-    paste('\n##### ', Sys.time(), ' #####\n',
+    paste('\n##### ', Sys.time(), 'Logger: ', logger, ' Level = ', level, ' #####\n',
           '\n', sep = ' '),
     file = file_name, append = TRUE
   )

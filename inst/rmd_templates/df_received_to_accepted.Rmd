@@ -3,8 +3,7 @@ title: "Received to Accepted Report"
 author: "SAPFLUXNET Project"
 date: "`r Sys.time()`"
 params:
-  wd: /home/victor/Documentos/CREAF/sapfluxnet_data/Server_Folder_Structure_Test
-output: html_document
+  wd: ../
 ---
 
 ```{r setup, include = FALSE}
@@ -17,7 +16,7 @@ knitr::opts_knit$set(root.dir = params$wd)
 ```{r setup_log, include = FALSE}
 # log setup
 log_file <- "Logs/sapfluxnet.log"
-log_sapfluxnet_setup(log_file, logger = 'DataFlow')
+log_sapfluxnet_setup(log_file, logger = 'DataFlow', level = 'DEBUG')
 ```
 
 ## Received folder content
