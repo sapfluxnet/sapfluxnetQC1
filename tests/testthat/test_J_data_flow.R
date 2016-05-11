@@ -51,7 +51,7 @@ test_that('warnings and messages are raised correctly', {
   unlink('Data/foo', recursive = TRUE)
 
   expect_message(df_received_to_accepted(remove = TRUE),
-                 'Removing the received files...')
+                 'Removing the received files for site')
 })
 
 unlink('Received_data', recursive = TRUE)

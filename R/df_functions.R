@@ -105,17 +105,14 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
     # Check if folder with site code already exists
     for (code in codes) {
 
+      # message indicating which code is moving
+      message('Copying files corresponding to ', code, ' site.')
+
       # 3.1 path and file names
       path <- file.path('Data', code)
       path_accepted <- file.path(path, 'Accepted')
-      file_names <- c(file.path(path_accepted, paste(code, '_metadata.xlsx', sep = '')),
-                      file.path(path_accepted, paste(code, '_metadata.xls', sep = '')),
-                      file.path(path_accepted, paste(code, '_environmental.csv', sep = '')),
-                      file.path(path_accepted, paste(code, '_sapflow.csv', sep = '')))
-      from_files <- c(file.path('Received_data', paste(code, '_metadata.xlsx', sep = '')),
-                      file.path('Received_data', paste(code, '_metadata.xls', sep = '')),
-                      file.path('Received_data', paste(code, '_environmental.csv', sep = '')),
-                      file.path('Received_data', paste(code, '_sapflow.csv', sep = '')))
+      from_files <- list.files('Received_data', pattern = code, full.names = TRUE)
+      file_names <- stringr::str_replace(from_files, 'Recieved_data', path_accepted)
 
       # 3.2 check presence
       if (dir.exists(path)) {
@@ -158,13 +155,22 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
       # STEP 7
       # Remove from files
       if (remove & all(md5_ok, na.rm = TRUE)) {
-        message('Removing the received files...')
+        message('Removing the received files for site ', code, '.')
         file.remove(from_files)
-        message('DONE!')
+        message('Remove DONE!')
       } else {
         warning('remove argument set to FALSE, data will be left ',
                 'in Received Data folder')
       }
+
+      # STEP 8
+      # Indicating which files were copied
+      files_copied <- vapply(dir(path_accepted),
+                             function(x){paste(x, '\n', sep = '')},
+                             character(1))
+
+      message("Files copied to ", path_accepted, ':\n', files_copied)
+
     }
 
     # END FUNCTION
