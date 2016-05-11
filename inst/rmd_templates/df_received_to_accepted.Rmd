@@ -1,0 +1,34 @@
+---
+title: "Received to Accepted Report"
+author: "SAPFLUXNET Project"
+date: "`r Sys.time()`"
+params:
+  wd: /home/victor/Documentos/CREAF/sapfluxnet_data/Server_Folder_Structure_Test
+output: html_document
+---
+
+```{r setup, include = FALSE}
+# libraries
+library(sapfluxnetr)
+# root folder
+knitr::opts_knit$set(root.dir = params$wd)
+```
+
+```{r setup_log, include = FALSE}
+# log setup
+log_file <- "Logs/sapfluxnet.log"
+log_sapfluxnet_setup(log_file, logger = 'DataFlow')
+```
+
+## Received folder content
+
+```{r received_content, echo = FALSE}
+dir('Received_data')
+```
+
+## Transfer files
+
+```{r transfer_files}
+df_received_to_accepted(remove = FALSE, parent_logger = 'DataFlow')
+```
+
