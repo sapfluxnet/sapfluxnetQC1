@@ -28,6 +28,7 @@ between them.
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_factor_values}},
+  \code{\link{qc_fix_timestamp}},
   \code{\link{qc_get_sapw_md}},
   \code{\link{qc_is_timestamp}}, \code{\link{qc_md_cols}},
   \code{\link{qc_pl_treatments}},

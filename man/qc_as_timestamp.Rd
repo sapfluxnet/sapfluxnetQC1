@@ -2,7 +2,7 @@
 % Please edit documentation in R/qc_data_general_checks.R
 \name{qc_as_timestamp}
 \alias{qc_as_timestamp}
-\title{Fixing known errors in TIMESTAMP format}
+\title{Convert known bad formats to correct TIMESTAMP format}
 \usage{
 qc_as_timestamp(data, parent_logger = "test")
 }

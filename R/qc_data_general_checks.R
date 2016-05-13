@@ -79,7 +79,7 @@ qc_is_timestamp <- function(data, verbose = TRUE,
 }
 
 ################################################################################
-#' Fixing known errors in TIMESTAMP format
+#' Convert known bad formats to correct TIMESTAMP format
 #'
 #' Converting known bad TIMESTAMP formats to POSIXt
 #'
@@ -193,6 +193,63 @@ qc_as_timestamp <- function(data, parent_logger = 'test') {
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger, 'qc_as_timestamp', sep = '.'))})
 
+}
+
+################################################################################
+#' Fix TIMESTAMP formats
+#'
+#' Wrapper for \code{\link{qc_is_timestamp}} and \code{\link{qc_as_timestamp}}
+#'
+#' This function uses \code{\link{qc_is_timestamp}} and
+#' \code{\link{qc_as_timestamp}} internally to check if the format is correct
+#' and if not, try one of the known fixes to convert it in the correct
+#' TIMESTAMP
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame contining the TIMESTAMP variable. Also it can be a
+#'   vector with the TIMESTAMPS values.
+#'
+#' @return An object of the same type of input (data frame or vector) with the
+#'   fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
+#'   appears and none fix is made, returning data as entered.
+#'   If TIMESTAMP can not be fixed, an error is raised.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_fix_timestamp <- function(data, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Check if TIMESTAMP is correct
+    if (qc_is_timestamp(data)) {
+
+      # 1.1 If correct, return the data without modifications
+      return(data)
+    } else {
+
+      # STEP 2
+      # If not correct, fix it
+      res <- qc_as_timestamp(data)
+
+      # 2.1 and return it
+      return(res)
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_fix_timestamp', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_fix_timestamp', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_fix_timestamp', sep = '.'))})
 }
 
 ################################################################################
