@@ -4,7 +4,8 @@
 \alias{dl_data}
 \title{Loading data from xls/xlsx ann csv files}
 \usage{
-dl_data(file_name, sheet_name, long = FALSE, parent_logger = "test")
+dl_data(file_name, sheet_name, long = FALSE, n = 1000,
+  parent_logger = "test")
 }
 \arguments{
 \item{file_name}{Character vector indicating the name of the file
@@ -15,6 +16,9 @@ loaded. It must be one of \code{sapflow_hd} or \code{environmental_hd}. It
 is only used if origin file is an xlsx file}
 
 \item{long}{Logical indicating if returned data must be in \code{long} format}
+
+\item{n}{Numeric indicating the number of rows used to guess the decimal
+character used in csv files. Only used when data file is a csv.}
 }
 \value{
 \code{dl_data} returns sapflow or environmental data in wide format,

@@ -4,11 +4,14 @@
 \alias{dl_dec_char_detect}
 \title{Decimal character detection}
 \usage{
-dl_dec_char_detect(file, parent_logger = "test")
+dl_dec_char_detect(file, n = 1000, parent_logger = "test")
 }
 \arguments{
 \item{file}{Character vector indicating the name (and route) of the file in
 which the decimal character must be guessed.}
+
+\item{n}{Numeric indicating the sample size of rows to use in the decimal
+character guessing.}
 }
 \value{
 A character vector containing the decimal character, to use in the

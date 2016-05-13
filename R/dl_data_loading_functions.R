@@ -131,12 +131,15 @@ dl_na_char_generator <- function(parent_logger = 'test') {
 #' @param file Character vector indicating the name (and route) of the file in
 #'   which the decimal character must be guessed.
 #'
+#' @param n Numeric indicating the sample size of rows to use in the decimal
+#'   character guessing.
+#'
 #' @return A character vector containing the decimal character, to use in the
 #'   fread order to load the data.
 #'
 #' @export
 
-dl_dec_char_detect <- function(file, parent_logger = 'test') {
+dl_dec_char_detect <- function(file, n = 1000, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
@@ -147,7 +150,7 @@ dl_dec_char_detect <- function(file, parent_logger = 'test') {
     # Load file sample
     sample_data <- data.table::fread(
       file, skip = 'TIMESTAMP', data.table = FALSE, na.strings = dl_na_char_generator(),
-      select = c(2,3,4,5), nrows = 1000, header = FALSE
+      select = c(2,3,4,5), nrows = n, header = FALSE
     )
 
     # STEP 2
@@ -389,6 +392,9 @@ dl_metadata <- function(file_name, sheet_name,
 #'
 #' @param long Logical indicating if returned data must be in \code{long} format
 #'
+#' @param n Numeric indicating the number of rows used to guess the decimal
+#'   character used in csv files. Only used when data file is a csv.
+#'
 #' @return \code{dl_data} returns sapflow or environmental data in wide format,
 #'   ready to pipe it in the quality checks for raw data. If \code{long = TRUE}
 #'   data is returned in long format, ready for plotting.
@@ -400,7 +406,7 @@ dl_metadata <- function(file_name, sheet_name,
 # START
 # Function declaration
 
-dl_data <- function(file_name, sheet_name, long = FALSE,
+dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000,
                     parent_logger = 'test') {
 
   # Using calling handlers to logging
@@ -492,7 +498,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE,
         res <- data.table::fread(
           file_name, skip = 'TIMESTAMP', data.table = FALSE,
           na.strings = dl_na_char_generator(),
-          dec = dl_dec_char_detect(file_name)
+          dec = dl_dec_char_detect(file_name, n)
         ) %>%
           remove_dupcols() %>%
           dplyr::select(matches('(TIME|^.+?\\d$)'))
@@ -515,7 +521,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE,
         res <- data.table::fread(
           file_name, skip = 'TIMESTAMP', data.table = FALSE,
           na.strings = dl_na_char_generator(),
-          dec = dl_dec_char_detect(file_name)
+          dec = dl_dec_char_detect(file_name, n)
         ) %>%
           remove_dupcols() %>%
           dplyr::select(matches(
