@@ -4,7 +4,7 @@
 \alias{qc_species_names}
 \title{Verify provided species names (spelling and correctness)}
 \usage{
-qc_species_names(species, conservatism = 0.9, parent_logging = "test")
+qc_species_names(species, conservatism = 0.9, parent_logger = "test")
 }
 \arguments{
 \item{species}{Character vector containing the species names to verify}

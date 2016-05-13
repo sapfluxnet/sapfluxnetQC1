@@ -93,12 +93,12 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
 
     # STEP 1
     # Obtaining the file names in the received folder.
-    files <- list.files('Received_data', pattern = "(environmental|sapflow)\\.csv$|_metadata\\.xls(x)?$")
+    files <- list.files('Received_data', pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
 
     # STEP 2
     # Extract site code from file names
     codes <- unique(stringr::str_replace(
-      files, "(_environmental|_sapflow)\\.csv$|_metadata\\.xls(x)?$", ""
+      files, "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$", ""
     ))
 
     # STEP 3

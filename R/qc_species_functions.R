@@ -33,7 +33,7 @@
 # Function declaration
 
 qc_species_names <- function(species, conservatism = 0.9,
-                             parent_logging = 'test') {
+                             parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
