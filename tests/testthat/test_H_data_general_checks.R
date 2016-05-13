@@ -1,5 +1,5 @@
 library(sapfluxnetr)
-
+################################################################################
 context('H1. TIMESTAMP format')
 
 good_data <- data.frame(TIMESTAMP = as.POSIXct(c(
@@ -73,6 +73,7 @@ test_that('Invisible logicals works', {
   expect_false(qc_is_timestamp(bad_data_1))
 })
 
+################################################################################
 context('H2. TIMESTAMP conversion')
 
 suppressMessages(as_good <- qc_as_timestamp(good_data))
@@ -92,6 +93,7 @@ test_that('TIMESTAMP produced is correct', {
   expect_identical(as_bad_1$TIMESTAMP, bad_1_timestamp)
 })
 
+################################################################################
 context('H3. TIMESTAMP errors')
 
 good_data_2 <- data.frame(TIMESTAMP = as.POSIXct(c(
@@ -124,4 +126,46 @@ test_that('Result is a data frame', {
 test_that('Results are correct', {
   expect_equal(nrow(res), 0, tolerance = 0)
   expect_equal(nrow(res_w_err), 2, tolerance = 0)
+})
+
+################################################################################
+context('H4. Getting timestep')
+
+timestep_pl_good <- data.frame(
+  pl_sens_timestep = rep(15, 10)
+)
+
+timestep_pl_bad <- data.frame(
+  pl_sens_timestep = c(rep(15, 9), 14)
+)
+
+timestep_env_good <- data.frame(
+  env_timestep = rep(15, 10)
+)
+
+timestep_env_bad <- data.frame(
+  env_timestep = c(14, rep(15, 9))
+)
+
+timestep_bad <- data.frame(
+  timestep = rep(15, 10)
+)
+
+test_that('argument errors are raised correctly', {
+  expect_error(qc_get_timestep(c(1,1,1,1)), 'metadata provided is not a data frame')
+  expect_error(qc_get_timestep('tralara'), 'metadata provided is not a data frame')
+  expect_error(qc_get_timestep(timestep_bad),
+               'Not timestep variables found in metadata provided')
+})
+
+test_that('error raised if different timesteps', {
+  expect_error(qc_get_timestep(timestep_pl_bad),
+               'There are diferent timesteps in the metadata, please check manually')
+  expect_error(qc_get_timestep(timestep_env_bad),
+               'There are diferent timesteps in the metadata, please check manually')
+})
+
+test_that('correct results are showed', {
+  expect_identical(qc_get_timestep(timestep_pl_good), 15)
+  expect_identical(qc_get_timestep(timestep_env_good), 15)
 })

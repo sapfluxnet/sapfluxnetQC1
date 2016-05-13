@@ -253,6 +253,91 @@ qc_fix_timestamp <- function(data, parent_logger = 'test') {
 }
 
 ################################################################################
+#' Helper function to get metadata timestep (environmental and sapflow).
+#'
+#' Get timestep value
+#'
+#' \code{\link{qc_timestamp_errors}} needs a value of timestep to be able to
+#' identify deviations from the expected interval of time. This function can
+#' extract the timestep for environmental or sapflow data.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param metadata Data frame contining the timestep variable (pl_sens_timestep
+#'   or env_timestep)
+#'
+#' @return The time step value as numeric
+#'
+#' @export
+
+# START
+# Function declaration
+qc_get_timestep <- function(metadata, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # Helper function to check if all elements of a vector are equal, borrowed
+    # from H. Wickham in
+    # http://stackoverflow.com/questions/4752275/test-for-equality-among-all-elements-of-a-single-vector
+    zero_range <- function(x, tol = .Machine$double.eps ^ 0.5) {
+      # If length of the vector is 1, results is TRUE
+      if (length(x) == 1) {
+        return(TRUE)
+      }
+      # If not,
+      x <- range(x) / mean(x)
+      isTRUE(all.equal(x[1], x[2], tolerance = tol))
+    }
+
+    # STEP 0
+    # Argument checks
+    # is metadata a data frame?
+    if (!is.data.frame(metadata)) {
+      stop('metadata provided is not a data frame')
+    }
+    # we need pl_sens_timestemp or env_timestep variables
+    if (is.null(metadata$pl_sens_timestep) & is.null(metadata$env_timestep)) {
+      stop('Not timestep variables found in metadata provided')
+    }
+
+    # STEP 1
+    # Guess which variable is needed
+
+    # 1.1 env_timestep
+    if (is.null(metadata$pl_sens_timestep) & !is.null(metadata$env_timestep)) {
+
+      # check if all timestep values (in the case of pl_sens_timestep) are the same
+      timestep <- metadata$env_timestep
+      if (!zero_range(timestep)) {
+        stop('There are diferent timesteps in the metadata, please check manually')
+      } else {
+        return(timestep[[1]])
+      }
+    } else {
+
+      # check if all timestep values (in the case of pl_sens_timestep) are the same
+      timestep <- metadata$pl_sens_timestep
+      if (!zero_range(timestep)) {
+        stop('There are diferent timesteps in the metadata, please check manually')
+      } else {
+        return(timestep[[1]])
+      }
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_get_timestep', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_get_timestep', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_get_timestep', sep = '.'))})
+}
+
+################################################################################
 #' TimeStamp errors localization
 #'
 #' Function to pinpoint errors in the timestamp
