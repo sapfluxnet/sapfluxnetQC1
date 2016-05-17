@@ -28,7 +28,7 @@
 
 # START
 # Function declaration
-qc_email_check <- function(data, parent_logging = 'test') {
+qc_email_check <- function(data, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({

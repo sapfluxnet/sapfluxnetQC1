@@ -1,0 +1,223 @@
+---
+title: "Metadata QC"
+author: "SAPFLUXNET Project"
+date: "`r Sys.time()`"
+params:
+  wd: ../
+  md_file: ''
+  sapf_data_file: ''
+  env_data_file: ''
+---
+
+```{r, include=FALSE}
+# root folder
+knitr::opts_knit$set(root.dir = params$wd)
+```
+
+
+# Metadata Quality Check
+
+## Quick Summary
+
+```{r qc, include=FALSE, error=TRUE, message=FALSE, warning=FALSE}
+################################################################################
+# libraries
+library(sapfluxnetr)
+library(magrittr)
+
+################################################################################
+# data load
+log_sapfluxnet_setup('Logs/sapfluxnet.log', 'data_load')
+
+## site_md
+site_md <- dl_metadata(params$md_file, 'site_md', parent_logger = 'data_load')
+
+## stand_md
+stand_md <- dl_metadata(params$md_file, 'stand_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## species_md
+species_md <- dl_metadata(params$md_file, 'species_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## plant_md
+plant_md <- dl_metadata(params$md_file, 'plant_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## env_md
+env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## sapf_data
+sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, parent_logger = 'data_load')
+
+## env_data
+env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, parent_logger = 'data_load')
+
+################################################################################
+# md qc
+log_sapfluxnet_setup('Logs/sapfluxnet.log', 'md_qc')
+
+## metadata columns
+md_cols <- dplyr::bind_rows(
+  qc_md_cols(site_md, 'site_md', parent_logger = 'md_qc'),
+  qc_md_cols(stand_md, 'stand_md', parent_logger = 'md_qc'),
+  qc_md_cols(species_md, 'species_md', parent_logger = 'md_qc'),
+  qc_md_cols(plant_md, 'plant_md', parent_logger = 'md_qc'),
+  qc_md_cols(env_md, 'environmental_md', parent_logger = 'md_qc')
+)
+
+## factor variables values 
+factor_values <- qc_factor_values(site_md, stand_md, species_md, plant_md, env_md,
+                                  parent_logger = 'md_qc')
+
+## email
+email_check <- qc_email_check(site_md, parent_logger = 'md_qc')
+
+## coordinates
+site_md_coordfix <-
+  site_md %T>%
+  qc_download_maps(parent_logger = 'md_qc') %>%
+  as.data.frame() %>%
+  qc_check_coordinates(parent_logger = 'md_qc') %>%
+  qc_fix_latlong_errors(special_countries = TRUE, parent_logger = 'md_qc')
+
+## species
+species_md$sp_name <- qc_species_names(species_md$sp_name, parent_logger = 'md_qc')
+plant_md$pl_species <- qc_species_names(plant_md$pl_species, parent_logger = 'md_qc')
+sp_verification <- qc_species_verification(species_md, plant_md, parent_logger = 'md_qc')
+
+## plant treatment check
+pl_treatments_check <- qc_pl_treatments(plant_md, parent_logger = 'md_qc')
+
+## environmental vars presence
+env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = 'md_qc')
+
+################################################################################
+# table
+qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
+                    species_md, plant_md, sp_verification, env_var_presence, 'md_qc')
+```
+
+
+
+```{r, error = TRUE, results='asis', echo=FALSE, warning=FALSE, message=FALSE, eval = FALSE}
+## test script para qc
+
+library(sapfluxnetr)
+library(magrittr)
+library(DT)
+
+
+
+# 1. dl
+
+log_sapfluxnet_setup('Logs/qc_test.log', 'dl_test')
+
+site_md <- dl_metadata('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_metadata.xlsx',
+                       'site_md', parent_logger = 'dl_test')
+
+stand_md <- dl_metadata('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_metadata.xlsx',
+                        'stand_md', site_md, parent_logger = 'dl_test')
+
+species_md <- dl_metadata('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_metadata.xlsx',
+                          'species_md', site_md, parent_logger = 'dl_test')
+
+plant_md <- dl_metadata('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_metadata.xlsx',
+                        'plant_md', site_md, parent_logger = 'dl_test')
+
+env_md <- dl_metadata('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_metadata.xlsx',
+                      'environmental_md', site_md, parent_logger = 'dl_test')
+
+
+sapf_data <- dl_data('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_sapflow_data.csv',
+                     'sapflow_hd', n = 2000, parent_logger = 'dl_test')
+
+env_data <- dl_data('Data/ESP_SAN__REG/Accepted/ESP_SAN__REG_env_data.csv',
+                    'environmental_hd', n = 5000, parent_logger = 'dl_test')
+
+# 2. metadata qc
+
+log_sapfluxnet_setup('Logs/qc_test.log', 'qc_md_test')
+
+# 2.1 metadata columns
+md_cols <- dplyr::bind_rows(qc_md_cols(site_md, 'site_md', parent_logger = 'qc_md_test'),
+                            qc_md_cols(stand_md, 'stand_md', parent_logger = 'qc_md_test'),
+                            qc_md_cols(species_md, 'species_md', parent_logger = 'qc_md_test'),
+                            qc_md_cols(plant_md, 'plant_md', parent_logger = 'qc_md_test'),
+                            qc_md_cols(env_md, 'environmental_md', parent_logger = 'qc_md_test'))
+# qc_md_cols(site_md, 'site_md', parent_logger = 'qc_md_test')
+# qc_md_cols(stand_md, 'stand_md', parent_logger = 'qc_md_test')
+# qc_md_cols(species_md, 'species_md', parent_logger = 'qc_md_test')
+# qc_md_cols(plant_md, 'plant_md', parent_logger = 'qc_md_test')
+# qc_md_cols(env_md, 'environmental_md', parent_logger = 'qc_md_test')
+
+# 2.2 factor variables values
+factor_values <- qc_factor_values(site_md, stand_md, species_md, plant_md, env_md,
+                                  parent_logger = 'qc_md_test')
+
+# 2.3 email_check
+email_check <- qc_email_check(site_md)
+
+# 2.4 coordinates
+
+site_md_coordfix <-
+  site_md %T>%
+  qc_download_maps(parent_logger = 'qc_md_test') %>%
+  as.data.frame() %>%
+  qc_check_coordinates(parent_logger = 'qc_md_test') %>%
+  qc_fix_latlong_errors(special_countries = TRUE, parent_logger = 'qc_md_test')
+
+# 2.5 species
+species_md$sp_name <- qc_species_names(species_md$sp_name, parent_logger = 'qc_md_test')
+plant_md$pl_species <- qc_species_names(plant_md$pl_species, parent_logger = 'qc_md_test')
+sp_verification <- qc_species_verification(species_md, plant_md, parent_logger = 'qc_md_test')
+
+# 2.6 plant treatment
+pl_treatments_check <- qc_pl_treatments(plant_md, parent_logger = 'qc_md_test')
+
+# 3. data-metadata qc
+env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = 'qc_md_test')
+
+############
+
+qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
+                    species_md, plant_md, sp_verification, env_var_presence, 'qc_md_test')
+
+# print(xtable::xtable(test, caption = 'test'), type = 'html', html.table.attributes = "border=0")
+
+# knitr::kable(test, caption = 'test_kable')
+
+# datatable(test, class = 'display', rownames = FALSE,
+#           caption = 'Table: Metadata Quality Check Summary',
+#           options = list(dom = 't')) %>%
+#   formatStyle('Status',
+#               backgroundColor = styleEqual(c('INFO', 'WARNING', 'ERROR'),
+#                                            c('#89C4F4', '#F5AB35', '#F22613')))
+
+############
+
+# 4. Data qc
+# log_sapfluxnet_setup('Logs/qc_test.log', 'qc_data_test')
+# 
+# # 4.1 timestamp
+# sapf_data <- qc_fix_timestamp(sapf_data, parent_logger = 'qc_data_test')
+# env_data <- qc_fix_timestamp(env_data, parent_logger = 'qc_data_test')
+# 
+# qc_timestamp_errors(sapf_data,
+#                     qc_get_timestep(plant_md, parent_logger = 'qc_data_test'),
+#                     parent_logger = 'qc_data_test')
+# qc_timestamp_errors(env_data,
+#                     qc_get_timestep(env_md, parent_logger = 'qc_data_test'),
+#                     parent_logger = 'qc_data_test')
+# 
+# # 4.2 units conversion
+# 
+# sapf_data_plant <- qc_sapw_conversion(sapf_data, qc_get_sapw_md(plant_md, parent_logger = 'qc_data_test'),
+#                                       'plant', parent_logger('qc_data_test'))
+# 
+# sapf_data_sapwood <- qc_sapw_conversion(sapf_data, qc_get_sapw_md(plant_md, parent_logger = 'qc_data_test'),
+#                                         'sapwood', parent_logger('qc_data_test'))
+# 
+# sapf_data_leaf <- qc_sapw_conversion(sapf_data, qc_get_sapw_md(plant_md, parent_logger = 'qc_data_test'),
+#                                      'leaf', parent_logger('qc_data_test'))
+
+
+```
+

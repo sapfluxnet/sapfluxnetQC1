@@ -22,7 +22,8 @@ Imports:
     data.table,
     tools,
     logging,
-    rmarkdown
+    rmarkdown,
+    DT
 Suggests:
     knitr,
     testthat

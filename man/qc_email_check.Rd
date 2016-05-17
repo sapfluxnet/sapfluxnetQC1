@@ -4,7 +4,7 @@
 \alias{qc_email_check}
 \title{Check if provided email directions are correct}
 \usage{
-qc_email_check(data, parent_logging = "test")
+qc_email_check(data, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the site metadata where email variables are
