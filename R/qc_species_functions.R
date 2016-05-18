@@ -146,7 +146,7 @@ qc_species_verification <- function(species_md, plant_md,
     # STEP 3
     # Compare both metadata to look for errors and generate result object
     res <- dplyr::full_join(sp_md, pl_md, by = 'sp_names') %>%
-      dplyr::mutate(coincidence = (sp_n_trees == pl_n_trees))
+      dplyr::mutate(Concordance = (sp_n_trees == pl_n_trees))
 
     # STEP 4
     # Return the results object

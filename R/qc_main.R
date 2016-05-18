@@ -141,7 +141,7 @@ qc_md_results_table <- function(md_cols, factor_values,
 
     # STEP 7
     # Species verification
-    if (!sp_verification$coincidence) {
+    if (!sp_verification$Concordance) {
       step <- c(step, 'Species names presence in Plant and Species metadata')
       status <- c(status, 'ERROR')
       description <- c(description, 'Species in Plant metadata not match species in Species metadata')

@@ -163,8 +163,8 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 # Function declaration
 
 qc_check_coordinates <- function(data, maps_folder = getwd(),
-                              plot = FALSE, text_report = TRUE,
-                              parent_logger = 'test'){
+                                 plot = FALSE, text_report = TRUE,
+                                 parent_logger = 'test'){
 
   # Using calling handlers to logging
   withCallingHandlers({
@@ -676,9 +676,9 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
 # START
 # Function declaration
 qc_fix_latlong_errors <- function(data, maps_folder = getwd(),
-                               sign_errors = TRUE,
-                               special_countries = FALSE,
-                               parent_logger = 'test') {
+                                  sign_errors = TRUE,
+                                  special_countries = FALSE,
+                                  parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
