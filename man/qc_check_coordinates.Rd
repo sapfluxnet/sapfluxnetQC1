@@ -23,18 +23,18 @@ console after checking coordinates. By default, a report is showed in the
 console.}
 }
 \value{
-A data frame containing country, site name and is_inside_country
-  logical variable indicating those sites with wrong coordinates.
+The data frame used as input with a new variable, is_inside_country,
+  a logical variable indicating if the site has wrong coordinates
 }
 \description{
 \code{qc_check_coordinates} verifies if provided coordinates are within
 country declared in metadata form.
 }
 \details{
-This function uses maps previously downloaded with
-\code{\link{qc_download_maps}} to check if the provided coordinates are within
-the country limits. It only creates a data frame containing country, site
-and a logical variable indicating if coordinates are correct.
+This function internally download the maps with
+\code{\link{qc_download_maps}} and it checks if the provided coordinates are
+within the country limits. It only creates a data frame containing country,
+site and a logical variable indicating if coordinates are correct.
 }
 \seealso{
 Other Quality Check Functions: \code{\link{qc_coord_sign_test}},

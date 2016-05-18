@@ -130,10 +130,10 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 #' \code{qc_check_coordinates} verifies if provided coordinates are within
 #' country declared in metadata form.
 #'
-#' This function uses maps previously downloaded with
-#' \code{\link{qc_download_maps}} to check if the provided coordinates are within
-#' the country limits. It only creates a data frame containing country, site
-#' and a logical variable indicating if coordinates are correct.
+#' This function internally download the maps with
+#' \code{\link{qc_download_maps}} and it checks if the provided coordinates are
+#' within the country limits. It only creates a data frame containing country,
+#' site and a logical variable indicating if coordinates are correct.
 #'
 #' @family Quality Check Functions
 #'
@@ -151,8 +151,8 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 #'   console after checking coordinates. By default, a report is showed in the
 #'   console.
 #'
-#' @return A data frame containing country, site name and is_inside_country
-#'   logical variable indicating those sites with wrong coordinates.
+#' @return The data frame used as input with a new variable, is_inside_country,
+#'   a logical variable indicating if the site has wrong coordinates
 #'
 #' @import ggplot2
 #'
@@ -202,10 +202,15 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
     }
 
     # STEP 1
+    # Downlaod maps, if already not downloaded
+    qc_download_maps(data = data, folder = maps_folder,
+                     parent_logger = parent_logger)
+
+    # STEP 2
     # Initialise results object
     results <- vector()
 
-    # STEP 2
+    # STEP 3
     # Begin the for loop and read the map file
     for (i in 1:length(data[,1])) {
 
@@ -769,3 +774,81 @@ qc_fix_latlong_errors <- function(data, maps_folder = getwd(),
 }
 
 ################################################################################
+#' Commodity function to check site coordinates
+#'
+#' Wrap around \code{\link{qc_check_coordinates}} and \code{\link{qc_fix_latlong_errors}}
+#' to process coordinates data in one step
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame with data coming from \code{\link{qc_check_coordinates}}
+#'   (with latitude, longitude, country and is_inside_country variables).
+#'
+#' @param maps_folder Folder route where the maps are stored, by default the
+#'   working directory. It must be a character object and it must end
+#'   \bold{without} \code{/}.
+#'
+#' @param plot Logical indicating if plots for coordinate are created and saved
+#'   in the working directory. By default, plot are not saved.
+#'
+#' @param text_report Logical indicating if a text report is showed in the
+#'   console after checking coordinates. By default, a report is showed in the
+#'   console.
+#'
+#' @param sign_errors Logical indicating if sign errors must be checked and
+#'   fixed. If TRUE (default), \code{\link{qc_coord_sign_test}} is internally
+#'   called.
+#'
+#' @param special_countries Logical indicating if the special approach to
+#'   countries having positive and negative coordinates must be used. See
+#'   \code{\link{qc_fix_latlong_errors}} for details.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_coordinates <- function(data, maps_folder = getwd(), plot = FALSE,
+                           text_report = TRUE, sign_errors = TRUE,
+                           special_countries = TRUE,
+                           parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+    # STEP 0
+    # Argument checks
+    # None, all are done in the internal functions
+
+    # STEP 1
+    # Check coordinates
+    check_coord_data <- qc_check_coordinates(as.data.frame(data), maps_folder,
+                                             parent_logger = parent_logger)
+
+    # 1.1, check if it is correct
+    if (check_coord_data$is_inside_country) {
+
+      # if it is, return data with the is_inside_variable added
+      message('Coordinates are correct')
+      return(check_coord_data)
+
+      # 1.2 if not, try to fixit
+    } else {
+      fixed_coord_data <- qc_fix_latlong_errors(check_coord_data, maps_folder,
+                                                sign_errors, special_countries,
+                                                parent_logger)
+
+      # and return the fixed data with the is_inside_country variable
+      return(fixed_coord_data)
+    }
+
+    # END FUNCTION
+  },
+
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_coordinates', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_coordinates', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_coordinates', sep = '.'))})
+
+
+}

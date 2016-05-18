@@ -23,6 +23,7 @@ extract the timestep for environmental or sapflow data.
 }
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
+  \code{\link{qc_coordinates}},
   \code{\link{qc_env_vars_presence}},
   \code{\link{qc_factor_values}},
   \code{\link{qc_fix_timestamp}},

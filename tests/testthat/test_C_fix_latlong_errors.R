@@ -39,3 +39,44 @@ test_that('results are correct (with special countries', {
 
 file.remove('CRI_adm0.rds', 'ITA_adm0.rds', 'NZL_adm0.rds', 'CHE_adm0.rds',
             'BRA_adm0.rds', 'ITA_ble.pdf', 'Rplots.pdf')
+
+context('C3. qc_coordinates wrapper function')
+
+foo_data_2 <- data.frame(
+  si_long = c(-5.797067),
+  si_lat = c(37.249105),
+  si_country = c('ESP'),
+  si_name = c('San')
+)
+
+foo_data_2_bad <- data.frame(
+  si_long = c(5.797067),
+  si_lat = c(37.249105),
+  si_country = c('ESP'),
+  si_name = c('San')
+)
+
+foo_data_2_really_bad <- data.frame(
+  si_long = c(-45.797067),
+  si_lat = c(68.249105),
+  si_country = c('ESP'),
+  si_name = c('San')
+)
+
+foo_res_2 <- suppressMessages(qc_coordinates(foo_data_2))
+foo_res_2_bad <- suppressMessages(qc_coordinates(foo_data_2_bad))
+foo_res_2_really_bad <- suppressMessages(qc_coordinates(foo_data_2_really_bad))
+
+test_that('results are data frames', {
+  expect_true(is.data.frame(foo_res_2))
+  expect_true(is.data.frame(foo_res_2_bad))
+  expect_true(is.data.frame(foo_res_2_really_bad))
+})
+
+test_that('results are correct', {
+  expect_true(foo_res_2$is_inside_country)
+  expect_true(foo_res_2_bad$is_inside_country)
+  expect_true(!foo_res_2_really_bad$is_inside_country)
+})
+
+file.remove('ESP_adm0.rds')
