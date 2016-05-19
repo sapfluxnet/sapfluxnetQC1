@@ -70,7 +70,7 @@ test_that('Message or warning are raised correctly', {
 test_that('Invisible logicals works', {
   expect_true(qc_is_timestamp(good_data))
   expect_true(qc_is_timestamp(foo_vector))
-  expect_false(qc_is_timestamp(bad_data_1))
+  expect_false(suppressWarnings(qc_is_timestamp(bad_data_1)))
 })
 
 ################################################################################

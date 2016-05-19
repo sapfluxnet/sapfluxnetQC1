@@ -5,8 +5,8 @@
 \title{Main function to resume QC in one data frame}
 \usage{
 qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
-  species_md, plant_md, sp_verification, env_var_presence,
-  parent_logger = "test")
+  species_md, plant_md, species_md_spnames, plant_md_spnames, sp_verification,
+  env_var_presence, parent_logger = "test")
 }
 \arguments{
 \item{md_cols}{}
@@ -20,6 +20,10 @@ qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
 \item{species_md}{}
 
 \item{plant_md}{}
+
+\item{species_md_spnames}{}
+
+\item{plant_md_spnames}{}
 
 \item{sp_verification}{}
 
@@ -43,6 +47,8 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_pl_treatments}},
   \code{\link{qc_sapw_area_calculator}},
   \code{\link{qc_sapw_conversion}},
+  \code{\link{qc_species_names_info}},
+  \code{\link{qc_species_names}},
   \code{\link{qc_species_verification}},
   \code{\link{qc_timestamp_errors}}
 }

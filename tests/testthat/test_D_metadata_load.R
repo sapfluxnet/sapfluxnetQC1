@@ -27,10 +27,10 @@ file.remove('foo.data')
 xlsx_name <- 'foo.xlsx'
 
 site_md <- suppressMessages(dl_metadata(xlsx_name, 'site_md'))
-stand_md <- dl_metadata(xlsx_name, 'stand_md', si_code_loc = site_md)
-species_md <- dl_metadata(xlsx_name, 'species_md', si_code_loc = site_md)
-plant_md <- dl_metadata(xlsx_name, 'plant_md', si_code_loc = site_md)
-env_md <- dl_metadata(xlsx_name, 'environmental_md', si_code_loc = site_md)
+stand_md <- suppressMessages(dl_metadata(xlsx_name, 'stand_md', si_code_loc = site_md))
+species_md <- suppressMessages(dl_metadata(xlsx_name, 'species_md', si_code_loc = site_md))
+plant_md <- suppressMessages(dl_metadata(xlsx_name, 'plant_md', si_code_loc = site_md))
+env_md <- suppressMessages(dl_metadata(xlsx_name, 'environmental_md', si_code_loc = site_md))
 
 test_that('function returns data frames', {
   expect_is(site_md, 'data.frame')

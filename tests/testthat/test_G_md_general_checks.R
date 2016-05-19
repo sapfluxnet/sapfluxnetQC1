@@ -107,3 +107,32 @@ test_that('results are correct', {
   expect_false(all(regular_env_presence$Concordance))
   expect_true(any(regular_env_presence$Concordance))
 })
+
+
+context('G4. Species names checks')
+
+species <- c('Olea europaea', 'Pinus pinaster', 'Pinus halepensis',
+             'Eucalyptus globulus', 'Fagus sylvatica')
+
+species_bad <- c('Oleae eurpea', 'Pino pinaster', 'Pinu alepensis',
+                 'Euclaiptus gobulus', 'Fagus silvatica')
+
+species_not_so_bad <- c('Olea europaee', 'Pinus pinaster', 'Pinus halepensis',
+                        'Eucaliptus globulus', 'Fagos sylvatica')
+
+test_that('results of info are data frames', {
+  expect_true(is.data.frame(qc_species_names_info(species)))
+  expect_true(is.data.frame(qc_species_names_info(species_bad)))
+  expect_true(is.data.frame(qc_species_names_info(species_not_so_bad)))
+})
+
+good_res <- qc_species_names(species)
+bad_res <- qc_species_names(species_bad)
+not_so_bad_res <- qc_species_names(species_not_so_bad)
+
+test_that('results are the same if no change is needed', {
+  expect_equal(as.character(good_res), species)
+  expect_equal(as.character(bad_res), species_bad)
+  expect_equal(as.character(not_so_bad_res), species)
+})
+

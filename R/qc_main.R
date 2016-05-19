@@ -17,6 +17,10 @@
 #'
 #' @param plant_md
 #'
+#' @param species_md_spnames
+#'
+#' @param plant_md_spnames
+#'
 #' @param sp_verification
 #'
 #' @param env_var_presence
@@ -30,6 +34,7 @@
 qc_md_results_table <- function(md_cols, factor_values,
                                 email_check, site_md_coordfix,
                                 species_md, plant_md,
+                                species_md_spnames, plant_md_spnames,
                                 sp_verification, env_var_presence,
                                 parent_logger = 'test') {
 
@@ -116,8 +121,7 @@ qc_md_results_table <- function(md_cols, factor_values,
     # STEP 6
     # Species names
     # 6.1 species md
-    if (isTRUE(tryCatch(sapfluxnetr::qc_species_names(species_md$sp_name),
-                        error = function(e) return(TRUE)))) {
+    if (any(!species_md_spnames$Concordance)) {
       step <- c(step, 'Species names spelling (species_md)')
       status <- c(status, 'WARNING')
       description <- c(description, 'Species names in Species metadata are mispelled')
@@ -127,9 +131,20 @@ qc_md_results_table <- function(md_cols, factor_values,
       description <- c(description, 'No mispelling in species names')
     }
 
+
+    # if (isTRUE(tryCatch(sapfluxnetr::qc_species_names(species_md$sp_name),
+    #                     error = function(e) return(TRUE)))) {
+    #   step <- c(step, 'Species names spelling (species_md)')
+    #   status <- c(status, 'WARNING')
+    #   description <- c(description, 'Species names in Species metadata are mispelled')
+    # } else {
+    #   step <- c(step, 'Species names spelling (species_md)')
+    #   status <- c(status, 'PASS')
+    #   description <- c(description, 'No mispelling in species names')
+    # }
+
     # 6.2 plant md
-    if (isTRUE(tryCatch(sapfluxnetr::qc_species_names(plant_md$pl_species),
-                        error = function(e) return(TRUE)))) {
+    if (any(!plant_md_spnames$Concordance)) {
       step <- c(step, 'Species names spelling (plant_md)')
       status <- c(status, 'WARNING')
       description <- c(description, 'Species names in Plant metadata are mispelled')
@@ -139,9 +154,20 @@ qc_md_results_table <- function(md_cols, factor_values,
       description <- c(description, 'No mispelling in species names')
     }
 
+    # if (isTRUE(tryCatch(sapfluxnetr::qc_species_names(plant_md$pl_species),
+    #                     error = function(e) return(TRUE)))) {
+    #   step <- c(step, 'Species names spelling (plant_md)')
+    #   status <- c(status, 'WARNING')
+    #   description <- c(description, 'Species names in Plant metadata are mispelled')
+    # } else {
+    #   step <- c(step, 'Species names spelling (plant_md)')
+    #   status <- c(status, 'PASS')
+    #   description <- c(description, 'No mispelling in species names')
+    # }
+
     # STEP 7
     # Species verification
-    if (!sp_verification$Concordance) {
+    if (any(!sp_verification$Concordance)) {
       step <- c(step, 'Species names presence in Plant and Species metadata')
       status <- c(status, 'ERROR')
       description <- c(description, 'Species in Plant metadata not match species in Species metadata')
@@ -171,7 +197,13 @@ qc_md_results_table <- function(md_cols, factor_values,
     # Return the datatable
     res_table <- DT::datatable(res, class = 'display', rownames = FALSE,
                                caption = 'Table 1: Metadata Quality Check Summary',
-                               options = list(dom = 't')) %>%
+                               options = list(dom = 't',
+                                              columnDefs = list(list(className = 'dt-center',
+                                                                     targets = 1:2),
+                                                                list(className = 'dt-right',
+                                                                     targets = 0)),
+                                              pageLength = 25,
+                                              autoWidth = TRUE)) %>%
       DT::formatStyle('Status',
                       backgroundColor = DT::styleEqual(c('PASS', 'INFO', 'WARNING', 'ERROR'),
                                                        c('#26a65b', '#89c4f4', '#f39c12', '#d91e18')))

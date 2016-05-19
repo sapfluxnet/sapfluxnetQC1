@@ -17,11 +17,7 @@
 #' \code{devtools::install_github("gustavobio/tpldata")}
 #' \code{devtools::install_github("gustavobio/tpl")}
 #'
-#' @param species Character vector containing the species names to verify
-#'
-#' @param conservatism Numerical value between 0 and 1 indicating the
-#'   conservatism level of the tpl spelling check algorithm. Default to
-#'   0.75
+#' @param data Data frame as the obtained from \code{\link{qc_species_names_info}}
 #'
 #' @return A character vector with species fixed in spelling and correctness.
 #'
@@ -32,41 +28,33 @@
 # START
 # Function declaration
 
-qc_species_names <- function(species, conservatism = 0.9,
-                             parent_logger = 'test') {
+qc_species_names_fix <- function(data, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
 
     # STEP 0
     # Argument checks
-    # Is species a character vector?
-    if (!is.vector(species, 'character')) {
-      stop('species object is not a character vector, please verify data object')
+    # Is data a data frame
+    if (!is.data.frame(data)) {
+      stop('data provided is not a data frame')
     }
-    # Warning if conservatism is under 0.75
-    if (conservatism < 0.75) {
-      message('Conservatism value for spelling algorithm is under 0.75',
-              ' and this can be cause of species name changes.',
-              ' Maybe manual fix of some species should be done')
+    # data has the needed variables
+    if (is.null(data$data_names) | is.null(data$tpl_names) | is.null(data$Concordance) | is.null(data$IsNA)) {
+      stop('data do not have needed variables: ',
+           'data_names, tpl_names, Concordance and isNA')
     }
 
     # STEP 1
-    # Check species in The Plant List with tpl package
-    # suggestion.distance can be set to 0.75 to be a little less conservative
-    # than in the default options, but be careful, a lower value can be source of
-    # specie change.
-    res_df <- tpl::tpl.get(species, suggestion.distance = conservatism)
+    # If tpl generated NAs, return the original species with a warning
+    if (any(data$IsNA)) {
+      warning('NAs have been generated, please try again with a lower value of conservatism')
+      return(data$data_names)
 
-    # STEP 2
-    # Be sure that no NAs have been introduced
-    if (any(is.na(res_df$name))) {
-      stop('NAs have been generated, please try again with a lower value of conservatism')
+      # STEP 2
+      # If not, return the tpl names
     } else {
-
-      # STEP 3
-      # Return the character vector with the names corrected
-      return(res_df$name)
+      return(data$tpl_names)
     }
 
     # END FUNCTION
@@ -79,6 +67,129 @@ qc_species_names <- function(species, conservatism = 0.9,
                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger, 'qc_species_names', sep = '.'))})
+
+}
+
+################################################################################
+#' Info of species names spelling
+#'
+#' Summary of species names spelling info
+#'
+#' @family Quality Checks Functions
+#'
+#' @param species Character vector containing the species names to verify
+#'
+#' @param conservatism Numerical value between 0 and 1 indicating the
+#'   conservatism level of the tpl spelling check algorithm. Default to
+#'   0.9
+#'
+#' @return A data frame summarizing the species names declared, the species
+#'   names obtained after tpl and the concordance and NAs info
+#'
+#' @export
+
+# START
+# Function declaration
+qc_species_names_info <- function(species, conservatism = 0.9,
+                                  parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+    # STEP 0
+    # Argument checking
+    # Is species a character vector?
+    if (!is.vector(species, 'character')) {
+      stop('species object is not a character vector, please verify data object')
+    }
+    # Warning if conservatism is under 0.75
+    if (conservatism < 0.75) {
+      message('Conservatism value for spelling algorithm is under 0.75',
+              ' and this can be cause of species name changes.',
+              ' Maybe manual fix of some species should be done')
+    }
+
+    # STEP 1
+    # Obtaining tpl info
+    tpl_df <- tpl::tpl.get(species, suggestion.distance = conservatism)
+    species_tpl <- tpl_df$name
+
+    # STEP 2
+    # Create the results data frame
+    res <- data.frame(
+      data_names = species,
+      tpl_names = species_tpl,
+      IsNA = is.na(species_tpl),
+      Concordance = species == species_tpl
+    )
+
+    # STEP 3
+    # Return the results
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_species_names_info', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_species_names_info', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_species_names_info', sep = '.'))})
+
+
+}
+
+################################################################################
+#' Wrapper for species names check
+#'
+#' Wrapper for \code{\link{qc_species_names_info}} and \code{\link{qc_species_names_fix}}
+#'
+#' @family Quality Checks Functions
+#'
+#' @param species Character vector containing the species names to verify
+#'
+#' @param conservatism Numerical value between 0 and 1 indicating the
+#'   conservatism level of the tpl spelling check algorithm. Default to
+#'   0.9
+#'
+#' @return a vector with the fixed names of the species if fix is possible or
+#'   needed, or a vector with the original names of the species if the fix is not
+#'   possible or they are correct
+#'
+#' @export
+
+# START
+# Function declaration
+qc_species_names <- function(species, conservatism = 0.9,
+                             parent_logger= 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+    # STEP 0
+    # Argument checking
+    # No needed as the checks are already made in the internal functions
+
+    # STEP 1
+    # Get names and tpl info
+    info <- qc_species_names_info(species, conservatism, parent_logger)
+
+    # STEP 2
+    # Return the names
+    res <- qc_species_names_fix(info, parent_logger)
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))})
+
 
 }
 

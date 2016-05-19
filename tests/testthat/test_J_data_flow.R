@@ -24,7 +24,7 @@ file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
                  'Received_data/foo_metadata.xlsx',
                  'Received_data/foo_environmental.csv'))
 
-df_received_to_accepted(remove = FALSE)
+suppressMessages(df_received_to_accepted(remove = FALSE))
 
 received_md5 <- md5sum(c('Received_data/foo_sapflow.csv',
                          'Received_data/foo_metadata.xlsx',

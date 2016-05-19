@@ -39,6 +39,8 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_pl_treatments}},
   \code{\link{qc_sapw_area_calculator}},
   \code{\link{qc_sapw_conversion}},
+  \code{\link{qc_species_names_info}},
+  \code{\link{qc_species_names}},
   \code{\link{qc_species_verification}},
   \code{\link{qc_timestamp_errors}}
 }

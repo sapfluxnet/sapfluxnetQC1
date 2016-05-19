@@ -2,7 +2,7 @@
 % Please edit documentation in R/qc_species_functions.R
 \name{qc_species_names}
 \alias{qc_species_names}
-\title{Verify provided species names (spelling and correctness)}
+\title{Wrapper for species names check}
 \usage{
 qc_species_names(species, conservatism = 0.9, parent_logger = "test")
 }
@@ -11,28 +11,31 @@ qc_species_names(species, conservatism = 0.9, parent_logger = "test")
 
 \item{conservatism}{Numerical value between 0 and 1 indicating the
 conservatism level of the tpl spelling check algorithm. Default to
-0.75}
+0.9}
 }
 \value{
-A character vector with species fixed in spelling and correctness.
+a vector with the fixed names of the species if fix is possible or
+  needed, or a vector with the original names of the species if the fix is not
+  possible or they are correct
 }
 \description{
-\code{qc_species_names} uses \code{tpl} package
-(\code{\link{https://github.com/gustavobio/tpl}}) to verify the species
-introduced by the contributors and fix spelling errors.
+Wrapper for \code{\link{qc_species_names_info}} and \code{\link{qc_species_names_fix}}
 }
-\details{
-This function takes a vector of species names and check if they are right
-spelled. Also, if a synonym is used, the function changes it automatically in
-order to have the same name for the same species.
-}
-\section{GitHub package}{
-
-\code{tpl} and \code{tpldata} are GitHub packages, and they are not available
-for install in the ususal way. In order to achieve that
-\code{qc_species_verification} works as expected, manual installation of
-those two packages must be done previously:
-\code{devtools::install_github("gustavobio/tpldata")}
-\code{devtools::install_github("gustavobio/tpl")}
+\seealso{
+Other Quality Checks Functions: \code{\link{create_dic}},
+  \code{\link{qc_coordinates}},
+  \code{\link{qc_env_vars_presence}},
+  \code{\link{qc_factor_values}},
+  \code{\link{qc_fix_timestamp}},
+  \code{\link{qc_get_sapw_md}},
+  \code{\link{qc_get_timestep}},
+  \code{\link{qc_is_timestamp}}, \code{\link{qc_md_cols}},
+  \code{\link{qc_md_results_table}},
+  \code{\link{qc_pl_treatments}},
+  \code{\link{qc_sapw_area_calculator}},
+  \code{\link{qc_sapw_conversion}},
+  \code{\link{qc_species_names_info}},
+  \code{\link{qc_species_verification}},
+  \code{\link{qc_timestamp_errors}}
 }
 
