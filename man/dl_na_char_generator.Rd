@@ -24,7 +24,8 @@ data.
 \seealso{
 Other Data Loading Functions: \code{\link{dl_data}},
   \code{\link{dl_dec_char_detect}},
-  \code{\link{dl_metadata}}, \code{\link{qc_as_timestamp}},
+  \code{\link{dl_get_si_code}}, \code{\link{dl_metadata}},
+  \code{\link{qc_as_timestamp}},
   \code{\link{remove_dupcols}}
 }
 

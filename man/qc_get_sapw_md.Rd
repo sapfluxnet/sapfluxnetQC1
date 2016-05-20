@@ -21,6 +21,7 @@ metadata in order to be able to convert sap flow units.
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
+  \code{\link{qc_data_results_table}},
   \code{\link{qc_env_vars_presence}},
   \code{\link{qc_factor_values}},
   \code{\link{qc_fix_timestamp}},

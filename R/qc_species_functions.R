@@ -62,11 +62,11 @@ qc_species_names_fix <- function(data, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
+                                         logger = paste(parent_logger, 'qc_species_names_fix', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_species_names', sep = '.'))},
+                                        logger = paste(parent_logger, 'qc_species_names_fix', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_species_names', sep = '.'))})
+                                         logger = paste(parent_logger, 'qc_species_names_fix', sep = '.'))})
 
 }
 

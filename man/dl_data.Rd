@@ -35,7 +35,7 @@ data.table package.
 }
 \seealso{
 Other Data Loading Functions: \code{\link{dl_dec_char_detect}},
-  \code{\link{dl_metadata}},
+  \code{\link{dl_get_si_code}}, \code{\link{dl_metadata}},
   \code{\link{dl_na_char_generator}},
   \code{\link{qc_as_timestamp}},
   \code{\link{remove_dupcols}}

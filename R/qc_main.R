@@ -1,7 +1,118 @@
 ################################################################################
-#' Main function to resume QC in one data frame
+#' Get the site code and the names of the data files (metadata, sapflow and env)
 #'
-#' QC codified results in one data frame
+#' Look at the data folder provided and get the code and the names of the files
+#' with the metadata, sapflow data and environmental data, in order to use them
+#' as parameters in the automated reports
+#'
+#' @family Data Loading Functions
+#'
+#' @param folder Route to folder in which are the code and the file names to
+#'   retrieve
+#'
+#' @return A list. The first element is the site code, the second one the
+#'   metadata file route, the third the sapflow data file route and finally, the
+#'   fourth the environmental data file route.
+#'
+#' @export
+
+# START
+# Function declaration
+dl_get_si_code <- function(folder = '.', parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # is folder a valid and existent folder?
+    if (!file_test("-d", folder)) {
+      stop('Folder does not exist, please check if folder name has been correctly provided')
+    }
+
+    # STEP 1
+    # be fast, get the files, now!
+    files <- list.files(folder,
+                        pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
+
+    # 1.1 Check if there is files, to avoid waste time
+    if (length(files) < 1) {
+      stop('There is no files matching data names pattern')
+    }
+
+    # STEP 2
+    # don't forget to extract the si_code, is needed!
+    code <- unique(stringr::str_replace(
+      files, "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$", ""
+    ))
+
+    # 2.1 check if there is more than one code, which is a problem!
+    if (length(code) > 1) {
+      stop('There is more than one code in the folder, please revise manually the folder')
+    }
+
+    # STEP 3
+    # How many files? are they the correct ones?
+
+    # 3.1 if more than three files ending in env_data.csv, sapflow_data.csv or
+    #     metadata.xlsx, stop it now!!!
+    if (length(files) > 3) {
+      stop('There is more than three data files, please revise manually the folder')
+    } else {
+
+      # 3.2 Three files, that is the trifecta (xlsx, csv, csv)
+      if (length(files) == 3) {
+
+        # 3.2.1 get the names, quick!
+        metadata <- files[grep('_metadata\\.xls(x)?$', files)]
+        sapf <- files[grep('_sapflow_data\\.csv$', files)]
+        env <- files[grep('env_data\\.csv$', files)]
+      } else {
+
+        # 3.3 One file to rule them all
+        if (length(files) == 1) {
+
+          # 3.3.1 only one name but three things
+          metadata <- files[grep('_metadata\\.xls(x)?$', files)]
+          sapf <- metadata
+          env <- metadata
+        }
+      }
+    }
+
+    # STEP 4
+    # now, lets make the results object, a list
+    res <- list(
+      si_code = code,
+      md_file = metadata,
+      sapf_file = sapf,
+      env_file = env
+    )
+
+    # STEP 5
+    # Return it!!!
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'dl_get_si_code', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'dl_get_si_code', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'dl_get_si_code', sep = '.'))})
+
+
+}
+
+
+
+################################################################################
+#' Main function to resume Metadata QC in one data frame
+#'
+#' Metadata QC codified results in one data frame
 #'
 #' @family Quality Checks Functions
 #'
@@ -199,14 +310,20 @@ qc_md_results_table <- function(md_cols, factor_values,
                                caption = 'Table 1: Metadata Quality Check Summary',
                                options = list(dom = 't',
                                               columnDefs = list(list(className = 'dt-center',
-                                                                     targets = 1:2),
+                                                                     targets = 1),
                                                                 list(className = 'dt-right',
-                                                                     targets = 0)),
+                                                                     targets = 0),
+                                                                list(width = '45%',
+                                                                     targets = c(0, 2)),
+                                                                list(width = '10%',
+                                                                     targets = 1)),
                                               pageLength = 25,
                                               autoWidth = TRUE)) %>%
       DT::formatStyle('Status',
-                      backgroundColor = DT::styleEqual(c('PASS', 'INFO', 'WARNING', 'ERROR'),
-                                                       c('#26a65b', '#89c4f4', '#f39c12', '#d91e18')))
+                      backgroundColor = DT::styleEqual(c('PASS', 'INFO',
+                                                         'WARNING', 'ERROR'),
+                                                       c('#26a65b', '#89c4f4',
+                                                         '#f39c12', '#d91e18')))
 
     return(res_table)
 
@@ -222,4 +339,165 @@ qc_md_results_table <- function(md_cols, factor_values,
                                          logger = paste(parent_logger, 'qc_md_results_table', sep = '.'))})
 
 
+}
+
+################################################################################
+#' Main function to resume Data QC in one data frame
+#'
+#' Data QC codified results in one data frame
+#'
+#' @family Quality Checks Functions
+#'
+#' @param sapf_data_fixed
+#'
+#' @param env_data_fixed
+#'
+#' @param timestamp_errors_sapf
+#'
+#' @param timestamp_errors_env
+#'
+#' @param sapw_md
+#'
+#' @param sapf_data_fixed_plant
+#'
+#' @param sapf_data_fixed_sapwood
+#'
+#' @param sapf_data_fixed_leaf
+#'
+#' @export
+
+# START
+# Function declaration
+qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
+                                  timestamp_errors_env, sapw_md, sapf_data_fixed_plant,
+                                  sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
+                                  parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Create the result vectors
+    step <- vector()
+    status <- vector()
+    description <- vector()
+
+    # STEP 2
+    # Timestamps
+    # 2.1 correct format sapf
+    if (!qc_is_timestamp(sapf_data_fixed, FALSE, parent_logger = parent_logger)) {
+      step <- c(step, 'TIMESTAMP Format Sapflow data')
+      status <- c(status, 'ERROR')
+      description <- c(description, 'TIMESTAMP format is incorrect and unfixable')
+    } else {
+      step <- c(step, 'TIMESTAMP Format Sapflow data')
+      status <- c(status, 'PASS')
+      description <- c(description, 'TIMESTAMP format is correct or has been fixed')
+    }
+
+    # 2.2 correct format env
+    if (!qc_is_timestamp(env_data_fixed, FALSE, parent_logger = parent_logger)) {
+      step <- c(step, 'TIMESTAMP Format Environmental data')
+      status <- c(status, 'ERROR')
+      description <- c(description, 'TIMESTAMP format is incorrect and unfixable')
+    } else {
+      step <- c(step, 'TIMESTAMP Format Environmental data')
+      status <- c(status, 'PASS')
+      description <- c(description, 'TIMESTAMP format is correct or has been fixed')
+    }
+
+    # 2.3 TIMESTAMP errors sapf
+    if (length(timestamp_errors_sapf[,1]) > 0) {
+      step <- c(step, 'TIMESTAMP continuity errors Sapflow data')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'TIMESTAMP continuity presents errors')
+    } else {
+      step <- c(step, 'TIMESTAMP continuity errors Sapflow data')
+      status <- c(status, 'PASS')
+      description <- c(description, 'TIMESTAMP continuity is fine')
+    }
+
+    # 2.4 TIMESTAMP errors env
+    if (length(timestamp_errors_env[,1]) > 0) {
+      step <- c(step, 'TIMESTAMP continuity errors Environmental data')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'TIMESTAMP continuity presents errors')
+    } else {
+      step <- c(step, 'TIMESTAMP continuity errors Environmental data')
+      status <- c(status, 'PASS')
+      description <- c(description, 'TIMESTAMP continuity is fine')
+    }
+
+    # 2.5 Unit conversion plant
+    if (is.null(sapf_data_fixed_plant)) {
+      step <- c(step, 'Unit conversion to plant level')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'Unit conversion to plant level failed')
+    } else {
+      step <- c(step, 'Unit conversion to plant level')
+      status <- c(status, 'PASS')
+      description <- c(description, 'Unit conversion to plant level done without problems')
+    }
+
+    # 2.6 Unit conversion sapwood
+    if (is.null(sapf_data_fixed_sapwood)) {
+      step <- c(step, 'Unit conversion to sapwood level')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'Unit conversion to sapwood level failed')
+    } else {
+      step <- c(step, 'Unit conversion to sapwood level')
+      status <- c(status, 'PASS')
+      description <- c(description, 'Unit conversion to sapwood level done without problems')
+    }
+
+    # 2.5 Unit conversion leaf
+    if (is.null(sapf_data_fixed_leaf)) {
+      step <- c(step, 'Unit conversion to leaf area level')
+      status <- c(status, 'ERROR')
+      description <- c(description, 'Unit conversion to leaf area level failed')
+    } else {
+      step <- c(step, 'Unit conversion to leaf area level')
+      status <- c(status, 'PASS')
+      description <- c(description, 'Unit conversion to leaf area level done without problems')
+    }
+
+    # FINAL STEP
+    # create the results object
+    res <- data.frame(
+      QC_Step = step, Status = status, Description = description
+    )
+
+    # return the table
+    res_table <- DT::datatable(res, class = 'display', rownames = FALSE,
+                               caption = 'Table 1: Data Quality Check Summary',
+                               options = list(dom = 't',
+                                              columnDefs = list(list(className = 'dt-center',
+                                                                     targets = 1),
+                                                                list(className = 'dt-right',
+                                                                     targets = 0),
+                                                                list(width = '45%',
+                                                                     targets = c(0, 2)),
+                                                                list(width = '10%',
+                                                                     targets = 1)),
+                                              pageLength = 25,
+                                              autoWidth = TRUE)) %>%
+      DT::formatStyle('Status',
+                      backgroundColor = DT::styleEqual(c('PASS', 'INFO',
+                                                         'WARNING', 'ERROR'),
+                                                       c('#26a65b', '#89c4f4',
+                                                         '#f39c12', '#d91e18')))
+
+    return(res_table)
+
+    # END FUNCTION
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_data_results_table', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_data_results_table', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_data_results_table', sep = '.'))})
 }
