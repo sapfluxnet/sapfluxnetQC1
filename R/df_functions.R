@@ -184,3 +184,238 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger, 'df_received_to_accepted', sep = '.'))})
 }
+
+################################################################################
+#' Initialise an empty status file
+#'
+#' Initialise an empty status file in yaml format, using the yaml package
+#'
+#' Before creating an empty file, \code{df_start_status} checks if an status
+#' file already exists, in order to avoid accidental rewriting of the file.
+#'
+#' @family Data Flow
+#'
+#' @param si_code Character vector indicating the site code
+#'
+#' @return Invisible TRUE if no errors were encountered, invisible FALSE if
+#'   there was errors. Also, status file is created in the corresponding folder.
+#'
+#' @export
+
+# START
+# Function declaration
+df_start_status <- function(si_code, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is si_code a character?
+    if (!is.character(si_code)) {
+      stop('si_code is not a character')
+    }
+
+    # STEP 1
+    # Check if status file already exists
+    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml'))
+
+    if (file.exists(filename)) {
+
+      # 1.1 if exists, raise a warning and return false
+      warning('Status file for ', si_code, 'already exists, skipping creation of empty file')
+      return(invisible(FALSE))
+
+      # 1.2 if not, continue to step 2
+    } else {
+
+      # STEP 2
+      # Create the file
+
+      # 2.1 create the content
+      content <- list(
+        QC = list(DONE = FALSE, DATE = NULL),
+        LVL1 = list(STORED = FALSE, DATE = NULL),
+        LVL2 = list(STORED = FALSE, DATE = NULL)
+      )
+
+      # 2.2 create the yaml object
+      yaml_content <- yaml::as.yaml(content)
+
+      # 2.3 create the file with the yaml object
+      cat(yaml_content, file = filename, append = FALSE)
+
+      # 2.4 return true (invisible)
+      return(invisible(TRUE))
+    }
+
+    # END FUNCTION
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'df_status_start', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'df_status_start', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'df_status_start', sep = '.'))})
+
+}
+
+################################################################################
+#' Get the status file info
+#'
+#' Retrieve the status file info as a list, with the yaml package
+#'
+#' \code{yaml} file is parsed by yaml.load_file and a list object is returned.
+#'
+#' @family Data Flow
+#'
+#' @param si_code Character vector indicating the site code
+#'
+#' @return a list object with the info contained in the status file
+#'
+#' @export
+
+# START
+# Function declaration
+
+df_get_status <- function(si_code, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is si_code a character?
+    if (!is.character(si_code)) {
+      stop('si_code is not a character')
+    }
+
+    # STEP 1
+    # Check if status file exists
+    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml'))
+    if (!file.exists(filename)) {
+
+      # 1.1 if don't exist, raise a warning and return false
+      warning('Status file for ', si_code, 'does not exist, unable to retrieve info')
+      return(invisible(FALSE))
+    } else {
+
+      # STEP 2
+      # Get the yaml object
+      res <- yaml::yaml.load_file(filename)
+
+      # 2.1 and return it
+      return(res)
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'df_get_status', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'df_get_status', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'df_get_status', sep = '.'))})
+}
+
+################################################################################
+#' Set the status file info
+#'
+#' Change and update status file info using yaml package
+#'
+#' \code{QC}, \code{LVL1} and \code{LVL2} must be lists. In the case of
+#' \code{QC}, a list with two elements, \code{DONE} and \code{DATE}. In the case
+#' of \code{LVL1} and \code{LVL2} a list with two elements, \code{STORED} and
+#' \code{DATE}. \code{DONE} and \code{STORED} are logicals, whereas \code{DATE}
+#' is always a character or NULL.
+#'
+#' @family Data Flow
+#'
+#' @param si_code Character vector indicating the site code
+#'
+#' @param QC List with the QC info to be updated
+#'
+#' @param LVL1 List with the LVL1 info to be updated
+#'
+#' @param LVL2 List with the LVL2 info to be updated
+#'
+#' @return Invisible TRUE if changes to status file were correctly made,
+#'   invisble FALSE if changes were not made. Also, the status file for the site
+#'   will be replaced with the new one.
+#'
+#' @export
+
+# START
+# Function declaration
+df_set_status <- function(si_code,
+                          QC = NULL,
+                          LVL1 = NULL,
+                          LVL2 = NULL,
+                          parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is si_code a character?
+    if (!is.character(si_code)) {
+      stop('si_code is not a character')
+    }
+
+    # STEP 1
+    # Check if the file already exists
+    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml'))
+    if (!file.exists(filename)) {
+
+      # 1.1 if don't exist, raise a warning and return false
+      warning('Status file for ', si_code, 'does not exist, unable to retrieve info')
+      return(invisible(FALSE))
+    } else {
+
+      # STEP 2
+      # Modify the status file
+
+      # 2.1 get the original
+      original_yaml <- df_get_status(si_code, parent_logger = parent_logger)
+
+      # 2.2 modify original with new no NULL elements
+      if (!is.null(QC)) {
+        original_yaml$QC <- QC
+      }
+
+      if (!is.null(LVL1)) {
+        original_yaml$LVL1 <- LVL1
+      }
+
+      if (!is.null(LVL2)) {
+        original_yaml$LVL2 <- LVL2
+      }
+
+      # STEP 3
+      # Convert to yaml and rewrite the status file
+      res <- yaml::as.yaml(original_yaml)
+
+      # 3.1 rewrite
+      cat(res, file = filename, append = FALSE)
+
+      # return invisible TRUE
+      return(invisible(TRUE))
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'df_set_status', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'df_set_status', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'df_set_status', sep = '.'))})
+}

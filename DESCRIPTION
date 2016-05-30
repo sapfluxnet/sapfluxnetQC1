@@ -23,7 +23,8 @@ Imports:
     tools,
     logging,
     rmarkdown,
-    DT
+    DT,
+    yaml
 Suggests:
     knitr,
     testthat,

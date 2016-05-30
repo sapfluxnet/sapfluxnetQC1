@@ -22,6 +22,9 @@ This functions only need to be called once, as it creates the needed folder
 structure to recreate SAPFLUXNET project in any environment.
 }
 \seealso{
-Other Data Flow: \code{\link{df_received_to_accepted}}
+Other Data Flow: \code{\link{df_get_status}},
+  \code{\link{df_received_to_accepted}},
+  \code{\link{df_set_status}},
+  \code{\link{df_start_status}}
 }
 
