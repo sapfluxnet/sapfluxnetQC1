@@ -1,0 +1,77 @@
+---
+title: "Settings configuration"
+author: "Sapfluxnet Team"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In order to identify the state of the data in the `Data` folder a status file
+is present in all sites folders. In this file is located all the information
+relative to the different steps of data processing for the folder datasets.
+
+## Format
+
+Choosen format is [yaml](http://www.yaml.org/) and the integration with R is
+done by the `yaml` package (https://cran.r-project.org/web/packages/yaml/index.html).
+
+This format is choosen by several reasons:
+
+  1. Easy integration with R
+  1. Actively developed
+  1. Already in use in other packages/processes (**RMarkdown**).
+
+## Status file characteristics
+
+  + Location:  
+    Each status file resides in the root of the site data folder. For example,
+    for the `XXX_XXX_XXX` site, the location is `Data/XXX_XXX_XXX/status.file`
+  
+  + Name:  
+    Each file is named by the site code plus `_status.yaml` to indicate the
+    nature of the file
+  
+  + Content:  
+    Content of the file is in the `yaml` format. See content section below.  
+    
+
+## File content
+
+QC
+  : Field indicating if Quality Check is already done. Two subfields:
+  
+    + DONE: logical indicating if QC is done
+    + DATE: character indicating the date in which QC was done
+
+LVL1
+  : Field indicating if data is stored in the `Level_1` data folder. Two subfields:
+  
+    + STORED: logical indicating if Lvl1 data was stored
+    + DATE: character indicating the date in which storage was done
+
+LVL2
+  : Field indicating if data is stored in the `Level_2` data folder. Two subfields:
+  
+    + STORED: logical indicating if Lvl2 data was stored
+    + DATE: character indicating the date in which storage was done
+
+## Example
+
+XXX_XXX_XXX_status.yaml
+
+```
+# XXX_XXX_XXX_status.yaml
+
+QC:
+  DONE: yes
+  DATE: '2016-05-29'
+LVL1:
+  STORED: yes
+  DATE: '2016-05-30'
+LVL2:
+  STORED: no
+  DATE: ~
+```

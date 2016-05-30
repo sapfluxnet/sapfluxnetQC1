@@ -26,5 +26,6 @@ Imports:
     DT
 Suggests:
     knitr,
-    testthat
+    testthat,
+    rmarkdown
 VignetteBuilder: knitr
