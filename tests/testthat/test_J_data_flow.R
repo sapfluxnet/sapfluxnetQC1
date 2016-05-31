@@ -20,18 +20,18 @@ context('J2. received_to_accepted')
 
 dir.create('Received_data')
 file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
-          to = c('Received_data/foo_sapflow.csv',
+          to = c('Received_data/foo_sapflow_data.csv',
                  'Received_data/foo_metadata.xlsx',
-                 'Received_data/foo_environmental.csv'))
+                 'Received_data/foo_env_data.csv'))
 
 suppressMessages(df_received_to_accepted(remove = FALSE))
 
-received_md5 <- md5sum(c('Received_data/foo_sapflow.csv',
+received_md5 <- md5sum(c('Received_data/foo_sapflow_data.csv',
                          'Received_data/foo_metadata.xlsx',
-                         'Received_data/foo_environmental.csv'))
-accepted_md5 <- md5sum(c('Data/foo/Accepted/foo_sapflow.csv',
+                         'Received_data/foo_env_data.csv'))
+accepted_md5 <- md5sum(c('Data/foo/Accepted/foo_sapflow_data.csv',
                           'Data/foo/Accepted/foo_metadata.xlsx',
-                          'Data/foo/Accepted/foo_environmental.csv'))
+                          'Data/foo/Accepted/foo_env_data.csv'))
 
 test_that('md5sums are correct', {
   expect_true(all(received_md5 == accepted_md5))
@@ -52,6 +52,70 @@ test_that('warnings and messages are raised correctly', {
 
   expect_message(df_received_to_accepted(remove = TRUE),
                  'Removing the received files for site')
+  expect_false(file.exists('Received_data/foo_sapflow_data.csv'))
+  expect_false(file.exists('Received_data/foo_env_data.csv'))
+  expect_false(file.exists('Received_data/foo_metadata.xlsx'))
+})
+
+file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
+          to = c('Received_data/bar_sapflow.csv',
+                 'Received_data/bar.xlsx',
+                 'Received_data/bar_environmental.csv'))
+
+suppressMessages(df_received_to_accepted(remove = FALSE))
+
+test_that('bar site files are not copied', {
+  expect_false(dir.exists('Data/bar'))
+  expect_false(file.exists('Data/bar/Accepted/bar.xlsx'))
+  expect_false(file.exists('Data/bar/Accepted/bar_sapflow.csv'))
+  expect_false(file.exists('Data/bar/Accepted/bar_environmental.csv'))
+})
+
+unlink('Received_data', recursive = TRUE)
+unlink('Data', recursive = TRUE)
+unlink('Logs', recursive = TRUE)
+unlink('Reports', recursive = TRUE)
+unlink('Templates', recursive = TRUE)
+
+
+context('J3. Status yaml files')
+
+df_folder_structure()
+
+dir.create('Received_data')
+
+file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
+          to = c('Received_data/foo_sapflow_data.csv',
+                 'Received_data/foo_metadata.xlsx',
+                 'Received_data/foo_env_data.csv'))
+
+suppressMessages(df_received_to_accepted(remove = FALSE))
+
+test_that('status file functions work', {
+  expect_true(df_start_status('foo'))
+
+  foo_yaml <- df_get_status('foo')
+
+  expect_true(file.exists('Data/foo/foo_status.yaml'))
+  expect_is(foo_yaml, 'list')
+  expect_false(foo_yaml$QC$DONE)
+  expect_false(foo_yaml$LVL1$STORED)
+  expect_false(foo_yaml$LVL2$STORED)
+  expect_true(is.null(foo_yaml$QC$DATE))
+  expect_true(is.null(foo_yaml$LVL1$DATE))
+  expect_true(is.null(foo_yaml$LVL2$DATE))
+
+  foo_yaml <- df_set_status('foo',
+                            QC = list(DONE = TRUE,
+                                      DATE = as.character(Sys.Date())))
+
+  expect_true(foo_yaml$QC$DONE)
+  expect_is(foo_yaml$QC$DATE, 'character')
+  expect_false(foo_yaml$LVL1$STORED)
+  expect_false(foo_yaml$LVL2$STORED)
+  expect_true(is.null(foo_yaml$LVL1$DATE))
+  expect_true(is.null(foo_yaml$LVL2$DATE))
+
 })
 
 unlink('Received_data', recursive = TRUE)

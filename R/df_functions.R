@@ -111,8 +111,12 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
       # 3.1 path and file names
       path <- file.path('Data', code)
       path_accepted <- file.path(path, 'Accepted')
-      from_files <- list.files('Received_data', pattern = code, full.names = TRUE)
-      file_names <- stringr::str_replace(from_files, 'Recieved_data', path_accepted)
+      from_files <- list.files('Received_data',
+                               pattern = paste('(', code,
+                                               '_env_data|_sapflow_data)\\.csv$|',
+                                               code, '_metadata\\.xls(x)?$', sep = ''),
+                               full.names = TRUE)
+      file_names <- stringr::str_replace(from_files, 'Received_data', path_accepted)
 
       # 3.2 check presence
       if (dir.exists(path)) {
@@ -218,7 +222,7 @@ df_start_status <- function(si_code, parent_logger = 'test') {
 
     # STEP 1
     # Check if status file already exists
-    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml'))
+    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml', sep = ''))
 
     if (file.exists(filename)) {
 
@@ -295,7 +299,7 @@ df_get_status <- function(si_code, parent_logger = 'test') {
 
     # STEP 1
     # Check if status file exists
-    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml'))
+    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml', sep = ''))
     if (!file.exists(filename)) {
 
       # 1.1 if don't exist, raise a warning and return false
@@ -370,7 +374,7 @@ df_set_status <- function(si_code,
 
     # STEP 1
     # Check if the file already exists
-    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml'))
+    filename <- file.path('Data', si_code, paste(si_code, '_status.yaml', sep = ''))
     if (!file.exists(filename)) {
 
       # 1.1 if don't exist, raise a warning and return false
