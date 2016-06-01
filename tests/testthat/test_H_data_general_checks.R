@@ -169,3 +169,33 @@ test_that('correct results are showed', {
   expect_identical(qc_get_timestep(timestep_pl_good), 15)
   expect_identical(qc_get_timestep(timestep_env_good), 15)
 })
+
+################################################################################
+context('H5. Time intervals of trees and environmental variables')
+
+intervals_data <- data.frame(TIMESTAMP = as.POSIXct(c(
+  "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
+  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
+  "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
+)),
+Tree_1 = 1:9,
+Tree_2 = c(NA, NA, NA, NA, 5:9),
+Tree_3 = c(1:8, NA),
+Tree_4 = rep(NA, 9),
+Tree_5 = c(1:3, NA, NA, 6:9),
+stringsAsFactors = FALSE)
+
+res_intervals_data <- qc_time_interval(intervals_data)
+
+test_that('Time intervals are correctly calculated', {
+  expect_equal(res_intervals_data[[1, 2]], intervals_data[[1, 1]])
+  expect_equal(res_intervals_data[[1, 3]], intervals_data[[9, 1]])
+  expect_equal(res_intervals_data[[2, 2]], intervals_data[[5, 1]])
+  expect_equal(res_intervals_data[[2, 3]], intervals_data[[9, 1]])
+  expect_equal(res_intervals_data[[3, 2]], intervals_data[[1, 1]])
+  expect_equal(res_intervals_data[[3, 3]], intervals_data[[8, 1]])
+  expect_equal(res_intervals_data[[4, 2]], as.POSIXct(NA))
+  expect_equal(res_intervals_data[[4, 3]], as.POSIXct(NA))
+  expect_equal(res_intervals_data[[5, 2]], intervals_data[[1, 1]])
+  expect_equal(res_intervals_data[[5, 3]], intervals_data[[9, 1]])
+})
