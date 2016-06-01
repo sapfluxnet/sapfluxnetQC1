@@ -105,9 +105,10 @@ test_that('status file functions work', {
   expect_true(is.null(foo_yaml$LVL1$DATE))
   expect_true(is.null(foo_yaml$LVL2$DATE))
 
-  foo_yaml <- df_set_status('foo',
-                            QC = list(DONE = TRUE,
-                                      DATE = as.character(Sys.Date())))
+  expect_true(df_set_status('foo', QC = list(DONE = TRUE,
+                                             DATE = as.character(Sys.Date()))))
+
+  foo_yaml <- df_get_status('foo')
 
   expect_true(foo_yaml$QC$DONE)
   expect_is(foo_yaml$QC$DATE, 'character')
