@@ -50,6 +50,7 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_sapw_conversion}},
   \code{\link{qc_species_names_info}},
   \code{\link{qc_species_names}},
+  \code{\link{qc_time_interval}},
   \code{\link{qc_timestamp_errors}}
 }
 

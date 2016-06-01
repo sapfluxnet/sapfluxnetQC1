@@ -416,3 +416,87 @@ qc_timestamp_errors <- function(data, timestep = 15,
 
 ################################################################################
 #' Gaps function (TO DO)
+
+################################################################################
+#' Getting the \eqn{t_0} and \eqn{t_f} for trees or environmental data
+#'
+#' Summary of \eqn{t_0} and \eqn{t_f} for each tree or for each environmental
+#' variable
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the sapflow values for each tree or the
+#'   environmental variables values. A \code{TIMESTAMP} variable must be present
+#'   in the dataset
+#'
+#' @return A data frame summarising the time intervals for each object(trees or
+#'   environmental variables)
+#'
+#' @export
+
+# START
+# Function declaration
+qc_time_interval <- function(data, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is data a data frame?
+    if (!is.data.frame(data)) {
+      stop('data provided is not a data frame')
+    }
+    # Is there a TIMESTAMP variable in data?
+    if (is.null(data$TIMESTAMP)) {
+      stop('data has not a TIMESTAMP variable')
+    }
+
+    # STEP 1
+    # Initialise the empty results object
+    res <- data.frame(
+      Object = vector(),
+      t0 = vector(),
+      tf = vector()
+    )
+
+    # STEP 2
+    # For loop to iterate each object and obtain the t0 and the tf
+    for (var in names(data)[-1]) {
+
+      # 2.0 create a standara eval object to allow quoted vars in the filter
+      #     step
+      dots <- paste('!is.na(', var, ')', sep = '')
+
+      res <- dplyr::bind_rows(
+        res,
+        {data %>%
+            dplyr::select_('TIMESTAMP', var) %>%
+            # 2.1 Filter to avoid NAs
+            dplyr::filter_(.dots = dots) %>%
+            # 2.2 Summarise to obtain the first and last value od TIMESTAMP
+            dplyr::summarise(t0 = first(TIMESTAMP),
+                             tf = last(TIMESTAMP)) %>%
+            # 2.3 Add the object name
+            dplyr::mutate(Object = var) %>%
+            # 2.4 Reorder variables
+            dplyr::select(Object, t0, tf)
+        }
+      )
+    }
+
+    # STEP 3
+    # Return the res object
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_time_interval', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_time_interval', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_time_interval', sep = '.'))})
+}
