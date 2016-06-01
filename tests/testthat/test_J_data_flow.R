@@ -119,6 +119,21 @@ test_that('status file functions work', {
 
 })
 
+test_that('messages are correctly raised', {
+  expect_warning(df_start_status('foo'),
+                 'already exists, skipping creation')
+  expect_false(suppressWarnings(df_start_status('foo')))
+
+  expect_warning(df_get_status('bar'), 'does not exist, unable to retrieve info')
+  expect_false(suppressWarnings(df_get_status('bar')))
+
+  expect_warning(df_set_status('bar', QC = list(DONE = TRUE,
+                                                DATE = as.character(Sys.Date()))),
+                 'does not exist, unable to retrieve info')
+  expect_false(suppressWarnings(df_set_status('bar', QC = list(DONE = TRUE,
+                                              DATE = as.character(Sys.Date())))))
+})
+
 unlink('Received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
