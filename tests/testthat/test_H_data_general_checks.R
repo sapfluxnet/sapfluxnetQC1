@@ -199,3 +199,12 @@ test_that('Time intervals are correctly calculated', {
   expect_equal(res_intervals_data[[5, 2]], intervals_data[[1, 1]])
   expect_equal(res_intervals_data[[5, 3]], intervals_data[[9, 1]])
 })
+
+intervals_data$TIMESTAMP <- NULL
+
+test_that('Errors are raised correctly', {
+  expect_error(qc_time_interval(intervals_data),
+               'data has not a TIMESTAMP variable')
+  expect_error(qc_time_interval('intervals_data'),
+               'data provided is not a data frame')
+})
