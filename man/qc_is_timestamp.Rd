@@ -44,6 +44,7 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_species_names}},
   \code{\link{qc_species_verification}},
   \code{\link{qc_time_interval}},
+  \code{\link{qc_timestamp_concordance}},
   \code{\link{qc_timestamp_errors}}
 }
 

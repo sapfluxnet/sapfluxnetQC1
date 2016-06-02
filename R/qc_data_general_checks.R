@@ -455,9 +455,9 @@ qc_time_interval <- function(data, parent_logger = 'test') {
     # STEP 1
     # Initialise the empty results object
     res <- data.frame(
-      Object = vector(),
-      t0 = vector(),
-      tf = vector()
+      Object = 'Total',
+      t0 = data$TIMESTAMP[1],
+      tf = data$TIMESTAMP[length(data$TIMESTAMP)]
     )
 
     # STEP 2
@@ -499,4 +499,75 @@ qc_time_interval <- function(data, parent_logger = 'test') {
                                         logger = paste(parent_logger, 'qc_time_interval', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger, 'qc_time_interval', sep = '.'))})
+}
+
+################################################################################
+#' Check concordance between sapflow TIMESTAMP and env TIMESTAMP
+#'
+#' Are the sapflow and environmental TIMESTAMPS in concordance?
+#'
+#' This function uses \code{\link{qc_time_interval}} and \code{lubridate}
+#' package internally to perform operations with time intervals. There is two
+#' ways of using this function:
+#' \enumerate{
+#'   \item Directly from sapflow and environmental data, providing both datasets
+#'   \item From the results obtained from \code{\link{qc_time_interval}},
+#'         providing both data frames with the results.
+#' }
+#'
+#' @family Quality Checks Functions
+#'
+#' @param sapf_data Data frame containing the sapflow data and its TIMESTAMP
+#'
+#' @param env_data Data frame containing the environmental data and its
+#'   TIMESTAMP
+#'
+#' @param sapf_intervals Data frame obtained from \code{\link{qc_time_interval}},
+#'   optional. It can be used if no sapf and env data is provided
+#'
+#' @param env_intervals Data frame obtained from \code{\link{qc_time_interval}},
+#'   optional. It can be used if no sapf and env data is provided
+#'
+#' @return A data frame summarising the results
+#'
+#' @export
+
+# START
+# Function declaration
+qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
+                                     sapf_intervals = NULL, env_intervals = NULL) {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Arguments check
+    # All NULL??
+    if (all(is.null(sapf_data), is.null(env_data),
+            is.null(sapf_intervals), is.null(env_intervals))) {
+      stop('No data provided')
+    }
+
+    # STEP 1
+    # Raw data or intervals data?
+
+    # 1.1 Raw data
+    if (all(!is.null(sapf_data), !is.null(env_data))) {
+
+    }
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_timestamp_concordance',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_timestamp_concordance',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_timestamp_concordance',
+                                                        sep = '.'))})
 }
