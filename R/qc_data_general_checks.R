@@ -506,9 +506,8 @@ qc_time_interval <- function(data, parent_logger = 'test') {
 #'
 #' Are the sapflow and environmental TIMESTAMPS in concordance?
 #'
-#' This function uses \code{\link{qc_time_interval}} and \code{lubridate}
-#' package internally to perform operations with time intervals. There is two
-#' ways of using this function:
+#' This function uses \code{\link{qc_time_interval}} internally to perform
+#' operations with time intervals. There is two ways of using this function:
 #' \enumerate{
 #'   \item Directly from sapflow and environmental data, providing both datasets
 #'   \item From the results obtained from \code{\link{qc_time_interval}},
@@ -528,6 +527,9 @@ qc_time_interval <- function(data, parent_logger = 'test') {
 #' @param env_intervals Data frame obtained from \code{\link{qc_time_interval}},
 #'   optional. It can be used if no sapf and env data is provided
 #'
+#' @param plot Logical indicating if the result is presented in graphical mode
+#'   (ggplot2 object). Desfault to TRUE.
+#'
 #' @return A data frame summarising the results
 #'
 #' @export
@@ -535,7 +537,8 @@ qc_time_interval <- function(data, parent_logger = 'test') {
 # START
 # Function declaration
 qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
-                                     sapf_intervals = NULL, env_intervals = NULL) {
+                                     sapf_intervals = NULL, env_intervals = NULL,
+                                     plot = TRUE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -554,7 +557,42 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
     # 1.1 Raw data
     if (all(!is.null(sapf_data), !is.null(env_data))) {
 
+      # 1.1.1 generate the intervals
+      sapf_intervals <- qc_time_interval(sapf_data, parent_logger = parent_logger)
+      sapf_intervals$Object[1] <- 'Total_sapf'
+      env_intervals <- qc_time_interval(env_data, parent_logger = parent_logger)
+      env_intervals$Object[1] <- 'Total_env'
     }
+
+    # 1.2 Intervals data (now all are intervals)
+    intervals_data <- dplyr::bind_rows(sapf_intervals, env_intervals)
+
+    # STEP 2
+    # Plot?
+    if (plot) {
+      intervals_plot <- intervals_data %>%
+        tidyr::gather(Time_point, Value, -Object) %>%
+        dplyr::mutate(Object = factor(Object, levels = rev(unique(Object)))) %>%
+        dplyr::group_by(Object, Time_point) %>%
+        ggplot(aes(x = Value, y = Object, colour = Object)) +
+        geom_line(size = 2) +
+        scale_colour_manual(values = c(rep('darkgreen',
+                                           length(env_intervals$Object)),
+                                       rep('steelblue',
+                                           length(sapf_intervals$Object)))) +
+        theme(legend.position = 'none')
+
+      # 2.1 return the plot
+      return(intervals_plot)
+
+      # 2.2 No plot
+    } else {
+
+      # 2.2.1 return the info data frame
+      return(intervals_data)
+    }
+
+    # END FUNCTION
   },
 
   # handlers

@@ -5,7 +5,8 @@
 \title{Check concordance between sapflow TIMESTAMP and env TIMESTAMP}
 \usage{
 qc_timestamp_concordance(sapf_data = NULL, env_data = NULL,
-  sapf_intervals = NULL, env_intervals = NULL)
+  sapf_intervals = NULL, env_intervals = NULL, plot = TRUE,
+  parent_logger = "test")
 }
 \arguments{
 \item{sapf_data}{Data frame containing the sapflow data and its TIMESTAMP}
@@ -18,6 +19,9 @@ optional. It can be used if no sapf and env data is provided}
 
 \item{env_intervals}{Data frame obtained from \code{\link{qc_time_interval}},
 optional. It can be used if no sapf and env data is provided}
+
+\item{plot}{Logical indicating if the result is presented in graphical mode
+(ggplot2 object). Desfault to TRUE.}
 }
 \value{
 A data frame summarising the results
@@ -26,9 +30,8 @@ A data frame summarising the results
 Are the sapflow and environmental TIMESTAMPS in concordance?
 }
 \details{
-This function uses \code{\link{qc_time_interval}} and \code{lubridate}
-package internally to perform operations with time intervals. There is two
-ways of using this function:
+This function uses \code{\link{qc_time_interval}} internally to perform
+operations with time intervals. There is two ways of using this function:
 \enumerate{
   \item Directly from sapflow and environmental data, providing both datasets
   \item From the results obtained from \code{\link{qc_time_interval}},
