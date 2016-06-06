@@ -559,12 +559,12 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
 
       # 1.1.1 generate the intervals
       sapf_intervals <- qc_time_interval(sapf_data, parent_logger = parent_logger)
-      sapf_intervals$Object[1] <- 'Total_sapf'
       env_intervals <- qc_time_interval(env_data, parent_logger = parent_logger)
-      env_intervals$Object[1] <- 'Total_env'
     }
 
     # 1.2 Intervals data (now all are intervals)
+    sapf_intervals$Object[1] <- 'Total_sapf'
+    env_intervals$Object[1] <- 'Total_env'
     intervals_data <- dplyr::bind_rows(sapf_intervals, env_intervals)
 
     # STEP 2

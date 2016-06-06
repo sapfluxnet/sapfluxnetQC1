@@ -208,3 +208,55 @@ test_that('Errors are raised correctly', {
   expect_error(qc_time_interval('intervals_data'),
                'data provided is not a data frame')
 })
+
+intervals_data <- data.frame(TIMESTAMP = as.POSIXct(c(
+  "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
+  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
+  "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
+)),
+Tree_1 = 1:9,
+Tree_2 = c(NA, NA, NA, NA, 5:9),
+Tree_3 = c(1:8, NA),
+Tree_4 = rep(NA, 9),
+Tree_5 = c(1:3, NA, NA, 6:9),
+stringsAsFactors = FALSE)
+
+intervals_env_data <- data.frame(TIMESTAMP = as.POSIXct(c(
+  "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
+  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
+  "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
+)),
+ta = 1:9,
+precip = c(NA, NA, NA, NA, 5:9),
+incoming = c(1:8, NA),
+ws = rep(NA, 9),
+hrs = c(1:3, NA, NA, 6:9),
+stringsAsFactors = FALSE)
+
+intervals_plot <- qc_timestamp_concordance(intervals_data, intervals_env_data)
+
+intervals_plot_2 <- qc_timestamp_concordance(
+  sapf_intervals = qc_time_interval(intervals_data),
+  env_intervals = qc_time_interval(intervals_env_data)
+)
+
+test_that('Plots are plots', {
+  expect_is(intervals_plot, 'ggplot')
+  expect_is(intervals_plot_2, 'ggplot')
+  expect_equal(intervals_plot, intervals_plot_2)
+})
+
+intervals_plot <- qc_timestamp_concordance(intervals_data, intervals_env_data,
+                                           plot = FALSE)
+
+intervals_plot_2 <- qc_timestamp_concordance(
+  sapf_intervals = qc_time_interval(intervals_data),
+  env_intervals = qc_time_interval(intervals_env_data),
+  plot = FALSE
+)
+
+test_that('data frames are data frames', {
+  expect_is(intervals_plot, 'data.frame')
+  expect_is(intervals_plot_2, 'data.frame')
+  expect_identical(intervals_plot, intervals_plot_2)
+})
