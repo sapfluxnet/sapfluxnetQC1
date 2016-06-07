@@ -14,19 +14,24 @@
 #' @param data Data frame containing the data in which obtain info about gaps.
 #'   It must have a TIMESTAMP variable
 #'
+#' @param trim Logial indicating if starting and ending gaps must be included.
+#'   Default to FALSE.
+#'
 #' @return A data frame with info about gaps:
 #'   \itemize{
-#'       \item Start: Gap start TIMESTAMP
-#'       \item End: Gap end TIMESTAMP
-#'       \item Coverage: Gap coverage in percentage
-#'       \item Interval: Gap interval in minutes
+#'       \item gap_start: Gap start TIMESTAMP
+#'       \item gap_end: Gap end TIMESTAMP
+#'       \item gap_interval: Gap interval in minutes
+#'       \item gap_coverage: Gap coverage in percentage
+#'       \item timestamp_start: Absolute timestamp start
+#'       \item timestamp_end: Absolute timestamp end
 #'   }
 #'
 #' @export
 
 # START
 # Function declaration
-qc_mind_the_gap <- function(data, parent_logger = 'test') {
+qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -105,8 +110,17 @@ qc_mind_the_gap <- function(data, parent_logger = 'test') {
 
     # STEP 4
     # Return the res
-    return(res)
 
+    # 4.1 trim = FALSE
+    if (!trim) {
+      return(res)
+    } else {
+      # 4.2 trim = TRUE
+      res_trimmed <- res %>%
+        dplyr::filter(gap_start != timestamp_start & gap_end != timestamp_end)
+
+      return(res_trimmed)
+    }
   },
 
   # handlers

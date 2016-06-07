@@ -4,19 +4,24 @@
 \alias{qc_mind_the_gap}
 \title{Gaps info}
 \usage{
-qc_mind_the_gap(data, parent_logger = "test")
+qc_mind_the_gap(data, trim = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the data in which obtain info about gaps.
 It must have a TIMESTAMP variable}
+
+\item{trim}{Logial indicating if starting and ending gaps must be included.
+Default to FALSE.}
 }
 \value{
 A data frame with info about gaps:
   \itemize{
-      \item Start: Gap start TIMESTAMP
-      \item End: Gap end TIMESTAMP
-      \item Coverage: Gap coverage in percentage
-      \item Interval: Gap interval in minutes
+      \item gap_start: Gap start TIMESTAMP
+      \item gap_end: Gap end TIMESTAMP
+      \item gap_interval: Gap interval in minutes
+      \item gap_coverage: Gap coverage in percentage
+      \item timestamp_start: Absolute timestamp start
+      \item timestamp_end: Absolute timestamp end
   }
 }
 \description{
