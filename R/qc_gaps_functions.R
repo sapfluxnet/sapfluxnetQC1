@@ -135,20 +135,70 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
                                                         'qc_mind_the_gap', sep = '.'))})
 }
 
+################################################################################
+#' Plotting an histogram for gaps intervals/gaps coverage
+#'
+#' Wrapper for ggplot to plot an histogram of gaps info
+#'
+#' This function is a simple wrapper for ggplot + geom_histogram. It produces
+#' a ggplot object that can be modified adding layers, like any other ggplot
+#' object.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param gaps_info Data frame as obtained from \code{\link{qc_mind_the_gap}}
+#'
+#' @param type Character indicating what to represent, \code{gap_interval} or
+#'   \code{gap_coverage}
+#'
+#' @param binwidth Bin width as stated in geom_histogram, default to NULL to
+#'   use the geom_histrogram default. Change it if more or less resolution is
+#'   needed
+#'
+#' @return a ggplot object with the basic histogram, no themes added.
+#'
+#' @export
 
-# foo_fun <- function(foo_data) {
-#   a <- vector()
-#   b <- vector()
-#   c <- vector()
-#   for (i in 1:length(foo_data$C)) {
-#     if (is.na(foo_data$C[i]) && !is.na(foo_data$C[i-1])) {
-#       a <- c(a, as.character(foo_data$TIMESTAMP[i]))
-#     }
-#     if (is.na(foo_data$C[i]) && !is.na(foo_data$C[i+1])) {
-#       b <- c(b, as.character(foo_data$TIMESTAMP[i]))
-#     }
-#   }
-#
-#   res <- data.frame(start = a, end = b)
-#   return(res)
-# }
+# START
+# Function declaration
+qc_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
+                            parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument check
+    # Is gaps_info a data frame?
+    if (!is.data.frame(gaps_info)) {
+      stop('gaps_info is not a data frame')
+    }
+    # Has it the necessary variables, as produced by mind_the_gap?
+    if (any(is.null(gaps_info$gap_interval), is.null(gaps_info$gap_coverage))) {
+      stop('gaps_info has not the necessary variables,',
+           ' see function help (?qc_plot_the_gap)')
+    }
+
+    # STEP 1
+    # Create the ggplot object
+    res_plot <- ggplot(gaps_info, aes_(x = type)) +
+      geom_histogram(binwidth = binwidth)
+
+    # STEP 2
+    # Return the plot
+    return(res_plot)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_plot_the_gap', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_plot_the_gap', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_plot_the_gap', sep = '.'))})
+}
