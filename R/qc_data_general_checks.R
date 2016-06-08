@@ -415,9 +415,6 @@ qc_timestamp_errors <- function(data, timestep = 15,
 }
 
 ################################################################################
-#' Gaps function (TO DO)
-
-################################################################################
 #' Getting the \eqn{t_0} and \eqn{t_f} for trees or environmental data
 #'
 #' Summary of \eqn{t_0} and \eqn{t_f} for each tree or for each environmental

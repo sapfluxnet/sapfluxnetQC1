@@ -34,8 +34,8 @@ test_that('Results are correct', {
 
 context('K2. Plot the gap')
 
-foo_plot <- qc_plot_the_gap(foo_res, type = 'gap_interval')
-foo_plot2 <- qc_plot_the_gap(foo_res_trim, type = 'gap_coverage')
+foo_plot <- vis_plot_the_gap(foo_res, type = 'gap_interval')
+foo_plot2 <- vis_plot_the_gap(foo_res_trim, type = 'gap_coverage')
 
 test_that('plots are plots', {
   expect_is(foo_plot, 'ggplot')
