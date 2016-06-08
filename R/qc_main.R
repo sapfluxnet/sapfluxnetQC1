@@ -358,6 +358,12 @@ qc_md_results_table <- function(md_cols, factor_values,
 #'
 #' @param sapw_md
 #'
+#' @param timestamp_concordance
+#'
+#' @param sapf_gaps_info
+#'
+#' @param env_gaps_info
+#'
 #' @param sapf_data_fixed_plant
 #'
 #' @param sapf_data_fixed_sapwood
@@ -369,7 +375,9 @@ qc_md_results_table <- function(md_cols, factor_values,
 # START
 # Function declaration
 qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
-                                  timestamp_errors_env, sapw_md, sapf_data_fixed_plant,
+                                  timestamp_errors_env, sapw_md,
+                                  timestamp_concordance, sapf_gaps_info,
+                                  env_gaps_info, sapf_data_fixed_plant,
                                   sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
                                   parent_logger = 'test') {
 
@@ -428,7 +436,65 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       description <- c(description, 'TIMESTAMP continuity is fine')
     }
 
-    # 2.5 Unit conversion plant
+    # 2.6 TIMESTAMP concordance
+    if (all(timestamp_concordance$t0 %in% timestamp_concordance$t0[[1]]) &&
+        all(timestamp_concordance$tf %in% timestamp_concordance$tf[[1]])) {
+      step <- c(step, 'TIMESTAMP concordance between sapflow and environmental variables')
+      status <- c(status, 'PASS')
+      description <- c(description, 'Concordance OK')
+    } else {
+      step <- c(step, 'TIMESTAMP concordance between sapflow and environmental variables')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'Concordance failed for one or more variables')
+    }
+
+    # 2.7 Gaps info, sapflow
+    if (length(sapf_gaps_info$gap_coverage) == 0) {
+      step <- c(step, 'Sapflow gaps coverage')
+      status <- c(status, 'PASS')
+      description <- c(description, 'No gaps')
+    } else {
+      if (any(sapf_gaps_info$gap_coverage > 0.25)) {
+        step <- c(step, 'Sapflow gaps coverage')
+        status <- c(status, 'ERROR')
+        description <- c(description, 'Presence of gaps covering more than 25% of the TIMESTAMP')
+      } else {
+        if (any(sapf_gaps_info$gap_coverage > 0.05)) {
+          step <- c(step, 'Sapflow gaps coverage')
+          status <- c(status, 'WARNING')
+          description <- c(description, 'Presence of gaps covering 5-25% of the TIMESTAMP')
+        } else {
+          step <- c(step, 'Sapflow gaps coverage')
+          status <- c(status, 'INFO')
+          description <- c(description, 'Presence of gaps covering less than 5% of the TIMESTAMP')
+        }
+      }
+    }
+
+    # 2.8 Gaps info, environmental
+    if (length(env_gaps_info$gap_coverage) == 0) {
+      step <- c(step, 'Environmental gaps coverage')
+      status <- c(status, 'PASS')
+      description <- c(description, 'No gaps')
+    } else {
+      if (any(env_gaps_info$gap_coverage > 0.25)) {
+        step <- c(step, 'Environmental gaps coverage')
+        status <- c(status, 'ERROR')
+        description <- c(description, 'Presence of gaps covering more than 25% of the TIMESTAMP')
+      } else {
+        if (any(env_gaps_info$gap_coverage > 0.05)) {
+          step <- c(step, 'Environmental gaps coverage')
+          status <- c(status, 'WARNING')
+          description <- c(description, 'Presence of gaps covering 5-25% of the TIMESTAMP')
+        } else {
+          step <- c(step, 'Environmental gaps coverage')
+          status <- c(status, 'INFO')
+          description <- c(description, 'Presence of gaps covering less than 5% of the TIMESTAMP')
+        }
+      }
+    }
+
+    # 2.9 Unit conversion plant
     if (is.null(sapf_data_fixed_plant)) {
       step <- c(step, 'Unit conversion to plant level')
       status <- c(status, 'WARNING')
@@ -439,7 +505,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       description <- c(description, 'Unit conversion to plant level done without problems')
     }
 
-    # 2.6 Unit conversion sapwood
+    # 2.10 Unit conversion sapwood
     if (is.null(sapf_data_fixed_sapwood)) {
       step <- c(step, 'Unit conversion to sapwood level')
       status <- c(status, 'WARNING')
@@ -450,7 +516,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       description <- c(description, 'Unit conversion to sapwood level done without problems')
     }
 
-    # 2.5 Unit conversion leaf
+    # 2.11 Unit conversion leaf
     if (is.null(sapf_data_fixed_leaf)) {
       step <- c(step, 'Unit conversion to leaf area level')
       status <- c(status, 'ERROR')

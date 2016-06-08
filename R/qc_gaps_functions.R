@@ -104,7 +104,7 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
       # interval in minutes
       dplyr::mutate(gap_interval = lubridate::int_length(lubridate::interval(gap_start, gap_end))/60,
                     # coverage percent
-                    gap_coverage = (gap_interval / timestamp_interval)*100,
+                    gap_coverage = (gap_interval / timestamp_interval),
                     timestamp_start = data$TIMESTAMP[[1]],
                     timestamp_end = data$TIMESTAMP[[length(data$TIMESTAMP)]])
 

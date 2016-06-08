@@ -2,8 +2,7 @@
 % Please edit documentation in R/qc_data_general_checks.R
 \name{qc_time_interval}
 \alias{qc_time_interval}
-\title{Gaps function (TO DO)
-Getting the \eqn{t_0} and \eqn{t_f} for trees or environmental data}
+\title{Getting the \eqn{t_0} and \eqn{t_f} for trees or environmental data}
 \usage{
 qc_time_interval(data, parent_logger = "test")
 }

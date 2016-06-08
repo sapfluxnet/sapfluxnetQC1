@@ -24,7 +24,8 @@ Imports:
     logging,
     rmarkdown,
     DT,
-    yaml
+    yaml,
+    cowplot
 Suggests:
     knitr,
     testthat,

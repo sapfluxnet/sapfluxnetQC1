@@ -577,6 +577,7 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
                                            length(env_intervals$Object)),
                                        rep('steelblue',
                                            length(sapf_intervals$Object)))) +
+        scale_x_datetime(date_breaks = '1 month') +
         theme(legend.position = 'none')
 
       # 2.1 return the plot

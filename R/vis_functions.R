@@ -122,8 +122,20 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
 
     # STEP 1
     # Create the ggplot object
-    res_plot <- ggplot(gaps_info, aes_(x = type)) +
-      geom_histogram(binwidth = binwidth)
+
+    # 1.1 gap_coverage special effects
+    if (type == 'gap_coverage') {
+      res_plot <- ggplot(gaps_info, aes_string(x = type)) +
+        geom_histogram(binwidth = 5) +
+        scale_x_continuous(limits = c(-5, 105)) +
+        labs(x = 'Gap coverage (%)', y = 'Count')
+    } else {
+
+      # 1.2 gap_interval special effects
+      res_plot <- ggplot(gaps_info, aes_string(x = type)) +
+        geom_histogram(binwidth = binwidth) +
+        labs(x = 'Gap interval (minutes)', y = 'Count')
+    }
 
     # STEP 2
     # Return the plot

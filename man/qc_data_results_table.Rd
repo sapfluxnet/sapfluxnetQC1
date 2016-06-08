@@ -5,7 +5,8 @@
 \title{Main function to resume Data QC in one data frame}
 \usage{
 qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
-  timestamp_errors_env, sapw_md, sapf_data_fixed_plant, sapf_data_fixed_sapwood,
+  timestamp_errors_env, sapw_md, timestamp_concordance, sapf_gaps_info,
+  env_gaps_info, sapf_data_fixed_plant, sapf_data_fixed_sapwood,
   sapf_data_fixed_leaf, parent_logger = "test")
 }
 \arguments{
@@ -18,6 +19,12 @@ qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
 \item{timestamp_errors_env}{}
 
 \item{sapw_md}{}
+
+\item{timestamp_concordance}{}
+
+\item{sapf_gaps_info}{}
+
+\item{env_gaps_info}{}
 
 \item{sapf_data_fixed_plant}{}
 
