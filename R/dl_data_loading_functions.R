@@ -150,7 +150,7 @@ dl_dec_char_detect <- function(file, n = 1000, parent_logger = 'test') {
     # Load file sample
     sample_data <- data.table::fread(
       file, skip = 'TIMESTAMP', data.table = FALSE, na.strings = dl_na_char_generator(),
-      select = c(2,3,4,5), nrows = n, header = FALSE
+      select = c(2,3,4), nrows = n, header = FALSE
     )
 
     # STEP 2
@@ -160,8 +160,6 @@ dl_dec_char_detect <- function(file, n = 1000, parent_logger = 'test') {
       sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
                  pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
       sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
-                 pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE) +
-      sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
                  pattern='(^.*\\d+\\,\\d+.*$)'), na.rm = TRUE)
 
     dots <- sum(vapply(sample_data[,1], stringr::str_detect, logical(1),
@@ -169,8 +167,6 @@ dl_dec_char_detect <- function(file, n = 1000, parent_logger = 'test') {
       sum(vapply(sample_data[,2], stringr::str_detect, logical(1),
                  pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
       sum(vapply(sample_data[,3], stringr::str_detect, logical(1),
-                 pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE) +
-      sum(vapply(sample_data[,4], stringr::str_detect, logical(1),
                  pattern='(^.*\\d+\\.\\d+.*$)'), na.rm = TRUE)
 
     # STEP 3
