@@ -1,8 +1,8 @@
 Package: sapfluxnetr
 Type: Package
 Title: Package with functions related to sapfluxnet project data
-Version: 0.0.2
-Author: Who wrote it
+Version: 0.0.3
+Author: Víctor Granda (SAPFLUXNET Team)
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
