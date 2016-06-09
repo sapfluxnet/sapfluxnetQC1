@@ -155,3 +155,10 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
                                          logger = paste(parent_logger,
                                                         'qc_plot_the_gap', sep = '.'))})
 }
+
+################################################################################
+#' Visualizations for data units
+#'
+#' Time series visualizations to detect incongruencies in data
+#'
+#'

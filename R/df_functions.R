@@ -113,7 +113,7 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
       path_accepted <- file.path(path, 'Accepted')
       from_files <- list.files('Received_data',
                                pattern = paste('(', code,
-                                               '_env_data|_sapflow_data)\\.csv$|',
+                                               '_env_data|', code, '_sapflow_data)\\.csv$|',
                                                code, '_metadata\\.xls(x)?$', sep = ''),
                                full.names = TRUE)
       file_names <- stringr::str_replace(from_files, 'Received_data', path_accepted)
