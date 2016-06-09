@@ -15,7 +15,7 @@ vis_plot_the_gap(gaps_info, type = "gap_interval", binwidth = NULL,
 
 \item{binwidth}{Bin width as stated in geom_histogram, default to NULL to
 use the geom_histrogram default. Change it if more or less resolution is
-needed}
+needed. Only works for \code{type = 'gap_interval'}.}
 }
 \value{
 a ggplot object with the basic histogram, no themes added.

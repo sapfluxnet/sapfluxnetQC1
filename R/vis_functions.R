@@ -94,7 +94,7 @@ vis_gaps_calendar <- function(data, parent_logger = 'test') {
 #'
 #' @param binwidth Bin width as stated in geom_histogram, default to NULL to
 #'   use the geom_histrogram default. Change it if more or less resolution is
-#'   needed
+#'   needed. Only works for \code{type = 'gap_interval'}.
 #'
 #' @return a ggplot object with the basic histogram, no themes added.
 #'
@@ -125,9 +125,11 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
 
     # 1.1 gap_coverage special effects
     if (type == 'gap_coverage') {
-      res_plot <- ggplot(gaps_info, aes_string(x = type)) +
+      res_plot <- gaps_info %>%
+        dplyr::mutate(gap_coverage = gap_coverage * 100) %>%
+        ggplot(aes_string(x = type)) +
         geom_histogram(binwidth = 5) +
-        scale_x_continuous(limits = c(-5, 105)) +
+        scale_x_continuous(limits = c(NA, 105)) +
         labs(x = 'Gap coverage (%)', y = 'Count')
     } else {
 
