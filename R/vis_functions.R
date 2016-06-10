@@ -159,8 +159,10 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
 }
 
 ################################################################################
-#' Visualizations for data units
+#' TIMESTAMP with gaps visualization
 #'
-#' Time series visualizations to detect incongruencies in data
+#' Concordance lines plot with gaps
 #'
+#' @family Visualization Functions
 #'
+#' @param

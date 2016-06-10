@@ -27,6 +27,13 @@ A data frame with info about gaps:
 \description{
 Information about gaps
 }
+\details{
+Gaps are considered from the last TIMESTAMP with data to the next TIMESTAMP
+with data. In this way, a gap of only one TIMESTAMP has a duration equal to
+the timestep of the TIMESTAMP. The only exception to this is if the gap
+includes the start or the end of the TIMESTAMP. In this case the gap start
+or end in the first or the last TIMESTAMP
+}
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},

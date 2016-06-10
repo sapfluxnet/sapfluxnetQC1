@@ -9,6 +9,12 @@
 #'
 #' Information about gaps
 #'
+#' Gaps are considered from the last TIMESTAMP with data to the next TIMESTAMP
+#' with data. In this way, a gap of only one TIMESTAMP has a duration equal to
+#' the timestep of the TIMESTAMP. The only exception to this is if the gap
+#' includes the start or the end of the TIMESTAMP. In this case the gap start
+#' or end in the first or the last TIMESTAMP
+#'
 #' @family Quality Checks Functions
 #'
 #' @param data Data frame containing the data in which obtain info about gaps.
