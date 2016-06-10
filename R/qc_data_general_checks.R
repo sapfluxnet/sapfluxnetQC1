@@ -535,7 +535,7 @@ qc_time_interval <- function(data, parent_logger = 'test') {
 # Function declaration
 qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
                                      sapf_intervals = NULL, env_intervals = NULL,
-                                     plot = TRUE, parent_logger = 'test') {
+                                     plot = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({

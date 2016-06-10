@@ -5,7 +5,7 @@
 \title{Check concordance between sapflow TIMESTAMP and env TIMESTAMP}
 \usage{
 qc_timestamp_concordance(sapf_data = NULL, env_data = NULL,
-  sapf_intervals = NULL, env_intervals = NULL, plot = TRUE,
+  sapf_intervals = NULL, env_intervals = NULL, plot = FALSE,
   parent_logger = "test")
 }
 \arguments{
