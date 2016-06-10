@@ -149,13 +149,13 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
   # handlers
   warning = function(w){logging::logwarn(w$message,
                                          logger = paste(parent_logger,
-                                                        'qc_plot_the_gap', sep = '.'))},
+                                                        'vis_plot_the_gap', sep = '.'))},
   error = function(e){logging::logerror(e$message,
                                         logger = paste(parent_logger,
-                                                       'qc_plot_the_gap', sep = '.'))},
+                                                       'vis_plot_the_gap', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
-                                                        'qc_plot_the_gap', sep = '.'))})
+                                                        'vis_plot_the_gap', sep = '.'))})
 }
 
 ################################################################################
@@ -165,4 +165,90 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
 #'
 #' @family Visualization Functions
 #'
-#' @param
+#' @param gaps_info Data frame with the gap info as obtained in
+#'   \code{\link{qc_mind_the_gap}}
+#'
+#' @return A ggplot object with the basic lines plot, no themes added.
+#'
+#' @export
+
+# START
+# Function declaration
+vis_gap_lines <- function(gaps_info, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (!is.data.frame(gaps_info)) {
+      stop('gaps_info object is not a data frame')
+    }
+    # has gaps_info the necessary variables
+    if (any(is.null(gaps_info$Id), is.null(gaps_info$gap_start),
+            is.null(gaps_info$gap_end), is.null(gaps_info$timestamp_start),
+            is.null(gaps_info$timestamp_end))) {
+      stop('gaps_info lacks one or more mandatory variables')
+    }
+
+    # STEP 1
+    # Creating the necessary data frame to use geom_segment
+    # First data is filtered by Id (object) and after that in a for loop
+    # the plot data is generated for each object. Finally all object data is
+    # row binded
+
+    # 1.1 Initiate res vectors
+    x_start <- vector()
+    x_end <- vector()
+    y_start <- vector()
+    y_end <- vector()
+
+    # 1.2 Get the object names
+    object_names <- unique(gaps_info$Id)
+
+    # 1.3 For loop
+    for (obj in object_names) {
+      # data by object
+      tmp_data <- gaps_info %>%
+        dplyr::filter(Id == obj)
+      # update the vectors
+      x_start <- c(x_start, tmp_data$timestamp_start[[1]], tmp_data$gap_end)
+      x_end <- c(x_end, tmp_data$gap_start, tmp_data$timestamp_end[[1]])
+      y_start <- c(y_start, as.character(tmp_data$Id), as.character(tmp_data$Id[[1]]))
+      y_end <- c(y_end, as.character(tmp_data$Id), as.character(tmp_data$Id[[1]]))
+    }
+
+    # STEP 2
+    # Build the plot data
+    plot_data <- data.frame(
+      x_start = as.POSIXct(x_start, origin = lubridate::origin),
+      x_end = as.POSIXct(x_end, origin = lubridate::origin),
+      y_start = y_start,
+      y_end = y_end
+    )
+
+    # STEP 3
+    # Build the plot
+    res_plot <- ggplot(plot_data, aes(x = x_start, y = y_start)) +
+      geom_segment(aes(xend = x_end, yend = y_end)) +
+      scale_x_datetime(date_breaks = '1 month') +
+      labs(x = 'TIMESTAMP', y = 'Object')
+
+    # 3.1 And return it, by the power of return!!
+    return(res_plot)
+
+    # END FUNCTION
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'vis_gap_lines', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'vis_gap_lines', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'vis_gap_lines', sep = '.'))})
+}
