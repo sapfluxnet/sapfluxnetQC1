@@ -461,7 +461,7 @@ qc_time_interval <- function(data, parent_logger = 'test') {
     # For loop to iterate each object and obtain the t0 and the tf
     for (var in names(data)[-1]) {
 
-      # 2.0 create a standara eval object to allow quoted vars in the filter
+      # 2.0 create a standard eval object to allow quoted vars in the filter
       #     step
       dots <- paste('!is.na(', var, ')', sep = '')
 

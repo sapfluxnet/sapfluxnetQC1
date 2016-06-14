@@ -98,7 +98,7 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
     # STEP 3
     # Build the results data frame
     res_df <- data.frame(
-      Id = id,
+      Object = id,
       gap_start = as.POSIXct(start, origin = lubridate::origin),
       gap_end = as.POSIXct(end, origin = lubridate::origin)
     )
