@@ -4,11 +4,14 @@
 \alias{qc_fix_timestamp}
 \title{Fix TIMESTAMP formats}
 \usage{
-qc_fix_timestamp(data, parent_logger = "test")
+qc_fix_timestamp(data, env_md, parent_logger = "test")
 }
 \arguments{
-\item{data}{Data frame contining the TIMESTAMP variable. Also it can be a
+\item{data}{Data frame containing the TIMESTAMP variable. Also it can be a
 vector with the TIMESTAMPS values.}
+
+\item{env_md}{Data frame containing the env_time_zone variable to retrieve
+the timezone name}
 }
 \value{
 An object of the same type of input (data frame or vector) with the

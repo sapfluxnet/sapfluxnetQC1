@@ -2,13 +2,16 @@
 % Please edit documentation in R/qc_data_general_checks.R
 \name{qc_as_timestamp}
 \alias{qc_as_timestamp}
-\title{Convert known bad formats to correct TIMESTAMP format}
+\title{Convert known bad formats to correct TIMESTAMP format and set timezone}
 \usage{
-qc_as_timestamp(data, parent_logger = "test")
+qc_as_timestamp(data, env_md, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing TIMESTAMP variable. Also it can be a vector
 with TIMESTAMP values}
+
+\item{env_md}{Data frame containing the environmental metadata, in order
+to obtain the timezone information}
 }
 \value{
 An object of the same type of input (data frame or vector) with the
@@ -17,13 +20,22 @@ An object of the same type of input (data frame or vector) with the
   If TIMESTAMP can not be fixed, an error is raised.
 }
 \description{
-Converting known bad TIMESTAMP formats to POSIXt
+Converting known bad TIMESTAMP formats to POSIXt and setting the correct
+timezone
 }
 \details{
 When loading data from csv files, depending on the office version and
 workflow to introduce TIMESTAMP and data, TIMESTAMP can result in the wrong
 format (lost of seconds, for example). This function checks for known
 formatting errors and try to fix them.
+}
+\section{Timezone}{
+
+This function also set the timezone attribute to the POSIXt TIMESTAMP.
+It uses \code{\link{qc_get_timezone}} and \code{\link{qc_set_timezone}}
+functions internally to get the timezone from the \code{env_time_zone}
+variable, transforming it to a compatible timezone name and set it as a
+POSIXt attribute.
 }
 \seealso{
 Other Data Loading Functions: \code{\link{dl_data}},

@@ -3,10 +3,10 @@ library(sapfluxnetr)
 context('H1. TIMESTAMP format')
 
 good_data <- data.frame(TIMESTAMP = as.POSIXct(c(
-  "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
-  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
-  "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
-  )),
+  "2003-06-03 00:00:00", "2003-06-03 00:14:59", "2003-06-03 00:30:00",
+  "2003-06-03 00:45:00", "2003-06-03 00:59:59", "2003-06-03 01:15:00",
+  "2003-06-03 01:30:00", "2003-06-03 01:44:59", "2003-06-03 02:00:00"
+  ), tz = 'Etc/GMT+1'),
   Other_var = 1:9,
   stringsAsFactors = FALSE)
 
@@ -19,10 +19,10 @@ bad_data <- data.frame(TIMESTAMP = c(
   stringsAsFactors = FALSE)
 
 bad_timestamp <- as.POSIXct(c(
-  "2003-06-03 00:00:00 CEST", "2003-06-03 00:14:00 CEST", "2003-06-03 00:30:00 CEST",
-  "2003-06-03 00:45:00 CEST", "2003-06-03 00:59:00 CEST", "2003-06-03 01:15:00 CEST",
-  "2003-06-03 01:30:00 CEST", "2003-06-03 01:44:00 CEST", "2003-06-03 02:00:00 CEST"
-), tz = 'UTC')
+  "2003-06-03 00:00:00", "2003-06-03 00:14:00", "2003-06-03 00:30:00",
+  "2003-06-03 00:45:00", "2003-06-03 00:59:00", "2003-06-03 01:15:00",
+  "2003-06-03 01:30:00", "2003-06-03 01:44:00", "2003-06-03 02:00:00"
+), tz = 'Etc/GMT+1')
 
 bad_data_1 <- data.frame(TIMESTAMP = c(
   "Miercoles, 23 de Mayo, 2015. 10:00", "Miercoles, 23 de Mayo, 2015. 10:15",
@@ -35,10 +35,10 @@ bad_data_1 <- data.frame(TIMESTAMP = c(
   stringsAsFactors = FALSE)
 
 bad_1_timestamp <- as.POSIXct(c(
-  "2015-05-23 10:00:00 CEST", "2015-05-23 10:15:00 CEST", "2015-05-23 10:30:00 CEST",
-  "2015-05-23 10:45:00 CEST", "2015-05-23 11:00:00 CEST", "2015-05-23 11:15:00 CEST",
-  "2015-05-23 11:30:00 CEST", "2015-05-23 11:45:00 CEST", "2015-05-23 12:00:00 CEST"
-), tz = 'UTC')
+  "2015-05-23 10:00:00", "2015-05-23 10:15:00", "2015-05-23 10:30:00",
+  "2015-05-23 10:45:00", "2015-05-23 11:00:00", "2015-05-23 11:15:00",
+  "2015-05-23 11:30:00", "2015-05-23 11:45:00", "2015-05-23 12:00:00"
+), tz = 'Etc/GMT+1')
 
 bad_data_2 <- data.frame(STAMP = as.POSIXct(c(
   "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
@@ -47,9 +47,9 @@ bad_data_2 <- data.frame(STAMP = as.POSIXct(c(
 )), stringsAsFactors = FALSE)
 
 foo_vector <- as.POSIXct(c(
-  "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
-  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
-  "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
+  "2003-06-03 00:00:00", "2003-06-03 00:14:59", "2003-06-03 00:30:00",
+  "2003-06-03 00:45:00", "2003-06-03 00:59:59", "2003-06-03 01:15:00",
+  "2003-06-03 01:30:00", "2003-06-03 01:44:59", "2003-06-03 02:00:00"
   ))
 
 test_that('Arguments raise the correct errors', {
@@ -76,16 +76,20 @@ test_that('Invisible logicals works', {
 ################################################################################
 context('H2. TIMESTAMP conversion')
 
-suppressMessages(as_good <- qc_as_timestamp(good_data))
-suppressMessages(as_bad <- qc_as_timestamp(bad_data))
-suppressMessages(as_bad_1 <- qc_as_timestamp(bad_data_1))
-suppressMessages(as_vec_good <- qc_as_timestamp(foo_vector))
+foo_md <- data.frame(
+  env_time_zone = "17UTC+01:00, A"
+)
+
+suppressMessages(as_good <- qc_as_timestamp(good_data, foo_md))
+suppressMessages(as_bad <- qc_as_timestamp(bad_data, foo_md))
+suppressMessages(as_bad_1 <- qc_as_timestamp(bad_data_1, foo_md))
+suppressMessages(as_vec_good <- qc_as_timestamp(foo_vector, foo_md))
 
 test_that('Results only change the TIMESTAMP, not other variables', {
   expect_identical(as_good, good_data)
   expect_identical(as_bad$Other_var, bad_data$Other_var)
   expect_identical(as_bad_1$Other_var, bad_data_1$Other_var)
-  expect_identical(as_vec_good, foo_vector)
+  expect_identical(attr(as_vec_good, 'tz'), 'Etc/GMT+1')
 })
 
 test_that('TIMESTAMP produced is correct', {
@@ -233,11 +237,13 @@ ws = rep(NA, 9),
 hrs = c(1:3, NA, NA, 6:9),
 stringsAsFactors = FALSE)
 
-intervals_plot <- qc_timestamp_concordance(intervals_data, intervals_env_data)
+intervals_plot <- qc_timestamp_concordance(intervals_data, intervals_env_data,
+                                           plot = TRUE)
 
 intervals_plot_2 <- qc_timestamp_concordance(
   sapf_intervals = qc_time_interval(intervals_data),
-  env_intervals = qc_time_interval(intervals_env_data)
+  env_intervals = qc_time_interval(intervals_env_data),
+  plot = TRUE
 )
 
 test_that('Plots are plots', {

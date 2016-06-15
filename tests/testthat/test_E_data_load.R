@@ -32,10 +32,10 @@ sapflow_data_long <- dl_data(xlsx_name, 'sapflow_hd', long = TRUE)
 env_data <- dl_data(xlsx_name, 'environmental_hd', long = FALSE)
 env_data_long <- dl_data(xlsx_name, 'environmental_hd', long = TRUE)
 
-sapf_csv_data <- dl_data(csv_name, 'sapflow_hd', long = FALSE)
-sapf_csv_data_long <- dl_data(csv_name, 'sapflow_hd', long = TRUE)
-env_csv_data <- dl_data(csv_name_2, 'environmental_hd', long = FALSE)
-env_csv_data_long <- dl_data(csv_name_2, 'environmental_hd', long = TRUE)
+sapf_csv_data <- dl_data(csv_name, 'sapflow_hd', long = FALSE, n = 50000)
+sapf_csv_data_long <- dl_data(csv_name, 'sapflow_hd', long = TRUE, n = 50000)
+env_csv_data <- dl_data(csv_name_2, 'environmental_hd', long = FALSE, n = 50000)
+env_csv_data_long <- dl_data(csv_name_2, 'environmental_hd', long = TRUE, n = 50000)
 
 test_that('function returns data frames', {
   expect_is(sapflow_data, 'data.frame')

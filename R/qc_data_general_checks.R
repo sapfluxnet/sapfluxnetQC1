@@ -79,19 +79,196 @@ qc_is_timestamp <- function(data, verbose = TRUE,
 }
 
 ################################################################################
-#' Convert known bad formats to correct TIMESTAMP format
+#' Timezones dictionary
 #'
-#' Converting known bad TIMESTAMP formats to POSIXt
+#' Tranforms timezone ISO code to character vector compatible with lubridate and
+#' POSIXct
+#'
+#' @family Quality Checks Functions
+#'
+#' @param tz Character vector with the ISO code of the timezone as provided in
+#'   \code{env_time_zone} variable in \code{environmental_md}
+#'
+#' @return A character vector with the timezone code compatible with lubridate
+#'   and as.POSIXct
+#'
+#' @export
+
+# START
+# Function declaration
+qc_get_timezone <- function(tz, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Create the list with the codes
+    timezones <- list(
+      "1UTC−12:00, Y" = "Etc/GMT-12",
+      "2UTC−11:00, X" = "Etc/GMT-11",
+      "3UTC−10:00, W" = "Etc/GMT-10",
+      "4UTC−09:30, V†" = "Pacific/Marquesas",
+      "5UTC−09:00, V" = "Etc/GMT-9",
+      "6UTC−08:00, U" = "Etc/GMT-8",
+      "7UTC−07:00, T" = "Etc/GMT-12",
+      "8UTC−06:00, S" = "Etc/GMT-6",
+      "9UTC−05:00, R" = "Etc/GMT-5",
+      "11UTC−04:00, Q" = "Etc/GMT-4",
+      "12UTC−03:30, P†" = "Canada/Newfoundland",
+      "13UTC−03:00, P" = "Etc/GMT-3",
+      "14UTC−02:00, O" = "Etc/GMT-2",
+      "15UTC−01:00, N" = "Etc/GMT-1",
+      "16UTC±00:00, Z" = "Etc/GMT+0",
+      "17UTC+01:00, A" = "Etc/GMT+1",
+      "18UTC+02:00, B" = "Etc/GMT+2",
+      "19UTC+03:00, C" = "Etc/GMT+3",
+      "20UTC+03:30, C†" = "Asia/Tehran",
+      "21UTC+04:00, D" = "Etc/GMT+4",
+      "22UTC+04:30, D†" = "Asia/Kabul",
+      "23UTC+05:00, E" = "Etc/GMT+5",
+      "24UTC+05:30, E†" = "Asia/Kolkata",
+      "25UTC+05:45, E*" = "Asia/Katmandu",
+      "26UTC+06:00, F" = "Etc/GMT+6",
+      "27UTC+06:30, F†" = "Indian/Cocos",
+      "28UTC+07:00, G" = "Etc/GMT+7",
+      "29UTC+08:00, H" = "Etc/GMT+8",
+      "30UTC+08:30, H†" = "Asia/Pyongyang",
+      "31UTC+08:45, H*" = "Australia/Eucla",
+      "32UTC+09:00, I" = "Etc/GMT+9",
+      "33UTC+09:30, I†" = "Australia/Adelaide",
+      "34UTC+10:00, K" = "Etc/GMT+10",
+      "35UTC+10:30, K†" = "Australia/Lord_Howe",
+      "36UTC+11:00, L" = "Etc/GMT+11",
+      "37UTC+12:00, M" = "Etc/GMT+12",
+      "38UTC+12:45, M*" = "Pacific/Chatham",
+      "39UTC+13:00, M†" = "Pacific/Samoa",
+      "40UTC+14:00, M†" = "Pacific/Kiritimati"
+    )
+
+    # STEP 2
+    # Return the timezone name compatible with lubridate
+    return(timezones[[as.character(tz)]])
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_get_timezone', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_get_timezone', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_get_timezone', sep = '.'))})
+}
+
+################################################################################
+#' Set the timezone of the TIMESTAMP
+#'
+#' Brute force convert of timezone
+#'
+#' When reading data from xlsx or csv, TIMESTAMP is readed as POSIXct and by
+#' default the timezone is UTC. With this function timezone can be changed
+#' without change the TIMESTAMP. This is made with the \code{force_tz} function
+#' of the lubridate package.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame with the TIMESTAMP variable to set, or a POSIXct
+#'   vector.
+#'
+#' @param tz Character vector with the compatible name of the timezone, as the
+#'   one provided by the \code{\link{qc_get_timezone}} function.
+#'
+#' @return A data frame as the \code{data} provided, with the TIMESTAMP variable
+#'   associated to the timezone specified
+#'
+#' @export
+
+# START
+# Function declaration
+qc_set_timezone <- function(data, tz, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # is data a data frame?
+    if (!is.data.frame(data) & !is.vector(data) & class(data)[1] != 'POSIXct') {
+      stop('data is not a data frame or a POSIX vector')
+    }
+
+    # STEP 1
+    # Data frame
+    if (is.data.frame(data)) {
+
+      # 1.1 has data a TIMESTAMP variable
+      if (is.null(data$TIMESTAMP)) {
+        stop('data has not a TIMESTAMP variable')
+      }
+
+      # 1.2 Force the timezone
+      data$TIMESTAMP <- lubridate::force_tz(data$TIMESTAMP, tz)
+
+      # 1.3 Return the data
+      return(data)
+
+    } else {
+      # STEP 2
+      # Vector
+
+      # 2.1 force the timezone
+      data <- lubridate::force_tz(data, tz)
+
+      # 2.2 return the results
+      return(data)
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_set_timezone', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_set_timezone', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_set_timezone', sep = '.'))})
+
+
+}
+
+################################################################################
+#' Convert known bad formats to correct TIMESTAMP format and set timezone
+#'
+#' Converting known bad TIMESTAMP formats to POSIXt and setting the correct
+#' timezone
 #'
 #' When loading data from csv files, depending on the office version and
 #' workflow to introduce TIMESTAMP and data, TIMESTAMP can result in the wrong
 #' format (lost of seconds, for example). This function checks for known
 #' formatting errors and try to fix them.
 #'
+#' @section Timezone:
+#' This function also set the timezone attribute to the POSIXt TIMESTAMP.
+#' It uses \code{\link{qc_get_timezone}} and \code{\link{qc_set_timezone}}
+#' functions internally to get the timezone from the \code{env_time_zone}
+#' variable, transforming it to a compatible timezone name and set it as a
+#' POSIXt attribute.
+#'
 #' @family Data Loading Functions
 #'
 #' @param data Data frame containing TIMESTAMP variable. Also it can be a vector
 #'   with TIMESTAMP values
+#'
+#' @param env_md Data frame containing the environmental metadata, in order
+#'   to obtain the timezone information
 #'
 #' @return An object of the same type of input (data frame or vector) with the
 #'   fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
@@ -102,7 +279,7 @@ qc_is_timestamp <- function(data, verbose = TRUE,
 
 # START
 # Function declaration
-qc_as_timestamp <- function(data, parent_logger = 'test') {
+qc_as_timestamp <- function(data, env_md, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
@@ -122,11 +299,19 @@ qc_as_timestamp <- function(data, parent_logger = 'test') {
         stop('Data have no TIMESTAMP variable')
       }
       timestamp <- data$TIMESTAMP
+      timezone <- qc_get_timezone(env_md$env_time_zone,
+                                  parent_logger = parent_logger)
 
       # 1.1 if already in format, inform and return the data unaltered
-      if (qc_is_timestamp(timestamp, verbose = FALSE)) {
-        message('TIMESTAMP is already in format')
-        return(data)
+      if (qc_is_timestamp(data, verbose = FALSE,
+                          parent_logger = parent_logger)) {
+
+        # 1.1.1 Set the timezone
+        res <- qc_set_timezone(data, timezone, parent_logger = parent_logger)
+
+        message(paste('TIMESTAMP already in format. Timezone set to ',
+                      timezone, sep = ''))
+        return(res)
       } else {
 
         # 1.2 If not in format, try to fix it using the known bad formats
@@ -136,13 +321,15 @@ qc_as_timestamp <- function(data, parent_logger = 'test') {
             "%d%m%y %H:%M", "%y%m%d %H:%M",
             # csv with seconds, but / present, in european and usa formats
             "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
-          )
+          ),
+          tz = timezone
         )
       }
 
       # 1.3 Check if the fix worked. If yes, message and return data
       # with the new TIMESTAMP
-      if (qc_is_timestamp(res, verbose = FALSE)) {
+      if (qc_is_timestamp(res, verbose = FALSE,
+                          parent_logger = parent_logger)) {
         message('TIMESTAMP succesfully fixed. A sample: ', res[1])
         data$TIMESTAMP <- res
         return(data)
@@ -155,25 +342,34 @@ qc_as_timestamp <- function(data, parent_logger = 'test') {
       # STEP 2
       # Vector
       # 2.1 If already in format, inform and return the data unaltered
+      timezone <- qc_get_timezone(env_md$env_time_zone,
+                                  parent_logger = parent_logger)
+
       if (qc_is_timestamp(data, verbose = FALSE)) {
-        message('TIMESTAMP is already in format')
-        return(data)
+
+        # 2.2 set the timezone
+        res <- qc_set_timezone(data, timezone, parent_logger = parent_logger)
+
+        message(paste('TIMESTAMP already in format. Timezone set to ',
+                      timezone, sep = ''))
+        return(res)
       } else {
 
-        # 1.2 If not in format, try to fix it using the known bad formats
+        # 2.3 If not in format, try to fix it using the known bad formats
         res <- lubridate::parse_date_time(
           data,
           c(# csv without seconds, in european and usa formats
             "%d%m%y %H:%M", "%y%m%d %H:%M",
             # csv with seconds, but / present, in european and usa formats
             "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
-          )
+          ),
+          tz = timezone
         )
       }
 
       # 1.3 Check if the fix worked. If yes, message and return data
       # with the new TIMESTAMP
-      if (qc_is_timestamp(res, verbose = FALSE)) {
+      if (qc_is_timestamp(res, verbose = FALSE, parent_logger = parent_logger)) {
         message('TIMESTAMP succesfully fixed. A sample: ', res[1])
         return(res)
       } else {
@@ -207,8 +403,11 @@ qc_as_timestamp <- function(data, parent_logger = 'test') {
 #'
 #' @family Quality Checks Functions
 #'
-#' @param data Data frame contining the TIMESTAMP variable. Also it can be a
+#' @param data Data frame containing the TIMESTAMP variable. Also it can be a
 #'   vector with the TIMESTAMPS values.
+#'
+#' @param env_md Data frame containing the env_time_zone variable to retrieve
+#'   the timezone name
 #'
 #' @return An object of the same type of input (data frame or vector) with the
 #'   fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
@@ -219,7 +418,7 @@ qc_as_timestamp <- function(data, parent_logger = 'test') {
 
 # START
 # Function declaration
-qc_fix_timestamp <- function(data, parent_logger = 'test') {
+qc_fix_timestamp <- function(data, env_md, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -234,7 +433,7 @@ qc_fix_timestamp <- function(data, parent_logger = 'test') {
 
       # STEP 2
       # If not correct, fix it
-      res <- qc_as_timestamp(data)
+      res <- qc_as_timestamp(data, env_md)
 
       # 2.1 and return it
       return(res)
