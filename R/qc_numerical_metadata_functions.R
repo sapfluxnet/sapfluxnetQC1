@@ -94,3 +94,77 @@ qc_suitable_range <- function(data, variables, ranges,
                                          logger = paste(parent_logger, 'qc_suitable_range', sep = '.'))})
 
 }
+
+################################################################################
+#' Suitable Range for sapflow values
+#'
+#' Suitability check for sapflow values.
+#'
+#' Ranges for sapflow measures at sapwood level are obtained from literature,
+#' being the most extreme values -10 and 533 cm3cm-2h-1 (Manzoni et al 2013 and
+#' other sources). This range is only informative, but values outside of the
+#' range may indicate some error in the data.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame with the values of sapflow measures for each plant
+#'   (variable).
+#'
+#' @return A data frame with summarising the values outside of the suitable
+#'   range.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_sapf_range_check <- function(data, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # is data a data frame?
+    if(!is.data.frame(data)) {
+      stop('data provided is not a data frame')
+    }
+
+    # STEP 1
+    # Initialising res objects
+    names <- names(data[,-1])
+    plant <- vector()
+    value <- vector()
+
+    # STEP 2
+    # For loop to iterate between plants
+    for (name in names) {
+      value <- c(value, data[data[, name] < -10 | data[, name] > 533, name])
+      plant <- c(plant, rep(name,
+                            length(data[data[, name] < -10 | data[, name] > 533, name])))
+    }
+
+    # STEP 3
+    # Build the results data frame
+    res <- data.frame(
+      Plant = plant,
+      Value = value,
+      Max = 533,
+      Min = -10
+    )
+
+    # 3.1 Return the results
+    return(res)
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_sapf_range_check', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_sapf_range_check', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_sapf_range_check', sep = '.'))})
+}
