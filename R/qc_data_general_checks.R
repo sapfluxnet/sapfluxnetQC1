@@ -806,3 +806,78 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
                                                         'qc_timestamp_concordance',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Solar time conversion
+#'
+#' Calculate the Mean Solar Time and Apparent (Real) Solar Time from the
+#' TIMESTAMP
+#'
+#' In order to obtain the mean solar time and the equation of time for each day
+#' included in the TIMESTAMP functions from \code{solaR} package.
+#'
+#' @section Apparent (Real) Solar Time:
+#' The Apparent Solar Time is calculated as:
+#' \deqn{Apparent Solar Time = Mean Solar Time - Equation of Time}
+#' The Equation of Time is calculated for each day, whereas the Mean Solar Time
+#' is calculated for each step of the TIMESTAMP.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the TIMESTAMP variable to convert to solar
+#'   time
+#' @param site_md Data frame containing the latitude and longitude variables of
+#'   the site (\code{si_lat} and \code{si_long})
+#'
+#' @param env_md Data frame containing the tz variable (\code{env_time_zone})
+#'
+#' @param type Character indicating which kind of solar time is desired,
+#'   \code{mean} or \code{apparent}.
+#'
+#' @return A data frame exactly as \code{data}, but with the TIMESTAMP converted
+#'   to the indicated solar time.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_solar_timestamp <- function(data, site_md, env_md, type = 'apparent',
+                               parent_logger = 'test') {
+
+  # STEP 0
+  # Argument checks
+  # Are data, site_md and env_md data frames?
+  if(any(!is.data.frame(data), !is.data.frame(site_md), !is.data.frame(env_md))) {
+    stop('data, site_md and/or env_md are not data frames')
+  }
+  # have data the timestamp variable?
+  if(is.null(data$TIMESTAMP)) {
+    stop('data has not a TIMESTAMP variable')
+  }
+  # have metadata objects the mandatory variables?
+  if(any(is.null(site_md$si_lat), is.null(site_md$si_long),
+         is.null(env_md$env_time_zone))) {
+    stop('metadata objects have not the needed variables. See function help')
+  }
+
+  # STEP 1
+  # Retrieve the accessory info
+  tz <- qc_get_timezone(env_md$env_time_zone)
+  lat <- site_md$si_lat
+  long <- site_md$si_long
+  timestamp <- data$TIMESTAMP
+
+  # STEP 2
+  # Intermediate objects
+
+  # 2.1 Equation of time
+  solD <- solaR::fSolD(lat, timestamp)
+  EoT <- solaR::r2sec(solD$EoT)
+  # 2.2 Mean Solar Time
+  mst <- solaR::local2Solar(timestamp, long)
+
+  # STEP 3
+  # Calculating Apparent Solar Time
+
+
+}
