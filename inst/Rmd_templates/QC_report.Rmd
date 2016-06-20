@@ -1,0 +1,672 @@
+---
+title: "Quality Check for `r params$code`"
+author: "SAPFLUXNET Project"
+date: "`r Sys.time()`"
+params:
+  wd: ../
+  md_file: ''
+  sapf_data_file: ''
+  env_data_file: ''
+  code: ''
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
+---
+
+
+```{r, include=FALSE}
+# root folder
+knitr::opts_knit$set(root.dir = params$wd)
+knitr::opts_chunk$set(error = TRUE, echo = FALSE)
+```
+
+***
+
+SITE: `r params$code`
+
+***
+
+# Metadata QC
+
+## Quick Summary
+
+```{r qc, echo=FALSE, message=FALSE, warning=FALSE}
+################################################################################
+# libraries
+library(sapfluxnetr)
+library(dplyr)
+library(DT)
+# library(dygraphs)
+# library(xts)
+################################################################################
+# data load
+log_sapfluxnet_setup('Logs/sapfluxnet.log', 'data_load')
+
+## site_md
+site_md <- dl_metadata(params$md_file, 'site_md', parent_logger = 'data_load')
+
+## stand_md
+stand_md <- dl_metadata(params$md_file, 'stand_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## species_md
+species_md <- dl_metadata(params$md_file, 'species_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## plant_md
+plant_md <- dl_metadata(params$md_file, 'plant_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## env_md
+env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md, parent_logger = 'data_load')
+
+## sapf_data
+sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, parent_logger = 'data_load')
+
+## env_data
+env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, parent_logger = 'data_load')
+
+################################################################################
+# md qc
+log_sapfluxnet_setup('Logs/sapfluxnet.log', 'md_qc')
+
+## metadata columns
+md_cols <- bind_rows(
+  qc_md_cols(site_md, 'site_md', parent_logger = 'md_qc'),
+  qc_md_cols(stand_md, 'stand_md', parent_logger = 'md_qc'),
+  qc_md_cols(species_md, 'species_md', parent_logger = 'md_qc'),
+  qc_md_cols(plant_md, 'plant_md', parent_logger = 'md_qc'),
+  qc_md_cols(env_md, 'environmental_md', parent_logger = 'md_qc')
+)
+
+## factor variables values 
+factor_values <- qc_factor_values(site_md, stand_md, species_md, plant_md, env_md,
+                                  parent_logger = 'md_qc')
+
+## email
+email_check <- qc_email_check(site_md, parent_logger = 'md_qc')
+
+## coordinates
+# site_md_coordfix <-
+#   site_md %T>%
+#   qc_download_maps(parent_logger = 'md_qc') %>%
+#   as.data.frame() %>%
+#   qc_check_coordinates(parent_logger = 'md_qc') %>%
+#   qc_fix_latlong_errors(special_countries = TRUE, parent_logger = 'md_qc')
+
+site_md_coordfix <- qc_coordinates(site_md, parent_logger = 'md_qc')
+
+## species
+species_md_spnames <- qc_species_names_info(species_md$sp_name,
+                                            parent_logger = 'md_qc') %>%
+  mutate(Md = 'sp')
+plant_md_spnames <- qc_species_names_info(plant_md$pl_species,
+                                            parent_logger = 'md_qc') %>%
+  mutate(Md = 'pl')
+
+
+species_md$sp_name <- qc_species_names(species_md$sp_name, parent_logger = 'md_qc')
+plant_md$pl_species <- qc_species_names(plant_md$pl_species, parent_logger = 'md_qc')
+sp_verification <- qc_species_verification(species_md, plant_md, parent_logger = 'md_qc')
+
+## plant treatment check
+pl_treatments_check <- qc_pl_treatments(plant_md, parent_logger = 'md_qc')
+
+## environmental vars presence
+env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = 'md_qc')
+
+################################################################################
+# table
+qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
+                    species_md, plant_md, species_md_spnames, plant_md_spnames,
+                    sp_verification, env_var_presence, 'md_qc')
+################################################################################
+
+################################################################################
+# data qc
+log_sapfluxnet_setup('Logs/sapfluxnet.log', 'data_qc')
+
+## timestamp
+### sapf
+sapf_data_fixed <- qc_fix_timestamp(sapf_data, env_md,  'data_qc')
+### env
+env_data_fixed <- qc_fix_timestamp(env_data, env_md, 'data_qc')
+
+## timestamp errors
+### sapf
+timestamp_errors_sapf <- qc_timestamp_errors(
+  sapf_data_fixed,
+  timestep = qc_get_timestep(plant_md, parent_logger = 'data_qc'),
+  parent_logger = 'data_qc'
+)
+### env
+timestamp_errors_env <- qc_timestamp_errors(
+  env_data_fixed,
+  timestep = qc_get_timestep(env_md, parent_logger = 'data_qc'),
+  parent_logger = 'data_qc'
+)
+
+## Timestamp concordance
+timestamp_concordance <- qc_timestamp_concordance(sapf_data_fixed, env_data_fixed,
+                                                       plot = FALSE, parent_logger = 'data_qc')
+timestamp_concordance_plot <- qc_timestamp_concordance(sapf_data_fixed, env_data_fixed,
+                                                       plot = TRUE, parent_logger = 'data_qc')
+
+### concordance and gaps info
+gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed, parent_logger = 'data_qc')
+
+## Gaps
+### No trimmed
+sapf_gaps_info <- qc_mind_the_gap(sapf_data_fixed, parent_logger = 'data_qc')
+env_gaps_info <- qc_mind_the_gap(env_data_fixed, parent_logger = 'data_qc')
+### Trimmed
+sapf_gaps_trim_info <- qc_mind_the_gap(sapf_data_fixed, trim = TRUE, parent_logger = 'data_qc')
+env_gaps_trim_info <- qc_mind_the_gap(env_data_fixed, trim = TRUE, parent_logger = 'data_qc')
+
+### plots
+#### calendars
+sapf_gaps_cal <- vis_gaps_calendar(sapf_data_fixed, parent_logger = 'data_qc')
+env_gaps_cal <- vis_gaps_calendar(env_data_fixed, parent_logger = 'data_qc')
+#### plot the gaps coverage
+sapf_gaps_plot <- vis_plot_the_gap(sapf_gaps_info, type = "gap_coverage",
+                                   parent_logger = 'data_qc')
+env_gaps_plot <- vis_plot_the_gap(env_gaps_info, type = "gap_coverage",
+                                   parent_logger = 'data_qc')
+sapf_gaps_trim_plot <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_coverage",
+                                   parent_logger = 'data_qc')
+env_gaps_trim_plot <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_coverage",
+                                   parent_logger = 'data_qc')
+#### plot the gaps interval
+sapf_gaps_plot_int <- vis_plot_the_gap(sapf_gaps_info, type = "gap_interval",
+                                   parent_logger = 'data_qc')
+env_gaps_plot_int <- vis_plot_the_gap(env_gaps_info, type = "gap_interval",
+                                   parent_logger = 'data_qc')
+sapf_gaps_trim_plot_int <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_interval",
+                                   parent_logger = 'data_qc')
+env_gaps_trim_plot_int <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_interval",
+                                   parent_logger = 'data_qc')
+
+## Unit conversion
+sapw_md <- qc_sapw_area_calculator(qc_get_sapw_md(plant_md,
+                                                  parent_logger = 'data_qc'),
+                                   parent_logger = 'data_qc')
+
+### plant units
+sapf_data_fixed_plant <- qc_sapw_conversion(sapf_data_fixed, sapw_md,
+                                            output_units = 'plant',
+                                            parent_logger = 'data_qc')
+
+#### check if errors
+sapf_data_fixed_plant <- tryCatch(sapf_data_fixed_plant, error = function(e) return(NULL))
+
+### sapwood units
+sapf_data_fixed_sapwood <- qc_sapw_conversion(sapf_data_fixed, sapw_md,
+                                              output_units = 'sapwood',
+                                              parent_logger = 'data_qc')
+
+#### check if errors
+sapf_data_fixed_sapwood <- tryCatch(sapf_data_fixed_sapwood, error = function(e) return(NULL))
+
+### leaf units
+sapf_data_fixed_leaf <- qc_sapw_conversion(sapf_data_fixed, sapw_md,
+                                           output_units = 'leaf',
+                                           parent_logger = 'data_qc')
+
+#### check if errors
+sapf_data_fixed_leaf <- tryCatch(sapf_data_fixed_leaf, error = function(e) return(NULL))
+```
+
+
+> **NOTE: Metadata Quality Checks are under continous development. Checks made and
+  results presentation can change in the future to adapt to new insights in
+  data digesting processes**
+
+***
+
+## Metadata columns
+
+Information about metadata variables (presence, class and NA)
+
+```{r md_cols, echo=FALSE}
+md_cols %>%
+  mutate(PresenceOK = as.character(PresenceOK),
+         ClassOK = as.character(ClassOK),
+         IsNA = as.character(IsNA)) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 2. Metadata variables info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '100px',
+                                                  targets = c(1,2,3,4)),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('IsNA',
+              backgroundColor = styleEqual(c('TRUE', 'FALSE'),
+                                           c('#89c4f4', 'transparent'))) %>%
+  formatStyle('PresenceOK',
+              backgroundColor = styleEqual(c('TRUE', 'FALSE'),
+                                           c('transparent', '#d91e18'))) %>%
+  formatStyle('ClassOK',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#89c4f4', 'transparent')))
+```
+
+***
+
+## Metadata factor variables value
+
+Information about factor variables values
+
+```{r factor_values, echo=FALSE}
+factor_values %>%
+  mutate(Check_result = as.character(Check_result),
+         NA_presence = as.character(NA_presence),
+         foo_var = paste(Check_result, NA_presence, sep = '')) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 3. Metadata factor variables info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(targets = 4, visible = FALSE),
+                                             list(className = 'dt-center',
+                                                  width = '100px',
+                                                  targets = 1:3),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('NA_presence',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('transparent', '#89c4f4')))
+```
+
+***
+
+## Contributors email
+
+Information about email directions provided
+
+```{r email, echo=FALSE}
+email_check %>%
+  mutate(Is_correct = as.character(Is_correct),
+         email = stringr::str_replace_all(email, '([a-z]|[0-9])*', '\\*')) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 4. Email info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '100px',
+                                                  targets = 1),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('Is_correct',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
+```
+
+***
+
+## Coordinates check and fix
+
+Information about site coordinates provided
+
+```{r coordinates, echo=FALSE}
+site_md_coordfix %>%
+  select(si_name, si_lat, si_long, is_inside_country) %>%
+  mutate(is_inside_country = as.character(is_inside_country)) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 5. Coordinates info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  targets = 1:3,
+                                                  width = '100px'),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('is_inside_country',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
+```
+
+***
+
+## Species names
+
+Information about species names
+
+```{r species_metadata_names, echo=FALSE}
+species_md_spnames %>%
+  bind_rows(plant_md_spnames) %>%
+  mutate(Concordance = as.character(Concordance),
+         IsNA = as.character(IsNA)) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 6. Species names spelling',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  targets = 1:4),
+                                             list(className = 'dt-right',
+                                                  targets = 0),
+                                             list(width = '150px',
+                                                  targets = 1),
+                                             list(width = '100px',
+                                                  targets = 2:3),
+                                             list(width = '50px',
+                                                  targets = 4)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('Concordance',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
+```
+
+
+```{r species, echo=FALSE}
+sp_verification %>%
+  mutate(Concordance = as.character(Concordance)) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 7. Species names info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  targets = 1:3),
+                                             list(className = 'dt-right',
+                                                  targets = 0),
+                                             list(width = '50px',
+                                                  targets = 1:2),
+                                             list(width = '100px',
+                                                  targets = 3)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('Concordance',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
+```
+
+***
+
+## Plant treatments check
+
+Information about declared plant treatments
+
+```{r pl_treatments, echo=FALSE}
+datatable(pl_treatments_check, class = 'display', rownames = FALSE, 
+          caption = 'Table 8. Plant treatments info',
+          options = list(dom = 'tp',
+                         columnDefs = list(list(className = 'dt-center',
+                                                width = '100px',
+                                                targets = 1),
+                                           list(className = 'dt-right',
+                                                targets = 0)),
+                         pageLength = 15,
+                         autoWidth = TRUE))
+```
+
+***
+
+## Environmental variables
+
+Information about environmental variables and their presence in metadata and data
+
+```{r env_vars, echo=FALSE}
+env_var_presence %>%
+  mutate(Concordance = as.character(Concordance),
+         Md_presence = as.character(Md_presence),
+         Data_presence = as.character(Data_presence)) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 9. Environmental variables info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '100px',
+                                                  targets = 1:3),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('Concordance',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
+```
+
+
+## Metadata Remarks
+
+List of remarks provided by the contributor/s
+
+***
+
+**Site level remarks**
+
+`r if (is.null(site_md_coordfix$si_remarks)) {'*No remarks*'} else {site_md_coordfix$si_remarks}`
+
+***
+
+**Stand level remarks**
+
+`r if (is.null(stand_md$st_remarks)) {'*No remarks*'} else {stand_md$st_remarks}`
+
+***
+
+**Species level remarks**
+
+`r if (is.null(species_md$sp_remarks)) {'*No remarks*'} else {species_md$sp_remarks}`
+
+***
+
+**Plant level remarks**
+
+`r if (is.null(plant_md_spnames$pl_remarks)) {'*No remarks*'} else {plant_md_spnames$pl_remarks}`
+
+***
+
+**Environmental remarks**
+
+`r if (is.null(env_md$env_remarks)) {'*No remarks*'} else {env_md$env_remarks}`
+
+***
+
+# Data QC
+
+## Quick Summary
+
+```{r qc_data_table, echo=FALSE, message=FALSE, warning=FALSE}
+################################################################################
+# table
+qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
+                      timestamp_errors_env, sapw_md,
+                      timestamp_concordance, sapf_gaps_info,
+                      env_gaps_info, sapf_data_fixed_plant,
+                      sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
+                      'data_qc')
+################################################################################
+```
+
+> **NOTE: Data Quality Checks are under continous development. Checks made and
+  results presentation can change in the future to adapt to new insights in
+  data digesting processes**
+
+***
+
+## TIMESTAMP Checks
+
+Information about TIMESTAMPS
+
+```{r sapf_timestamp_format}
+timestamp_sapf <- sapf_data_fixed %>%
+  select(TIMESTAMP) %>%
+  summarise(Sample = as.character(sample(TIMESTAMP, 1)),
+            Range = paste(range(TIMESTAMP), collapse = ' - ')) %>%
+  mutate(Data = 'Sapflow') %>%
+  select(Data, Sample, Range)
+
+timestamp_env <- env_data_fixed %>%
+  select(TIMESTAMP) %>%
+  summarise(Sample = as.character(sample(TIMESTAMP, 1)),
+            Range = paste(range(TIMESTAMP), collapse = ' - ')) %>%
+  mutate(Data = 'Environmental') %>%
+  select(Data, Sample, Range)
+
+timestamp_sapf %>%
+  bind_rows(timestamp_env) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 2. TIMESTAMP format info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '40%',
+                                                  targets = c(1,2)),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE))
+```
+
+```{r timestamp_cont_errors_sapf}
+timestamp_errors_sapf %>%
+  mutate(Int_length_minutes = Int_length/60) %>%
+  select(Interval, Int_length_minutes) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 3. Sapflow TIMESTAMP continuity info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '40%',
+                                                  targets = 1),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE))
+```
+
+```{r timestamp_cont_errors_env}
+timestamp_errors_env %>%
+  mutate(Int_length_minutes = Int_length/60) %>%
+  select(Interval, Int_length_minutes) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 4. Environmental TIMESTAMP continuity info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '40%',
+                                                  targets = 1),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE))
+```
+
+TIMESTAMP concordance between sapflow and environmental data
+
+```{r timestamp_concordance, fig.width=12}
+# timestamp_concordance %>%
+#   datatable(class = 'display', rownames = FALSE,
+#             caption = 'Table 4. TIMESTAMP concordance info',
+#             options = list(dom = 'tp',
+#                            # columnDefs = list(list(className = 'dt-center',
+#                            #                        width = '40%',
+#                            #                        targets = 1),
+#                            #                   list(className = 'dt-right',
+#                            #                        targets = 0)),
+#                            pageLength = 15,
+#                            autoWidth = TRUE))
+
+# timestamp_concordance_plot
+gap_lines_plot
+```
+
+***
+
+## Time series gaps
+
+### Sap flow gaps info
+
+```{r gaps_info}
+sapf_gaps_info %>%
+  select(-timestamp_start, -timestamp_end) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 5. Sap flow gaps info. gap_interval is expressed in minutes',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '20%',
+                                                  targets = c(1:4)),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatPercentage('gap_coverage', 2) %>%
+  formatStyle('gap_coverage',
+              backgroundColor = styleInterval(c(.10, .25),
+                                              c('#89c4f4', '#f39c12',
+                                                '#d91e18')))
+```
+
+```{r gaps_info_cal, fig.width=12, fig.height=6}
+cowplot::ggdraw() +
+  cowplot::draw_plot(sapf_gaps_cal, 0, .5, 1, .5) +
+  cowplot::draw_plot(sapf_gaps_plot, 0, 0, .5, .5) +
+  cowplot::draw_plot(sapf_gaps_plot_int, .5, 0, .5, .5) +
+  cowplot::draw_plot_label(c("A", "B", "C"), c(0, 0, 0.5), c(1, 0.5, 0.5), size = 12)
+```
+
+### Environmental gaps info
+
+```{r gaps_info_env}
+env_gaps_info %>%
+  select(-timestamp_start, -timestamp_end) %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 6. Environmental gaps info. gap_interval is expressed in minutes',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '20%',
+                                                  targets = c(1:4)),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatPercentage('gap_coverage', 2) %>%
+  formatStyle('gap_coverage',
+              backgroundColor = styleInterval(c(.1, .25),
+                                              c('#89c4f4', '#f39c12',
+                                                '#d91e18')))
+```
+
+```{r env_gaps_info_cal, fig.width=12, fig.height=6}
+cowplot::ggdraw() +
+  cowplot::draw_plot(env_gaps_cal, 0, .5, 1, .5) +
+  cowplot::draw_plot(env_gaps_plot, 0, 0, .5, .5) +
+  cowplot::draw_plot(env_gaps_plot_int, .5, 0, .5, .5) +
+  cowplot::draw_plot_label(c("A", "B", "C"), c(0, 0, 0.5), c(1, 0.5, 0.5), size = 12)
+```
+
+***
+
+## Unit Conversion and standarization
+
+If there are problems in unit conversion and standarization, critical variables
+needed will be highlighted in Table 7.
+
+```{r unit conversion}
+sapw_md %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Table 7. Sapwood related variables needed to unit conversion',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  targets = 1),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) %>%
+  formatStyle('pl_sap_units',
+              backgroundColor = styleEqual(c(''),
+                                           c('#d91e18'))) %>%
+  formatStyle('pl_leaf_area',
+              backgroundColor = styleEqual(c(''),
+                                           c('#89c4f4'))) %>%
+  formatStyle('pl_dbh',
+              backgroundColor = styleEqual(c(''),
+                                           c('#89c4f4'))) %>%
+  formatStyle('pl_sapw_depth',
+              backgroundColor = styleEqual(c(''),
+                                           c('#89c4f4'))) %>%
+  formatStyle('pl_bark_thick',
+              backgroundColor = styleEqual(c(''),
+                                           c('#89c4f4'))) %>%
+  formatStyle('pl_sapw_area_est',
+              backgroundColor = styleEqual(c(''),
+                                           c('#d91e18')))
+```
