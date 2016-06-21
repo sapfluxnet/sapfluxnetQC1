@@ -4,7 +4,7 @@
 \alias{dl_data}
 \title{Loading data from xls/xlsx ann csv files}
 \usage{
-dl_data(file_name, sheet_name, long = FALSE, n = 1000,
+dl_data(file_name, sheet_name, long = FALSE, n = 1000, na = "",
   parent_logger = "test")
 }
 \arguments{
@@ -19,6 +19,9 @@ is only used if origin file is an xlsx file}
 
 \item{n}{Numeric indicating the number of rows used to guess the decimal
 character used in csv files. Only used when data file is a csv.}
+
+\item{na}{Character string with the symbol codified as missing value.
+Default to blank.}
 }
 \value{
 \code{dl_data} returns sapflow or environmental data in wide format,

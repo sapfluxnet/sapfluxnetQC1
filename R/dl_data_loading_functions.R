@@ -81,7 +81,7 @@ dl_na_char_generator <- function(parent_logger = 'test') {
     # Return a character vector with values to be converted to NA
     return(c(
       # Usual
-      '', 'NA',
+      '', 'NA', 'NaN',
       # Numeric NAs
       '-9999',
       # Excel errors (castilian)
@@ -391,6 +391,9 @@ dl_metadata <- function(file_name, sheet_name,
 #' @param n Numeric indicating the number of rows used to guess the decimal
 #'   character used in csv files. Only used when data file is a csv.
 #'
+#' @param na Character string with the symbol codified as missing value.
+#'   Default to blank.
+#'
 #' @return \code{dl_data} returns sapflow or environmental data in wide format,
 #'   ready to pipe it in the quality checks for raw data. If \code{long = TRUE}
 #'   data is returned in long format, ready for plotting.
@@ -402,7 +405,7 @@ dl_metadata <- function(file_name, sheet_name,
 # START
 # Function declaration
 
-dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000,
+dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
                     parent_logger = 'test') {
 
   # Using calling handlers to logging
@@ -435,7 +438,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000,
       # Loading and shaping the data
       # 2.1 sapflow data
       if (sheet_name == 'sapflow_hd') {
-        res <- readxl::read_excel(file_name, sheet_name, skip = 4) %>%
+        res <- readxl::read_excel(file_name, sheet_name, na = na, skip = 4) %>%
           # 2.1.2 Check and remove duplicate columns
           remove_dupcols() %>%
           # 2.1.3 Remove any extra column that could be created in the read_excel step.
@@ -458,7 +461,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000,
 
       } else {
         # 2.2 environmental data
-        res <- readxl::read_excel(file_name, sheet_name, skip = 3) %>%
+        res <- readxl::read_excel(file_name, sheet_name, na = na, skip = 3) %>%
           # 2.2.2 check and remove duplicate columns
           remove_dupcols() %>%
           # 2.2.3 Remove any extra column that could be created in the read_excel step.

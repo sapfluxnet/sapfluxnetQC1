@@ -572,11 +572,11 @@ qc_env_dics <- function(variable, parent_logger = 'test') {
     # Get the variable and populate the dictionary
     # 1.1 env_time_zone
     if (variable == 'env_time_zone') {
-      res <- c('1UTC−12:00, Y', '2UTC−11:00, X', '3UTC−10:00, W', '4UTC−09:30, V†',
-               '5UTC−09:00, V', '6UTC−08:00, U', '7UTC−07:00, T', '8UTC−06:00, S',
-               '9UTC−05:00, R', '10UTC−04:30, Q†', '11UTC−04:00, Q',
-               '12UTC−03:30, P†', '13UTC−03:00, P', '14UTC−02:00, O',
-               '15UTC−01:00, N','16UTC±00:00, Z', '17UTC+01:00, A',
+      res <- c('1UTC-12:00, Y', '2UTC-11:00, X', '3UTC-10:00, W', '4UTC-09:30, V†',
+               '5UTC-09:00, V', '6UTC-08:00, U', '7UTC-07:00, T', '8UTC-06:00, S',
+               '9UTC-05:00, R', '10UTC-04:30, Q†', '11UTC-04:00, Q',
+               '12UTC-03:30, P†', '13UTC-03:00, P', '14UTC-02:00, O',
+               '15UTC-01:00, N','16UTC±00:00, Z', '17UTC+01:00, A',
                '18UTC+02:00, B', '19UTC+03:00, C', '20UTC+03:30, C†',
                '21UTC+04:00, D', '22UTC+04:30, D†', '23UTC+05:00, E',
                '24UTC+05:30, E†', '25UTC+05:45, E*', '26UTC+06:00, F',
