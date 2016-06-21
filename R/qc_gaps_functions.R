@@ -68,7 +68,7 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
         dplyr::select_('TIMESTAMP', var)
 
       # 2.2 for each value
-      for (i in 1:length(temp_data[,2])) {
+      for (i in 1:length(temp_data[[2]])) {
         # start value
         # if value is the first value and is na, gap start point
         if (is.na(temp_data[[i, 2]]) && i == 1) {
@@ -81,7 +81,7 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
         }
         # end value and id
         # if value is na and the last one, gap end point
-        if (is.na(temp_data[[i, 2]]) && i == length(temp_data[,2])) {
+        if (is.na(temp_data[[i, 2]]) && i == length(temp_data[[2]])) {
           end <- c(end, temp_data$TIMESTAMP[i])
           id <- c(id, var)
         } else {
