@@ -936,7 +936,8 @@ qc_env_vars_presence <- function(data, metadata,
       # Warning: in data, variables have the "env_" part stripped, so we need to
       # strip that part in var. Also in swc_* variables, the _depth part must
       # be removed
-      if(stringr::str_replace_all(var, "(env_)|(_depth)", '') %in% names(data)) {
+      if(stringr::str_replace_all(var, "(env_)|(_depth)", '') %in% names(data) &
+         !all(is.na(data[[stringr::str_replace_all(var, "(env_)|(_depth)", '')]]))) {
         hd <- TRUE
         hd_res <- c(hd_res, hd)
       } else {
