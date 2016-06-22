@@ -32,12 +32,25 @@ species_md <- suppressMessages(dl_metadata(xlsx_name, 'species_md', si_code_loc 
 plant_md <- suppressMessages(dl_metadata(xlsx_name, 'plant_md', si_code_loc = site_md))
 env_md <- suppressMessages(dl_metadata(xlsx_name, 'environmental_md', si_code_loc = site_md))
 
+xlsx_name <- 'foo_nan.xlsx'
+
+site_md_nan <- suppressMessages(dl_metadata(xlsx_name, 'site_md'))
+stand_md_nan <- suppressMessages(dl_metadata(xlsx_name, 'stand_md', si_code_loc = site_md))
+species_md_nan <- suppressMessages(dl_metadata(xlsx_name, 'species_md', si_code_loc = site_md))
+plant_md_nan <- suppressMessages(dl_metadata(xlsx_name, 'plant_md', si_code_loc = site_md))
+env_md_nan <- suppressMessages(dl_metadata(xlsx_name, 'environmental_md', si_code_loc = site_md))
+
 test_that('function returns data frames', {
   expect_is(site_md, 'data.frame')
   expect_is(stand_md, 'data.frame')
   expect_is(species_md, 'data.frame')
   expect_is(plant_md, 'data.frame')
   expect_is(env_md, 'data.frame')
+  expect_is(site_md_nan, 'data.frame')
+  expect_is(stand_md_nan, 'data.frame')
+  expect_is(species_md_nan, 'data.frame')
+  expect_is(plant_md_nan, 'data.frame')
+  expect_is(env_md_nan, 'data.frame')
 })
 
 test_that('si_code is correctly inserted in all metadata', {
@@ -46,6 +59,11 @@ test_that('si_code is correctly inserted in all metadata', {
   expect_true(all(species_md$si_code == 'ESP_VAL_SOR'))
   expect_true(all(plant_md$si_code == 'ESP_VAL_SOR'))
   expect_identical(env_md$si_code, 'ESP_VAL_SOR')
+  expect_identical(site_md_nan$si_code, 'ESP_VAL_SOR')
+  expect_identical(stand_md_nan$si_code, 'ESP_VAL_SOR')
+  expect_true(all(species_md_nan$si_code == 'ESP_VAL_SOR'))
+  expect_true(all(plant_md_nan$si_code == 'ESP_VAL_SOR'))
+  expect_identical(env_md_nan$si_code, 'ESP_VAL_SOR')
 })
 
 test_that('each metadata object has the correct number of variables', {
@@ -54,4 +72,9 @@ test_that('each metadata object has the correct number of variables', {
   expect_equal(length(names(species_md)), 5)
   expect_equal(length(names(plant_md)), 24)
   expect_equal(length(names(env_md)), 17)
+  expect_equal(length(names(site_md_nan)), 20)
+  expect_equal(length(names(stand_md_nan)), 17)
+  expect_equal(length(names(species_md_nan)), 5)
+  expect_equal(length(names(plant_md_nan)), 24)
+  expect_equal(length(names(env_md_nan)), 17)
 })

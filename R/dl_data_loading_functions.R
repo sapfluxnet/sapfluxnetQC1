@@ -85,9 +85,11 @@ dl_na_char_generator <- function(parent_logger = 'test') {
       # Numeric NAs
       '-9999',
       # Excel errors (castilian)
-      "#\xadVALOR!", "#\xadDIV/0!", "VERDADERO", 'FALSO', '#\xadREF!',
+      "#\xadVALOR!", "#\xadDIV/0!", "#\xa1DIV/0!", "VERDADERO", 'FALSO', '#\xadREF!',
       # Excel errors (english)
-      '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!'
+      '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!',
+      # Excel errors (generic and rare characters)
+      '#�DIV/0!'
     )
     )
 
