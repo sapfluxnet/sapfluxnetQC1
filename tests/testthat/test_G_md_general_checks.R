@@ -82,6 +82,8 @@ bad_env_presence <- qc_env_vars_presence(env_data, site_md)
 env_data$ta <- NULL
 env_md$rh <- NA
 regular_env_presence <- qc_env_vars_presence(env_data, env_md)
+env_data$ta <- NA
+na_env_presence <- qc_env_vars_presence(env_data, env_md)
 
 
 test_that('argument checks work', {
@@ -106,6 +108,7 @@ test_that('results are correct', {
   expect_false(all(regular_env_presence$Md_presence == regular_env_presence$Data_presence))
   expect_false(all(regular_env_presence$Concordance))
   expect_true(any(regular_env_presence$Concordance))
+  expect_false(na_env_presence$Concordance[na_env_presence$Name == 'env_ta'])
 })
 
 
