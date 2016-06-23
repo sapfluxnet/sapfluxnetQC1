@@ -98,11 +98,14 @@ dl_get_si_code <- function(folder = '.', parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'dl_get_si_code', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'dl_get_si_code', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'dl_get_si_code', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'dl_get_si_code', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'dl_get_si_code', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'dl_get_si_code', sep = '.'))})
 
 
 }
@@ -561,9 +564,59 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_data_results_table', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_data_results_table', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_data_results_table', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_data_results_table', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_data_results_table', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_data_results_table', sep = '.'))})
+}
+
+################################################################################
+#' Start QC process
+#'
+#' Start QC process from the site code.
+#'
+#' This function check the status of the site, starts it if it does not exists,
+#' and start the QC process
+#'
+#' @family Quality Checks Functions
+#'
+#' @param si_code Character string with the code of the site to start the process
+#'
+#' @return Invisible TRUE if all the process is ok, and invisible FALSE if there
+#'   was some error in the process
+#'
+#' @export
+
+# START
+# Function declaration
+qc_start_process <- function(si_code, parent_logger = 'test') {
+
+  # STEP 0
+  # Argument checks
+  if(!is.character(si_code)) {
+    stop('si_code provided is not a character string')
+  }
+
+  # STEP 1
+  # Get the status of the site
+  status <- df_get_status(si_code, parent_logger = parent_logger)
+
+  # STEP 2
+  # If status does not exists, create it and start the QC
+
+  # 2.1 if status exists and QC is DONE, don't do anything
+  if (status != FALSE) {
+    if(status$QC$DONE) {
+      message(si_code, ' already passed QC, not doing anything else')
+      return(invisible(TRUE))
+    } else {
+
+      # 2.2 if status exists but QC is not DONE, lets do it
+      # 2.2.1 First, we need the files
+    }
+  }
 }
