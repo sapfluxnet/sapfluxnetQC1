@@ -2,8 +2,8 @@ Package: sapfluxnetr
 Type: Package
 Title: Package with functions related to sapfluxnet project data
 Version: 0.0.4
-Author: Víctor Granda (SAPFLUXNET Team)
-Maintainer: Víctor Granda <v.granda@creaf.uab.cat>
+Author: Victor Granda (SAPFLUXNET Team)
+Maintainer: Victor Granda <v.granda@creaf.uab.cat>
 Description: Functions to make easy, reproducible and semiautomatized quality checks of submmited data
 License: What license is it under?
 LazyData: TRUE
