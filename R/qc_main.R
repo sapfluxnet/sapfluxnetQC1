@@ -34,6 +34,9 @@ dl_get_si_code <- function(folder = '.', parent_logger = 'test') {
     # be fast, get the files, now!
     files <- list.files(folder,
                         pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
+    complete_files <- list.files(folder,
+                                 pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$",
+                                 full.names = TRUE)
 
     # 1.1 Check if there is files, to avoid waste time
     if (length(files) < 1) {
@@ -64,16 +67,16 @@ dl_get_si_code <- function(folder = '.', parent_logger = 'test') {
       if (length(files) == 3) {
 
         # 3.2.1 get the names, quick!
-        metadata <- files[grep('_metadata\\.xls(x)?$', files)]
-        sapf <- files[grep('_sapflow_data\\.csv$', files)]
-        env <- files[grep('env_data\\.csv$', files)]
+        metadata <- complete_files[grep('_metadata\\.xls(x)?$', complete_files)]
+        sapf <- complete_files[grep('_sapflow_data\\.csv$', complete_files)]
+        env <- complete_files[grep('env_data\\.csv$', complete_files)]
       } else {
 
         # 3.3 One file to rule them all
         if (length(files) == 1) {
 
           # 3.3.1 only one name but three things
-          metadata <- files[grep('_metadata\\.xls(x)?$', files)]
+          metadata <- complete_files[grep('_metadata\\.xls(x)?$', complete_files)]
           sapf <- metadata
           env <- metadata
         }
@@ -613,7 +616,7 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
 
     # STEP 2
     # 2.1 if status exists and QC is DONE, don't do anything
-    if (status != FALSE) {
+    if (!is.logical(status)) {
       if(status$QC$DONE) {
         message(code_and_files[['si_code']],
                 ' already passed QC, not doing anything else')
