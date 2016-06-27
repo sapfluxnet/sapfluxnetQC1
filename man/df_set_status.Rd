@@ -35,6 +35,7 @@ is always a character or NULL.
 Other Data Flow: \code{\link{df_folder_structure}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
+  \code{\link{df_report_folder_creation}},
   \code{\link{df_start_status}}
 }
 

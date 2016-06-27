@@ -417,9 +417,72 @@ df_set_status <- function(si_code,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'df_set_status', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'df_set_status', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'df_set_status', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'df_set_status', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'df_set_status', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'df_set_status', sep = '.'))})
+}
+
+################################################################################
+#' Reports folders creation
+#'
+#' Function to create the report subfolder for the site to analyze
+#'
+#' @family Data Flow
+#'
+#' @param si_code Character indicating the site code to create the reports folder
+#'
+#' @return Invisible TRUE if the folder is created correctly, invisible FALSE if
+#'   folder is not created.
+#'
+#' @export
+
+# START
+# Function declaration
+df_report_folder_creation <- function(si_code, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # is si_code a character?
+    if(!is.character(si_code)) {
+      stop('si_code provided is not a character')
+    }
+
+    # STEP 1
+    # Check if folder already exists
+    folder <- file.path('Reports', si_code)
+
+    if (dir.exists(folder)) {
+      message(folder, ' folder already exists. skipping creation')
+      return(invisible(FALSE))
+    } else {
+
+      # 1.1 If folder does not exist, create it
+      dir.create(folder, showWarnings = TRUE)
+      return(invisible(TRUE))
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_report_folder_creation',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_report_folder_creation',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_report_folder_creation',
+                                                        sep = '.'))})
 }

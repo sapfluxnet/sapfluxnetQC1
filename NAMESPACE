@@ -3,6 +3,7 @@
 export(df_folder_structure)
 export(df_get_status)
 export(df_received_to_accepted)
+export(df_report_folder_creation)
 export(df_set_status)
 export(df_start_status)
 export(dl_data)

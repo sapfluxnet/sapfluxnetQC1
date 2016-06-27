@@ -626,12 +626,16 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
                              logger = code_and_files[['si_code']],
                              level = "DEBUG")
 
-        # 2.2.2 report
+        # 2.2.2 report folder
+        df_report_folder_creation(code_and_files[['si_code']],
+                                  parent_logger = parent_logger)
+
+        # 2.2.3 report
         rep_sfn_render('QC_report.Rmd',
                        output_file = file.path(
-                         'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
-                                          code_and_files[['si_code']],
-                                          'QC_report.html', sep = '_')
+                         paste(format(Sys.time(), '%Y%m%d%H%M'),
+                               code_and_files[['si_code']],
+                               'QC_report.html', sep = '_')
                        ),
                        output_dir = file.path('Reports',
                                               code_and_files[['si_code']]),
@@ -641,7 +645,7 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
                        env_data_file = code_and_files[['env_file']],
                        code = code_and_files[['si_code']])
 
-        # 2.2.3 set status
+        # 2.2.4 set status
         df_set_status(code_and_files[['si_code']],
                       QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
                       parent_logger = parent_logger)
@@ -658,12 +662,16 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
                            logger = code_and_files[['si_code']],
                            level = "DEBUG")
 
-      # 2.3.3 report
+      # 2.3.3 report folder
+      df_report_folder_creation(code_and_files[['si_code']],
+                                parent_logger = parent_logger)
+
+      # 2.3.4 report
       rep_sfn_render('QC_report.Rmd',
                      output_file = file.path(
-                       'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
-                                        code_and_files[['si_code']],
-                                        'QC_report.html', sep = '_')
+                       paste(format(Sys.time(), '%Y%m%d%H%M'),
+                             code_and_files[['si_code']],
+                             'QC_report.html', sep = '_')
                      ),
                      output_dir = file.path('Reports',
                                             code_and_files[['si_code']]),
@@ -673,7 +681,7 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
                      env_data_file = code_and_files[['env_file']],
                      code = code_and_files[['si_code']])
 
-      # 2.3.4 set status
+      # 2.3.5 set status
       df_set_status(code_and_files[['si_code']],
                     QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
                     parent_logger = parent_logger)

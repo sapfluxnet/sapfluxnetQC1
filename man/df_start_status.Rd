@@ -24,6 +24,7 @@ file already exists, in order to avoid accidental rewriting of the file.
 Other Data Flow: \code{\link{df_folder_structure}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
+  \code{\link{df_report_folder_creation}},
   \code{\link{df_set_status}}
 }
 

@@ -21,6 +21,7 @@ Retrieve the status file info as a list, with the yaml package
 \seealso{
 Other Data Flow: \code{\link{df_folder_structure}},
   \code{\link{df_received_to_accepted}},
+  \code{\link{df_report_folder_creation}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}}
 }

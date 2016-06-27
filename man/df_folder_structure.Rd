@@ -24,6 +24,7 @@ structure to recreate SAPFLUXNET project in any environment.
 \seealso{
 Other Data Flow: \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
+  \code{\link{df_report_folder_creation}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}}
 }
