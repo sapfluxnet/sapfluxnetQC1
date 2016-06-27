@@ -18,6 +18,7 @@ Function to create the report subfolder for the site to analyze
 }
 \seealso{
 Other Data Flow: \code{\link{df_folder_structure}},
+  \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
   \code{\link{df_set_status}},

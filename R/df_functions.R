@@ -486,3 +486,50 @@ df_report_folder_creation <- function(si_code, parent_logger = 'test') {
                                                         'df_report_folder_creation',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Get the folders to feed \code{\link{qc_start_process}}
+#'
+#' Get the folders to be able to start QC process
+#'
+#' No parameters (except for parent_logger) are needed, as the functions simply
+#' collects the folders present in \code{Data}.
+#'
+#' @family Data Flow
+#'
+#' @return a character vector with the folders route
+#'
+#' @export
+
+# START
+# Function declaration
+df_get_data_folders <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Collect the data folders names
+    folder_names <- list.dirs('Data', recursive = FALSE)
+
+    # STEP 2
+    # Return the folder names
+    return(folder_names)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_get_data_folders',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_get_data_folders',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_get_data_folders',
+                                                        sep = '.'))})
+}

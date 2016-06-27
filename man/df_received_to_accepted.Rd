@@ -23,6 +23,7 @@ to accepted folder (\code{Data/site_code/site_code_accepted/}).
 }
 \seealso{
 Other Data Flow: \code{\link{df_folder_structure}},
+  \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_report_folder_creation}},
   \code{\link{df_set_status}},
