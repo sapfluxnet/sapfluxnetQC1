@@ -584,7 +584,8 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
 #'
 #' @family Quality Checks Functions
 #'
-#' @param si_code Character string with the code of the site to start the process
+#' @param folder Character string with the route to the folder to start QC
+#'   process
 #'
 #' @return Invisible TRUE if all the process is ok, and invisible FALSE if there
 #'   was some error in the process
@@ -593,30 +594,105 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
 
 # START
 # Function declaration
-qc_start_process <- function(si_code, parent_logger = 'test') {
+qc_start_process <- function(folder = '.', parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checks
-  if(!is.character(si_code)) {
-    stop('si_code provided is not a character string')
-  }
+  # Using calling handlers to manage errors
+  withCallingHandlers({
 
-  # STEP 1
-  # Get the status of the site
-  status <- df_get_status(si_code, parent_logger = parent_logger)
+    # STEP 0
+    # Argument checks
+    if(!is.character(folder)) {
+      stop('folder provided is not a character string')
+    }
 
-  # STEP 2
-  # If status does not exists, create it and start the QC
+    # STEP 1
+    # Get the files names, code and status of the site
+    code_and_files <- dl_get_si_code(folder, parent_logger = parent_logger)
+    status <- df_get_status(code_and_files[['si_code']],
+                            parent_logger = parent_logger)
 
-  # 2.1 if status exists and QC is DONE, don't do anything
-  if (status != FALSE) {
-    if(status$QC$DONE) {
-      message(si_code, ' already passed QC, not doing anything else')
-      return(invisible(TRUE))
+    # STEP 2
+    # 2.1 if status exists and QC is DONE, don't do anything
+    if (status != FALSE) {
+      if(status$QC$DONE) {
+        message(code_and_files[['si_code']],
+                ' already passed QC, not doing anything else')
+        return(invisible(TRUE))
+      } else {
+
+        # 2.2 if status exists but QC is not DONE, lets do it
+        # 2.2.1 log setup
+        log_sapfluxnet_setup('Logs/sapfluxnet.log',
+                             logger = code_and_files[['si_code']],
+                             level = "DEBUG")
+
+        # 2.2.2 report
+        rep_sfn_render('QC_report.Rmd',
+                       output_file = file.path(
+                         'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
+                                          code_and_files[['si_code']],
+                                          'QC_report.html', sep = '_')
+                       ),
+                       output_dir = file.path('Reports',
+                                              code_and_files[['si_code']]),
+                       parent_logger = parent_logger,
+                       md_file = code_and_files[['md_file']],
+                       sapf_data_file = code_and_files[['sapf_file']],
+                       env_data_file = code_and_files[['env_file']],
+                       code = code_and_files[['si_code']])
+
+        # 2.2.3 set status
+        df_set_status(code_and_files[['si_code']],
+                      QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
+                      parent_logger = parent_logger)
+      }
+
     } else {
 
-      # 2.2 if status exists but QC is not DONE, lets do it
-      # 2.2.1 First, we need the files
+      # 2.3 If status does not exist, create it and perform the QC
+      # 2.3.1 start status
+      df_start_status(code_and_files[['si_code']], parent_logger = parent_logger)
+
+      # 2.3.2 log setup
+      log_sapfluxnet_setup('Logs/sapfluxnet.log',
+                           logger = code_and_files[['si_code']],
+                           level = "DEBUG")
+
+      # 2.3.3 report
+      rep_sfn_render('QC_report.Rmd',
+                     output_file = file.path(
+                       'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
+                                        code_and_files[['si_code']],
+                                        'QC_report.html', sep = '_')
+                     ),
+                     output_dir = file.path('Reports',
+                                            code_and_files[['si_code']]),
+                     parent_logger = parent_logger,
+                     md_file = code_and_files[['md_file']],
+                     sapf_data_file = code_and_files[['sapf_file']],
+                     env_data_file = code_and_files[['env_file']],
+                     code = code_and_files[['si_code']])
+
+      # 2.3.4 set status
+      df_set_status(code_and_files[['si_code']],
+                    QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
+                    parent_logger = parent_logger)
     }
-  }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_start_process',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_start_process',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_start_process',
+                                                        sep = '.'))})
 }
