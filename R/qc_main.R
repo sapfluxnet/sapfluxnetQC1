@@ -614,6 +614,9 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
     status <- df_get_status(code_and_files[['si_code']],
                             parent_logger = parent_logger)
 
+    # 1.1 Info message
+    message('Starting process for ', code_and_files[['si_code']], ' site')
+
     # STEP 2
     # 2.1 if status exists and QC is DONE, don't do anything
     if (!is.logical(status)) {
