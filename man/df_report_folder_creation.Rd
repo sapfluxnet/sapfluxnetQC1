@@ -17,7 +17,8 @@ Invisible TRUE if the folder is created correctly, invisible FALSE if
 Function to create the report subfolder for the site to analyze
 }
 \seealso{
-Other Data Flow: \code{\link{df_folder_structure}},
+Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_folder_structure}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},

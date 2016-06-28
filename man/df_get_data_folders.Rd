@@ -17,7 +17,8 @@ No parameters (except for parent_logger) are needed, as the functions simply
 collects the folders present in \code{Data}.
 }
 \seealso{
-Other Data Flow: \code{\link{df_folder_structure}},
+Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_folder_structure}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
   \code{\link{df_report_folder_creation}},

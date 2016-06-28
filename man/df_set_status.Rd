@@ -32,7 +32,8 @@ of \code{LVL1} and \code{LVL2} a list with two elements, \code{STORED} and
 is always a character or NULL.
 }
 \seealso{
-Other Data Flow: \code{\link{df_folder_structure}},
+Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_folder_structure}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},

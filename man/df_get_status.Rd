@@ -19,7 +19,8 @@ Retrieve the status file info as a list, with the yaml package
 \code{yaml} file is parsed by yaml.load_file and a list object is returned.
 }
 \seealso{
-Other Data Flow: \code{\link{df_folder_structure}},
+Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_folder_structure}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_received_to_accepted}},
   \code{\link{df_report_folder_creation}},
