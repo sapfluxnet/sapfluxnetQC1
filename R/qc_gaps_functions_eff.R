@@ -104,9 +104,9 @@ qc_mind_the_gap_eff <- function(data, trim = FALSE, parent_logger = 'test') {
                          gap_start = vector(),
                          gap_end = vector())
 
-    lapply(res_list, function(x) {
-      dplyr::bind_rows(res_df, x)
-    })
+    for (df in res_list) {
+      res_df <- dplyr::bind_rows(res_df, df)
+    }
 
     timestamp_interval <- lubridate::int_length(lubridate::interval(data$TIMESTAMP[[1]],
                                                                     data$TIMESTAMP[[length(data$TIMESTAMP)]]))/60

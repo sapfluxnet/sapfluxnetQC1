@@ -59,10 +59,10 @@ plant_md <- dl_metadata(params$md_file, 'plant_md', si_code_loc = site_md, paren
 env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md, parent_logger = 'data_load')
 
 ## sapf_data
-sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, na = '', parent_logger = 'data_load')
+sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, na = 'NaN', parent_logger = 'data_load')
 
 ## env_data
-env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = '', parent_logger = 'data_load')
+env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = 'NaN', parent_logger = 'data_load')
 
 ################################################################################
 # md qc
