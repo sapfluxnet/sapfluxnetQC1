@@ -561,8 +561,10 @@ df_get_data_folders <- function(parent_logger = 'test') {
 #'
 #' @param env_md Data frame with the fixed environmental metadata
 #'
-#' @return Invisible TRUE if the three steps were correctly made, invisible
-#'   FALSE otherwise.
+#' @param rdata Logical indicating if an RData file must be created with the
+#'   objects generated in the QC. Default to TRUE.
+#'
+#' @return Nothing
 #'
 #' @export
 
@@ -572,7 +574,7 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
                                 sapf_data_sapwood = NULL, sapf_data_leaf = NULL,
                                 env_data = NULL, site_md = NULL, stand_md = NULL,
                                 plant_md = NULL, species_md = NULL, env_md = NULL,
-                                parent_logger = 'test') {
+                                rdata = TRUE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -587,7 +589,7 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
       stop('One or more datasets were not provided')
     }
     # are datasets dataframes?
-    if(any(!is.data.frame(sapf_data), !is.data.frame(env_data), !is.data.frame(site_md),
+    if(any(!is.data.frame(env_data), !is.data.frame(site_md),
            !is.data.frame(stand_md), !is.data.frame(plant_md), !is.data.frame(species_md),
            !is.data.frame(env_md))) {
       stop('One or more datasets provided are not data frames')
@@ -595,6 +597,29 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
     # is si_code a character string?
     if(!is.character(si_code)) {
       stop('site code provided is not a character string')
+    }
+    # if files exist before the function execution, stop and inform
+    if (all(file.exists(file.path('Data', si_code, 'Lvl_1',
+                                  paste(si_code, 'env_data.csv', sep = '_'))),
+            file.exists(file.path('Data', si_code, 'Lvl_1',
+                                  paste(si_code, 'site_md.csv', sep = '_'))),
+            file.exists(file.path('Data', si_code, 'Lvl_1',
+                                  paste(si_code, 'stand_md.csv', sep = '_'))),
+            file.exists(file.path('Data', si_code, 'Lvl_1',
+                                  paste(si_code, 'plant_md.csv', sep = '_'))),
+            file.exists(file.path('Data', si_code, 'Lvl_1',
+                                  paste(si_code, 'species_md.csv', sep = '_'))),
+            file.exists(file.path('Data', si_code, 'Lvl_1',
+                                  paste(si_code, 'env_md.csv', sep = '_')))
+    ) && any(
+      file.exists(file.path('Data', si_code, 'Lvl_1',
+                            paste(si_code, 'sapflow_data_plant.csv', sep = '_'))),
+      file.exists(file.path('Data', si_code, 'Lvl_1',
+                            paste(si_code, 'sapflow_data_sapwood.csv', sep = '_'))),
+      file.exists(file.path('Data', si_code, 'Lvl_1',
+                            paste(si_code, 'sapflow_data_leaf.csv', sep = '_')))
+    )) {
+      stop('csv files already exist in Lvl_1 folder. Please revise manually')
     }
 
     # STEP 1
@@ -633,7 +658,7 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
               file.path('Data', si_code, 'Lvl_1',
                         paste(si_code, 'stand_md.csv', sep = '_')),
               row.names = FALSE)
-    write.csv(olant_md,
+    write.csv(plant_md,
               file.path('Data', si_code, 'Lvl_1',
                         paste(si_code, 'plant_md.csv', sep = '_')),
               row.names = FALSE)
@@ -670,25 +695,30 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
                             paste(si_code, 'sapflow_data_leaf.csv', sep = '_')))
     )) {
       df_set_status(si_code,
-                    LVL1 = list(STORED = TRUE, DATE = Sys.Date()))
+                    LVL1 = list(STORED = TRUE, DATE = as.character(Sys.Date())))
     } else {
       stop('One or more files has been not created in Lvl_1 folder, please revise manually')
     }
 
     # STEP 3
     # Saving the objects for a later use in dashboards
-    save(list = c(
-      'md_cols', 'factor_values', 'email_check', 'species_md_spnames',
-      'plant_md_spnames', 'sp_verification', 'pl_treatments_check',
-      'env_var_presence', 'timestamp_errors_sapf', 'timestamp_errors_env',
-      'timestamp_concordance', 'timestamp_concordance_plot',
-      'gap_lines_plot', 'sapf_gaps_info', 'env_gaps_info',
-      'sapf_gaps_trim_info', 'env_gaps_trim_info', 'sapf_gaps_cal', 'env_gaps_cal',
-      'sapf_gaps_plot', 'env_gaps_plot', 'sapf_gaps_trim_plot', 'env_gaps_trim_plot',
-      'sapf_gaps_plot_int', 'env_gaps_plot_int', 'sapf_gaps_trim_plot_int',
-      'env_gaps_trim_plot_int', 'sapw_md'
-    ), file.path('Data', si_code, 'Lvl_1',
-                 paste(si_code, 'objects.RData', sep = '_')))
+    if (rdata) {
+      save(
+        md_cols, factor_values, email_check, species_md_spnames,
+        plant_md_spnames, sp_verification, pl_treatments_check,
+        env_var_presence, timestamp_errors_sapf, timestamp_errors_env,
+        timestamp_concordance, timestamp_concordance_plot,
+        gap_lines_plot, sapf_gaps_info, env_gaps_info,
+        sapf_gaps_trim_info, env_gaps_trim_info, sapf_gaps_cal, env_gaps_cal,
+        sapf_gaps_plot, env_gaps_plot, sapf_gaps_trim_plot, env_gaps_trim_plot,
+        sapf_gaps_plot_int, env_gaps_plot_int, sapf_gaps_trim_plot_int,
+        env_gaps_trim_plot_int, sapw_md,
+        file = file.path('Data', si_code, 'Lvl_1',
+                         paste(si_code, 'objects.RData', sep = '_')))
+
+      # save.image(file = file.path('Data', si_code, 'Lvl_1',
+      #                             paste(si_code, 'objects.RData', sep = '_')))
+    }
 
     # END FUNCTION
   },
