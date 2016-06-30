@@ -189,12 +189,85 @@ dl_dec_char_detect <- function(file, n = 1000, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'dl_dec_char_detect', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'dl_dec_char_detect',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'dl_dec_char_detect', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'dl_dec_char_detect',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'dl_dec_char_detect', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'dl_dec_char_detect',
+                                                        sep = '.'))})
 }
+
+################################################################################
+#' Check data columns classes and set to numeric if needed
+#'
+#' Checking and setting data column classes to numeric
+#'
+#' Loading from csv's with fread can be problematic if some characters are
+#' spreaded here and there in the data columns. This function checks for this
+#' problem and tries to fix it
+#'
+#' @family Data Loading Functions
+#'
+#' @param data Data frame with the sapflow or environmental data to check
+#'
+#' @return A data frame exactly as the data provided with the variables
+#'   changed to numeric if needed
+#'
+#' @export
+
+# START
+# Function declaration
+dl_data_col_classes <- function(data, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # is data a data frame?
+    if (!is.data.frame(data)) {
+      stop('Data provided is not a data frame')
+    }
+
+    # STEP 1
+    # Loop itereating between variables, checking the class and avoiding
+    # the TIMESTAMP
+    for (var in names(data[, -1])) {
+
+      # 1.1 if the class is different from numeric, lets transform it!!!
+      if (!is.numeric(data[, var])) {
+        message('Converting to numeric ', var)
+        data[, var] <- as.numeric(data[, var])
+      }
+    }
+
+    # STEP 2
+    # Return the converted data
+    return(data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_data_col_classes',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_data_col_classes',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_data_col_classes',
+                                                        sep = '.'))})
+}
+
 
 ################################################################################
 #' Loading metadata from xls/xlsx

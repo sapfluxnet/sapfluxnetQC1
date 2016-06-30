@@ -34,8 +34,8 @@ retrieve and format the metadata. It's intended to be used as first step
 to load the metadata and start the metadata quality check.
 }
 \seealso{
-Other Data Loading Functions: \code{\link{dl_data}},
-  \code{\link{dl_dec_char_detect}},
+Other Data Loading Functions: \code{\link{dl_data_col_classes}},
+  \code{\link{dl_data}}, \code{\link{dl_dec_char_detect}},
   \code{\link{dl_get_si_code}},
   \code{\link{dl_na_char_generator}},
   \code{\link{qc_as_timestamp}},
