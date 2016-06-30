@@ -240,7 +240,7 @@ dl_data_col_classes <- function(data, parent_logger = 'test') {
     for (var in names(data[, -1])) {
 
       # 1.1 if the class is different from numeric, lets transform it!!!
-      if (!is.numeric(data[, var])) {
+      if (all(!is.numeric(data[, var]), !is.logical(data[, var]))) {
         message('Converting to numeric ', var)
         data[, var] <- as.numeric(data[, var])
       }
@@ -577,6 +577,9 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           remove_dupcols() %>%
           dplyr::select(matches('(TIME|^.+?\\d$)'))
 
+        # 4.1.0 Check and fix if any character is in the data
+        res <- dl_data_col_classes(res, parent_logger = parent_logger)
+
         # 4.1.1 If long format is needed, gather time!!
         if (long) {
           res <- res %>%
@@ -601,6 +604,9 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           dplyr::select(matches(
             "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
           ))
+
+        # 4.2.0 Check and fix if any character is in the data
+        res <- dl_data_col_classes(res, parent_logger = parent_logger)
 
         # 4.2.1 If long format is needed, gather time!!
         if (long) {
