@@ -623,7 +623,7 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
       if(status$QC$DONE) {
         message(code_and_files[['si_code']],
                 ' already passed QC, not doing anything else')
-        return(invisible(TRUE))
+        return(invisible(FALSE))
       } else {
 
         # 2.2 if status exists but QC is not DONE, lets do it
@@ -655,6 +655,9 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
         df_set_status(code_and_files[['si_code']],
                       QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
                       parent_logger = parent_logger)
+
+        # 2.2.5 return invisible TRUE
+        return(invisible(TRUE))
       }
 
     } else {
@@ -691,6 +694,10 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
       df_set_status(code_and_files[['si_code']],
                     QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
                     parent_logger = parent_logger)
+
+      # 2.3.6 return invisible TRUE
+      return(invisible(TRUE))
+
     }
 
     # END FUNCTION
