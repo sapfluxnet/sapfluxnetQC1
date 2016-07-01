@@ -55,9 +55,53 @@ test_that('results are correct', {
 ################################################################################
 context('M2. QC Start Process')
 
+# preparation
+# df_folder_structure()
+#
+# file.copy(
+#   system.file("Rmd_templates", "received_to_accepted.Rmd", package = "sapfluxnetr"),
+#   file.path('Templates')
+# )
+# file.copy(
+#   system.file("Rmd_templates", "QC_report.Rmd", package = "sapfluxnetr"),
+#   file.path('Templates')
+# )
+#
+# file.copy(
+#   c('foo.xlsx', 'foo.xlsx'),
+#   c(file.path('Received_data', 'foo_metadata.xlsx'),
+#     file.path('Received_data', 'bar_metadata.xlsx'))
+# )
+#
+# rep_sfn_render('received_to_accepted.Rmd',
+#                output_file = file.path(
+#                  'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
+#                                   'received_to_accepted.html', sep = '_')
+#                ),
+#                output_dir = 'Reports')
+#
+# data_folders <- df_get_data_folders()
+#
+# for (folder in data_folders) {
+#   qc_start_process(file.path(folder, 'Accepted'))
+# }
+
+# tests
+
+test_that('Argument checks work', {
+  expect_error(qc_start_process(25),
+               'folder provided is not a character string')
+  expect_error(qc_start_process(data.frame(a = 'lalala', b = 'lololo')),
+               'folder provided is not a character string')
+})
 
 
 
 ################################################################################
 # cleaning
 unlink('FakeData', recursive = TRUE)
+unlink('Received_data', recursive = TRUE)
+unlink('Data', recursive = TRUE)
+unlink('Logs', recursive = TRUE)
+unlink('Reports', recursive = TRUE)
+unlink('Templates', recursive = TRUE)
