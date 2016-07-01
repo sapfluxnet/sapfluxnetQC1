@@ -513,7 +513,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
       # Loading and shaping the data
       # 2.1 sapflow data
       if (sheet_name == 'sapflow_hd') {
-        res <- readxl::read_excel(file_name, sheet_name, na = na, skip = 4) %>%
+        res <- suppressWarnings(readxl::read_excel(file_name, sheet_name, na = na, skip = 4)) %>%
           # 2.1.2 Check and remove duplicate columns
           remove_dupcols() %>%
           # 2.1.3 Remove any extra column that could be created in the read_excel step.
@@ -536,7 +536,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
 
       } else {
         # 2.2 environmental data
-        res <- readxl::read_excel(file_name, sheet_name, na = na, skip = 3) %>%
+        res <- suppressWarnings(readxl::read_excel(file_name, sheet_name, na = na, skip = 3)) %>%
           # 2.2.2 check and remove duplicate columns
           remove_dupcols() %>%
           # 2.2.3 Remove any extra column that could be created in the read_excel step.
