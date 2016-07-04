@@ -55,39 +55,6 @@ test_that('results are correct', {
 ################################################################################
 context('M2. QC Start Process')
 
-# preparation
-# df_folder_structure()
-#
-# file.copy(
-#   system.file("Rmd_templates", "received_to_accepted.Rmd", package = "sapfluxnetr"),
-#   file.path('Templates')
-# )
-# file.copy(
-#   system.file("Rmd_templates", "QC_report.Rmd", package = "sapfluxnetr"),
-#   file.path('Templates')
-# )
-#
-# file.copy(
-#   c('foo.xlsx', 'foo.xlsx'),
-#   c(file.path('Received_data', 'foo_metadata.xlsx'),
-#     file.path('Received_data', 'bar_metadata.xlsx'))
-# )
-#
-# rep_sfn_render('received_to_accepted.Rmd',
-#                output_file = file.path(
-#                  'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
-#                                   'received_to_accepted.html', sep = '_')
-#                ),
-#                output_dir = 'Reports')
-#
-# data_folders <- df_get_data_folders()
-#
-# for (folder in data_folders) {
-#   qc_start_process(file.path(folder, 'Accepted'))
-# }
-
-# tests
-
 test_that('Argument checks work', {
   expect_error(qc_start_process(25),
                'folder provided is not a character string')
@@ -95,6 +62,76 @@ test_that('Argument checks work', {
                'folder provided is not a character string')
 })
 
+# preparation
+dir.create('Received_data')
+df_folder_structure()
+
+file.copy(
+  system.file("Rmd_templates", "received_to_accepted.Rmd", package = "sapfluxnetr"),
+  file.path('Templates', "received_to_accepted.Rmd")
+)
+file.copy(
+  system.file("Rmd_templates", "QC_report.Rmd", package = "sapfluxnetr"),
+  file.path('Templates', "QC_report.Rmd")
+)
+
+file.copy(
+  c('foo.xlsx', 'foo.xlsx'),
+  c(file.path('Received_data', 'foo_metadata.xlsx'),
+    file.path('Received_data', 'bar_metadata.xlsx'))
+)
+
+rep_sfn_render('received_to_accepted.Rmd',
+               output_file = file.path(
+                 'Reports', paste(format(Sys.time(), '%Y%m%d%H%M'),
+                                  'received_to_accepted.html', sep = '_')
+               ),
+               output_dir = 'Reports')
+
+data_folders <- df_get_data_folders()
+
+# I can't test the rdata file as in test environment objects are not found :(
+
+for (folder in data_folders) {
+  suppressMessages(qc_start_process(file.path(folder, 'Accepted'), rdata = FALSE))
+}
+
+foo_yaml <- df_get_status('foo')
+bar_yaml <- df_get_status('bar')
+
+test_that('files are created OK and in the correct places', {
+  expect_true(file.exists(file.path('Data', 'foo', 'Accepted', 'foo_metadata.xlsx')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Accepted', 'bar_metadata.xlsx')))
+  expect_true(file.exists(file.path('Logs', 'sapfluxnet.log')))
+  expect_true(file.exists(file.path('Templates', 'received_to_accepted.Rmd')))
+  expect_true(file.exists(file.path('Templates', 'QC_report.Rmd')))
+  expect_true(file.exists(file.path('Data', 'foo', 'foo_status.yaml')))
+  expect_true(file.exists(file.path('Data', 'bar', 'bar_status.yaml')))
+
+  expect_length(list.files(file.path('Reports', 'foo'),
+                           pattern = 'QC_report.html'), 1)
+  expect_length(list.files(file.path('Reports', 'bar'),
+                           pattern = 'QC_report.html'), 1)
+  expect_length(list.files(file.path('Reports'),
+                           pattern = 'received_to_accepted.html'), 1)
+
+
+
+  expect_is(foo_yaml, 'list')
+  expect_true(foo_yaml$QC$DONE)
+  expect_true(foo_yaml$LVL1$STORED)
+  expect_false(foo_yaml$LVL2$STORED)
+  expect_true(!is.null(foo_yaml$QC$DATE))
+  expect_true(!is.null(foo_yaml$LVL1$DATE))
+  expect_true(is.null(foo_yaml$LVL2$DATE))
+  expect_is(bar_yaml, 'list')
+  expect_true(bar_yaml$QC$DONE)
+  expect_true(bar_yaml$LVL1$STORED)
+  expect_false(bar_yaml$LVL2$STORED)
+  expect_true(!is.null(bar_yaml$QC$DATE))
+  expect_true(!is.null(bar_yaml$LVL1$DATE))
+  expect_true(is.null(bar_yaml$LVL2$DATE))
+})
 
 
 ################################################################################
@@ -105,3 +142,4 @@ unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)
 unlink('Templates', recursive = TRUE)
+unlink('ESP_adm0.rds')

@@ -590,6 +590,9 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
 #' @param folder Character string with the route to the folder to start QC
 #'   process
 #'
+#' @param rdata Logical indicating if objects created in the QC must be saved in
+#'   a file
+#'
 #' @return Invisible TRUE if all the process is ok, and invisible FALSE if there
 #'   was some error in the process
 #'
@@ -597,7 +600,8 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
 
 # START
 # Function declaration
-qc_start_process <- function(folder = '.', parent_logger = 'test') {
+qc_start_process <- function(folder = '.', rdata = TRUE,
+                             parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -649,7 +653,8 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
                        md_file = code_and_files[['md_file']],
                        sapf_data_file = code_and_files[['sapf_file']],
                        env_data_file = code_and_files[['env_file']],
-                       code = code_and_files[['si_code']])
+                       code = code_and_files[['si_code']],
+                       rdata = rdata)
 
         # 2.2.4 set status
         df_set_status(code_and_files[['si_code']],
@@ -688,7 +693,8 @@ qc_start_process <- function(folder = '.', parent_logger = 'test') {
                      md_file = code_and_files[['md_file']],
                      sapf_data_file = code_and_files[['sapf_file']],
                      env_data_file = code_and_files[['env_file']],
-                     code = code_and_files[['si_code']])
+                     code = code_and_files[['si_code']],
+                     rdata = rdata)
 
       # 2.3.5 set status
       df_set_status(code_and_files[['si_code']],

@@ -350,7 +350,8 @@ test_that('no objects in environment now', {
 
 # load(file.path('Data', 'legen_wait_for_it', 'Lvl_1',
 #                paste('legen_wait_for_it', 'objects.RData',
-#                      sep = '_')))
+#                      sep = '_')),
+#      envir = test_env())
 #
 # test_that('objects from RData file are correctly created when loading file', {
 #   expect_length(ls(), 28)

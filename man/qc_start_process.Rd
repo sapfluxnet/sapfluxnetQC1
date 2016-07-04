@@ -4,11 +4,14 @@
 \alias{qc_start_process}
 \title{Start QC process}
 \usage{
-qc_start_process(folder = ".", parent_logger = "test")
+qc_start_process(folder = ".", rdata = TRUE, parent_logger = "test")
 }
 \arguments{
 \item{folder}{Character string with the route to the folder to start QC
 process}
+
+\item{rdata}{Logical indicating if objects created in the QC must be saved in
+a file}
 }
 \value{
 Invisible TRUE if all the process is ok, and invisible FALSE if there
