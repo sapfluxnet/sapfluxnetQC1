@@ -917,7 +917,7 @@ qc_env_vars_presence <- function(data, metadata,
                        'env_swc_deep_depth')
     md_res <- vector()
     hd_res <- vector()
-    concordance <- vector()
+    # concordance <- vector()
 
     # STEP 2
     # Check which variables are in metadata
