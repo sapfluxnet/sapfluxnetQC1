@@ -125,3 +125,123 @@ the environmental metadata. This helper function will be used in the
 arguments, (`?qc_get_timestep`).
 
 <img src="qc_get_timestep.svg" alt="qc_get_timestep" style="width: 650px;"/>
+
+## `qc_timestamp_errors`
+
+Function to identify known errors in TIMESTAMP variable. A summary of intervals
+59 seconds away from the declared timestep is presented in order to locate the
+errors. See function help for more details about the arguments,
+(`?qc_timestamp_errors`).
+
+<img src="qc_timestamp_errors.svg" alt="qc_timestamp_errors" style="width: 500px;"/>
+
+## `qc_time_interval`
+
+This function obtains a summary of the inital and final time (t0 and tf) of
+each object in the data (plants or environmental variables). See function help
+for more details about the arguments, (`?qc_time_interval`).
+
+<img src="qc_time_interval.svg" alt="qc_time_interval" style="width: 500px;"/>
+
+## `qc_timestamp_concordance`
+
+Function to retrieve numerical or graphical information about concordance in
+the timestamp for both, environmental and sapflow data. See function help for
+more details about the arguments, (`?qc_timestamp_concordance`).
+
+<img src="qc_timestamp_concordance.svg" alt="qc_timestamp_concordance" style="width: 500px;"/>
+
+## `qc_solar_timestamp`
+
+TO DO
+
+# Gaps functions
+
+Functions for characterise the gaps (type, length...).
+
+## `qc_mind_the_gap`
+
+This function obtains info about the gaps and display it in a summary data frame.
+See function help for details about the arguments, (`?qc_mind_the_gap`).  
+
+<img src="qc_mind_the_gap.svg" alt="qc_mind_the_gap" style="width: 750px;"/>
+
+# Metadata general checks
+
+Functions to perform the quality check in the metadata. They include the five
+kinds of metadata (site, stand, plant, species and environmental) as well as
+the interface between metadata and data (checks that involves both kind of data).
+
+## `create_dic`
+
+This function creates dictionaries (named lists) for the specified kind of
+metadata, including the name of the metadata variables as labels and their
+expected class as the value. This provides a reference to check if the class is
+OK with the `qc_md_cols` function. See function help for details about the
+arguments, (`?create_dic`).
+
+<img src="create_dic.svg" alt="create_dic" style="width: 650px;"/>
+
+## `qc_site_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of site metadata specified in the arguments. See function
+help for details about the arguments, (`?qc_site_dics`).  
+
+<img src="qc_site_dics.svg" alt="qc_site_dics" style="width: 650px;"/>
+
+## `qc_stand_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of stand metadata specified in the arguments. See function
+help for details about the arguments, (`?qc_stand_dics`).  
+
+<img src="qc_stand_dics.svg" alt="qc_stand_dics" style="width: 650px;"/>
+
+## `qc_species_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of species metadata specified in the arguments. See function
+help for details about the arguments, (`?qc_species_dics`).  
+
+<img src="qc_species_dics.svg" alt="qc_species_dics" style="width: 650px;"/>
+
+## `qc_plant_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of plant metadata specified in the arguments. See function
+help for details about the arguments, (`?qc_plant_dics`).  
+
+<img src="qc_plant_dics.svg" alt="qc_plant_dics" style="width: 650px;"/>
+
+## `qc_env_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of environmental metadata specified in the arguments.
+See function help for details about the arguments, (`?qc_env_dics`).  
+
+<img src="qc_env_dics.svg" alt="qc_env_dics" style="width: 650px;"/>
+
+## `qc_md_cols`
+
+This functions checks for presence, NAs and classes of the variables provided
+in the different kinds of metadata, buiding a summary data frame as result.
+See function help for details about the arguments, (`?qc_md_cols`).
+
+<img src="qc_md_cols.svg" alt="qc_md_cols" style="width: 750px;"/>
+
+## `qc_factor_values`
+
+This function checks if the values provided for the factor metadata variables are
+allowed values. See function help for details about the arguments,
+(`?qc_factor_values`).  
+
+<img src="qc_factor_values.svg" alt="qc_factor_values" style="width: 750px;"/>
+
+## `qc_env_vars_presence`
+
+This function check the presence in the environmental data of variables
+declared as measured in the environmental metadata. See function help for details
+about arguments, (`?qc_env_vars_presence`)
+
+<img src="qc_env_vars_presence.svg" alt="qc_env_vars_presence" style="width: 650px;"/>
