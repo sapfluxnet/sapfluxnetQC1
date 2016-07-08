@@ -245,3 +245,69 @@ declared as measured in the environmental metadata. See function help for detail
 about arguments, (`?qc_env_vars_presence`)
 
 <img src="qc_env_vars_presence.svg" alt="qc_env_vars_presence" style="width: 650px;"/>
+
+## `qc_pl_treatments`
+
+This function summarizes the treatments declared in the plant metadata to look
+for mispelling and concordance errors. Results are summarised in a data frame.
+See function help for details about arguments, (`?qc_pl_treatments`).  
+
+<img src="qc_pl_treatments.svg" alt="qc_pl_treatments" style="width: 200px;"/>
+
+## `qc_email_check`
+
+This function checks if the email provided is a correct formatted email
+direction. See function help for details about arguments, (`?qc_email_check`).  
+
+<img src="qc_email_check.svg" alt="qc_email_check" style="width: 500px;"/>
+
+## `qc_species_names_info`
+
+This function uses the tpl and tpl_data packages (from github) to obtain
+the correct species names (if any correction is needed). A summary data frame
+is returned to use in `qc_species_names_fix` function.
+See function help for details about arguments, (`?qc_species_names_info`).  
+
+<img src="qc_species_names_info.svg" alt="qc_species_names_info" style="width: 500px;"/>
+
+## `qc_species_names_fix`
+
+This function takes the results of `qc_species_names_info` and return the
+tpl names if no NAs has been generated.
+See function help for details about arguments, (`?qc_species_names_fix`).  
+
+<img src="qc_species_names_fix.svg" alt="qc_species_names_fix" style="width: 300px;"/>
+
+## `qc_species_names`
+
+Wrapper for species_names_info and species_names_fix.
+See function help for details about arguments, (`?qc_species_names`).  
+
+<img src="qc_species_names.svg" alt="qc_species_names" style="width: 300px;"/>
+
+## `qc_species_verification`
+
+This function return a summary indicating if the species declared in the
+species metadata are the same that those indicated in the plant metadata.
+See function help for details about arguments, (`?qc_species_verification`).  
+
+<img src="qc_species_verification.svg" alt="qc_species_verification" style="width: 500px;"/>
+
+# Ranges checks
+
+This group of functions check that the provided numerical values are within the
+natural/typical/known ranges. It is a work in progress.
+
+## `qc_suitable_range`
+
+Function to check if the numerical value provided is within the ranges provided.
+It is a wrapper for functions yet to do.
+
+## `qc_sapf_range_check`
+
+Function to make a suitability test in the sap flow values provided. Values
+are tested to be within the ranges for sap flow measures observed in the
+literature. See function help for details about arguments,
+(`?qc_sapf_range_check`).  
+
+<img src="qc_sapf_range_check.svg" alt="qc_sapf_range_check" style="width: 650px;"/>
