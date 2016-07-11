@@ -401,4 +401,33 @@ This functions only need to be called once, as it creates the needed folder
 structure to recreate SAPFLUXNET project in any environment.
 See function help for details about the arguments, (`?df_folder_structure`).  
 
-<img src="df_folder_structure.svg" alt="df_folder_structure" style="width: 650px;"/>
+<img src="df_folder_structure.svg" alt="df_folder_structure" style="width: 350px;"/>
+
+## `df_received_to_accepted`
+
+This function is in charge of move the data from the received folder to the
+accepted data folder (within the `code` folder).
+See function help for details about arguments, (`?df_received_to_accepted`).  
+
+<img src="df_received_to_accepted_FUNCTION.svg" alt="df_received_to_accepted" style="width: 650px;"/>
+
+## `df_start_status`
+
+Initialise an empty status file in yaml format, using the `yaml` package.
+See function help for details about arguments, (`?df_start_status`).  
+
+<img src="df_start_status.svg" alt="df_start_status" style="width: 650px;"/>
+
+## `df_get_status`
+
+Retrieve the status file info as a list, with the yaml package.
+See the function help for details about the arguments, (`?df_get_status`).  
+
+<img src="df_get_status.svg" alt="df_get_status" style="width: 650px;"/>
+
+## `df_set_status`
+
+Change and update status file info using yaml package.
+See function help for details about arguments, (`?df_set_status`).  
+
+<img src="df_set_status.svg" alt="df_set_status" style="width: 650px;"/>
