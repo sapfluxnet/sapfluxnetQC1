@@ -311,3 +311,94 @@ literature. See function help for details about arguments,
 (`?qc_sapf_range_check`).  
 
 <img src="qc_sapf_range_check.svg" alt="qc_sapf_range_check" style="width: 650px;"/>
+
+# Unit transformation functions
+
+Family of functions dedicated to extract the sapwood metadata, calculate the
+sapwood area if not provided and convert between units and sapflow measure levels
+(plant, sapwood and leaf area).
+
+## `qc_get_sapw_md`
+
+Simple function to retrieve the metadata variables related with sapwood.
+See function help for details about arguments, (`?qc_get_sapw_md`).  
+
+<img src="qc_get_sapw_md.svg" alt="qc_get_sapw_md" style="width: 500px;"/>
+
+## `qc_sapw_area_calculator`
+
+Function to calculate sapwood area from DBH, bark thickness and sapwood depth.
+See function help for details about arguments, (`?qc_sapw_area_calculator`).  
+
+<img src="qc_sapw_area_calculator.svg" alt="qc_sapw_area_calculator" style="width: 500px;"/>
+
+## `qc_cm_cm_h`
+
+Conversion of sap flow units to sapwood level
+(cm³·cm⁻²·h⁻¹), plant level (cm³·h⁻¹) or leaf area level (cm³·cm⁻²·h⁻¹). This
+documentation is valid for this function as well as all other functions for
+unit conversion (`qc_cm_cm_h`, `qc_cm_m_s`, `qc_dm_dm_h`, `qc_dm_dm_s`,
+`qc_mm_mm_s`, `qc_g_m_s`, `qc_kg_m_h`, `qc_kg_m_s`, `qc_cm_s`, `qc_cm_h`,
+`qc_dm_h`, `qc_g_h`, `qc_kg_h`). See function(s) help for details about
+arguments, (`?qc_cm_cm_h`).
+
+<img src="qc_cm_cm_h.svg" alt="qc_cm_cm_h" style="width: 500px;"/>
+
+## `qc_sapw_conversion`
+
+Wrapper for unit conversion functions, from the units declared in metadata
+to the desired output units.
+See function help for details about arguments, (`?qc_sapw_conversion`).
+
+<img src="qc_sapw_conversion.svg" alt="qc_sapw_conversion" style="width: 450px;"/>
+
+# Report functions
+
+Family of functions dedicated to generate the html reports.
+
+## `rep_sfn_render`
+
+Wrap around rmarkdown::render function to generate the automatic reports.
+See function help for details about arguments, (`?rep_sfn_render`).  
+
+<img src="rep_sfn_render.svg" alt="rep_sfn_render" style="width: 250px;"/>
+
+# Visualization functions
+
+Functions dedicated to generate plots or visualizations of data and metadata
+
+## `vis_gaps_calendar`
+
+This function generates a calendar heatmap to visualize the gaps density. Plot
+is generated as a `ggplot` object, so post-modifications are allowed.
+See function help for details about arguments, (`?vis_gaps_calendar`).  
+
+<img src="vis_gaps_calendar.svg" alt="vis_gaps_calendar" style="width: 200px;"/>
+
+## `vis_plot_the_gap`
+
+This function is a simple wrapper for ggplot + geom_histogram. It produces
+a ggplot object that can be modified adding layers, like any other ggplot
+object.
+See function help for details about arguments, (`?vis_plot_the_gap`).  
+
+<img src="vis_plot_the_gap.svg" alt="vis_plot_the_gap" style="width: 650px;"/>
+
+## `vis_gap_lines`
+
+TIMESTAMP concordance line plot, with gaps.
+See function help for details about the arguments, (`?vis_gap_lines`).  
+
+<img src="vis_gap_lines.svg" alt="vis_gap_lines" style="width: 650px;"/>
+
+# Data flow functions
+
+Functions to manage the movement of files between folders in the server tree.
+
+## `df_folder_structure`
+
+This functions only need to be called once, as it creates the needed folder
+structure to recreate SAPFLUXNET project in any environment.
+See function help for details about the arguments, (`?df_folder_structure`).  
+
+<img src="df_folder_structure.svg" alt="df_folder_structure" style="width: 650px;"/>
