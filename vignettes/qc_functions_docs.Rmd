@@ -462,3 +462,56 @@ This function performs three actions:
 See function help for details about arguments, (`?df_accepted_to_lvl1`).  
 
 <img src="df_accepted_to_lvl1.svg" alt="df_accepted_to_lvl1" style="width: 650px;"/>
+
+# Data Load functions
+
+Functions to load data and metadata, as well as helper functions to aid with
+the automatic detection of format of raw data.
+
+## `remove_dupcols`
+
+`remove_dupcols` is an internal function to use inside of the `dl_*`
+functions. It checks for duplicate column names and drop them.
+See function help for details about arguments, (`?remove_dupcols`).  
+
+<img src="remove_dupcols.svg" alt="remove_dupcols" style="width: 500px;"/>
+
+## `dl_na_char_generator`
+
+Generation of a character vector with the possible na characters found in
+csv files in order to load data with `data.table::fread`.
+See function help for details about arguments, (`?dl_na_char_generator`).  
+
+<img src="dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 150px;"/>
+
+## `dl_dec_char_detect`
+
+Decimal character detection to csv files loading with `data.table::fread`.
+See function help for details about arguments, (`?dl_dec_char_detect`).  
+
+<img src="dl_dec_char_detect.svg" alt="dl_dec_char_detect" style="width: 500px;"/>
+
+## `dl_data_col_classes`
+
+Checking and setting data column classes to numeric.
+See function help for details about arguments, (`?dl_data_col_classes`).  
+
+<img src="dl_data_col_classes.svg" alt="dl_data_col_classes" style="width: 400px;"/>
+
+## `dl_metadata`
+
+This function make use of dplyr, tidyr and readxl packages in order to
+retrieve and format the metadata. It's intended to be used as first step
+to load the metadata and start the metadata quality check.
+See function help for details about the arguments, (`?dl_metadata`).  
+
+<img src="dl_metadata.svg" alt="dl_metadata" style="width: 650px;"/>
+
+## `dl_data`
+
+This function make use of dplyr, tidyr and readxl packages in order to
+retrieve and format the data. Also, in the case of csv files it uses
+data.table package.
+See function help for details about the arguments, (`?dl_data`).  
+
+<img src="dl_data.svg" alt="dl_data" style="width: 850px;"/>
