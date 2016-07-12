@@ -431,3 +431,34 @@ Change and update status file info using yaml package.
 See function help for details about arguments, (`?df_set_status`).  
 
 <img src="df_set_status.svg" alt="df_set_status" style="width: 650px;"/>
+
+## `df_report_folder_creation`
+
+Function to create the report subfolder for the site to analyze.
+See function help for details about arguments, (`?df_report_folder_creation`).  
+
+<img src="df_report_folder_creation.svg" alt="df_report_folder_creation" style="width: 650px;"/>
+
+## `df_get_data_folders`
+
+This function gets the data folder names to be able to start automatically the
+QC process.
+See function help for details about arguments, (`?df_get_data_folders`).  
+
+<img src="df_get_data_folders.svg" alt="df_get_data_folders" style="width: 150px;"/>
+
+## `df_accepted_to_lvl1`
+
+This function performs three actions:
+
+1. write csv files with the fixed data in the LVL1 folder.
+
+2. Update the status files to indicate that data is in LVL1 and the date of the
+   move.
+
+3. Save the objects generated in the QC to make easy the creation of dashboards
+   without the need of run all QC tests again.
+
+See function help for details about arguments, (`?df_accepted_to_lvl1`).  
+
+<img src="df_accepted_to_lvl1.svg" alt="df_accepted_to_lvl1" style="width: 650px;"/>
