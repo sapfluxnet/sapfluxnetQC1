@@ -515,3 +515,64 @@ data.table package.
 See function help for details about the arguments, (`?dl_data`).  
 
 <img src="dl_data.svg" alt="dl_data" style="width: 850px;"/>
+
+# Logging functions
+
+Family of functions dedicated to setup, maintain and configure the logging
+process
+
+## `log_sapfluxnet_format`
+
+Custom log formatter for SAPFLUXNET Project
+See function help for details about arguments, (`?log_sapfluxnet_format`).  
+
+<img src="log_sapfluxnet_format.svg" alt="log_sapfluxnet_format" style="width: 150px;"/>
+
+## `log_sapfluxnet_action`
+
+Custom logging handler action for SAPFLUXNET Project.
+See function help for details about arguments, (`?log_sapfluxnet_action`).  
+
+<img src="log_sapfluxnet_action.svg" alt="log_sapfluxnet_action" style="width: 350px;"/>
+
+## `log_sapfluxnet_setup`
+
+Setting up the SAPFLUXNET Project log handler.
+See function help for details about arguments, (`?log_sapfluxnet_setup`).  
+
+<img src="log_sapfluxnet_setup.svg" alt="log_sapfluxnet_setup" style="width: 250px;"/>
+
+# Main functions
+
+Main functions for starting QC procces, getting si_code and generate results
+tables.
+
+## `dl_get_si_code`
+
+Look at the data folder provided and get the code and the names of the files
+with the metadata, sapflow data and environmental data, in order to use them
+as parameters in the automated reports.
+See function help for details about arguments, (`?dl_get_si_code`).  
+
+<img src="dl_get_si_code.svg" alt="dl_get_si_code" style="width: 650px;"/>
+
+## `qc_md_results_table`
+
+Metadata QC codified results in one data frame.
+See function help for details about arguments, (`?qc_md_results_table`).  
+
+<img src="qc_md_results_table.svg" alt="qc_md_results_table" style="width: 600px;"/>
+
+## `qc_data_results_table`
+
+Data QC codified results in one data frame.
+See function help for details about arguments, (`?qc_data_results_table`).  
+
+<img src="qc_data_results_table.svg" alt="qc_data_results_table" style="width: 650px;"/>
+
+## `qc_start_process`
+
+Start QC process from the site code.
+See function help for details about arguments, (`?qc_start_process`).  
+
+<img src="qc_start_process.svg" alt="qc_start_process" style="width: 500px;"/>
