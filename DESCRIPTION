@@ -1,7 +1,7 @@
 Package: sapfluxnetr
 Type: Package
 Title: Package with functions related to sapfluxnet project data
-Version: 0.0.5 RtfM
+Version: 0.0.5
 Author: Victor Granda (SAPFLUXNET Team)
 Maintainer: Victor Granda <v.granda@creaf.uab.cat>
 Description: Functions to make easy, reproducible and semiautomatized quality checks of submmited data
