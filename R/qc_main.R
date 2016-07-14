@@ -177,25 +177,37 @@ qc_md_results_table <- function(md_cols, factor_values,
     }
 
     # 2.2 ClassOK
-    if (any(!md_cols$ClassOK & !md_cols$IsNA)) {
+    if (any(is.na(md_cols$IsNA)) | any(is.na(md_cols$ClassOK))) {
       step <- c(step, 'Metadata variables expected class')
-      status <- c(status, 'ERROR')
-      description <- c(description, 'One or more variables have the wrong class')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'One or more variables are missing from metadata and class check is unfeasible')
     } else {
-      step <- c(step, 'Metadata variables expected class')
-      status <- c(status, 'PASS')
-      description <- c(description, 'All metadata variables have the correct class')
+      if (any(!md_cols$ClassOK & !md_cols$IsNA)) {
+        step <- c(step, 'Metadata variables expected class')
+        status <- c(status, 'ERROR')
+        description <- c(description, 'One or more variables have the wrong class')
+      } else {
+        step <- c(step, 'Metadata variables expected class')
+        status <- c(status, 'PASS')
+        description <- c(description, 'All metadata variables have the correct class')
+      }
     }
 
     # 2.3 NAs
-    if (any(md_cols$IsNA)) {
+    if (any(is.na(md_cols$IsNA))) {
       step <- c(step, 'Metadata variables NA presence')
-      status <- c(status, 'INFO')
-      description <- c(description, 'Some variables have no value')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'One or more variables are missing from metadata and NA check is unfeasible')
     } else {
-      step <- c(step, 'Metadata variables NA presence')
-      status <- c(status, 'PASS')
-      description <- c(description, 'No NAs in metadata')
+      if (any(md_cols$IsNA)) {
+        step <- c(step, 'Metadata variables NA presence')
+        status <- c(status, 'INFO')
+        description <- c(description, 'Some variables have no value')
+      } else {
+        step <- c(step, 'Metadata variables NA presence')
+        status <- c(status, 'PASS')
+        description <- c(description, 'No NAs in metadata')
+      }
     }
 
     # STEP 3
