@@ -1,0 +1,54 @@
+---
+title: "Manual Changes Protocol"
+author: "Victor Granda"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Sometimes manual changes in the received data are necessary. If it is the case,
+all changes must be documented following established rules. This vignette sets
+those rules and explains the protocol to be followed to document the manual
+changes.
+
+## File characteristics and location
+
+All changes for a site data must be documented in a **`txt`** file, located in
+the site folder of the `Data` folder (i.e.
+`Data/XXX_YYY_ZZZ/`).  
+Name of the file is the site code plus manual_changes
+(`XXX_YYY_ZZZ_manual_changes.txt`).  
+
+**Example**:
+
+`Data/ESP_VAL_SOR/ESP_VAL_SOR_manual_changes.txt`
+
+
+## File content and organization
+
+All manual changes, no matter how small, must be included and documented in the
+file. File content is a list, with one element for each change, coded by date
+of the change.
+
+**Example**
+
+      Data/ESP_VAL_SOR/ESP_VAL_SOR_manual_changes.txt
+
+
+      2016/07/27: Fixed errors in the TIMESTAMP:
+                  TIMESTAMP presented errors of continuity due to bad conversion.
+                  Errors were detected in the QC process, but were not automatically
+                  fixed in the same process.
+                  In order to fix those errors, TIMESTAMP wrong values were manually
+                  changed. List of fixed TIMESTAMP values can be found below:
+                  1. 2007/02/06 12:00:00 changed to 2007/02/06 12:15:00 in row 208
+                  2. 2007/06/14 08:30:00 changed to 2007/06/14 08:00:00 in row 10567
+      
+      2016/07/30: Fixed wrong latitude in metadata:
+                  Latitude was wrongly added to the metadata, with no possible
+                  autofix.
+                  si_lat variable was changed from 42.9 to 38.2 in the ESP_VAL_SOR_metadata.xlsx
+                  file
