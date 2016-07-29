@@ -18,6 +18,11 @@ A character vector with the timezone code compatible with lubridate
 Tranforms timezone ISO code to character vector compatible with lubridate and
 POSIXct
 }
+\details{
+GMT time zones are used, as they are day saving light time (DST) agnostic,
+and in that way the DST can setted if the metadata says so. GMT are sign
+exchanged to be compatible with ISO.
+}
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
