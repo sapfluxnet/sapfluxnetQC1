@@ -93,7 +93,7 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
 
     # STEP 1
     # Obtaining the file names in the received folder.
-    files <- list.files('Received_data', pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
+    files <- list.files('received_data', pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
 
     # STEP 2
     # Extract site code from file names
@@ -111,12 +111,12 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
       # 3.1 path and file names
       path <- file.path('Data', code)
       path_accepted <- file.path(path, 'Accepted')
-      from_files <- list.files('Received_data',
+      from_files <- list.files('received_data',
                                pattern = paste('(', code,
                                                '_env_data|', code, '_sapflow_data)\\.csv$|',
                                                code, '_metadata\\.xls(x)?$', sep = ''),
                                full.names = TRUE)
-      file_names <- stringr::str_replace(from_files, 'Received_data', path_accepted)
+      file_names <- stringr::str_replace(from_files, 'received_data', path_accepted)
 
       # 3.2 check presence
       if (dir.exists(path)) {

@@ -20,17 +20,17 @@ test_that('warnings are raised if folder already exist', {
 ################################################################################
 context('J2. received_to_accepted')
 
-dir.create('Received_data')
+dir.create('received_data')
 file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
-          to = c('Received_data/foo_sapflow_data.csv',
-                 'Received_data/foo_metadata.xlsx',
-                 'Received_data/foo_env_data.csv'))
+          to = c('received_data/foo_sapflow_data.csv',
+                 'received_data/foo_metadata.xlsx',
+                 'received_data/foo_env_data.csv'))
 
 suppressMessages(df_received_to_accepted(remove = FALSE))
 
-received_md5 <- md5sum(c('Received_data/foo_sapflow_data.csv',
-                         'Received_data/foo_metadata.xlsx',
-                         'Received_data/foo_env_data.csv'))
+received_md5 <- md5sum(c('received_data/foo_sapflow_data.csv',
+                         'received_data/foo_metadata.xlsx',
+                         'received_data/foo_env_data.csv'))
 accepted_md5 <- md5sum(c('Data/foo/Accepted/foo_sapflow_data.csv',
                           'Data/foo/Accepted/foo_metadata.xlsx',
                           'Data/foo/Accepted/foo_env_data.csv'))
@@ -54,15 +54,15 @@ test_that('warnings and messages are raised correctly', {
 
   expect_message(df_received_to_accepted(remove = TRUE),
                  'Removing the received files for site')
-  expect_false(file.exists('Received_data/foo_sapflow_data.csv'))
-  expect_false(file.exists('Received_data/foo_env_data.csv'))
-  expect_false(file.exists('Received_data/foo_metadata.xlsx'))
+  expect_false(file.exists('received_data/foo_sapflow_data.csv'))
+  expect_false(file.exists('received_data/foo_env_data.csv'))
+  expect_false(file.exists('received_data/foo_metadata.xlsx'))
 })
 
 file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
-          to = c('Received_data/bar_sapflow.csv',
-                 'Received_data/bar.xlsx',
-                 'Received_data/bar_environmental.csv'))
+          to = c('received_data/bar_sapflow.csv',
+                 'received_data/bar.xlsx',
+                 'received_data/bar_environmental.csv'))
 
 suppressMessages(df_received_to_accepted(remove = FALSE))
 
@@ -73,7 +73,7 @@ test_that('bar site files are not copied', {
   expect_false(file.exists('Data/bar/Accepted/bar_environmental.csv'))
 })
 
-unlink('Received_data', recursive = TRUE)
+unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)
@@ -84,12 +84,12 @@ context('J3. Status yaml files')
 
 df_folder_structure()
 
-dir.create('Received_data')
+dir.create('received_data')
 
 file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
-          to = c('Received_data/foo_sapflow_data.csv',
-                 'Received_data/foo_metadata.xlsx',
-                 'Received_data/foo_env_data.csv'))
+          to = c('received_data/foo_sapflow_data.csv',
+                 'received_data/foo_metadata.xlsx',
+                 'received_data/foo_env_data.csv'))
 
 suppressMessages(df_received_to_accepted(remove = FALSE))
 
@@ -371,7 +371,7 @@ test_that('no objects in environment now', {
 
 ################################################################################
 # cleaning
-unlink('Received_data', recursive = TRUE)
+unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)

@@ -63,7 +63,7 @@ test_that('Argument checks work', {
 })
 
 # preparation
-dir.create('Received_data')
+dir.create('received_data')
 df_folder_structure()
 
 file.copy(
@@ -77,8 +77,8 @@ file.copy(
 
 file.copy(
   c('foo.xlsx', 'foo.xlsx'),
-  c(file.path('Received_data', 'foo_metadata.xlsx'),
-    file.path('Received_data', 'bar_metadata.xlsx'))
+  c(file.path('received_data', 'foo_metadata.xlsx'),
+    file.path('received_data', 'bar_metadata.xlsx'))
 )
 
 rep_sfn_render('received_to_accepted.Rmd',
@@ -137,7 +137,7 @@ test_that('files are created OK and in the correct places', {
 ################################################################################
 # cleaning
 unlink('FakeData', recursive = TRUE)
-unlink('Received_data', recursive = TRUE)
+unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)

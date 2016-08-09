@@ -6,7 +6,7 @@ good_data <- data.frame(TIMESTAMP = as.POSIXct(c(
   "2003-06-03 00:00:00", "2003-06-03 00:14:59", "2003-06-03 00:30:00",
   "2003-06-03 00:45:00", "2003-06-03 00:59:59", "2003-06-03 01:15:00",
   "2003-06-03 01:30:00", "2003-06-03 01:44:59", "2003-06-03 02:00:00"
-  ), tz = 'Etc/GMT+1'),
+  ), tz = 'Etc/GMT-1'),
   Other_var = 1:9,
   stringsAsFactors = FALSE)
 
@@ -22,7 +22,7 @@ bad_timestamp <- as.POSIXct(c(
   "2003-06-03 00:00:00", "2003-06-03 00:14:00", "2003-06-03 00:30:00",
   "2003-06-03 00:45:00", "2003-06-03 00:59:00", "2003-06-03 01:15:00",
   "2003-06-03 01:30:00", "2003-06-03 01:44:00", "2003-06-03 02:00:00"
-), tz = 'Etc/GMT+1')
+), tz = 'Etc/GMT-1')
 
 bad_data_1 <- data.frame(TIMESTAMP = c(
   "Miercoles, 23 de Mayo, 2015. 10:00", "Miercoles, 23 de Mayo, 2015. 10:15",
@@ -38,7 +38,7 @@ bad_1_timestamp <- as.POSIXct(c(
   "2015-05-23 10:00:00", "2015-05-23 10:15:00", "2015-05-23 10:30:00",
   "2015-05-23 10:45:00", "2015-05-23 11:00:00", "2015-05-23 11:15:00",
   "2015-05-23 11:30:00", "2015-05-23 11:45:00", "2015-05-23 12:00:00"
-), tz = 'Etc/GMT+1')
+), tz = 'Etc/GMT-1')
 
 bad_data_2 <- data.frame(STAMP = as.POSIXct(c(
   "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
@@ -89,7 +89,7 @@ test_that('Results only change the TIMESTAMP, not other variables', {
   expect_identical(as_good, good_data)
   expect_identical(as_bad$Other_var, bad_data$Other_var)
   expect_identical(as_bad_1$Other_var, bad_data_1$Other_var)
-  expect_identical(attr(as_vec_good, 'tz'), 'Etc/GMT+1')
+  expect_identical(attr(as_vec_good, 'tz'), 'Etc/GMT-1')
 })
 
 test_that('TIMESTAMP produced is correct', {

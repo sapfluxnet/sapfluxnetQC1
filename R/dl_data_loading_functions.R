@@ -519,7 +519,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           # 2.1.3 Remove any extra column that could be created in the read_excel step.
           #       This is achieved with a regular expression indicating that we select
           #       those variables that have TIME or end with a number
-          dplyr::select(matches("(TIME|^.+?\\d$)"))
+          dplyr::select(dplyr::matches("(TIME|^.+?\\d$)"))
 
         # 2.1.4 If long format is needed, gather time!!
         if (long) {
@@ -542,7 +542,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           # 2.2.3 Remove any extra column that could be created in the read_excel step.
           #       This is achieved with a regular expression indicating that we select
           #       the environmental variables and the TIMESTAMP
-          dplyr::select(matches(
+          dplyr::select(dplyr::matches(
             "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
           ))
 
@@ -575,7 +575,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           dec = dl_dec_char_detect(file_name, n)
         ) %>%
           remove_dupcols() %>%
-          dplyr::select(matches('(TIME|^.+?\\d$)'))
+          dplyr::select(dplyr::matches('(TIME|^.+?\\d$)'))
 
         # 4.1.0 Check and fix if any character is in the data
         res <- dl_data_col_classes(res, parent_logger = parent_logger)
@@ -601,7 +601,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           dec = dl_dec_char_detect(file_name, n)
         ) %>%
           remove_dupcols() %>%
-          dplyr::select(matches(
+          dplyr::select(dplyr::matches(
             "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
           ))
 
