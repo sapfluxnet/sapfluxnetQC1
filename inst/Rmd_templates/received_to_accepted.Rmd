@@ -22,7 +22,7 @@ log_sapfluxnet_setup(log_file, logger = 'DataFlow', level = 'DEBUG')
 ## Received folder content
 
 ```{r received_content, echo = FALSE}
-dir('Received_data')
+dir('received_data')
 ```
 
 ## Transfer files
