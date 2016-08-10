@@ -673,7 +673,7 @@ qc_start_process <- function(folder = '.', rdata = TRUE,
                       QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
                       parent_logger = parent_logger)
 
-        # 2.2.5 return invisible TRUE
+        # 2.2.7 return invisible TRUE
         return(invisible(TRUE))
       }
 
@@ -713,7 +713,7 @@ qc_start_process <- function(folder = '.', rdata = TRUE,
                     QC = list(DONE = TRUE, DATE = as.character(Sys.Date())),
                     parent_logger = parent_logger)
 
-      # 2.3.6 return invisible TRUE
+      # 2.3.8 return invisible TRUE
       return(invisible(TRUE))
 
     }

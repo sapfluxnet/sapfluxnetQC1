@@ -7,7 +7,7 @@
 df_accepted_to_lvl1(si_code, sapf_data_plant = NULL,
   sapf_data_sapwood = NULL, sapf_data_leaf = NULL, env_data = NULL,
   site_md = NULL, stand_md = NULL, plant_md = NULL, species_md = NULL,
-  env_md = NULL, rdata = TRUE, parent_logger = "test")
+  env_md = NULL, rdata = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{si_code}{Character with the site code}
@@ -25,7 +25,7 @@ df_accepted_to_lvl1(si_code, sapf_data_plant = NULL,
 \item{env_md}{Data frame with the fixed environmental metadata}
 
 \item{rdata}{Logical indicating if an RData file must be created with the
-objects generated in the QC. Default to TRUE.}
+objects generated in the QC. Default to FALSE.}
 
 \item{sapf_data}{Data frame with the fixed sapflow data}
 }

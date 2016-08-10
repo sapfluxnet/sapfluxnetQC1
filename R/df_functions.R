@@ -562,7 +562,7 @@ df_get_data_folders <- function(parent_logger = 'test') {
 #' @param env_md Data frame with the fixed environmental metadata
 #'
 #' @param rdata Logical indicating if an RData file must be created with the
-#'   objects generated in the QC. Default to TRUE.
+#'   objects generated in the QC. Default to FALSE.
 #'
 #' @return Nothing
 #'
@@ -574,7 +574,7 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
                                 sapf_data_sapwood = NULL, sapf_data_leaf = NULL,
                                 env_data = NULL, site_md = NULL, stand_md = NULL,
                                 plant_md = NULL, species_md = NULL, env_md = NULL,
-                                rdata = TRUE, parent_logger = 'test') {
+                                rdata = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
