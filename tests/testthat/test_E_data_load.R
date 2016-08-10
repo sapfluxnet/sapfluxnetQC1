@@ -113,7 +113,7 @@ test_that('NaN and "Missing" are interpreted as they must', {
   expect_is(sapflow_data[[2]], 'numeric')
   expect_equal(sum(!is.na(sapflow_data_nan[[2]])), 0)
   expect_is(sapflow_data[[7]], 'numeric')
-  expect_is(sapflow_data_nan[[7]], 'character')
+  expect_is(sapflow_data_nan[[7]], 'numeric')
   expect_is(env_data[['ta']], 'numeric')
   expect_equal(sum(!is.na(env_data_nan[['ta']])), 0)
   expect_is(sapf_csv_data[[2]], 'numeric')

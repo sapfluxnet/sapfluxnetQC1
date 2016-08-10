@@ -240,9 +240,9 @@ dl_data_col_classes <- function(data, parent_logger = 'test') {
     for (var in names(data[, -1])) {
 
       # 1.1 if the class is different from numeric, lets transform it!!!
-      if (all(!is.numeric(data[, var]), !is.logical(data[, var]))) {
+      if (all(!is.numeric(data[[var]]), !is.logical(data[[var]]))) {
         message('Converting to numeric ', var)
-        data[, var] <- as.numeric(data[, var])
+        data[, var] <- as.numeric(data[[var]])
       }
     }
 
@@ -355,7 +355,7 @@ dl_metadata <- function(file_name, sheet_name,
         # spread the variables to their own columns, getting back their class
         tidyr::spread(Variable, Value, convert = TRUE)
 
-      # 1.1.1 return the site metadata
+      # 1.1.2 return the site metadata
       return(res)
     }
 
@@ -374,7 +374,7 @@ dl_metadata <- function(file_name, sheet_name,
         # adding the si_code
         dplyr::mutate(si_code = si_code_txt)
 
-      # 1.2.1 return the stand or environmental metadata
+      # 1.2.2 return the stand or environmental metadata
       return(res)
     }
 
@@ -400,7 +400,7 @@ dl_metadata <- function(file_name, sheet_name,
         # adding the si_code
         dplyr::mutate(si_code = si_code_txt)
 
-      # 1.3.1 return the plant metadata
+      # 1.3.2 return the plant metadata
       return(res)
     }
 
@@ -426,7 +426,7 @@ dl_metadata <- function(file_name, sheet_name,
         # adding the si_code
         dplyr::mutate(si_code = si_code_txt)
 
-      # 1.4.1 return the species metadata
+      # 1.4.2 return the species metadata
       return(res)
     }
 
@@ -521,12 +521,15 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           #       those variables that have TIME or end with a number
           dplyr::select(dplyr::matches("(TIME|^.+?\\d$)"))
 
-        # 2.1.4 If long format is needed, gather time!!
+        # 2.1.4 Check and fix if any character is in the data
+        res <- dl_data_col_classes(res, parent_logger = parent_logger)
+
+        # 2.1.5 If long format is needed, gather time!!
         if (long) {
           res <- res %>%
             tidyr::gather(Plant, Sapflow_value, -TIMESTAMP)
 
-          # 2.1.5 return long format
+          # 2.1.6 return long format
           return(res)
 
         } else {
@@ -546,12 +549,15 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
             "(TIME|ta|rh|vpd|sw_in|ppfd_in|netrad|ws|precip|swc_deep|swc_shallow)"
           ))
 
-        # 1.2.4 If long format is needed, gather time!!
+        # 2.2.4 Check and fix if any character is in the data
+        res <- dl_data_col_classes(res, parent_logger = parent_logger)
+
+        # 2.2.5 If long format is needed, gather time!!
         if (long) {
           res <- res %>%
             tidyr::gather(Variable, Value, -TIMESTAMP)
 
-          # 1.2.5 return long format
+          # 2.2.6 return long format
           return(res)
 
         } else {
