@@ -670,3 +670,18 @@ sapw_md %>%
               backgroundColor = styleEqual(c(''),
                                            c('#d91e18')))
 ```
+
+
+```{r, include=FALSE}
+# log setup
+log_sapfluxnet_setup('Logs/sapfluxnet.log',
+                     logger = 'DataFlow',
+                     level = 'WARNING')
+# saving the fixed datasets and the objects created in the level1 folder
+df_accepted_to_lvl1(
+  params$code,
+  sapf_data_fixed_plant, sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
+  env_data_fixed, site_md_coordfix, stand_md, plant_md, species_md,
+  env_md, parent_logger = 'DataFlow', rdata = params$rdata
+)
+```

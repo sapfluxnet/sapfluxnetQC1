@@ -674,6 +674,10 @@ sapw_md %>%
 
 
 ```{r, include=FALSE}
+# log setup
+log_sapfluxnet_setup('Logs/sapfluxnet.log',
+                     logger = 'DataFlow',
+                     level = 'WARNING')
 # saving the fixed datasets and the objects created in the level1 folder
 df_accepted_to_lvl1(
   params$code,
