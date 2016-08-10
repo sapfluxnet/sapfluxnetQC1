@@ -95,6 +95,15 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
       }
     }
 
+    # STEP 2'5
+    # Check if no gaps, as empty vectors will produce problems in the data
+    # processing pipeline
+    if (any(length(id) < 1, length(start) < 1, length(end) < 1)) {
+      id <- 'No gaps found'
+      start <- NA
+      end <- NA
+    }
+
     # STEP 3
     # Build the results data frame
     res_df <- data.frame(
