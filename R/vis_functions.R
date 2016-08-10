@@ -264,7 +264,12 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
 
     sapf_gaps <- qc_mind_the_gap(sapf_data)
 
-    sapf_tmp_data <- dplyr::full_join(sapf_intervals, sapf_gaps, by = 'Object')
+    # if no gaps, no join
+    if (sapf_gaps$Object[1] == 'No gaps found') {
+      sapf_tmp_data <- sapf_intervals
+    } else {
+      sapf_tmp_data <- dplyr::full_join(sapf_intervals, sapf_gaps, by = 'Object')
+    }
 
     # 1.2 env
     env_intervals <- qc_time_interval(env_data)
@@ -272,7 +277,12 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
 
     env_gaps <- qc_mind_the_gap(env_data)
 
-    env_tmp_data <- dplyr::full_join(env_intervals, env_gaps, by = 'Object')
+    # if no gaps, no join
+    if (env_gaps$Object[1] == 'No gaps found') {
+      env_tmp_data <- env_intervals
+    } else {
+      env_tmp_data <- dplyr::full_join(env_intervals, env_gaps, by = 'Object')
+    }
 
     # 1.3 all
     gaps_info <- dplyr::bind_rows(env_tmp_data, sapf_tmp_data)
