@@ -414,8 +414,8 @@ qc_as_timestamp <- function(data, env_md, parent_logger = 'test') {
 #'   the timezone name
 #'
 #' @return An object of the same type of input (data frame or vector) with the
-#'   fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
-#'   appears and none fix is made, returning data as entered.
+#'   fixed values of TIMESTAMP. If TIMESTAMP is already in format, only timezone
+#'   is set, returning data as entered.
 #'   If TIMESTAMP can not be fixed, an error is raised.
 #'
 #' @export
@@ -428,20 +428,26 @@ qc_fix_timestamp <- function(data, env_md, parent_logger = 'test') {
   withCallingHandlers({
 
     # STEP 1
-    # Check if TIMESTAMP is correct
-    if (qc_is_timestamp(data)) {
+    # Check if TIMESTAMP is correct and set the timezone
+    res <- qc_as_timestamp(data, env_md, parent_logger = parent_logger)
 
-      # 1.1 If correct, return the data without modifications
-      return(data)
-    } else {
+    # STEP 2
+    # Return the result
+    return(res)
 
-      # STEP 2
-      # If not correct, fix it
-      res <- qc_as_timestamp(data, env_md)
-
-      # 2.1 and return it
-      return(res)
-    }
+    # if (qc_is_timestamp(data)) {
+    #
+    #   # 1.1 If correct, set the timezone
+    #   return(qc_as_timestamp(data, env_md))
+    # } else {
+    #
+    #   # STEP 2
+    #   # If not correct, fix it
+    #   res <- qc_as_timestamp(data, env_md)
+    #
+    #   # 2.1 and return it
+    #   return(res)
+    # }
 
     # END FUNCTION
   },

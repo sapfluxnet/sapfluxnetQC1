@@ -15,8 +15,8 @@ the timezone name}
 }
 \value{
 An object of the same type of input (data frame or vector) with the
-  fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
-  appears and none fix is made, returning data as entered.
+  fixed values of TIMESTAMP. If TIMESTAMP is already in format, only timezone
+  is set, returning data as entered.
   If TIMESTAMP can not be fixed, an error is raised.
 }
 \description{

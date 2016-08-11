@@ -467,7 +467,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     }
 
     # 2.7 Gaps info, sapflow
-    if (length(sapf_gaps_info$gap_coverage) == 0) {
+    if (is.na(sapf_gaps_info$gap_coverage) | length(sapf_gaps_info$gap_coverage) == 0) {
       step <- c(step, 'Sapflow gaps coverage')
       status <- c(status, 'PASS')
       description <- c(description, 'No gaps')
@@ -490,7 +490,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     }
 
     # 2.8 Gaps info, environmental
-    if (length(env_gaps_info$gap_coverage) == 0) {
+    if (is.na(env_gaps_info$gap_coverage) | length(env_gaps_info$gap_coverage) == 0) {
       step <- c(step, 'Environmental gaps coverage')
       status <- c(status, 'PASS')
       description <- c(description, 'No gaps')
