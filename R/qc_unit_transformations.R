@@ -198,6 +198,8 @@ qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -259,6 +261,8 @@ qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -320,6 +324,8 @@ qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -381,6 +387,8 @@ qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -442,6 +450,8 @@ qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -503,6 +513,8 @@ qc_g_m_s <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -564,6 +576,8 @@ qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -625,6 +639,8 @@ qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -686,6 +702,8 @@ qc_cm_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -747,6 +765,8 @@ qc_dm_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -808,6 +828,8 @@ qc_cm_s <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -869,6 +891,8 @@ qc_g_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
@@ -930,6 +954,8 @@ qc_kg_h <- function(x, sapw_area, leaf_area, output_units,
 
     # STEP 0
     # Arguments checking
+    # If x is NA, return NA to avoid check for numeric error
+    if (is.na(x)) {return(NA)}
     # Are values numeric?
     if (any(!is.numeric(x), !is.numeric(sapw_area), !is.numeric(leaf_area))) {
       stop('x, sapw_area and/or leaf_area are not numeric values')
