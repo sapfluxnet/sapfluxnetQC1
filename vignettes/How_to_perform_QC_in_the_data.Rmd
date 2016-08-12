@@ -1,0 +1,13 @@
+---
+title: "How to perform QC in the data"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to perform QC in the data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Here will be an explanation of how to run tghe script to QC and the debug script
+in case of problems
