@@ -397,6 +397,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
                                   timestamp_concordance, sapf_gaps_info,
                                   env_gaps_info, sapf_data_fixed_plant,
                                   sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
+                                  sapf_timestamp_nas, env_timestamp_nas,
                                   parent_logger = 'test') {
 
   # Using calling handlers to manage errors
@@ -432,7 +433,29 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       description <- c(description, 'TIMESTAMP format is correct or has been fixed')
     }
 
-    # 2.3 TIMESTAMP errors sapf
+    # 2.3 TIMESTAMP NAs sapf
+    if (is.logical(sapf_timestamp_nas)) {
+      step <- c(step, 'Sapflow TIMESTAMP NAs presence')
+      status <- c(status, 'PASS')
+      description <- c(description, 'No NAs detected in TIMESTAMP')
+    } else {
+      step <- c(step, 'Sapflow TIMESTAMP NAs presence')
+      status <- c(status, 'ERROR')
+      description <- c(description, 'TIMESTAMP has NAs')
+    }
+
+    # 2.3b TIMESTAMP NAs env
+    if (is.logical(env_timestamp_nas)) {
+      step <- c(step, 'Environmental TIMESTAMP NAs presence')
+      status <- c(status, 'PASS')
+      description <- c(description, 'No NAs detected in TIMESTAMP')
+    } else {
+      step <- c(step, 'Environmental TIMESTAMP NAs presence')
+      status <- c(status, 'ERROR')
+      description <- c(description, 'TIMESTAMP has NAs')
+    }
+
+    # 2.4 TIMESTAMP errors sapf
     if (length(timestamp_errors_sapf[,1]) > 0) {
       step <- c(step, 'TIMESTAMP continuity errors Sapflow data')
       status <- c(status, 'WARNING')
@@ -443,7 +466,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       description <- c(description, 'TIMESTAMP continuity is fine')
     }
 
-    # 2.4 TIMESTAMP errors env
+    # 2.5 TIMESTAMP errors env
     if (length(timestamp_errors_env[,1]) > 0) {
       step <- c(step, 'TIMESTAMP continuity errors Environmental data')
       status <- c(status, 'WARNING')

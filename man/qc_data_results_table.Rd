@@ -7,7 +7,8 @@
 qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
   timestamp_errors_env, sapw_md, timestamp_concordance, sapf_gaps_info,
   env_gaps_info, sapf_data_fixed_plant, sapf_data_fixed_sapwood,
-  sapf_data_fixed_leaf, parent_logger = "test")
+  sapf_data_fixed_leaf, sapf_timestamp_nas, env_timestamp_nas,
+  parent_logger = "test")
 }
 \arguments{
 \item{sapf_data_fixed}{}

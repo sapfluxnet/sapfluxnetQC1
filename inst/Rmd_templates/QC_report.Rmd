@@ -131,6 +131,12 @@ sapf_data_fixed <- qc_fix_timestamp(sapf_data, env_md,  'data_qc')
 ### env
 env_data_fixed <- qc_fix_timestamp(env_data, env_md, 'data_qc')
 
+## timestamp NAs
+### sapf
+sapf_timestamp_nas <- qc_timestamp_nas(sapf_data_fixed, 'data_qc')
+### env
+env_timestamp_nas <- qc_timestamp_nas(env_data_fixed, 'data_qc')
+
 ## timestamp errors
 ### sapf
 timestamp_errors_sapf <- qc_timestamp_errors(
@@ -232,7 +238,7 @@ md_cols %>%
          ClassOK = as.character(ClassOK),
          IsNA = as.character(IsNA)) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 2. Metadata variables info',
+            caption = 'Metadata variables info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '100px',
@@ -264,7 +270,7 @@ factor_values %>%
          NA_presence = as.character(NA_presence),
          foo_var = paste(Check_result, NA_presence, sep = '')) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 3. Metadata factor variables info',
+            caption = 'Metadata factor variables info',
             options = list(dom = 'tp',
                            columnDefs = list(list(targets = 4, visible = FALSE),
                                              list(className = 'dt-center',
@@ -290,7 +296,7 @@ email_check %>%
   mutate(Is_correct = as.character(Is_correct),
          email = stringr::str_replace_all(email, '([a-z]|[0-9])*', '\\*')) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 4. Email info',
+            caption = 'Email info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '100px',
@@ -315,7 +321,7 @@ site_md_coordfix %>%
   select(si_name, si_lat, si_long, is_inside_country) %>%
   mutate(is_inside_country = as.character(is_inside_country)) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 5. Coordinates info',
+            caption = 'Coordinates info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1:3,
@@ -341,7 +347,7 @@ species_md_spnames %>%
   mutate(Concordance = as.character(Concordance),
          IsNA = as.character(IsNA)) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 6. Species names spelling',
+            caption = 'Species names spelling',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1:4),
@@ -365,7 +371,7 @@ species_md_spnames %>%
 sp_verification %>%
   mutate(Concordance = as.character(Concordance)) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 7. Species names info',
+            caption = 'Species names info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1:3),
@@ -390,7 +396,7 @@ Information about declared plant treatments
 
 ```{r pl_treatments, echo=FALSE}
 datatable(pl_treatments_check, class = 'display', rownames = FALSE, 
-          caption = 'Table 8. Plant treatments info',
+          caption = 'Plant treatments info',
           options = list(dom = 'tp',
                          columnDefs = list(list(className = 'dt-center',
                                                 width = '100px',
@@ -413,7 +419,7 @@ env_var_presence %>%
          Md_presence = as.character(Md_presence),
          Data_presence = as.character(Data_presence)) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 9. Environmental variables info',
+            caption = 'Environmental variables info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '100px',
@@ -476,6 +482,7 @@ qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
                       timestamp_concordance, sapf_gaps_info,
                       env_gaps_info, sapf_data_fixed_plant,
                       sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
+                      sapf_timestamp_nas, env_timestamp_nas,
                       'data_qc')
 ################################################################################
 ```
@@ -508,7 +515,7 @@ timestamp_env <- env_data_fixed %>%
 timestamp_sapf %>%
   bind_rows(timestamp_env) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 2. TIMESTAMP format info',
+            caption = 'TIMESTAMP format info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
@@ -519,12 +526,48 @@ timestamp_sapf %>%
                            autoWidth = TRUE))
 ```
 
+```{r sapf_timestamp_nas}
+if (is.logical(sapf_timestamp_nas)) {
+  invisible(TRUE)
+} else {
+ sapf_timestamp_nas %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Sapflow TIMESTAMP NAs info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '40%',
+                                                  targets = 1),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) 
+}
+```
+
+```{r env_timestamp_nas}
+if (is.logical(env_timestamp_nas)) {
+  invisible(TRUE)
+} else {
+ env_timestamp_nas %>%
+  datatable(class = 'display', rownames = FALSE,
+            caption = 'Environmental TIMESTAMP NAs info',
+            options = list(dom = 'tp',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  width = '40%',
+                                                  targets = 1),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           pageLength = 15,
+                           autoWidth = TRUE)) 
+}
+```
+
 ```{r timestamp_cont_errors_sapf}
 timestamp_errors_sapf %>%
   mutate(Int_length_minutes = Int_length/60) %>%
   select(Interval, Int_length_minutes) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 3. Sapflow TIMESTAMP continuity info',
+            caption = 'Sapflow TIMESTAMP continuity info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
@@ -540,7 +583,7 @@ timestamp_errors_env %>%
   mutate(Int_length_minutes = Int_length/60) %>%
   select(Interval, Int_length_minutes) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 4. Environmental TIMESTAMP continuity info',
+            caption = 'Environmental TIMESTAMP continuity info',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
@@ -580,7 +623,7 @@ gap_lines_plot
 sapf_gaps_info %>%
   select(-timestamp_start, -timestamp_end) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 5. Sap flow gaps info. gap_interval is expressed in minutes',
+            caption = 'Sap flow gaps info. gap_interval is expressed in minutes',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '20%',
@@ -610,7 +653,7 @@ cowplot::ggdraw() +
 env_gaps_info %>%
   select(-timestamp_start, -timestamp_end) %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 6. Environmental gaps info. gap_interval is expressed in minutes',
+            caption = 'Environmental gaps info. gap_interval is expressed in minutes',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '20%',
@@ -644,7 +687,7 @@ needed will be highlighted in Table 7.
 ```{r unit conversion}
 sapw_md %>%
   datatable(class = 'display', rownames = FALSE,
-            caption = 'Table 7. Sapwood related variables needed to unit conversion',
+            caption = 'Sapwood related variables needed to unit conversion',
             options = list(dom = 'tp',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1),
