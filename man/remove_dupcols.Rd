@@ -11,18 +11,21 @@ remove_dupcols(data, parent_logger = "test")
 }
 \value{
 \code{remove_dupcols} returns the loaded data with duplicate columns
-  removed, if any.
+  and wmpty rows removed, if any.
 }
 \description{
 \code{remove_dupcols} is an internal function to use inside of the \code{dl_*}
-functions. It checks for duplicate column names and drop them
+functions. It checks for duplicate column names and drop them. It also checks
+for empty rows (all row NAs, TIMESTAMP included) and delete them.
 }
 \details{
 When exporting from excel files, sometimes cell fomatting makes empty columns
 and rows to be read and loaded in R. If that is the case, any try to transform
 and to shape the data faces a "duplicate column names error". This can be
 solved by the correct formatting of the excel files, but this can not be
-always achieved, hence this function.
+always achieved, hence this function. Also, when excel files with formatting
+are read sometimes empty rows are added. This function also check for that
+and fix it if happens.
 }
 \seealso{
 Other Data Loading Functions: \code{\link{dl_data_col_classes}},
