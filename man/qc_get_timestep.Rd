@@ -7,7 +7,7 @@
 qc_get_timestep(metadata, parent_logger = "test")
 }
 \arguments{
-\item{metadata}{Data frame contining the timestep variable (pl_sens_timestep
+\item{metadata}{Data frame containing the timestep variable (pl_sens_timestep
 or env_timestep)}
 }
 \value{
@@ -46,6 +46,7 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_start_process}},
   \code{\link{qc_time_interval}},
   \code{\link{qc_timestamp_concordance}},
-  \code{\link{qc_timestamp_errors}}
+  \code{\link{qc_timestamp_errors}},
+  \code{\link{qc_timestamp_nas}}
 }
 

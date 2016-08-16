@@ -266,3 +266,45 @@ test_that('data frames are data frames', {
   expect_is(intervals_plot_2, 'data.frame')
   expect_identical(intervals_plot, intervals_plot_2)
 })
+
+################################################################################
+context('H6. TIMESTAMP NAs')
+
+data_wo_nas <- data.frame(TIMESTAMP = as.POSIXct(c(
+  "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
+  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
+  "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
+)),
+Tree_1 = 1:9,
+Tree_2 = c(NA, NA, NA, NA, 5:9),
+Tree_3 = c(1:8, NA),
+Tree_4 = rep(NA, 9),
+Tree_5 = c(1:3, NA, NA, 6:9),
+stringsAsFactors = FALSE)
+
+data_w_nas <- data.frame(TIMESTAMP = as.POSIXct(c(
+  "2003-06-03 00:00:00 UTC", NA, NA,
+  "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
+  "2003-06-03 01:30:00 UTC", NA, "2003-06-03 02:00:00 UTC"
+)),
+Tree_1 = 1:9,
+Tree_2 = c(NA, NA, NA, NA, 5:9),
+Tree_3 = c(1:8, NA),
+Tree_4 = rep(NA, 9),
+Tree_5 = c(1:3, NA, NA, 6:9),
+stringsAsFactors = FALSE)
+
+res_wo_nas <- qc_timestamp_nas(data_wo_nas)
+res_w_nas <- qc_timestamp_nas(data_w_nas)
+
+
+test_that('No NAs returns TRUE', {
+  expect_true(qc_timestamp_nas(data_wo_nas))
+  expect_true(res_wo_nas)
+})
+
+test_that('NAs returns data frame', {
+  expect_is(qc_timestamp_nas(data_w_nas), 'data.frame')
+  expect_is(res_w_nas, 'data.frame')
+  expect_length(res_w_nas$row_number, 3)
+})

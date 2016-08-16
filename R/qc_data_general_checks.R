@@ -462,6 +462,71 @@ qc_fix_timestamp <- function(data, env_md, parent_logger = 'test') {
 }
 
 ################################################################################
+#' Checking for NAs in the TIMESTAMP
+#'
+#' Simple function to check for NAs in the TIMESTAMP.
+#'
+#' NAs in TIMESTAMP generates problems in the further steps of QC, a function
+#' checking for NAs and info about the location is needed in order to be
+#' able to fix it
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the TIMESTAMP variable (sapflow or
+#'   environmental data)
+#'
+#' @return A data frame with the NAs info
+#'
+#' @export
+
+# START
+# Function declaration
+qc_timestamp_nas <- function(data, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (!is.data.frame(data)) {
+      stop('Data provided is not a data frame')
+    }
+    if (is.null(data$TIMESTAMP)) {
+      stop('Data provided has not a TIMESTAMP variable')
+    }
+
+    # STEP 1
+    # Retrieving info about NAs in TIMESTAMP
+    if (!any(is.na(data$TIMESTAMP))) {
+
+      # 1.1 If no NAs, return TRUE
+      return(invisible(TRUE))
+    } else {
+
+      # 1.2 If NAs, return the NAs
+      res_df <- data %>%
+        dplyr::mutate(row_number = row.names(data)) %>%
+        dplyr::filter(is.na(TIMESTAMP))
+
+      # STEP 2
+      # Return the res_df
+      return(res_df)
+    }
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_timestamp_nas', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_timestamp_nas', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_timestamp_nas', sep = '.'))})
+}
+
+################################################################################
 #' Helper function to get metadata timestep (environmental and sapflow).
 #'
 #' Get timestep value
@@ -472,7 +537,7 @@ qc_fix_timestamp <- function(data, env_md, parent_logger = 'test') {
 #'
 #' @family Quality Checks Functions
 #'
-#' @param metadata Data frame contining the timestep variable (pl_sens_timestep
+#' @param metadata Data frame containing the timestep variable (pl_sens_timestep
 #'   or env_timestep)
 #'
 #' @return The time step value as numeric
