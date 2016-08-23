@@ -720,12 +720,16 @@ sapw_md %>%
 log_sapfluxnet_setup('Logs/sapfluxnet.log',
                      logger = 'DataFlow',
                      level = 'WARNING')
-        # 2.2.6 saving the fixed datasets and the objects created in the level1 folder
+# 2.2.6 saving the fixed datasets and the objects created in the level1 folder
 df_accepted_to_lvl1(
           params$code,
           sapf_data_fixed_plant, sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
           env_data_fixed, site_md_coordfix, stand_md, plant_md, species_md,
           env_md, parent_logger = 'DataFlow', rdata = params$rdata
-        )    
+        )
+
+# saving Rdata object to use it in shiny apps
+save.image(file = file.path('Data', params$code, 'Lvl_1',
+                            paste(params$code, 'objects.RData', sep = '_')))
 ```
 
