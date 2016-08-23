@@ -729,7 +729,9 @@ df_accepted_to_lvl1(
         )
 
 # saving Rdata object to use it in shiny apps
-save.image(file = file.path('Data', params$code, 'Lvl_1',
-                            paste(params$code, 'objects.RData', sep = '_')))
+save(list = ls(all.names = TRUE),
+     file = file.path('Data', params$code, 'Lvl_1',
+                            paste(params$code, 'objects.RData', sep = '_')),
+     envir = environment())
 ```
 
