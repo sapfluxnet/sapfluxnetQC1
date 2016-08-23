@@ -728,7 +728,8 @@ qc_time_interval <- function(data, parent_logger = 'test') {
     res <- data.frame(
       Object = 'Total',
       t0 = data$TIMESTAMP[1],
-      tf = data$TIMESTAMP[length(data$TIMESTAMP)]
+      tf = data$TIMESTAMP[length(data$TIMESTAMP)],
+      stringsAsFactors = FALSE
     )
 
     # STEP 2

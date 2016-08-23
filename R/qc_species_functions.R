@@ -119,7 +119,8 @@ qc_species_names_info <- function(species, conservatism = 0.9,
       data_names = species,
       tpl_names = species_tpl,
       IsNA = is.na(species_tpl),
-      Concordance = species == species_tpl
+      Concordance = species == species_tpl,
+      stringsAsFactors = FALSE
     )
 
     # STEP 3
