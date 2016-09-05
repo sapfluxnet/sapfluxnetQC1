@@ -18,6 +18,7 @@ collects the folders present in \code{Data}.
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_copy_templates}},
   \code{\link{df_folder_structure}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},

@@ -737,3 +737,73 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
                                                         'df_accepted_to_lvl1',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Save the Rmd templates and the running scripts to their corresponding folders
+#'
+#' Copy the Rmd templates for file transfer and quality check to Template folder and
+#' the template for shiny web app to parent directory, and running scripts to parent
+#' directory.
+#'
+#' @family Data Flow
+#'
+#' @return Logical indicating if all files have been copied or overwritten
+#'
+#' @export
+
+# START
+# Function declaration
+df_copy_templates <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Copy templates for file transfer and quality check to Template folder
+    file.copy(
+      system.file("Rmd_templates", "received_to_accepted.Rmd",
+                  package = "sapfluxnetr"),
+      file.path('Templates'), overwrite = TRUE
+    )
+    file.copy(
+      system.file("Rmd_templates", "QC_report.Rmd",
+                  package = "sapfluxnetr"),
+      file.path('Templates'), overwrite = TRUE
+    )
+
+    # Copy template for shiny web app to parent directory
+    file.copy(
+      system.file("Rmd_templates", "sfn_monitor.Rmd",
+                  package = "sapfluxnetr"),
+      file.path('.'), overwrite = TRUE
+    )
+
+    # Copy scripts to parent directory
+    file.copy(
+      system.file("run_scripts", "main_script.R",
+                  package = "sapfluxnetr"),
+      file.path('.'), overwrite = TRUE
+    )
+    file.copy(
+      system.file("run_scripts", "debug_script.R",
+                  package = "sapfluxnetr"),
+      file.path('.'), overwrite = TRUE
+    )
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_copy_templates',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_copy_templates',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_copy_templates',
+                                                        sep = '.'))})
+}

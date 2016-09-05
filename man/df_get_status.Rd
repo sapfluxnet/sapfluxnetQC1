@@ -20,6 +20,7 @@ Retrieve the status file info as a list, with the yaml package
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_copy_templates}},
   \code{\link{df_folder_structure}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_received_to_accepted}},

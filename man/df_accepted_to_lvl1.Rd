@@ -40,7 +40,8 @@ make easy the creation of dashboards without the need of run all QC tests
 again.
 }
 \seealso{
-Other Data Flow: \code{\link{df_folder_structure}},
+Other Data Flow: \code{\link{df_copy_templates}},
+  \code{\link{df_folder_structure}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},

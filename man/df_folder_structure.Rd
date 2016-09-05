@@ -23,6 +23,7 @@ structure to recreate SAPFLUXNET project in any environment.
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
+  \code{\link{df_copy_templates}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
