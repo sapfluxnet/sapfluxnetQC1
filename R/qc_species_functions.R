@@ -110,7 +110,8 @@ qc_species_names_info <- function(species, conservatism = 0.9,
 
     # STEP 1
     # Obtaining tpl info
-    tpl_df <- tpl::tpl.get(species, suggestion.distance = conservatism)
+    tpl_df <- tpl::tpl.get(species, replace.synonyms = FALSE,
+                           suggestion.distance = conservatism)
     species_tpl <- tpl_df$name
 
     # STEP 2

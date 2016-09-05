@@ -456,7 +456,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     }
 
     # 2.4 TIMESTAMP errors sapf
-    if (length(timestamp_errors_sapf[,1]) > 0) {
+    if (length(timestamp_errors_sapf[[1]]) > 0) {
       step <- c(step, 'TIMESTAMP continuity errors Sapflow data')
       status <- c(status, 'WARNING')
       description <- c(description, 'TIMESTAMP continuity presents errors')
@@ -467,7 +467,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     }
 
     # 2.5 TIMESTAMP errors env
-    if (length(timestamp_errors_env[,1]) > 0) {
+    if (length(timestamp_errors_env[[1]]) > 0) {
       step <- c(step, 'TIMESTAMP continuity errors Environmental data')
       status <- c(status, 'WARNING')
       description <- c(description, 'TIMESTAMP continuity presents errors')
