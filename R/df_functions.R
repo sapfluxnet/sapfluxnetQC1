@@ -807,3 +807,84 @@ df_copy_templates <- function(parent_logger = 'test') {
                                                         'df_copy_templates',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Reset the data folder and status file for the si_code given.
+#'
+#' After manual changes, update the satus file to indicate that QC is needed.
+#' Also rename Accepted and Lvl1 data to avoid conflicts with manually
+#' changed data.
+#'
+#' A fast way of reset any site data folder when needed, usually after manual
+#' changes of the files
+#'
+#' @family Data Flow
+#'
+#' @param si_code Character vector indicating the site code to reset
+#'
+#' @return Nothing
+#'
+#' @export
+
+# START
+# Function declaration
+df_reset_data_status <- function(si_code, parent_logger = 'test') {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (!is.character(si_code)) {
+      stop('si_code provided is not a character')
+    }
+
+    # STEP 1
+    # Setting the status
+
+    # 1.1 status lists
+    QC = list(DONE = FALSE, DATE = NULL)
+    LVL1 = list(STORED = FALSE, DATE = NULL)
+
+    # 1.2 set status
+    df_set_status(si_code, QC = QC, LVL1 = LVL1, parent_logger = parent_logger)
+
+    # STEP 2
+    # Renaming data
+
+    # 2.1 file names, old and new
+    old_files <- c(
+      list.files(file.path('Data', si_code, 'Accepted'), full.names = TRUE),
+      list.files(file.path('Data', si_code, 'Lvl_1'), full.names = TRUE)
+    )
+
+    # 2.1.1 new names, substituting extension for _time.bak
+    new_files <- stringr::str_replace_all(
+      old_files,
+      pattern = "(.csv|.RData|.xlsx)",
+      replace = paste0('_', format(Sys.time(), '%Y%m%d%H%M'), '.bak')
+    )
+
+    # 2.2 Rename step
+    file.rename(
+      from = old_files,
+      to = new_files
+    )
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_reset_data_status',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_reset_data_status',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_reset_data_status',
+                                                        sep = '.'))})
+}

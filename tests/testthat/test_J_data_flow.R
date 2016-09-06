@@ -206,7 +206,7 @@ dir.create(file.path('Data', code, 'Accepted'))
 dir.create(file.path('Data', code, 'Lvl_1'))
 df_report_folder_creation(code)
 df_start_status(code)
-df_set_status(code, QC = list(DONE = TRUE, DATE = Sys.Date()))
+df_set_status(code, QC = list(DONE = TRUE, DATE = as.character(Sys.Date())))
 
 md_cols <- 1
 factor_values <- 2
@@ -368,6 +368,39 @@ test_that('no objects in environment now', {
 #                            'timestamp_concordance', 'timestamp_concordance_plot',
 #                            'timestamp_errors_env', 'timestamp_errors_sapf'))
 # })
+
+################################################################################
+context('J7. Reset data and status')
+
+code <- 'legen_wait_for_it'
+
+old_yaml <- df_get_status(code)
+old_files <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE),
+               list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+
+df_reset_data_status(code)
+
+new_yaml <- df_get_status(code)
+new_files <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE),
+               list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+
+test_that('status file has been updated', {
+  expect_true(old_yaml$QC$DONE)
+  expect_false(new_yaml$QC$DONE)
+  expect_equal(old_yaml$QC$DATE, as.character(Sys.Date()))
+  expect_null(new_yaml$QC$DATE)
+  expect_true(old_yaml$LVL1$STORED)
+  expect_false(new_yaml$LVL1$STORED)
+  expect_equal(old_yaml$LVL1$DATE, as.character(Sys.Date()))
+  expect_null(new_yaml$LVL1$DATE)
+})
+
+test_that('files had been renamed correctly', {
+  expect_false(all(old_files == new_files))
+  expect_true(length(old_files) == length(new_files))
+  expect_match(new_files, "(.bak)")
+  expect_match(old_files, "(.csv|.RData|.xlsx)")
+})
 
 ################################################################################
 # cleaning

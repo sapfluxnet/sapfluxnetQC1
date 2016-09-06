@@ -23,6 +23,7 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_get_data_folders}},
   \code{\link{df_get_status}},
   \code{\link{df_received_to_accepted}},
+  \code{\link{df_reset_data_status}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}}
 }
