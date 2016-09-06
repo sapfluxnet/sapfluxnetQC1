@@ -46,6 +46,10 @@ bad_data_2 <- data.frame(STAMP = as.POSIXct(c(
   "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
 )), stringsAsFactors = FALSE)
 
+bad_data_nas <- data.frame(TIMESTAMP = as.POSIXct(c(
+  rep(NA, 9)
+)), stringsAsFactors = FALSE)
+
 foo_vector <- as.POSIXct(c(
   "2003-06-03 00:00:00", "2003-06-03 00:14:59", "2003-06-03 00:30:00",
   "2003-06-03 00:45:00", "2003-06-03 00:59:59", "2003-06-03 01:15:00",
@@ -65,12 +69,18 @@ test_that('Message or warning are raised correctly', {
                  'TIMESTAMP is in the correct format')
   expect_warning(qc_is_timestamp(bad_data_1),
                  'WARNING: TIMESTAMP is NOT in the correct format')
+  expect_warning(qc_is_timestamp(rep(NA, 5)),
+                 'WARNING: TIMESTAMP is all NAs')
+  expect_warning(qc_is_timestamp(bad_data_nas),
+                 'WARNING: TIMESTAMP is all NAs')
 })
 
 test_that('Invisible logicals works', {
   expect_true(qc_is_timestamp(good_data))
   expect_true(qc_is_timestamp(foo_vector))
   expect_false(suppressWarnings(qc_is_timestamp(bad_data_1)))
+  expect_false(qc_is_timestamp(rep(NA, 5)))
+  expect_false(qc_is_timestamp(bad_data_nas))
 })
 
 ################################################################################
@@ -95,6 +105,11 @@ test_that('Results only change the TIMESTAMP, not other variables', {
 test_that('TIMESTAMP produced is correct', {
   expect_identical(as_bad$TIMESTAMP, bad_timestamp)
   expect_identical(as_bad_1$TIMESTAMP, bad_1_timestamp)
+})
+
+test_that('all NA TIMESTAMPs raise an error', {
+  expect_error(qc_as_timestamp(bad_data_nas, foo_md))
+  expect_error(qc_as_timestamp(c(NA,NA,NA,NA), foo_md))
 })
 
 ################################################################################

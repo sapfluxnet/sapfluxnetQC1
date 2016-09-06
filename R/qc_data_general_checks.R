@@ -44,8 +44,15 @@ qc_is_timestamp <- function(data, verbose = TRUE,
       if(is.null(data$TIMESTAMP)) {
         stop('TIMESTAMP variable is missing in the data provided')
       }
+
+      # is all TIMESTAMP NAs?
+      if (all(is.na(data$TIMESTAMP))) {
+        if (verbose) {warning('WARNING: TIMESTAMP is all NAs')}
+        return(invisible(FALSE))
+      }
+
       # Check TIMESTAMP format
-      if(lubridate::is.POSIXt(data$TIMESTAMP)) {
+      if (lubridate::is.POSIXt(data$TIMESTAMP)) {
         if (verbose) {message('TIMESTAMP is in the correct format')}
         return(invisible(TRUE))
       } else {
@@ -56,7 +63,13 @@ qc_is_timestamp <- function(data, verbose = TRUE,
 
       # STEP 2
       # Vector
-      if(lubridate::is.POSIXt(data)) {
+      # is all vector NA?
+      if (all(is.na(data))) {
+        if (verbose) {warning('WARNING: TIMESTAMP is all NAs')}
+        return(invisible(FALSE))
+      }
+
+      if (lubridate::is.POSIXt(data)) {
         if (verbose) {message('TIMESTAMP is in the correct format')}
         return(invisible(TRUE))
       } else {
@@ -70,11 +83,14 @@ qc_is_timestamp <- function(data, verbose = TRUE,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_is_timestamp', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_is_timestamp', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_is_timestamp', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_is_timestamp', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_is_timestamp', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_is_timestamp', sep = '.'))})
 
 }
 
@@ -338,7 +354,7 @@ qc_as_timestamp <- function(data, env_md, parent_logger = 'test') {
         data$TIMESTAMP <- res
         return(data)
       } else {
-        error('Unable to format correctly the TIMESTAMP, please ',
+        stop('Unable to format correctly the TIMESTAMP, please ',
               'revise manually.')
       }
     } else {
@@ -377,7 +393,7 @@ qc_as_timestamp <- function(data, env_md, parent_logger = 'test') {
         message('TIMESTAMP succesfully fixed. A sample: ', res[1])
         return(res)
       } else {
-        error('Unable to format correctly the TIMESTAMP, please ',
+        stop('Unable to format correctly the TIMESTAMP, please ',
               'revise manually.')
       }
     }
