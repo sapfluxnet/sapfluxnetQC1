@@ -4,7 +4,7 @@
 \alias{qc_rad_conversion}
 \title{Radiation units transformation}
 \usage{
-qc_rad_conversion(data, env_md, output_units = "PPFD",
+qc_rad_conversion(data, env_md, output_units = "ppfd_in",
   parent_logger = "test")
 }
 \arguments{

@@ -1184,7 +1184,7 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
 
 # START
 # Function declaration
-qc_rad_conversion <- function(data, env_md, output_units = 'PPFD',
+qc_rad_conversion <- function(data, env_md, output_units = 'ppfd_in',
                                parent_logger = 'test') {
 
   # Using calling handlers to logging
