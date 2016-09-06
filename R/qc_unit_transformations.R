@@ -1068,9 +1068,9 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
 
     # STEP 0
     # Arguments checking
-    # Are data and pl_metadata data frames?
+    # Are data and sapw_md data frames?
     if (any(!is.data.frame(data), !is.data.frame(sapw_md))) {
-      stop('data and/or pl_metadata objects are not data frames')
+      stop('data and/or sapw_md objects are not data frames')
     }
     # Is output units a character vector?
     if (!is.character(output_units)) {
@@ -1145,5 +1145,114 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
                                         logger = paste(parent_logger, 'qc_sapw_conversion', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger, 'qc_sapw_conversion', sep = '.'))})
+
+}
+
+################################################################################
+#' Radiation units transformation
+#'
+#' Function to transform between radiation units
+#'
+#' Radiation accepted measures can be of two kinds, \code{incoming photosynthetic photon flux density}
+#' and \code{shortwave incoming radiation}. Unit conversion must be done to allow data
+#' integration and analysis.
+#' This function converts between:
+#' \describe{
+#'   \item{\bold{Incoming photosynthetic photon flux density}}{
+#'   In this case, units returned are \eqn{{\mu}mol·m⁻²·s⁻¹}
+#'   }
+#'   \item{\bold{Shortwave incoming radiation}}{
+#'   In this case, units returned are \eqn{W·m⁻²}
+#'   }
+#' }
+#'
+#' @section Incoming photosynthetic photon flux density:
+#' Direct transformation is made from \emph{shortwave incoming radiation}.
+#'
+#' @section Shortwave incoming radiation:
+#' Direct transformation is made from \emph{incoming photosynthetic photon flux density}.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the environmental measurements
+#'
+#' @param output_units Character vector indicating the kind of output units.
+#'   Allowed values are \code{"ppfd_in"} and \code{"sw_in"}.
+#'   See details to obtain more information
+#'
+#' @export
+
+# START
+# Function declaration
+qc_rad_conversion <- function(data, env_md, output_units = 'PPFD',
+                               parent_logger = 'test') {
+
+  # Using calling handlers to logging
+  withCallingHandlers({
+
+    # STEP 0
+    # Initial checks
+
+    # 0.1 Arguments checking
+    # Is data a data frame?
+    if (!is.data.frame(data)) {
+      stop('data object is not a data frame')
+    }
+    # Is output units a character vector?
+    if (!is.character(output_units)) {
+      stop('output_units value is not a character vector')
+    }
+    # Is output units a valid value?
+    if (!(output_units %in% c('ppfd_in', 'sw_in'))) {
+      stop('output_units = "', output_units, '" is not a valid value. See function ',
+           'help (?qc_rad_conversion) for a list of valid values')
+    }
+
+    # 0.2 Check if output units already exist
+    if (!(output_units %in% colnames(data))){
+
+    # STEP 1
+    # Convert radiation values
+
+      # 1.1 Convert to incoming photosynthetic photon flux density and join to the data frame
+      if (output_units == "ppfd_in") {
+        if ('sw_in' %in% colnames(data)) {
+
+          ppfd_in <- LakeMetabolizer::sw.to.par(data, sw.col = "sw_in")
+          data <- cbind(data,ppfd_in)
+
+        } else {
+          warning("Radiation can not be transformed to incoming photosynthetic
+                  photon flux density because shortwave incoming radiation is missing")
+        }
+
+      # 1.2 Convert to shortwave incoming radiation and join to the data frame
+      } else if (output_units == "sw_in") {
+        if ('ppfd_in' %in% colnames(data)) {
+
+          sw_in <- LakeMetabolizer::par.to.sw(data, par.col = "ppfd_in")
+          data <- cbind(data,sw_in)
+
+        } else {
+          warning("Radiation can not be transformed to shortwave incoming radiation
+                  because incoming photosynthetic photon flux density is missing")
+        }
+      }
+    }
+
+    # STEP 2
+    # Return the results
+    return(data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_rad_conversion', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_rad_conversion', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_rad_conversion', sep = '.'))})
 
 }

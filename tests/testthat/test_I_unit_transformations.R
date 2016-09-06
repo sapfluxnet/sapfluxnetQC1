@@ -67,10 +67,10 @@ context('I3. Unit conversion')
 
 test_that('argument checks works', {
   expect_error(qc_sapw_conversion('not a data frame', qc_get_sapw_md(pl_data), 'plant'),
-               'data and/or pl_metadata objects are not data frames')
+               'data and/or sapw_md objects are not data frames')
   expect_error(qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'),
                                   'not a data frame', 'plant'),
-               'data and/or pl_metadata objects are not data frames')
+               'data and/or sapw_md objects are not data frames')
   expect_error(
     qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'), qc_get_sapw_md(pl_data), 25),
     'output_units value is not a character vector'

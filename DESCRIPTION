@@ -25,7 +25,9 @@ Imports:
     rmarkdown,
     DT,
     yaml,
-    cowplot
+    cowplot,
+    mapproj,
+    LakeMetabolizer
 Suggests:
     knitr,
     testthat,
