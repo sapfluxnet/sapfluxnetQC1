@@ -37,6 +37,12 @@ sites <- eventReactive(
   valueExpr = list.dirs('Data', full.names = FALSE, recursive = FALSE)
 )
 
+## update files
+observeEvent(
+  eventExpr = input$update_button,
+  handlerExpr = df_copy_templates()
+)
+
 ## number of sites stored in LVL1 (QC passed)
 qc_ran_n <- reactive({
   qc_ran <- 0
@@ -166,14 +172,12 @@ tags$br()
 tags$br()
 ```
 
-Idea, botón para la función `update_sapfluxnetr_files`, que haría una copia nueva
-de los main script, debug script, sfn monitor rmd, templates etc... para
-ejecutarlo cada vez que se instale una nueva versión del paquete sapfluxnetr.
-De esa manera los archivos pueden estar en el paquete y ser parte así del
-repositorio.
+Press `Update files` button to update templates and scripts files after an
+update in `sapfluxnetr` package.
 
 ```{r}
-actionButton('test', 'test')
+actionButton('update_button', 'Update files',
+             icon = icon("download-alt", lib = "glyphicon"))
 ```
 
 
