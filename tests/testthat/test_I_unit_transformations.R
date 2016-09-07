@@ -9,7 +9,7 @@ pl_data_bad$pl_code <- NULL
 test_that('argument checks work', {
   expect_error(qc_get_sapw_md(c('a','b','c')),
                'Provided pl_data object is not a data frame')
-  expect_error(qc_get_sapw_md(pl_data_bad),
+  expect_error(suppressWarnings(qc_get_sapw_md(pl_data_bad)),
                'pl_code variable is missing from pl_data')
 })
 

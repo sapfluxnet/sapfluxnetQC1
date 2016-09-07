@@ -79,8 +79,8 @@ test_that('Invisible logicals works', {
   expect_true(qc_is_timestamp(good_data))
   expect_true(qc_is_timestamp(foo_vector))
   expect_false(suppressWarnings(qc_is_timestamp(bad_data_1)))
-  expect_false(qc_is_timestamp(rep(NA, 5)))
-  expect_false(qc_is_timestamp(bad_data_nas))
+  expect_false(suppressWarnings(qc_is_timestamp(rep(NA, 5))))
+  expect_false(suppressWarnings(qc_is_timestamp(bad_data_nas)))
 })
 
 ################################################################################
@@ -108,8 +108,8 @@ test_that('TIMESTAMP produced is correct', {
 })
 
 test_that('all NA TIMESTAMPs raise an error', {
-  expect_error(qc_as_timestamp(bad_data_nas, foo_md))
-  expect_error(qc_as_timestamp(c(NA,NA,NA,NA), foo_md))
+  expect_error(suppressWarnings(qc_as_timestamp(bad_data_nas, foo_md)))
+  expect_error(suppressWarnings(qc_as_timestamp(c(NA,NA,NA,NA), foo_md)))
 })
 
 ################################################################################

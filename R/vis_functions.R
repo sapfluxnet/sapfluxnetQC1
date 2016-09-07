@@ -119,6 +119,19 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
       stop('gaps_info has not the necessary variables,',
            ' see function help (?qc_plot_the_gap)')
     }
+    # Is data empty (no gaps found)
+    if (gaps_info[[1]] == 'No gaps found') {
+
+      # create an empty plot
+      res_plot <- ggplot(data.frame(x = c(1,5,10), y =c(1,5,10)),
+                         aes(x = x, y = y)) +
+        geom_blank() +
+        annotate('text', x = 5, y = 5, label = 'No gaps found') +
+        theme_void()
+
+      # return empty plot
+      return(res_plot)
+    }
 
     # STEP 1
     # Create the ggplot object
