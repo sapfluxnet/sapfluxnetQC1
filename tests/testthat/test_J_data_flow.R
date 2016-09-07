@@ -370,6 +370,21 @@ test_that('no objects in environment now', {
 # })
 
 ################################################################################
+context('J7. Saving templates and running scripts to folders')
+
+test_that('Templates directory exists', {
+  expect_error(df_copy_templates(),'Templates directory does not exist')
+})
+
+dir.create('Templates')
+
+# test_that('function works', {
+#   expect_is(df_get_data_folders(), 'character')
+#   expect_length(df_get_data_folders(), 2)
+#   expect_identical(df_get_data_folders(), c('Data/bar', 'Data/foo'))
+# })
+
+################################################################################
 # cleaning
 unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)

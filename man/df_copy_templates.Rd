@@ -4,7 +4,10 @@
 \alias{df_copy_templates}
 \title{Save the Rmd templates and the running scripts to their corresponding folders}
 \usage{
-df_copy_templates(parent_logger = "test")
+df_copy_templates(first = FALSE, parent_logger = "test")
+}
+\arguments{
+\item{first}{Logical indicating if it is the first time the files are copied}
 }
 \value{
 Logical indicating if all files have been copied or overwritten
@@ -13,6 +16,11 @@ Logical indicating if all files have been copied or overwritten
 Copy the Rmd templates for file transfer and quality check to Template folder and
 the template for shiny web app to parent directory, and running scripts to parent
 directory.
+}
+\details{
+If it is the first time to set the SAPFLUXNET project, execute this function
+after the function \code{\link{df_folder_structure}} with the argument
+\code{first} set to \code{TRUE}
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},

@@ -745,7 +745,13 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
 #' the template for shiny web app to parent directory, and running scripts to parent
 #' directory.
 #'
+#' If it is the first time to set the SAPFLUXNET project, execute this function
+#' after the function \code{\link{df_folder_structure}} with the argument
+#' \code{first} set to \code{TRUE}
+#'
 #' @family Data Flow
+#'
+#' @param first Logical indicating if it is the first time the files are copied
 #'
 #' @return Logical indicating if all files have been copied or overwritten
 #'
@@ -753,42 +759,114 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
 
 # START
 # Function declaration
-df_copy_templates <- function(parent_logger = 'test') {
+df_copy_templates <- function(first=FALSE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
 
     # STEP 1
+    # Does 'Templates' directory exists?
+    if (!dir.exists('Templates')) {
+      stop('Templates directory does not exist')
+    }
+
+    # STEP 2
+    # If it is the first time, just copy the files
+    if(first){
+
+      # Copy templates for file transfer and quality check to Template folder
+      file.copy(
+        system.file('Rmd_templates', 'received_to_accepted.Rmd',
+                    package = 'sapfluxnetr'),
+        file.path('Templates'), overwrite = TRUE
+      )
+      file.copy(
+        system.file('Rmd_templates', 'QC_report.Rmd',
+                    package = 'sapfluxnetr'),
+        file.path('Templates'), overwrite = TRUE
+      )
+
+      # Copy template for shiny web app to parent directory
+      file.copy(
+        system.file('Rmd_templates', 'sfn_monitor.Rmd',
+                    package = 'sapfluxnetr'),
+        file.path('.'), overwrite = TRUE
+      )
+
+      # Copy scripts to parent directory
+      file.copy(
+        system.file('run_scripts', 'main_script.R',
+                    package = 'sapfluxnetr'),
+        file.path('.'), overwrite = TRUE
+      )
+      file.copy(
+        system.file('run_scripts', 'debug_script.R',
+                    package = 'sapfluxnetr'),
+        file.path('.'), overwrite = TRUE
+      )
+
+      return(invisible(TRUE))
+    }
+
+    # STEP 3
+    # Checks when first is set to FALSE
+
+    # Get the time of last modification for all the files previous to overwritting
+    pre_time <- file.mtime(c(file.path('Templates','received_to_accepted.Rmd'),
+                 file.path('Templates','QC_report.Rmd'),'sfn_monitor.Rmd',
+                 'main_script.R','debug_script.R'))
+
+    # Give an error if modification time of the files can not be obtained
+    if(any(is.na(pre_time))){
+      stop('Check whether templates and running scripts already exist. If some of them do not
+           exist, delete those that exist (if any) and run again the function with parameter
+           first set to TRUE')
+    }
+
+    # STEP 4
     # Copy templates for file transfer and quality check to Template folder
     file.copy(
-      system.file("Rmd_templates", "received_to_accepted.Rmd",
-                  package = "sapfluxnetr"),
+      system.file('Rmd_templates', 'received_to_accepted.Rmd',
+                  package = 'sapfluxnetr'),
       file.path('Templates'), overwrite = TRUE
     )
     file.copy(
-      system.file("Rmd_templates", "QC_report.Rmd",
-                  package = "sapfluxnetr"),
+      system.file('Rmd_templates', 'QC_report.Rmd',
+                  package = 'sapfluxnetr'),
       file.path('Templates'), overwrite = TRUE
     )
 
     # Copy template for shiny web app to parent directory
     file.copy(
-      system.file("Rmd_templates", "sfn_monitor.Rmd",
-                  package = "sapfluxnetr"),
+      system.file('Rmd_templates', 'sfn_monitor.Rmd',
+                  package = 'sapfluxnetr'),
       file.path('.'), overwrite = TRUE
     )
 
     # Copy scripts to parent directory
     file.copy(
-      system.file("run_scripts", "main_script.R",
-                  package = "sapfluxnetr"),
+      system.file('run_scripts', 'main_script.R',
+                  package = 'sapfluxnetr'),
       file.path('.'), overwrite = TRUE
     )
     file.copy(
-      system.file("run_scripts", "debug_script.R",
-                  package = "sapfluxnetr"),
+      system.file('run_scripts', 'debug_script.R',
+                  package = 'sapfluxnetr'),
       file.path('.'), overwrite = TRUE
     )
+
+    # STEP 5
+    # Check that all times of last modification have changed
+    post_time <- file.mtime(c(file.path('Templates','received_to_accepted.Rmd'),
+                             file.path('Templates','QC_report.Rmd'),'sfn_monitor.Rmd',
+                             'main_script.R','debug_script.R'))
+
+    if(all(post_time != pre_time)){
+      return(invisible(TRUE))
+    } else {
+      warning("Some Rmd templates or running scripts have not been copied")
+      return(invisible(FALSE))
+    }
 
     # END FUNCTION
   },
