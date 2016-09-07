@@ -263,6 +263,79 @@ renderTable({
 })
 ```
 
+### Manual Changes Log
+
+```{r manual_changes_log}
+site_list <- list.dirs('Data', full.names = FALSE, recursive = FALSE)
+fillCol(width = '100%', flex = c(NA),
+        selectInput('site_sel_man', label = 'Select site by code:',
+                    choices = site_list, selected = site_list[1]),
+        # textOutput('manual_changes'),
+        uiOutput('include_txt'))
+
+# mc_file <- reactive({
+#   file.path('Data', input$site_sel_man,
+#             paste0(input$site_sel_man, '_manual_changes.txt'))
+# })
+# 
+output$include_txt <- renderUI(
+  if (file.exists(file.path('Data', input$site_sel_man,
+                            paste0(input$site_sel_man,
+                                   '_manual_changes.txt')))) {
+    pre(includeText(file.path('Data', input$site_sel_man,
+                              paste0(input$site_sel_man,
+                                     '_manual_changes.txt'))))
+  } else {
+    tags$h2('No manual changes file found for this site')
+  }
+)
+```
+
+### Site Notes
+
+```{r site_notes}
+fillRow(height = '100%', flex = c(1, 1),
+        fillCol(width = '100%', flex = c(NA, NA, 1, NA),
+                selectInput('site_sel_notes', label = 'Select site by code:',
+                            choices = site_list, selected = site_list[1]),
+                # textInput('notes', 'Notes to add', width = '100%'),
+                tags$h4('Notes to add'),
+                tags$textarea(id = 'notes', rows = 10, cols = 80),
+                actionButton("write_button", "Add note",
+                             icon = icon("pencil", lib = "glyphicon"))),
+        uiOutput('site_notes')
+)
+
+add_notes <- function(file, string) {
+  write(string, file = file, append = TRUE)
+}
+
+observeEvent(
+  eventExpr = input$write_button,
+  handlerExpr = {
+    add_notes(
+      string = input$notes,
+      file = file.path('Data', input$site_sel_notes,
+                       paste0(input$site_sel_notes,
+                              '_notes.txt'))
+    )
+  }
+)
+
+output$site_notes <- renderUI(
+  if (file.exists(file.path('Data', input$site_sel_notes,
+                            paste0(input$site_sel_notes,
+                                   '_notes.txt')))) {
+    pre(includeText(file.path('Data', input$site_sel_notes,
+                              paste0(input$site_sel_notes,
+                                     '_notes.txt'))))
+  } else {
+    tags$h2('No notes file found for this site')
+  }
+)
+```
+
+
 Global Overview {data-icon="ion-android-globe" .storyboard}
 ================================================================================
 
