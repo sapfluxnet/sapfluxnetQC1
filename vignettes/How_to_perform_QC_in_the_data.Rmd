@@ -1,6 +1,6 @@
 ---
 title: "How to perform QC in the data"
-author: "Vignette Author"
+author: "SAPFLUXNET Team"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -9,5 +9,43 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Here will be an explanation of how to run tghe script to QC and the debug script
+Here will be an explanation of how to run the script to QC and the debug script
 in case of problems
+
+## Run Scripts
+
+There is two scripts in the main folder of the project (`/sapfluxnet`):
+
+  1. `main_script.R`
+  
+  1. `debug_script.R`
+
+### `main_script.R`
+
+This script is in charge of loading the `sapfluxnetr` package, move any new
+data from received to accepted folder, and start the QC process.  
+It is a very small and simple script, which takes advantage of all the functions
+present in the package. It is intended to be executed by a cron job
+(system level) or by the button present in the SapFluxNet Monitor app (interactive
+level). It also can be ran in a RStudio Server session (high interactive level).
+
+### `debug_script.R`
+
+This script is intended to be executed **manually** only when an error during the QC process
+is found. It replicates all the steps made in the QC process, but outside of
+the Rmd report. In this way, all the intermediate objects created by the QC
+process are available and can be studied to identify the error source/step.  
+In this case, *error* means that something went wrong in the QC resulting in the
+unavailability of the report or really weird reports. This can lead to find errors
+in the functions (data kinds we didn't account for before) or errors in the
+data (not in the package). Depending on the error found, solution can involve
+improving troublesome function/s, ask contributor politely to amend data or
+make easy and small manual changes in the data.
+
+## RData objects
+
+`Qc_report.Rmd` template also save the intermediate objects created during the
+QC process in a RData file in the data folder.  
+This file can be opened in a RStudio Server instance, allowing access to the
+objects without running the debug script. This can be useful in very large
+datasets, where running the script could be very time consuming.

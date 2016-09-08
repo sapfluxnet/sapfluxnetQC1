@@ -21,6 +21,8 @@ the site folder of the `Data` folder (i.e.
 `Data/XXX_YYY_ZZZ/`).  
 Name of the file is the site code plus manual_changes
 (`XXX_YYY_ZZZ_manual_changes.txt`).  
+Lines must **not** exceed 80 characters, to ensure complete visibility in most of
+the screens and in the `sfn_monitor` app.  
 
 **Example**:
 

@@ -35,7 +35,7 @@ Main report, where all the QC process is done and reported. This report provides
 a summary for the metadata and the data, as well as a section for each check
 done with the metadata and the data.  
 Last but not least, the code in the report is in charge of generate the fixed
-data (if needed), the intermediate r objects and move the fixed data to the
+data (if needed), the intermediate R objects and move the fixed data to the
 level 1 data folder.
 
 ### Flow diagram of QC_report.Rmd document

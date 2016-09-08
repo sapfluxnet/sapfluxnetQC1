@@ -15,10 +15,10 @@ relative to the different steps of data processing for the folder datasets.
 
 ## Format
 
-Choosen format is [yaml](http://www.yaml.org/) and the integration with R is
+Chosen format is [yaml](http://www.yaml.org/) and the integration with R is
 done by the `yaml` package (https://cran.r-project.org/web/packages/yaml/index.html).
 
-This format is choosen by several reasons:
+This format is chosen by several reasons:
 
   1. Easy integration with R
   1. Actively developed
@@ -41,24 +41,24 @@ This format is choosen by several reasons:
 ## File content
 
 QC
-  : Field indicating if Quality Check is already done. Two subfields:
+  : Field indicating if Quality Check is already done. Two sub-fields:
   
     + DONE: logical indicating if QC is done
     + DATE: character indicating the date in which QC was done
 
 LVL1
-  : Field indicating if data is stored in the `Level_1` data folder. Two subfields:
+  : Field indicating if data is stored in the `Level_1` data folder. Two sub-fields:
   
     + STORED: logical indicating if Lvl1 data was stored
     + DATE: character indicating the date in which storage was done
 
 LVL2
-  : Field indicating if data is stored in the `Level_2` data folder. Two subfields:
+  : Field indicating if data is stored in the `Level_2` data folder. Two sub-fields:
   
     + STORED: logical indicating if Lvl2 data was stored
     + DATE: character indicating the date in which storage was done
 
-## Example
+### Example
 
 XXX_XXX_XXX_status.yaml
 
@@ -75,3 +75,27 @@ LVL2:
   STORED: no
   DATE: ~
 ```
+
+## Getting and setting statuses
+
+There is two functions to retrieve and set the status of a site:
+
+  1. `df_get_status`. In charge of load the actual state of a site. Executing
+     this function in the RStudio Server instance prints a list with the
+     elements we saw before. See function help (`?df_get_status`) for more
+     info.
+  
+  2. `df_set_status`. This function allows modification of the status file by
+     providing a list for each element to modify. See function help
+     (`?df_set_status`) for more info.
+
+## Resetting a site
+
+Sometimes, after completing needed manual changes, status must be resetted to
+allow performing the QC process again. Status can be retrieved and changed
+by the functions explained above, but doing only this can lead to errors.
+When resetting a site, not only the status file must be changed, also old data
+present in `received_data` and `Data/si_code/Lvl_1` folders must be renamed to
+avoid conflicts in the new QC. So, in the case of a site reset, we need to use
+the `df_reset_data_status`, which is in charge of setting the new status, but
+also of renaming old data.

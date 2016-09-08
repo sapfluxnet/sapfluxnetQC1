@@ -43,3 +43,23 @@ Finally, depending on the value of the `remove` argument of the function, the
 files in te `Received_data` folders are dropped (with a message) or not
 (with a warning). All the proccess is logged at message level (messages,
 warnings and errors).
+
+## QC process
+
+Once the data is in the accepted folder, data quality checks must be run to
+ensure data suitability.
+QC is started with `qc_start_process`. This function checks all data status
+files, and performs the QC on those without the QC **DONE** flag.  
+
+<img src="qc_start_process.svg" alt="Fig. 3" style="width: 500px;"/>
+
+Last step in the QC process is data flow to `Lvl_1` folder, indicating that
+the data has been checked. This step is performed by the `df_accepted_to_lvl1`.  
+function:
+
+<img src="df_accepted_to_lvl1.svg" alt="Fig. 2" style="width: 500px;"/>
+
+Data will stay in `Lvl_1` folder until the report produced is studied. If manual
+or contributor side changes are necessary, those are made and the QC process
+is re-runned (after changing the flags in the status file). If all is correct,
+data can be moved to `Lvl_2` (yet to do).
