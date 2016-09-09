@@ -165,8 +165,8 @@ gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed, parent_logger =
 sapf_gaps_info <- qc_mind_the_gap(sapf_data_fixed, parent_logger = 'data_qc')
 env_gaps_info <- qc_mind_the_gap(env_data_fixed, parent_logger = 'data_qc')
 ### Trimmed
-sapf_gaps_trim_info <- qc_mind_the_gap(sapf_data_fixed, trim = TRUE, parent_logger = 'data_qc')
-env_gaps_trim_info <- qc_mind_the_gap(env_data_fixed, trim = TRUE, parent_logger = 'data_qc')
+# sapf_gaps_trim_info <- qc_mind_the_gap(sapf_data_fixed, trim = TRUE, parent_logger = 'data_qc')
+# env_gaps_trim_info <- qc_mind_the_gap(env_data_fixed, trim = TRUE, parent_logger = 'data_qc')
 
 ### plots
 #### calendars
@@ -177,19 +177,19 @@ sapf_gaps_plot <- vis_plot_the_gap(sapf_gaps_info, type = "gap_coverage",
                                    parent_logger = 'data_qc')
 env_gaps_plot <- vis_plot_the_gap(env_gaps_info, type = "gap_coverage",
                                    parent_logger = 'data_qc')
-sapf_gaps_trim_plot <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_coverage",
-                                   parent_logger = 'data_qc')
-env_gaps_trim_plot <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_coverage",
-                                   parent_logger = 'data_qc')
+# sapf_gaps_trim_plot <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_coverage",
+#                                    parent_logger = 'data_qc')
+# env_gaps_trim_plot <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_coverage",
+                                   # parent_logger = 'data_qc')
 #### plot the gaps interval
 sapf_gaps_plot_int <- vis_plot_the_gap(sapf_gaps_info, type = "gap_interval",
                                    parent_logger = 'data_qc')
 env_gaps_plot_int <- vis_plot_the_gap(env_gaps_info, type = "gap_interval",
                                    parent_logger = 'data_qc')
-sapf_gaps_trim_plot_int <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_interval",
-                                   parent_logger = 'data_qc')
-env_gaps_trim_plot_int <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_interval",
-                                   parent_logger = 'data_qc')
+# sapf_gaps_trim_plot_int <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_interval",
+#                                    parent_logger = 'data_qc')
+# env_gaps_trim_plot_int <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_interval",
+#                                    parent_logger = 'data_qc')
 
 ## Unit conversion
 sapw_md <- qc_sapw_area_calculator(qc_get_sapw_md(plant_md,
@@ -197,28 +197,28 @@ sapw_md <- qc_sapw_area_calculator(qc_get_sapw_md(plant_md,
                                    parent_logger = 'data_qc')
 
 ### plant units
-sapf_data_fixed_plant <- qc_sapw_conversion(sapf_data_fixed, sapw_md,
-                                            output_units = 'plant',
-                                            parent_logger = 'data_qc')
-
 #### check if errors
-sapf_data_fixed_plant <- tryCatch(sapf_data_fixed_plant, error = function(e) return(NULL))
+sapf_data_fixed_plant <- tryCatch({
+  qc_sapw_conversion(sapf_data_fixed, sapw_md,
+                     output_units = 'plant',
+                     parent_logger = 'data_qc')
+}, error = function(e) return(NULL))
 
 ### sapwood units
-sapf_data_fixed_sapwood <- qc_sapw_conversion(sapf_data_fixed, sapw_md,
-                                              output_units = 'sapwood',
-                                              parent_logger = 'data_qc')
-
 #### check if errors
-sapf_data_fixed_sapwood <- tryCatch(sapf_data_fixed_sapwood, error = function(e) return(NULL))
+sapf_data_fixed_sapwood <- tryCatch({
+   qc_sapw_conversion(sapf_data_fixed, sapw_md,
+                      output_units = 'sapwood',
+                      parent_logger = 'data_qc')
+}, error = function(e) return(NULL))
 
 ### leaf units
-sapf_data_fixed_leaf <- qc_sapw_conversion(sapf_data_fixed, sapw_md,
-                                           output_units = 'leaf',
-                                           parent_logger = 'data_qc')
-
 #### check if errors
-sapf_data_fixed_leaf <- tryCatch(sapf_data_fixed_leaf, error = function(e) return(NULL))
+sapf_data_fixed_leaf <- tryCatch({
+  qc_sapw_conversion(sapf_data_fixed, sapw_md,
+                     output_units = 'leaf',
+                     parent_logger = 'data_qc')
+}, error = function(e) return(NULL))
 ```
 
 
@@ -237,17 +237,17 @@ md_cols %>%
   mutate(PresenceOK = as.character(PresenceOK),
          ClassOK = as.character(ClassOK),
          IsNA = as.character(IsNA)) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Metadata variables info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '100px',
                                                   targets = c(1,2,3,4)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('IsNA',
               backgroundColor = styleEqual(c('TRUE', 'FALSE'),
                                            c('#89c4f4', 'transparent'))) %>%
@@ -270,18 +270,18 @@ factor_values %>%
   mutate(Check_result = as.character(Check_result),
          NA_presence = as.character(NA_presence),
          foo_var = paste(Check_result, NA_presence, sep = '')) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Metadata factor variables info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(targets = 4, visible = FALSE),
                                              list(className = 'dt-center',
                                                   width = '100px',
                                                   targets = 1:3),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('NA_presence',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('transparent', '#89c4f4')))
@@ -297,17 +297,17 @@ Information about email directions provided
 email_check %>%
   mutate(Is_correct = as.character(Is_correct),
          email = stringr::str_replace_all(email, '([a-z]|[0-9])*', '\\*')) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Email info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '100px',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('Is_correct',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -323,17 +323,17 @@ Information about site coordinates provided
 site_md_coordfix %>%
   select(si_name, si_lat, si_long, is_inside_country) %>%
   mutate(is_inside_country = as.character(is_inside_country)) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Coordinates info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1:3,
                                                   width = '100px'),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('is_inside_country',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -350,10 +350,10 @@ species_md_spnames %>%
   bind_rows(plant_md_spnames) %>%
   mutate(Concordance = as.character(Concordance),
          IsNA = as.character(IsNA)) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Species names spelling',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1:4),
                                              list(className = 'dt-right',
@@ -364,8 +364,8 @@ species_md_spnames %>%
                                                   targets = 2:3),
                                              list(width = '50px',
                                                   targets = 4)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('Concordance',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -375,10 +375,10 @@ species_md_spnames %>%
 ```{r species, echo=FALSE}
 sp_verification %>%
   mutate(Concordance = as.character(Concordance)) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Species names info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1:3),
                                              list(className = 'dt-right',
@@ -387,8 +387,8 @@ sp_verification %>%
                                                   targets = 1:2),
                                              list(width = '100px',
                                                   targets = 3)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('Concordance',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -401,17 +401,17 @@ sp_verification %>%
 Information about declared plant treatments
 
 ```{r pl_treatments, echo=FALSE}
-datatable(pl_treatments_check, class = 'display', rownames = FALSE, 
+datatable(pl_treatments_check, class = 'display compact', rownames = FALSE, filter = 'none', 
             extensions = c('Scroller', 'FixedColumns'),
           caption = 'Plant treatments info',
-          options = list(dom = 'tp',
+          options = list(dom = 'ti',
                          columnDefs = list(list(className = 'dt-center',
                                                 width = '100px',
                                                 targets = 1),
                                            list(className = 'dt-right',
                                                 targets = 0)),
-                         pageLength = 15,
-                         scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE))
+                         scroller = TRUE,
+                         scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
 ```
 
 ***
@@ -425,17 +425,17 @@ env_var_presence %>%
   mutate(Concordance = as.character(Concordance),
          Md_presence = as.character(Md_presence),
          Data_presence = as.character(Data_presence)) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Environmental variables info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '100px',
                                                   targets = 1:3),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('Concordance',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -522,17 +522,17 @@ timestamp_env <- env_data_fixed %>%
 
 timestamp_sapf %>%
   bind_rows(timestamp_env) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'TIMESTAMP format info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
                                                   targets = c(1,2)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE))
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
 ```
 
 ```{r sapf_timestamp_nas}
@@ -540,17 +540,17 @@ if (is.logical(sapf_timestamp_nas)) {
   invisible(TRUE)
 } else {
  sapf_timestamp_nas %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Sapflow TIMESTAMP NAs info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) 
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) 
 }
 ```
 
@@ -559,17 +559,17 @@ if (is.logical(env_timestamp_nas)) {
   invisible(TRUE)
 } else {
  env_timestamp_nas %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Environmental TIMESTAMP NAs info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) 
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) 
 }
 ```
 
@@ -577,50 +577,50 @@ if (is.logical(env_timestamp_nas)) {
 timestamp_errors_sapf %>%
   mutate(Int_length_minutes = Int_length/60) %>%
   select(Interval, Int_length_minutes) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Sapflow TIMESTAMP continuity info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE))
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
 ```
 
 ```{r timestamp_cont_errors_env}
 timestamp_errors_env %>%
   mutate(Int_length_minutes = Int_length/60) %>%
   select(Interval, Int_length_minutes) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Environmental TIMESTAMP continuity info',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE))
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
 ```
 
 TIMESTAMP concordance between sapflow and environmental data
 
 ```{r timestamp_concordance, fig.width=12}
 # timestamp_concordance %>%
-#   datatable(class = 'display', rownames = FALSE,
+#   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
 #             caption = 'Table 4. TIMESTAMP concordance info',
-#             options = list(dom = 'tp',
+#             options = list(dom = 'ti',
 #                            # columnDefs = list(list(className = 'dt-center',
 #                            #                        width = '40%',
 #                            #                        targets = 1),
 #                            #                   list(className = 'dt-right',
 #                            #                        targets = 0)),
-#                            pageLength = 15,
-#                            scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE))
+#                            scroller = TRUE,
+#                            scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
 
 # timestamp_concordance_plot
 gap_lines_plot
@@ -635,17 +635,17 @@ gap_lines_plot
 ```{r gaps_info}
 sapf_gaps_info %>%
   select(-timestamp_start, -timestamp_end) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Sap flow gaps info. gap_interval is expressed in minutes',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '20%',
                                                   targets = c(1:4)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatPercentage('gap_coverage', 2) %>%
   formatStyle('gap_coverage',
               backgroundColor = styleInterval(c(.10, .25),
@@ -653,7 +653,7 @@ sapf_gaps_info %>%
                                                 '#d91e18')))
 ```
 
-```{r gaps_info_cal, fig.width=12, fig.height=6}
+```{r gaps_info_cal, fig.width=12, fig.height=6, message=FALSE}
 cowplot::ggdraw() +
   cowplot::draw_plot(sapf_gaps_cal, 0, .5, 1, .5) +
   cowplot::draw_plot(sapf_gaps_plot, 0, 0, .5, .5) +
@@ -666,17 +666,17 @@ cowplot::ggdraw() +
 ```{r gaps_info_env}
 env_gaps_info %>%
   select(-timestamp_start, -timestamp_end) %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Environmental gaps info. gap_interval is expressed in minutes',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '20%',
                                                   targets = c(1:4)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatPercentage('gap_coverage', 2) %>%
   formatStyle('gap_coverage',
               backgroundColor = styleInterval(c(.1, .25),
@@ -684,7 +684,7 @@ env_gaps_info %>%
                                                 '#d91e18')))
 ```
 
-```{r env_gaps_info_cal, fig.width=12, fig.height=6}
+```{r env_gaps_info_cal, fig.width=12, fig.height=6, message=FALSE}
 cowplot::ggdraw() +
   cowplot::draw_plot(env_gaps_cal, 0, .5, 1, .5) +
   cowplot::draw_plot(env_gaps_plot, 0, 0, .5, .5) +
@@ -696,38 +696,39 @@ cowplot::ggdraw() +
 
 ## Unit Conversion and standarization
 
-If there are problems in unit conversion and standarization, critical variables
-needed will be highlighted in Table 7.
+The following table shows the needed variables to perform the unit conversion
+and standardization. Look for missing variables if WARNINGS were raised in this
+section.
 
 ```{r unit conversion}
 sapw_md %>%
-  datatable(class = 'display', rownames = FALSE,
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller', 'FixedColumns'),
             caption = 'Sapwood related variables needed to unit conversion',
-            options = list(dom = 'tp',
+            options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           pageLength = 15,
-                           scrollY = 450, scrollX = TRUE, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE,
+                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('pl_sap_units',
-              backgroundColor = styleEqual(c(''),
+              backgroundColor = styleEqual(c(NA),
                                            c('#d91e18'))) %>%
   formatStyle('pl_leaf_area',
-              backgroundColor = styleEqual(c(''),
+              backgroundColor = styleEqual(c(NA),
                                            c('#89c4f4'))) %>%
   formatStyle('pl_dbh',
-              backgroundColor = styleEqual(c(''),
+              backgroundColor = styleEqual(c(NA),
                                            c('#89c4f4'))) %>%
   formatStyle('pl_sapw_depth',
-              backgroundColor = styleEqual(c(''),
+              backgroundColor = styleEqual(c(NA),
                                            c('#89c4f4'))) %>%
   formatStyle('pl_bark_thick',
-              backgroundColor = styleEqual(c(''),
+              backgroundColor = styleEqual(c(NA),
                                            c('#89c4f4'))) %>%
   formatStyle('pl_sapw_area_est',
-              backgroundColor = styleEqual(c(''),
+              backgroundColor = styleEqual(c(NA),
                                            c('#d91e18')))
 ```
 

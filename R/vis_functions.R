@@ -363,7 +363,8 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
                                          length(unique(env_intervals$Object))))) +
       labs(x = 'TIMESTAMP', y = 'Object') +
       theme_sfn() +
-      theme(legend.position = 'none')
+      theme(legend.position = 'none',
+            axis.text.x = element_text(angle = 30, margin = margin(t = 15)))
 
     # 3.1 And return it, by the power of return!!
     return(res_plot)

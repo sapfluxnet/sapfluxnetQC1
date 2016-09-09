@@ -561,7 +561,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     # 2.11 Unit conversion leaf
     if (is.null(sapf_data_fixed_leaf)) {
       step <- c(step, 'Unit conversion to leaf area level')
-      status <- c(status, 'ERROR')
+      status <- c(status, 'WARNING')
       description <- c(description, 'Unit conversion to leaf area level failed')
     } else {
       step <- c(step, 'Unit conversion to leaf area level')
