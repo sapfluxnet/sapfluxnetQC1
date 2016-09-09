@@ -238,7 +238,7 @@ md_cols %>%
          ClassOK = as.character(ClassOK),
          IsNA = as.character(IsNA)) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Metadata variables info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -271,7 +271,7 @@ factor_values %>%
          NA_presence = as.character(NA_presence),
          foo_var = paste(Check_result, NA_presence, sep = '')) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Metadata factor variables info',
             options = list(dom = 'ti',
                            columnDefs = list(list(targets = 4, visible = FALSE),
@@ -298,7 +298,7 @@ email_check %>%
   mutate(Is_correct = as.character(Is_correct),
          email = stringr::str_replace_all(email, '([a-z]|[0-9])*', '\\*')) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Email info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -324,7 +324,7 @@ site_md_coordfix %>%
   select(si_name, si_lat, si_long, is_inside_country) %>%
   mutate(is_inside_country = as.character(is_inside_country)) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Coordinates info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -351,7 +351,7 @@ species_md_spnames %>%
   mutate(Concordance = as.character(Concordance),
          IsNA = as.character(IsNA)) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Species names spelling',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -376,7 +376,7 @@ species_md_spnames %>%
 sp_verification %>%
   mutate(Concordance = as.character(Concordance)) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Species names info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -402,7 +402,7 @@ Information about declared plant treatments
 
 ```{r pl_treatments, echo=FALSE}
 datatable(pl_treatments_check, class = 'display compact', rownames = FALSE, filter = 'none', 
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
           caption = 'Plant treatments info',
           options = list(dom = 'ti',
                          columnDefs = list(list(className = 'dt-center',
@@ -426,7 +426,7 @@ env_var_presence %>%
          Md_presence = as.character(Md_presence),
          Data_presence = as.character(Data_presence)) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Environmental variables info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -523,7 +523,7 @@ timestamp_env <- env_data_fixed %>%
 timestamp_sapf %>%
   bind_rows(timestamp_env) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'TIMESTAMP format info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -541,7 +541,7 @@ if (is.logical(sapf_timestamp_nas)) {
 } else {
  sapf_timestamp_nas %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Sapflow TIMESTAMP NAs info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -560,7 +560,7 @@ if (is.logical(env_timestamp_nas)) {
 } else {
  env_timestamp_nas %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Environmental TIMESTAMP NAs info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -578,7 +578,7 @@ timestamp_errors_sapf %>%
   mutate(Int_length_minutes = Int_length/60) %>%
   select(Interval, Int_length_minutes) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Sapflow TIMESTAMP continuity info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -595,7 +595,7 @@ timestamp_errors_env %>%
   mutate(Int_length_minutes = Int_length/60) %>%
   select(Interval, Int_length_minutes) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Environmental TIMESTAMP continuity info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -636,7 +636,7 @@ gap_lines_plot
 sapf_gaps_info %>%
   select(-timestamp_start, -timestamp_end) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Sap flow gaps info. gap_interval is expressed in minutes',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -667,7 +667,7 @@ cowplot::ggdraw() +
 env_gaps_info %>%
   select(-timestamp_start, -timestamp_end) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Environmental gaps info. gap_interval is expressed in minutes',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
@@ -703,7 +703,7 @@ section.
 ```{r unit conversion}
 sapw_md %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
-            extensions = c('Scroller', 'FixedColumns'),
+            extensions = c('Scroller'),
             caption = 'Sapwood related variables needed to unit conversion',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
