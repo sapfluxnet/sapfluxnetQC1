@@ -641,15 +641,9 @@ sapf_gaps_info %>%
 
 ```{r gaps_info_cal, fig.width=12, fig.height=6}
 cowplot::ggdraw() +
-  if(is.null(sapf_gaps_cal)) {cowplot::draw_plot(NULL, 0, .5, 1, .5)} else {
-    cowplot::draw_plot(sapf_gaps_cal, 0, .5, 1, .5) 
-  } +
-  if(is.null(sapf_gaps_plot)) {cowplot::draw_plot(NULL, 0, .5, 1, .5)} else {
-    cowplot::draw_plot(sapf_gaps_plot, 0, 0, .5, .5) 
-  } +
-  if(is.null(sapf_gaps_plot_int)) {cowplot::draw_plot(NULL, 0, .5, 1, .5)} else {
-    cowplot::draw_plot(sapf_gaps_plot_int, .5, 0, .5, .5)
-  } +
+  cowplot::draw_plot(sapf_gaps_cal, 0, .5, 1, .5) +
+  cowplot::draw_plot(sapf_gaps_plot, 0, 0, .5, .5) +
+  cowplot::draw_plot(sapf_gaps_plot_int, .5, 0, .5, .5) +
   cowplot::draw_plot_label(c("A", "B", "C"), c(0, 0, 0.5), c(1, 0.5, 0.5), size = 12)
 ```
 
