@@ -117,10 +117,10 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
     # Has it the necessary variables, as produced by mind_the_gap?
     if (any(is.null(gaps_info$gap_interval), is.null(gaps_info$gap_coverage))) {
       stop('gaps_info has not the necessary variables,',
-           ' see function help (?qc_plot_the_gap)')
+           ' see function help (?vis_plot_the_gap)')
     }
     # Is data empty (no gaps found)
-    if (gaps_info[[1]] == 'No gaps found') {
+    if (gaps_info[1,1] == 'No gaps found') {
 
       # create an empty plot
       res_plot <- ggplot(data.frame(x = c(1,5,10), y =c(1,5,10)),
