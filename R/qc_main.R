@@ -325,6 +325,7 @@ qc_md_results_table <- function(md_cols, factor_values,
     # STEP 10
     # Return the datatable
     res_table <- DT::datatable(res, class = 'display', rownames = FALSE,
+                               extensions = c('Scroller', 'FixedColumns'),
                                caption = 'Table 1: Metadata Quality Check Summary',
                                options = list(dom = 't',
                                               columnDefs = list(list(className = 'dt-center',
@@ -576,6 +577,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
 
     # return the table
     res_table <- DT::datatable(res, class = 'display', rownames = FALSE,
+                               extensions = c('Scroller', 'FixedColumns'),
                                caption = 'Table 1: Data Quality Check Summary',
                                options = list(dom = 't',
                                               columnDefs = list(list(className = 'dt-center',
