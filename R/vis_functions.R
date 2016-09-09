@@ -60,8 +60,9 @@ vis_gaps_calendar <- function(data, parent_logger = 'test') {
       ggplot(aes(x = Week, y = Day, fill = n)) +
         geom_tile() +
         facet_grid(Year ~ Month, scales = 'free_x') +
-        scale_fill_gradient(low = "#C8F7C5", high = "#26A65B") +
-        theme_bw()
+        # scale_fill_gradient(low = "#C8F7C5", high = "#26A65B") +
+        viridis::scale_fill_viridis() +
+        theme_sfn()
 
     # END FUNCTION
 
@@ -141,15 +142,19 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
       res_plot <- gaps_info %>%
         dplyr::mutate(gap_coverage = gap_coverage * 100) %>%
         ggplot(aes_string(x = type)) +
-        geom_histogram(binwidth = 5) +
+        geom_histogram(binwidth = 5,
+                       fill = viridis::viridis(1)) +
         scale_x_continuous(limits = c(NA, 105)) +
-        labs(x = 'Gap coverage (%)', y = 'Count')
+        labs(x = 'Gap coverage (%)', y = 'Count') +
+        theme_sfn()
     } else {
 
       # 1.2 gap_interval special effects
       res_plot <- ggplot(gaps_info, aes_string(x = type)) +
-        geom_histogram(binwidth = binwidth) +
-        labs(x = 'Gap interval (minutes)', y = 'Count')
+        geom_histogram(binwidth = binwidth,
+                       fill = viridis::viridis(1)) +
+        labs(x = 'Gap interval (minutes)', y = 'Count') +
+        theme_sfn()
     }
 
     # STEP 2
@@ -352,11 +357,12 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
       geom_point(aes(x = x_start, y = y_start)) +
       geom_point(aes(x = x_end, y = y_end)) +
       scale_x_datetime(date_breaks = '1 month') +
-      scale_colour_manual(values = c(rep('steelblue',
+      scale_colour_manual(values = c(rep(viridis::viridis(1),
                                          length(unique(sapf_intervals$Object))),
-                                     rep('darkgreen',
+                                     rep(viridis::viridis(3)[2],
                                          length(unique(env_intervals$Object))))) +
       labs(x = 'TIMESTAMP', y = 'Object') +
+      theme_sfn() +
       theme(legend.position = 'none')
 
     # 3.1 And return it, by the power of return!!
@@ -376,4 +382,78 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
                                                         'vis_gap_lines', sep = '.'))})
+}
+
+################################################################################
+#' ggplot2 theme for SAPFLUXNET plots
+#'
+#' Custom ggplot2 theme for uniformization of plot visuals
+#'
+#' @export
+
+theme_sfn <- function(base_size = 10, base_family = "Lato") {
+  half_line <- base_size/2
+  theme(line = element_line(colour = "black", size = 1,
+                            linetype = 1, lineend = "butt"),
+        rect = element_rect(fill = NA, colour = "black",
+                            size = 1, linetype = 1),
+        text = element_text(family = base_family, face = "plain",
+                            colour = "black", size = base_size,
+                            lineheight = 0.9, hjust = 0.5,
+                            vjust = 0.5, angle = 0,
+                            margin = margin(), debug = FALSE),
+        axis.line = element_blank(),
+        # axis.line.x = element_line(),
+        # axis.line.y = element_line(),
+        axis.text = element_text(size = rel(0.8)),
+        axis.text.x = element_text(margin = margin(t = 0.8 * half_line*2.5),
+                                   vjust = 1),
+        axis.text.y = element_text(margin = margin(r = 0.8 * half_line*2),
+                                   hjust = 1),
+        axis.ticks = element_line(colour = "black", size = 0.5),
+        axis.ticks.length = unit(-half_line, "pt"),
+        axis.title.x = element_text(margin = margin(t = 0.8 * half_line,
+                                                    b = 0.8 * half_line/2)),
+        axis.title.y = element_text(angle = 90,
+                                    margin = margin(r = 0.8 * half_line,
+                                                    l = 0.8 * half_line/2)),
+        legend.background = element_rect(colour  = NA, fill = ),
+        legend.margin = unit(1, "pt"),
+        legend.key = element_rect(colour = NA),
+        legend.key.size = unit(1, "lines"),
+        legend.key.height = NULL,
+        legend.key.width = NULL,
+        legend.text = element_text(size = rel(0.8)),
+        legend.text.align = NULL,
+        legend.title = element_text(hjust = 0.5),
+        legend.title.align = 0,
+        legend.position = "right",
+        legend.direction = NULL,
+        legend.justification = "top",
+        legend.box = NULL,
+        panel.background = element_blank(),
+        panel.border = element_rect(),
+        panel.grid = element_blank(),
+        # panel.grid.major = element_line(colour = "black", size = rel(0.3),
+        #                                 linetype = 2),
+        # panel.grid.minor = element_blank(),
+        # panel.grid.major.x = element_blank(),
+        panel.margin = unit(half_line, "pt"),
+        panel.margin.x = NULL,
+        panel.margin.y = NULL,
+        panel.ontop = TRUE,
+        strip.background = element_rect(size = rel(0.3)),
+        strip.text = element_text(colour = "grey10", size = rel(0.8)),
+        strip.text.x = element_text(margin = margin(t = half_line,
+                                                    b = half_line)),
+        strip.text.y = element_text(angle = -90,
+                                    margin = margin(l = half_line, r = half_line)),
+        strip.switch.pad.grid = unit(0.1, "cm"),
+        strip.switch.pad.wrap = unit(0.1, "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(size = rel(1.2),
+                                  margin = margin(b = half_line * 1.2)),
+        plot.margin = margin(half_line, half_line, half_line, half_line),
+
+        complete = TRUE)
 }
