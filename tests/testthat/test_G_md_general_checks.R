@@ -139,3 +139,31 @@ test_that('results are the same if no change is needed', {
   expect_equal(as.character(not_so_bad_res), species)
 })
 
+context('G5. Email checks')
+
+emails <- data.frame(
+  si_contact_email = c(
+    'victorgrandagarcia@gmail.com', 'v.granda@creaf.uab.cat',
+    '123@123', 'Victor.Granda.Garcia@yahoo.es',
+    'turururu@ailsdhflashf.ajshdjsdh', 'df.aD@c.123',
+    '-df.aD@c.123', 'yooo.yooo'
+  ),
+  si_addcontr_email = c(
+    NA,NA,NA,NA,NA,NA,NA,NA
+  ),
+  stringsAsFactors = FALSE
+)
+
+emilios_res <- qc_email_check(emails)
+
+test_that('result is a data frame', {
+  expect_is(emilios_res, 'data.frame')
+})
+
+test_that('results are correct', {
+  expect_equal(emilios_res$Is_correct,
+               c(TRUE, TRUE, FALSE, TRUE,
+                 FALSE, FALSE, FALSE, FALSE,
+                 NA, NA, NA, NA,
+                 NA, NA, NA, NA))
+})

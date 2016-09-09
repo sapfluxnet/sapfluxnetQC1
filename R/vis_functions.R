@@ -60,8 +60,8 @@ vis_gaps_calendar <- function(data, parent_logger = 'test') {
       ggplot(aes(x = Week, y = Day, fill = n)) +
         geom_tile() +
         facet_grid(Year ~ Month, scales = 'free_x') +
-        # scale_fill_gradient(low = "#C8F7C5", high = "#26A65B") +
-        viridis::scale_fill_viridis() +
+        scale_fill_gradient(low = "#C8F7C5", high = "#26A65B") +
+        # viridis::scale_fill_viridis() +
         theme_sfn()
 
     # END FUNCTION

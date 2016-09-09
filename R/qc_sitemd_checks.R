@@ -42,7 +42,7 @@ qc_email_check <- function(data, parent_logger = 'test') {
 
     # STEP 1
     # Initialize pattern
-    emilio_pattern <- "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"
+    emilio_pattern <- "^([a-zA-Z0-9_\\.-]+)@([\\da-zA-Z\\.-]+)\\.([a-zA-Z\\.]{2,6})$"
 
     # Initialize email directions object
     emilio_vec <- c(data$si_contact_email, data$si_addcontr_email)
