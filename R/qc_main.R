@@ -320,7 +320,8 @@ qc_md_results_table <- function(md_cols, factor_values,
 
     # STEP 9
     # Create the results data frame
-    res <- data.frame(QC_Step = step, Status = status, Description = description)
+    res <- data.frame(QC_Step = step, Status = status, Description = description,
+                      stringsAsFactors = FALSE)
 
     # STEP 10
     # Return the datatable
@@ -572,7 +573,8 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     # FINAL STEP
     # create the results object
     res <- data.frame(
-      QC_Step = step, Status = status, Description = description
+      QC_Step = step, Status = status, Description = description,
+      stringsAsFactors = FALSE
     )
 
     # return the table
