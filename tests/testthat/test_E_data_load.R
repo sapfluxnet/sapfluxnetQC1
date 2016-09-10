@@ -27,86 +27,102 @@ xlsx_name <- 'foo.xlsx'
 csv_name <- 'foo.csv'
 csv_name_2 <- 'foo_env.csv'
 
-sapflow_data <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd', long = FALSE))
-sapflow_data_long <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd', long = TRUE))
+sapflow_data <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
+                                         long = FALSE))
+# sapflow_data_long <- suppressMessages(dl_data(xlsx_name,
+#                                               'sapflow_hd',
+#                                               long = TRUE))
 env_data <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = FALSE))
-env_data_long <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = TRUE))
+# env_data_long <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
+#                                           long = TRUE))
 
-sapf_csv_data <- suppressMessages(dl_data(csv_name, 'sapflow_hd', long = FALSE, n = 50000))
-sapf_csv_data_long <- suppressMessages(dl_data(csv_name, 'sapflow_hd', long = TRUE, n = 50000))
-env_csv_data <- suppressMessages(dl_data(csv_name_2, 'environmental_hd', long = FALSE, n = 50000))
-env_csv_data_long <- suppressMessages(dl_data(csv_name_2, 'environmental_hd', long = TRUE, n = 50000))
+sapf_csv_data <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
+                                          long = FALSE, n = 50000))
+# sapf_csv_data_long <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
+#                                                long = TRUE, n = 50000))
+env_csv_data <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
+                                         long = FALSE, n = 50000))
+# env_csv_data_long <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
+#                                               long = TRUE, n = 50000))
 
 xlsx_name <- 'foo_nan.xlsx'
 csv_name <- 'foo_nan.csv'
 csv_name_2 <- 'foo_nan_env.csv'
 
-sapflow_data_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd', na = 'NaN', long = FALSE))
-sapflow_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd', na = 'NaN', long = TRUE))
-env_data_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', na = 'NaN', long = FALSE))
-env_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', na = 'NaN', long = TRUE))
+sapflow_data_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
+                                             na = 'NaN', long = FALSE))
+# sapflow_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
+#                                                   na = 'NaN', long = TRUE))
+env_data_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
+                                         na = 'NaN', long = FALSE))
+# env_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
+#                                               na = 'NaN', long = TRUE))
 
-sapf_csv_data_nan <- suppressMessages(dl_data(csv_name, 'sapflow_hd', long = FALSE, na = 'NaN', n = 50000))
-sapf_csv_data_long_nan <- suppressMessages(dl_data(csv_name, 'sapflow_hd', long = TRUE, na = 'NaN', n = 50000))
-env_csv_data_nan <- suppressMessages(dl_data(csv_name_2, 'environmental_hd', long = FALSE, na = 'NaN', n = 50000))
-env_csv_data_long_nan <- suppressMessages(dl_data(csv_name_2, 'environmental_hd', long = TRUE, na = 'NaN', n = 50000))
+sapf_csv_data_nan <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
+                                              long = FALSE, na = 'NaN', n = 50000))
+# sapf_csv_data_long_nan <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
+#                                                    long = TRUE, na = 'NaN', n = 50000))
+env_csv_data_nan <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
+                                             long = FALSE, na = 'NaN', n = 50000))
+# env_csv_data_long_nan <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
+#                                                   long = TRUE, na = 'NaN', n = 50000))
 
 
 test_that('function returns data frames', {
   expect_is(sapflow_data, 'data.frame')
-  expect_is(sapflow_data_long, 'data.frame')
+  # expect_is(sapflow_data_long, 'data.frame')
   expect_is(env_data, 'data.frame')
-  expect_is(env_data_long, 'data.frame')
+  # expect_is(env_data_long, 'data.frame')
   expect_is(sapf_csv_data, 'data.frame')
-  expect_is(sapf_csv_data_long, 'data.frame')
+  # expect_is(sapf_csv_data_long, 'data.frame')
   expect_is(env_csv_data, 'data.frame')
-  expect_is(env_csv_data_long, 'data.frame')
+  # expect_is(env_csv_data_long, 'data.frame')
   expect_is(sapflow_data_nan, 'data.frame')
-  expect_is(sapflow_data_long_nan, 'data.frame')
+  # expect_is(sapflow_data_long_nan, 'data.frame')
   expect_is(env_data_nan, 'data.frame')
-  expect_is(env_data_long_nan, 'data.frame')
+  # expect_is(env_data_long_nan, 'data.frame')
   expect_is(sapf_csv_data_nan, 'data.frame')
-  expect_is(sapf_csv_data_long_nan, 'data.frame')
+  # expect_is(sapf_csv_data_long_nan, 'data.frame')
   expect_is(env_csv_data_nan, 'data.frame')
-  expect_is(env_csv_data_long_nan, 'data.frame')
+  # expect_is(env_csv_data_long_nan, 'data.frame')
 })
 
 test_that('number of variables is correct', {
   expect_equal(length(names(sapflow_data)), 14)
-  expect_equal(length(names(sapflow_data_long)), 3)
+  # expect_equal(length(names(sapflow_data_long)), 3)
   expect_equal(length(names(env_data)), 7)
-  expect_equal(length(names(env_data_long)), 3)
+  # expect_equal(length(names(env_data_long)), 3)
   expect_equal(length(names(sapflow_data)), 14)
-  expect_equal(length(names(sapflow_data_long)), 3)
+  # expect_equal(length(names(sapflow_data_long)), 3)
   expect_equal(length(names(env_data)), 7)
-  expect_equal(length(names(env_data_long)), 3)
+  # expect_equal(length(names(env_data_long)), 3)
   expect_equal(length(names(sapflow_data_nan)), 14)
-  expect_equal(length(names(sapflow_data_long_nan)), 3)
+  # expect_equal(length(names(sapflow_data_long_nan)), 3)
   expect_equal(length(names(env_data_nan)), 7)
-  expect_equal(length(names(env_data_long_nan)), 3)
+  # expect_equal(length(names(env_data_long_nan)), 3)
   expect_equal(length(names(sapflow_data_nan)), 14)
-  expect_equal(length(names(sapflow_data_long_nan)), 3)
+  # expect_equal(length(names(sapflow_data_long_nan)), 3)
   expect_equal(length(names(env_data_nan)), 7)
-  expect_equal(length(names(env_data_long_nan)), 3)
+  # expect_equal(length(names(env_data_long_nan)), 3)
 })
 
 test_that('number of rows is as expected', {
   expect_equal(nrow(sapflow_data), 78816)
-  expect_equal(nrow(sapflow_data_long), 1024608)
+  # expect_equal(nrow(sapflow_data_long), 1024608)
   expect_equal(nrow(env_data), 78816)
-  expect_equal(nrow(env_data_long), 472896)
+  # expect_equal(nrow(env_data_long), 472896)
   expect_equal(nrow(sapflow_data), 78816)
-  expect_equal(nrow(sapflow_data_long), 1024608)
+  # expect_equal(nrow(sapflow_data_long), 1024608)
   expect_equal(nrow(env_data), 78816)
-  expect_equal(nrow(env_data_long), 472896)
+  # expect_equal(nrow(env_data_long), 472896)
   expect_equal(nrow(sapflow_data_nan), 78816)
-  expect_equal(nrow(sapflow_data_long_nan), 1024608)
+  # expect_equal(nrow(sapflow_data_long_nan), 1024608)
   expect_equal(nrow(env_data_nan), 78816)
-  expect_equal(nrow(env_data_long_nan), 472896)
+  # expect_equal(nrow(env_data_long_nan), 472896)
   expect_equal(nrow(sapflow_data_nan), 78816)
-  expect_equal(nrow(sapflow_data_long_nan), 1024608)
+  # expect_equal(nrow(sapflow_data_long_nan), 1024608)
   expect_equal(nrow(env_data_nan), 78816)
-  expect_equal(nrow(env_data_long_nan), 472896)
+  # expect_equal(nrow(env_data_long_nan), 472896)
 })
 
 test_that('NaN and "Missing" are interpreted as they must', {
