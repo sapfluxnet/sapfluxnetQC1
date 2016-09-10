@@ -53,7 +53,8 @@ qc_email_check <- function(data, parent_logger = 'test') {
 
     # STEP 3
     # Results object
-    emilio_df <- data.frame(email = emilio_vec, Is_correct = emilio_res)
+    emilio_df <- data.frame(email = emilio_vec, Is_correct = emilio_res,
+                            stringsAsFactors = FALSE)
 
     # 3.1 return de results
     return(emilio_df)
