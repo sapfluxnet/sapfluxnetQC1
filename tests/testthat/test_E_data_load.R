@@ -36,12 +36,16 @@ env_data <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = FALSE
 # env_data_long <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
 #                                           long = TRUE))
 
-sapf_csv_data <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
-                                          long = FALSE, n = 50000))
+sapf_csv_data <- suppressWarnings(
+  suppressMessages(dl_data(csv_name, 'sapflow_hd',
+                           long = FALSE, n = 50000))
+)
 # sapf_csv_data_long <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
 #                                                long = TRUE, n = 50000))
-env_csv_data <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
-                                         long = FALSE, n = 50000))
+env_csv_data <- suppressWarnings(
+  suppressMessages(dl_data(csv_name_2, 'environmental_hd',
+                           long = FALSE, n = 50000))
+)
 # env_csv_data_long <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
 #                                               long = TRUE, n = 50000))
 
@@ -49,8 +53,10 @@ xlsx_name <- 'foo_nan.xlsx'
 csv_name <- 'foo_nan.csv'
 csv_name_2 <- 'foo_nan_env.csv'
 
-sapflow_data_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
-                                             na = 'NaN', long = FALSE))
+sapflow_data_nan <- suppressWarnings(
+  suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
+                           na = 'NaN', long = FALSE))
+)
 # sapflow_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
 #                                                   na = 'NaN', long = TRUE))
 env_data_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
@@ -58,12 +64,16 @@ env_data_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
 # env_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
 #                                               na = 'NaN', long = TRUE))
 
-sapf_csv_data_nan <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
-                                              long = FALSE, na = 'NaN', n = 50000))
+sapf_csv_data_nan <- suppressWarnings(
+  suppressMessages(dl_data(csv_name, 'sapflow_hd',
+                           long = FALSE, na = 'NaN', n = 50000))
+)
 # sapf_csv_data_long_nan <- suppressMessages(dl_data(csv_name, 'sapflow_hd',
 #                                                    long = TRUE, na = 'NaN', n = 50000))
-env_csv_data_nan <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
-                                             long = FALSE, na = 'NaN', n = 50000))
+env_csv_data_nan <- suppressWarnings(
+  suppressMessages(dl_data(csv_name_2, 'environmental_hd',
+                           long = FALSE, na = 'NaN', n = 50000))
+)
 # env_csv_data_long_nan <- suppressMessages(dl_data(csv_name_2, 'environmental_hd',
 #                                                   long = TRUE, na = 'NaN', n = 50000))
 
