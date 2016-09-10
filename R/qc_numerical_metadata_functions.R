@@ -149,7 +149,8 @@ qc_sapf_range_check <- function(data, parent_logger = 'test') {
       Plant = plant,
       Value = value,
       Max = 533,
-      Min = -10
+      Min = -10,
+      stringsAsFactors = FALSE
     )
 
     # 3.1 Return the results
