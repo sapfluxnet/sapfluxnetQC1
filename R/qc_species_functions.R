@@ -109,12 +109,16 @@ qc_species_names_info <- function(species, conservatism = 0.9,
     }
 
     # STEP 1
+    # Trimming blank spaces in both sides
+    species <- stringr::str_trim(species, 'both')
+
+    # STEP 2
     # Obtaining tpl info
     tpl_df <- tpl::tpl.get(species, replace.synonyms = FALSE,
                            suggestion.distance = conservatism)
     species_tpl <- tpl_df$name
 
-    # STEP 2
+    # STEP 3
     # Create the results data frame
     res <- data.frame(
       data_names = species,
@@ -124,7 +128,7 @@ qc_species_names_info <- function(species, conservatism = 0.9,
       stringsAsFactors = FALSE
     )
 
-    # STEP 3
+    # STEP 4
     # Return the results
     return(res)
 

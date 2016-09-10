@@ -117,16 +117,37 @@ context('G4. Species names checks')
 species <- c('Olea europaea', 'Pinus pinaster', 'Pinus halepensis',
              'Eucalyptus globulus', 'Fagus sylvatica')
 
-species_bad <- c('Oleae eurpea', 'Pino pinaster', 'Pinu alepensis',
+species_bad <- c('Oleae eurpea', 'Pino pinaster ', ' Pinu alepensis',
                  'Euclaiptus gobulus', 'Fagus silvatica')
 
 species_not_so_bad <- c('Olea europaee', 'Pinus pinaster', 'Pinus halepensis',
-                        'Eucaliptus globulus', 'Fagos sylvatica')
+                        'Eucaliptus globulus ', ' Fagos sylvatica')
+
+good_info <- qc_species_names_info(species)
+bad_info <- qc_species_names_info(species_bad)
+not_so_bad_info <- qc_species_names_info(species_not_so_bad)
 
 test_that('results of info are data frames', {
-  expect_true(is.data.frame(qc_species_names_info(species)))
-  expect_true(is.data.frame(qc_species_names_info(species_bad)))
-  expect_true(is.data.frame(qc_species_names_info(species_not_so_bad)))
+  expect_true(is.data.frame(good_info))
+  expect_true(is.data.frame(bad_info))
+  expect_true(is.data.frame(not_so_bad_info))
+})
+
+test_that('trimming works', {
+  expect_equal(good_info$data_names, species)
+  expect_equal(good_info$tpl_names, species)
+  expect_true(all(good_info$Concordance))
+  expect_equal(bad_info$data_names, c('Oleae eurpea', 'Pino pinaster',
+                                      'Pinu alepensis', 'Euclaiptus gobulus',
+                                      'Fagus silvatica'))
+  expect_equal(bad_info$tpl_names, c(NA, NA, 'Pinus alepensis', NA,
+                                     'Fagus sylvatica'))
+  expect_false(all(bad_info$Concordance))
+  expect_equal(not_so_bad_info$data_names, c('Olea europaee', 'Pinus pinaster',
+                                             'Pinus halepensis', 'Eucaliptus globulus',
+                                             'Fagos sylvatica'))
+  expect_equal(not_so_bad_info$tpl_names, species)
+  expect_false(all(not_so_bad_info$Concordance))
 })
 
 good_res <- qc_species_names(species)
@@ -135,7 +156,7 @@ not_so_bad_res <- qc_species_names(species_not_so_bad)
 
 test_that('results are the same if no change is needed', {
   expect_equal(as.character(good_res), species)
-  expect_equal(as.character(bad_res), species_bad)
+  expect_equal(as.character(bad_res), stringr::str_trim(species_bad, 'both'))
   expect_equal(as.character(not_so_bad_res), species)
 })
 
