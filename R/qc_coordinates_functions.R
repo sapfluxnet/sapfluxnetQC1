@@ -493,14 +493,16 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
               si_long = res_data$si_long[j] * -1,
               si_lat = res_data$si_lat[j] * -1,
               si_country = res_data$si_country[j],
-              si_name = res_data$si_name[j]
+              si_name = res_data$si_name[j],
+              stringsAsFactors = FALSE
             )
           } else {
             check_data_lat <- data.frame(
               si_long = res_data$si_long[j],
               si_lat = res_data$si_lat[j] * -1,
               si_country = res_data$si_country[j],
-              si_name = res_data$si_name[j]
+              si_name = res_data$si_name[j],
+              stringsAsFactors = FALSE
             )
           }
 
@@ -519,14 +521,16 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
               si_long = res_data$si_long[j] * -1,
               si_lat = res_data$si_lat[j] * -1,
               si_country = res_data$si_country[j],
-              si_name = res_data$si_name[j]
+              si_name = res_data$si_name[j],
+              stringsAsFactors = FALSE
             )
           } else {
             check_data_long <- data.frame(
               si_long = res_data$si_long[j] * -1,
               si_lat = res_data$si_lat[j],
               si_country = res_data$si_country[j],
-              si_name = res_data$si_name[j]
+              si_name = res_data$si_name[j],
+              stringsAsFactors = FALSE
             )
           }
 
@@ -546,21 +550,24 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
             si_long = res_data$si_long[j],
             si_lat = res_data$si_lat[j] * -1,
             si_country = res_data$si_country[j],
-            si_name = res_data$si_name[j]
+            si_name = res_data$si_name[j],
+            stringsAsFactors = FALSE
           )
 
           check_data_long <- data.frame(
             si_long = res_data$si_long[j] * -1,
             si_lat = res_data$si_lat[j],
             si_country = res_data$si_country[j],
-            si_name = res_data$si_name[j]
+            si_name = res_data$si_name[j],
+            stringsAsFactors = FALSE
           )
 
           check_data_both <- data.frame(
             si_long = res_data$si_long[j] * -1,
             si_lat = res_data$si_lat[j] * -1,
             si_country = res_data$si_country[j],
-            si_name = res_data$si_name[j]
+            si_name = res_data$si_name[j],
+            stringsAsFactors = FALSE
           )
 
           # 7.3.2 checks
