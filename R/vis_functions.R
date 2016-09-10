@@ -345,7 +345,8 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
       x_start = as.POSIXct(x_start, origin = lubridate::origin),
       x_end = as.POSIXct(x_end, origin = lubridate::origin),
       y_start = y_start,
-      y_end = y_end
+      y_end = y_end,
+      stringsAsFactors = FALSE
     ) %>%
       dplyr::mutate(y_start = factor(y_start, levels = rev(unique(y_start)))) %>%
       dplyr::mutate(y_end = factor(y_end, levels = rev(unique(y_end))))
