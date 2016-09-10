@@ -723,7 +723,8 @@ qc_md_cols <- function(metadata, dic,
                          PresenceOK = presence_res,
                          DetectedClass = det_class_res,
                          ClassOK = classes_res,
-                         IsNA = na_res)
+                         IsNA = na_res,
+                         stringsAsFactors = FALSE)
 
     return(result)
 
@@ -856,7 +857,8 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
     res_data <- data.frame(Variable = var_name,
                            Check_result = res_check,
                            NA_presence = na_presence,
-                           Metadata = metadata)
+                           Metadata = metadata,
+                           stringsAsFactors = FALSE)
 
     return(res_data)
 
@@ -976,7 +978,8 @@ qc_env_vars_presence <- function(data, metadata,
     df_res <- data.frame(Name = accepted_vars,
                          Md_presence = md_res,
                          Data_presence = hd_res,
-                         Concordance = concordance)
+                         Concordance = concordance,
+                         stringsAsFactors = FALSE)
 
     return(df_res)
 
