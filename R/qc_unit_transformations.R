@@ -1185,7 +1185,8 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
     data_tmp$TIMESTAMP <- NULL
 
     # 1.3 Results data frame, here TIMESTAMP is needed
-    res_df <- data.frame(TIMESTAMP = data$TIMESTAMP)
+    res_df <- data.frame(TIMESTAMP = data$TIMESTAMP,
+                         stringsAsFactors = FALSE)
 
     # STEP 2
     # Loop for each plant/tree
