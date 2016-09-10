@@ -151,7 +151,7 @@ test_that('trimming works', {
 })
 
 good_res <- qc_species_names(species)
-bad_res <- qc_species_names(species_bad)
+bad_res <- suppressWarnings(qc_species_names(species_bad))
 not_so_bad_res <- qc_species_names(species_not_so_bad)
 
 test_that('results are the same if no change is needed', {
