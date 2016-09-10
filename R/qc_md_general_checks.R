@@ -923,6 +923,8 @@ qc_env_vars_presence <- function(data, metadata,
     # Check which variables are in metadata
     for (var in accepted_vars) {
       if (any(is.null(metadata[[var]]),
+              # supressing warnings of is.na applied to null in case of variable
+              # not present
               suppressWarnings(is.na(metadata[[var]])),
               metadata[[var]] == 'Not provided')) {
         md <- FALSE
