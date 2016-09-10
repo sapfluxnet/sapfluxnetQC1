@@ -26,7 +26,7 @@ file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
                  'received_data/foo_metadata.xlsx',
                  'received_data/foo_env_data.csv'))
 
-suppressMessages(df_received_to_accepted(remove = FALSE))
+suppressWarnings(suppressMessages(df_received_to_accepted(remove = FALSE)))
 
 received_md5 <- md5sum(c('received_data/foo_sapflow_data.csv',
                          'received_data/foo_metadata.xlsx',
@@ -91,7 +91,7 @@ file.copy(from = c('foo.csv', 'foo.xlsx', 'foo_env.csv'),
                  'received_data/foo_metadata.xlsx',
                  'received_data/foo_env_data.csv'))
 
-suppressMessages(df_received_to_accepted(remove = FALSE))
+suppressWarnings(suppressMessages(df_received_to_accepted(remove = FALSE)))
 
 test_that('status file functions work', {
   expect_true(df_start_status('foo'))
