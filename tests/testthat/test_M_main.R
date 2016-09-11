@@ -93,7 +93,10 @@ data_folders <- df_get_data_folders()
 # I can't test the rdata file as in test environment objects are not found :(
 
 for (folder in data_folders) {
-  suppressMessages(qc_start_process(file.path(folder, 'Accepted'), rdata = FALSE))
+  suppressWarnings(
+    suppressMessages(qc_start_process(file.path(folder, 'Accepted'),
+                                      rdata = FALSE))
+  )
 }
 
 foo_yaml <- df_get_status('foo')
