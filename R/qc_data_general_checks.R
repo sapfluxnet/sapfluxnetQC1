@@ -587,7 +587,8 @@ qc_get_timestep <- function(metadata, parent_logger = 'test') {
       stop('metadata provided is not a data frame')
     }
     # we need pl_sens_timestemp or env_timestep variables
-    if (is.null(metadata$pl_sens_timestep) & is.null(metadata$env_timestep)) {
+    if (!any(c('pl_sens_timestep', 'env_timestep') %in% names(metadata))) {
+    # if (is.null(metadata$pl_sens_timestep) & is.null(metadata$env_timestep)) {
       stop('Not timestep variables found in metadata provided')
     }
 
@@ -595,7 +596,8 @@ qc_get_timestep <- function(metadata, parent_logger = 'test') {
     # Guess which variable is needed
 
     # 1.1 env_timestep
-    if (is.null(metadata$pl_sens_timestep) & !is.null(metadata$env_timestep)) {
+    if ('env_timestep' %in% names(metadata)) {
+    # if (is.null(metadata$pl_sens_timestep) & !is.null(metadata$env_timestep)) {
 
       # check if all timestep values (in the case of pl_sens_timestep) are the same
       timestep <- metadata$env_timestep
