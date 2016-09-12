@@ -22,7 +22,7 @@ log_sapfluxnet_format <- function(record) {
   # STEP 1
   # Formatting with sprintf
   sprintf(
-    'time= "%s" level="%s" description="sapfluxnetLog:%s" message="%s"\n',
+    'time="%s" level="%s" description="sapfluxnetLog:%s" message="%s"',
     record$timestamp, record$levelname, record$logger, record$msg
   )
 
@@ -92,11 +92,11 @@ log_sapfluxnet_setup <- function(file_name, logger, level = "DEBUG") {
 
   # STEP 2
   # Add a line to the log file indicating date and time of the setup
-  cat(
-    paste('\n##### ', Sys.time(), 'Logger: ', logger, ' Level = ', level, ' #####\n',
-          '\n', sep = ' '),
-    file = file_name, append = TRUE
-  )
+  # cat(
+  #   paste('\n##### ', Sys.time(), 'Logger: ', logger, ' Level = ', level, ' #####\n',
+  #         '\n', sep = ' '),
+  #   file = file_name, append = TRUE
+  # )
 
   # END FUNCTION
 }

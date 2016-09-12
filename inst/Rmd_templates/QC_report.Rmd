@@ -20,6 +20,14 @@ output:
 # root folder
 knitr::opts_knit$set(root.dir = params$wd)
 knitr::opts_chunk$set(error = TRUE, echo = FALSE)
+
+# log setup
+logger_name <- paste('QC', params$code, 'qc_start_process',
+                     'rep_sfn_render', sep = '.')
+
+log_sapfluxnet_setup('Logs/sapfluxnet.log',
+                     logger = logger_name,
+                     level = 'DEBUG')
 ```
 
 ***
@@ -42,48 +50,50 @@ library(DT)
 # library(xts)
 ################################################################################
 # data load
-log_sapfluxnet_setup('Logs/sapfluxnet.log', 'data_load')
-
 ## site_md
-site_md <- dl_metadata(params$md_file, 'site_md', parent_logger = 'data_load')
+site_md <- dl_metadata(params$md_file, 'site_md', parent_logger = logger_name)
 
 ## stand_md
-stand_md <- dl_metadata(params$md_file, 'stand_md', si_code_loc = site_md, parent_logger = 'data_load')
+stand_md <- dl_metadata(params$md_file, 'stand_md', si_code_loc = site_md,
+                        parent_logger = logger_name)
 
 ## species_md
-species_md <- dl_metadata(params$md_file, 'species_md', si_code_loc = site_md, parent_logger = 'data_load')
+species_md <- dl_metadata(params$md_file, 'species_md', si_code_loc = site_md,
+                          parent_logger = logger_name)
 
 ## plant_md
-plant_md <- dl_metadata(params$md_file, 'plant_md', si_code_loc = site_md, parent_logger = 'data_load')
+plant_md <- dl_metadata(params$md_file, 'plant_md', si_code_loc = site_md,
+                        parent_logger = logger_name)
 
 ## env_md
-env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md, parent_logger = 'data_load')
+env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md,
+                      parent_logger = logger_name)
 
 ## sapf_data
-sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, na = '', parent_logger = 'data_load')
+sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, na = '',
+                     parent_logger = logger_name)
 
 ## env_data
-env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = '', parent_logger = 'data_load')
+env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = '',
+                    parent_logger = logger_name)
 
 ################################################################################
 # md qc
-log_sapfluxnet_setup('Logs/sapfluxnet.log', 'md_qc')
-
 ## metadata columns
 md_cols <- bind_rows(
-  qc_md_cols(site_md, 'site_md', parent_logger = 'md_qc'),
-  qc_md_cols(stand_md, 'stand_md', parent_logger = 'md_qc'),
-  qc_md_cols(species_md, 'species_md', parent_logger = 'md_qc'),
-  qc_md_cols(plant_md, 'plant_md', parent_logger = 'md_qc'),
-  qc_md_cols(env_md, 'environmental_md', parent_logger = 'md_qc')
+  qc_md_cols(site_md, 'site_md', parent_logger = logger_name),
+  qc_md_cols(stand_md, 'stand_md', parent_logger = logger_name),
+  qc_md_cols(species_md, 'species_md', parent_logger = logger_name),
+  qc_md_cols(plant_md, 'plant_md', parent_logger = logger_name),
+  qc_md_cols(env_md, 'environmental_md', parent_logger = logger_name)
 )
 
 ## factor variables values 
 factor_values <- qc_factor_values(site_md, stand_md, species_md, plant_md, env_md,
-                                  parent_logger = 'md_qc')
+                                  parent_logger = logger_name)
 
 ## email
-email_check <- qc_email_check(site_md, parent_logger = 'md_qc')
+email_check <- qc_email_check(site_md, parent_logger = logger_name)
 
 ## coordinates
 # site_md_coordfix <-
@@ -93,99 +103,101 @@ email_check <- qc_email_check(site_md, parent_logger = 'md_qc')
 #   qc_check_coordinates(parent_logger = 'md_qc') %>%
 #   qc_fix_latlong_errors(special_countries = TRUE, parent_logger = 'md_qc')
 
-site_md_coordfix <- qc_coordinates(site_md, parent_logger = 'md_qc')
+site_md_coordfix <- qc_coordinates(site_md, parent_logger = logger_name)
 
 ## species
 species_md_spnames <- qc_species_names_info(species_md$sp_name,
-                                            parent_logger = 'md_qc') %>%
+                                            parent_logger = logger_name) %>%
   mutate(Md = 'sp')
 plant_md_spnames <- qc_species_names_info(plant_md$pl_species,
-                                            parent_logger = 'md_qc') %>%
+                                            parent_logger = logger_name) %>%
   mutate(Md = 'pl')
 
 
-species_md$sp_name <- qc_species_names(species_md$sp_name, parent_logger = 'md_qc')
-plant_md$pl_species <- qc_species_names(plant_md$pl_species, parent_logger = 'md_qc')
-sp_verification <- qc_species_verification(species_md, plant_md, parent_logger = 'md_qc')
+species_md$sp_name <- qc_species_names(species_md$sp_name,
+                                       parent_logger = logger_name)
+plant_md$pl_species <- qc_species_names(plant_md$pl_species,
+                                        parent_logger = logger_name)
+sp_verification <- qc_species_verification(species_md, plant_md,
+                                           parent_logger = logger_name)
 
 ## plant treatment check
-pl_treatments_check <- qc_pl_treatments(plant_md, parent_logger = 'md_qc')
+pl_treatments_check <- qc_pl_treatments(plant_md, parent_logger = logger_name)
 
 ## environmental vars presence
-env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = 'md_qc')
+env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = logger_name)
 
 ################################################################################
 # table
 qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
                     species_md, plant_md, species_md_spnames, plant_md_spnames,
-                    sp_verification, env_var_presence, 'md_qc')
+                    sp_verification, env_var_presence,
+                    parent_logger = logger_name)
 ################################################################################
 
 ################################################################################
 # data qc
-log_sapfluxnet_setup('Logs/sapfluxnet.log', 'data_qc')
-
 ## timestamp
 ### sapf
-sapf_data_fixed <- qc_fix_timestamp(sapf_data, env_md,  'data_qc')
+sapf_data_fixed <- qc_fix_timestamp(sapf_data, env_md,  logger_name)
 ### env
-env_data_fixed <- qc_fix_timestamp(env_data, env_md, 'data_qc')
+env_data_fixed <- qc_fix_timestamp(env_data, env_md, logger_name)
 
 ## timestamp NAs
 ### sapf
-sapf_timestamp_nas <- qc_timestamp_nas(sapf_data_fixed, 'data_qc')
+sapf_timestamp_nas <- qc_timestamp_nas(sapf_data_fixed, logger_name)
 ### env
-env_timestamp_nas <- qc_timestamp_nas(env_data_fixed, 'data_qc')
+env_timestamp_nas <- qc_timestamp_nas(env_data_fixed, logger_name)
 
 ## timestamp errors
 ### sapf
 timestamp_errors_sapf <- qc_timestamp_errors(
   sapf_data_fixed,
-  timestep = qc_get_timestep(plant_md, parent_logger = 'data_qc'),
-  parent_logger = 'data_qc'
+  timestep = qc_get_timestep(plant_md, parent_logger = logger_name),
+  parent_logger = logger_name
 )
 ### env
 timestamp_errors_env <- qc_timestamp_errors(
   env_data_fixed,
-  timestep = qc_get_timestep(env_md, parent_logger = 'data_qc'),
-  parent_logger = 'data_qc'
+  timestep = qc_get_timestep(env_md, parent_logger = logger_name),
+  parent_logger = logger_name
 )
 
 ## Timestamp concordance
 timestamp_concordance <- qc_timestamp_concordance(sapf_data_fixed, env_data_fixed,
-                                                       plot = FALSE, parent_logger = 'data_qc')
+                                                       plot = FALSE, parent_logger = logger_name)
 timestamp_concordance_plot <- qc_timestamp_concordance(sapf_data_fixed, env_data_fixed,
-                                                       plot = TRUE, parent_logger = 'data_qc')
+                                                       plot = TRUE, parent_logger = logger_name)
 
 ### concordance and gaps info
-gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed, parent_logger = 'data_qc')
+gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed, parent_logger = logger_name)
 
 ## Gaps
 ### No trimmed
-sapf_gaps_info <- qc_mind_the_gap(sapf_data_fixed, parent_logger = 'data_qc')
-env_gaps_info <- qc_mind_the_gap(env_data_fixed, parent_logger = 'data_qc')
+sapf_gaps_info <- qc_mind_the_gap(sapf_data_fixed, parent_logger = logger_name)
+env_gaps_info <- qc_mind_the_gap(env_data_fixed, parent_logger = logger_name)
 ### Trimmed
 # sapf_gaps_trim_info <- qc_mind_the_gap(sapf_data_fixed, trim = TRUE, parent_logger = 'data_qc')
 # env_gaps_trim_info <- qc_mind_the_gap(env_data_fixed, trim = TRUE, parent_logger = 'data_qc')
 
 ### plots
 #### calendars
-sapf_gaps_cal <- vis_gaps_calendar(sapf_data_fixed, parent_logger = 'data_qc')
-env_gaps_cal <- vis_gaps_calendar(env_data_fixed, parent_logger = 'data_qc')
+sapf_gaps_cal <- vis_gaps_calendar(sapf_data_fixed, parent_logger = logger_name)
+env_gaps_cal <- vis_gaps_calendar(env_data_fixed, parent_logger = logger_name)
 #### plot the gaps coverage
 sapf_gaps_plot <- vis_plot_the_gap(sapf_gaps_info, type = "gap_coverage",
-                                   parent_logger = 'data_qc')
+                                   parent_logger = logger_name)
 env_gaps_plot <- vis_plot_the_gap(env_gaps_info, type = "gap_coverage",
-                                   parent_logger = 'data_qc')
+                                   parent_logger = logger_name)
 # sapf_gaps_trim_plot <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_coverage",
 #                                    parent_logger = 'data_qc')
 # env_gaps_trim_plot <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_coverage",
                                    # parent_logger = 'data_qc')
 #### plot the gaps interval
 sapf_gaps_plot_int <- vis_plot_the_gap(sapf_gaps_info, type = "gap_interval",
-                                   parent_logger = 'data_qc')
+                                   parent_logger = logger_name)
 env_gaps_plot_int <- vis_plot_the_gap(env_gaps_info, type = "gap_interval",
-                                   parent_logger = 'data_qc')
+                                   parent_logger = logger_name)
 # sapf_gaps_trim_plot_int <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_interval",
 #                                    parent_logger = 'data_qc')
 # env_gaps_trim_plot_int <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_interval",
@@ -193,15 +205,15 @@ env_gaps_plot_int <- vis_plot_the_gap(env_gaps_info, type = "gap_interval",
 
 ## Unit conversion
 sapw_md <- qc_sapw_area_calculator(qc_get_sapw_md(plant_md,
-                                                  parent_logger = 'data_qc'),
-                                   parent_logger = 'data_qc')
+                                                  parent_logger = logger_name),
+                                   parent_logger = logger_name)
 
 ### plant units
 #### check if errors
 sapf_data_fixed_plant <- tryCatch({
   qc_sapw_conversion(sapf_data_fixed, sapw_md,
                      output_units = 'plant',
-                     parent_logger = 'data_qc')
+                     parent_logger = logger_name)
 }, error = function(e) return(NULL))
 
 ### sapwood units
@@ -209,7 +221,7 @@ sapf_data_fixed_plant <- tryCatch({
 sapf_data_fixed_sapwood <- tryCatch({
    qc_sapw_conversion(sapf_data_fixed, sapw_md,
                       output_units = 'sapwood',
-                      parent_logger = 'data_qc')
+                      parent_logger = logger_name)
 }, error = function(e) return(NULL))
 
 ### leaf units
@@ -217,7 +229,7 @@ sapf_data_fixed_sapwood <- tryCatch({
 sapf_data_fixed_leaf <- tryCatch({
   qc_sapw_conversion(sapf_data_fixed, sapw_md,
                      output_units = 'leaf',
-                     parent_logger = 'data_qc')
+                     parent_logger = logger_name)
 }, error = function(e) return(NULL))
 ```
 
@@ -491,7 +503,7 @@ qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
                       env_gaps_info, sapf_data_fixed_plant,
                       sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
                       sapf_timestamp_nas, env_timestamp_nas,
-                      'data_qc')
+                      parent_logger = logger_name)
 ################################################################################
 ```
 

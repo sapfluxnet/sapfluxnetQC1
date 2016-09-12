@@ -31,8 +31,8 @@ create_dic <- function(dic_name, parent_logger = 'test') {
                          'plant_md', 'environmental_md')
 
     if (!is.character(dic_name) || !(dic_name %in% accepted_sheets)) {
-      stop('Provided dicitonary name is not a character or is not a valid name.
-           Please see function help for information about valid dictionary names')
+      stop('Provided dicitonary name is not a character or is not a valid name.',
+           ' Please see function help for information about valid dictionary names')
     }
 
     # STEP 1
@@ -122,11 +122,14 @@ create_dic <- function(dic_name, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'create_dic', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'create_dic', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'create_dic', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'create_dic', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'create_dic', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'create_dic', sep = '.'))})
 
 
 }
@@ -166,8 +169,8 @@ qc_site_dics <- function(variable, parent_logger = 'test') {
     # valid variables for site_md
     accepted_vars <- c('si_country', 'si_dist_mgmt', 'si_igbp')
     if (!(variable %in% accepted_vars)) {
-      stop('Variable provided (', variable,') is not adequate for creating a dictionary.
-           Please see "Accepted variables" section of the function help.')
+      stop('Variable provided (', variable,') is not adequate for creating a dictionary.',
+           ' Please see "Accepted variables" section of the function help.')
     }
 
     # STEP 1
@@ -231,11 +234,14 @@ qc_site_dics <- function(variable, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_site_dics', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_site_dics', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_site_dics', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_site_dics', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_site_dics', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_site_dics', sep = '.'))})
 
 }
 
@@ -275,8 +281,9 @@ qc_stand_dics <- function(variable, parent_logger = 'test') {
     accepted_vars <- c('st_growth_condition', 'st_aspect',
                        'st_terrain', 'st_soil_texture')
     if (!(variable %in% accepted_vars)) {
-      stop('Variable provided (', variable,') is not adequate for creating a dictionary.
-           Please see "Accepted variables" section of the function help.')
+      stop('Variable provided (', variable,
+           ') is not adequate for creating a dictionary.',
+           ' Please see "Accepted variables" section of the function help.')
     }
 
     # STEP 1
@@ -322,11 +329,14 @@ qc_stand_dics <- function(variable, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_stand_dics', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_stand_dics', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_stand_dics', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_stand_dics', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_stand_dics', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_stand_dics', sep = '.'))})
 
 }
 
@@ -364,8 +374,9 @@ qc_species_dics <- function(variable = 'sp_leaf_habit',
     # valid variables for site_md
     accepted_vars <- c('sp_leaf_habit')
     if (!(variable %in% accepted_vars)) {
-      stop('Variable provided (', variable,') is not adequate for creating a dictionary.
-         Please see "Accepted variables" section of the function help.')
+      stop('Variable provided (', variable,
+           ') is not adequate for creating a dictionary.',
+           ' Please see "Accepted variables" section of the function help.')
     }
 
     # STEP 1
@@ -381,11 +392,14 @@ qc_species_dics <- function(variable = 'sp_leaf_habit',
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_species_dics', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_species_dics', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_species_dics', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_species_dics', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_species_dics', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_species_dics', sep = '.'))})
 
 
 }
@@ -428,8 +442,9 @@ qc_plant_dics <- function(variable, parent_logger = 'test') {
                        'pl_sens_cor_grad', 'pl_sens_cor_zero',
                        'pl_sap_units', 'pl_radial_int', 'pl_azimut_int')
     if (!(variable %in% accepted_vars)) {
-      stop('Variable provided (', variable,') is not adequate for creating a dictionary.
-           Please see "Accepted variables" section of the function help.')
+      stop('Variable provided (', variable,
+           ') is not adequate for creating a dictionary.',
+           ' Please see "Accepted variables" section of the function help.')
     }
 
     # STEP 1
@@ -517,11 +532,14 @@ qc_plant_dics <- function(variable, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_plant_dics', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_plant_dics', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_plant_dics', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_plant_dics', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_plant_dics', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_plant_dics', sep = '.'))})
 
 }
 
@@ -564,8 +582,9 @@ qc_env_dics <- function(variable, parent_logger = 'test') {
                        'env_sw_in', 'env_ppfd_in', 'env_netrad', 'env_ws',
                        'env_precip', 'env_plant_watpot', 'env_leafarea_seasonal')
     if (!(variable %in% accepted_vars)) {
-      stop('Variable provided (', variable,') is not adequate for creating a dictionary.
-           Please see "Accepted variables" section of the function help.')
+      stop('Variable provided (', variable,
+           ') is not adequate for creating a dictionary.',
+           ' Please see "Accepted variables" section of the function help.')
     }
 
     # STEP 1
@@ -624,11 +643,14 @@ qc_env_dics <- function(variable, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_env_dics', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_env_dics', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_env_dics', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_env_dics', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_env_dics', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_env_dics', sep = '.'))})
 
 }
 
@@ -679,8 +701,8 @@ qc_md_cols <- function(metadata, dic,
                          'plant_md', 'environmental_md')
 
     if (!is.character(dic) || !(dic %in% accepted_sheets)) {
-      stop('Provided dictionary name is not a character or is not a valid name.
-           Please see function help for information about valid dictionary names')
+      stop('Provided dictionary name is not a character or is not a valid name.',
+           ' Please see function help for information about valid dictionary names')
     }
 
     # STEP 1
@@ -733,11 +755,14 @@ qc_md_cols <- function(metadata, dic,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_md_cols', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_md_cols', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_md_cols', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_md_cols', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_md_cols', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_md_cols', sep = '.'))})
 
 }
 
@@ -867,11 +892,14 @@ qc_factor_values <- function(site = NULL, stand = NULL, species = NULL,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_factor_values', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_factor_values', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_factor_values', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_factor_values', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_factor_values', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_factor_values', sep = '.'))})
 
 }
 
@@ -988,10 +1016,13 @@ qc_env_vars_presence <- function(data, metadata,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_env_vars_presence', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_env_vars_presence', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_env_vars_presence', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_env_vars_presence', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_env_vars_presence', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_env_vars_presence', sep = '.'))})
 
 }

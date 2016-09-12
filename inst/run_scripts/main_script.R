@@ -8,7 +8,7 @@ library(sapfluxnetr)
 
 # # folder structure
 # df_folder_structure(parent_logger = 'DataFlow')
-# 
+#
 # # Copy templates to Template folder
 # file.copy(
 #   system.file("Rmd_templates", "received_to_accepted.Rmd",
@@ -28,7 +28,7 @@ library(sapfluxnetr)
 # setup logs
 log_sapfluxnet_setup('Logs/sapfluxnet.log',
                      logger = 'DataFlow',
-                     level = 'WARNING')
+                     level = 'DEBUG')
 
 # reports for data in the system
 rep_sfn_render('received_to_accepted.Rmd',
@@ -40,13 +40,16 @@ rep_sfn_render('received_to_accepted.Rmd',
                parent_logger = 'DataFlow')
 
 # QC
-log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = 'QC', level = "WARNING")
+log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = 'QC', level = "DEBUG")
 
 data_folders <- df_get_data_folders(parent_logger = 'QC')
 
-for (folder in data_folders) {
-  log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = paste('QC', folder, sep = '_'),
-                       level = "WARNING")
+## Loop for every site
+lapply(data_folders, function(folder) {
+  code <- stringr::str_sub(folder, 6, -1)
+  # log_sapfluxnet_setup('Logs/sapfluxnet.log',
+  #                      logger = paste('QC', code, sep = '.'),
+  #                      level = "DEBUG")
   qc_start_process(file.path(folder, 'Accepted'), rdata = FALSE,
-                   parent_logger = paste('QC', folder, sep = '_')) 
-}
+                   parent_logger = paste('QC', code, sep = '.'))
+})
