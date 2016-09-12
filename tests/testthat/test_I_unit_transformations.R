@@ -202,25 +202,21 @@ test_that('conversion fails when there is NAs in leaf area or sapwood', {
 context('I4. Radiation unit conversion')
 
 env_hd <- suppressWarnings(suppressMessages(dl_data('foo_env.csv','environmental_hd')))
+ppfd_in <- LakeMetabolizer::sw.to.par.base(env_hd$sw_in)
 
 test_that('argument checks work', {
   expect_error(qc_rad_conversion('not a data frame'),
                'data object is not a data frame')
-  expect_error(
-    qc_rad_conversion(env_hd, 25),
-    'output_units value is not a character vector'
-  )
-  expect_error(
-    qc_rad_conversion(env_hd, '25'),
-    'output_units = "'
-  )
+})
+
+test_that('function works', {
   expect_message(
-    qc_rad_conversion(env_hd, 'sw_in'),
-    'Radiation in output units already exists. No transformation made.'
+    qc_rad_conversion(cbind(env_hd, ppfd_in)),
+    'Radiation in both sw_in and ppfd_in units already exists.'
   )
   expect_warning(
     qc_rad_conversion(subset(env_hd, select=-sw_in),'ppfd_in'),
-    'Radiation can not be transformed to incoming photosynthetic photon flux density'
+    'Both sw_in and ppfd_in are missing.'
   )
 })
 
@@ -236,8 +232,8 @@ test_results_expected_ppfd_in <- c(0.2114, 2.114, 4.228, 10.57, 21.14, 211.4, 21
 test_results_expected_sw_in <- c(0.0473, 0.473, 0.946, 2.365, 4.73, 47.3, 473)
 
 # results applying the function
-test_results_ppfd_in <- round(qc_rad_conversion(test_data_sw_in, output_units = 'ppfd_in'), 4)
-test_results_sw_in <- round(qc_rad_conversion(test_data_ppfd_in, output_units = 'sw_in'), 4)
+test_results_ppfd_in <- round(qc_rad_conversion(test_data_sw_in), 4)
+test_results_sw_in <- round(qc_rad_conversion(test_data_ppfd_in), 4)
 
 test_that('conversion is made correctly', {
   expect_equal(test_results_ppfd_in$ppfd_in, test_results_expected_ppfd_in)
@@ -247,7 +243,7 @@ test_that('conversion is made correctly', {
 test_that('the new variable is added to the table and is numeric', {
   expect_equal(
     c(names(env_hd),'ppfd_in'),
-    names(qc_rad_conversion(env_hd,'ppfd_in'))
+    names(qc_rad_conversion(env_hd))
   )
-  expect_is(qc_rad_conversion(env_hd,'ppfd_in')$ppfd_in, 'numeric')
+  expect_is(qc_rad_conversion(env_hd)$ppfd_in, 'numeric')
 })

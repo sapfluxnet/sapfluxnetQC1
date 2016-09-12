@@ -4,14 +4,10 @@
 \alias{qc_rad_conversion}
 \title{Radiation units transformation}
 \usage{
-qc_rad_conversion(data, output_units = "ppfd_in", parent_logger = "test")
+qc_rad_conversion(data, parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the environmental measurements}
-
-\item{output_units}{Character vector indicating the kind of output units.
-Allowed values are \code{"ppfd_in"} and \code{"sw_in"}.
-See details to obtain more information}
 }
 \description{
 Function to transform between radiation units

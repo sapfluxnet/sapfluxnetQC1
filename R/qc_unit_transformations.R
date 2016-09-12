@@ -1255,71 +1255,47 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
 #'
 #' @param data Data frame containing the environmental measurements
 #'
-#' @param output_units Character vector indicating the kind of output units.
-#'   Allowed values are \code{"ppfd_in"} and \code{"sw_in"}.
-#'   See details to obtain more information
-#'
 #' @export
 
 # START
 # Function declaration
-qc_rad_conversion <- function(data, output_units = 'ppfd_in',
-                               parent_logger = 'test') {
+qc_rad_conversion <- function(data, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
 
     # STEP 0
-    # Initial checks
-
-    # 0.1 Arguments checking
     # Is data a data frame?
     if (!is.data.frame(data)) {
       stop('data object is not a data frame')
     }
-    # Is output units a character vector?
-    if (!is.character(output_units)) {
-      stop('output_units value is not a character vector')
-    }
-    # Is output units a valid value?
-    if (!(output_units %in% c('ppfd_in', 'sw_in'))) {
-      stop('output_units = "', output_units, '" is not a valid value. See function ',
-           'help (?qc_rad_conversion) for a list of valid values')
-    }
-
-    # 0.2 Check if output units already exist
-    if (!(output_units %in% colnames(data))){
 
     # STEP 1
     # Convert radiation values
 
-      # 1.1 Convert to incoming photosynthetic photon flux density and join to the data frame
-      if (output_units == "ppfd_in") {
-        if ('sw_in' %in% colnames(data)) {
+    # 1.1 If both measures appear in the data frame, no transformation is made
+    if (all(c('sw_in', 'ppfd_in') %in% names(data))){
 
-          ppfd_in <- LakeMetabolizer::sw.to.par.base(data$sw_in)
-          data <- cbind(data,ppfd_in)
+      message('Radiation in both sw_in and ppfd_in units already exists. No transformation made.')
 
-        } else {
-          warning('Radiation can not be transformed to incoming photosynthetic ',
-                  'photon flux density because shortwave incoming radiation is missing')
-        }
+    # 1.2 If none of the measures appear in the data frame, no transformation is made,
+    # with a warning
+    } else if (all(!(c('sw_in', 'ppfd_in') %in% names(data)))){
 
-      # 1.2 Convert to shortwave incoming radiation and join to the data frame
-      } else if (output_units == "sw_in") {
-        if ('ppfd_in' %in% colnames(data)) {
+      warning('Both sw_in and ppfd_in are missing. No transformation is possible.')
 
-          sw_in <- LakeMetabolizer::par.to.sw.base(data$ppfd_in)
-          data <- cbind(data,sw_in)
+    # 1.3 If only sw_in appears in the data frame, transformation to ppfd_in is made
+    } else if ('sw_in' %in% names(data)){
 
-        } else {
-          warning('Radiation can not be transformed to shortwave incoming radiation ',
-                  'because incoming photosynthetic photon flux density is missing')
-        }
-      }
+      ppfd_in <- LakeMetabolizer::sw.to.par.base(data$sw_in)
+      data <- cbind(data, ppfd_in)
 
-    } else {
-      message('Radiation in output units already exists. No transformation made.')
+    # 1.3 If only ppfd_in appears in the data frame, transformation to sw_in is made
+    } else if ('ppfd_in' %in% names(data)){
+
+      sw_in <- LakeMetabolizer::par.to.sw.base(data$ppfd_in)
+      data <- cbind(data,sw_in)
+
     }
 
     # STEP 2
