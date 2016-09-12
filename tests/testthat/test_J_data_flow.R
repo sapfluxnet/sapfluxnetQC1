@@ -372,17 +372,21 @@ test_that('no objects in environment now', {
 ################################################################################
 context('J7. Saving templates and running scripts to folders')
 
+unlink('Templates', recursive = TRUE)
+
 test_that('Templates directory exists', {
   expect_error(df_copy_templates(),'Templates directory does not exist')
 })
 
 dir.create('Templates')
 
-# test_that('function works', {
-#   expect_is(df_get_data_folders(), 'character')
-#   expect_length(df_get_data_folders(), 2)
-#   expect_identical(df_get_data_folders(), c('Data/bar', 'Data/foo'))
-# })
+test_that('function works', {
+  expect_error(df_copy_templates(),'Check whether templates and running scripts already exist.')
+  expect_true(df_copy_templates(first = TRUE))
+  expect_equal(dir('Templates'),c('QC_report.Rmd','received_to_accepted.Rmd'))
+  expect_true(all(c('sfn_monitor.Rmd','main_script.R','debug_script.R') %in% dir('.')))
+  expect_true(df_copy_templates())
+})
 
 ################################################################################
 # cleaning
@@ -391,6 +395,7 @@ unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)
 unlink('Templates', recursive = TRUE)
+unlink(c('sfn_monitor.Rmd','main_script.R','debug_script.R'))
 
 
 

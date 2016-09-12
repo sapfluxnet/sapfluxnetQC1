@@ -1184,7 +1184,7 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
 
 # START
 # Function declaration
-qc_rad_conversion <- function(data, env_md, output_units = 'ppfd_in',
+qc_rad_conversion <- function(data, output_units = 'ppfd_in',
                                parent_logger = 'test') {
 
   # Using calling handlers to logging
@@ -1218,26 +1218,29 @@ qc_rad_conversion <- function(data, env_md, output_units = 'ppfd_in',
       if (output_units == "ppfd_in") {
         if ('sw_in' %in% colnames(data)) {
 
-          ppfd_in <- LakeMetabolizer::sw.to.par(data, sw.col = "sw_in")
+          ppfd_in <- LakeMetabolizer::sw.to.par.base(data$sw_in)
           data <- cbind(data,ppfd_in)
 
         } else {
-          warning("Radiation can not be transformed to incoming photosynthetic
-                  photon flux density because shortwave incoming radiation is missing")
+          warning('Radiation can not be transformed to incoming photosynthetic ',
+                  'photon flux density because shortwave incoming radiation is missing')
         }
 
       # 1.2 Convert to shortwave incoming radiation and join to the data frame
       } else if (output_units == "sw_in") {
         if ('ppfd_in' %in% colnames(data)) {
 
-          sw_in <- LakeMetabolizer::par.to.sw(data, par.col = "ppfd_in")
+          sw_in <- LakeMetabolizer::par.to.sw.base(data$ppfd_in)
           data <- cbind(data,sw_in)
 
         } else {
-          warning("Radiation can not be transformed to shortwave incoming radiation
-                  because incoming photosynthetic photon flux density is missing")
+          warning('Radiation can not be transformed to shortwave incoming radiation ',
+                  'because incoming photosynthetic photon flux density is missing')
         }
       }
+
+    } else {
+      message('Radiation in output units already exists. No transformation made.')
     }
 
     # STEP 2

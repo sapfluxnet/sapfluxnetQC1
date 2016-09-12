@@ -759,7 +759,7 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data_plant = NULL,
 
 # START
 # Function declaration
-df_copy_templates <- function(first=FALSE, parent_logger = 'test') {
+df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -818,9 +818,9 @@ df_copy_templates <- function(first=FALSE, parent_logger = 'test') {
 
     # Give an error if modification time of the files can not be obtained
     if(any(is.na(pre_time))){
-      stop('Check whether templates and running scripts already exist. If some of them do not
-           exist, delete those that exist (if any) and run again the function with parameter
-           first set to TRUE')
+      stop('Check whether templates and running scripts already exist. ',
+           'If some of them do not exist, delete those that exist (if any) ',
+           'and run again the function with parameter first set to TRUE')
     }
 
     # STEP 4
