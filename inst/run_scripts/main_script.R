@@ -6,20 +6,11 @@ library(sapfluxnetr)
 # server preparation, run only once!!!!!!!
 ################################################################################
 
-# # folder structure
+# folder structure
 # df_folder_structure(parent_logger = 'DataFlow')
-# 
-# # Copy templates to Template folder
-# file.copy(
-#   system.file("Rmd_templates", "received_to_accepted.Rmd",
-#               package = "sapfluxnetr"),
-#   file.path('Templates')
-# )
-# file.copy(
-#   system.file("Rmd_templates", "QC_report.Rmd",
-#               package = "sapfluxnetr"),
-#   file.path('Templates')
-# )
+
+# Copy templates to Template folder
+# df_copy_templates()
 
 ################################################################################
 # END server preparation
@@ -48,5 +39,5 @@ for (folder in data_folders) {
   log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = paste('QC', folder, sep = '_'),
                        level = "WARNING")
   qc_start_process(file.path(folder, 'Accepted'), rdata = FALSE,
-                   parent_logger = paste('QC', folder, sep = '_')) 
+                   parent_logger = paste('QC', folder, sep = '_'))
 }
