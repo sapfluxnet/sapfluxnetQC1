@@ -63,14 +63,14 @@ test_that('function works', {
   expect_equal(sum(is.na(qc_sapw_area_calculator(pl_data_bad_6)$pl_sapw_area_est)), 5)
 })
 
-context('I3. Unit conversion')
+context('I3. Sapflow unit conversion')
 
 test_that('argument checks works', {
   expect_error(qc_sapw_conversion('not a data frame', qc_get_sapw_md(pl_data), 'plant'),
-               'data and/or pl_metadata objects are not data frames')
+               'data and/or sapw_md objects are not data frames')
   expect_error(qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'),
                                   'not a data frame', 'plant'),
-               'data and/or pl_metadata objects are not data frames')
+               'data and/or sapw_md objects are not data frames')
   expect_error(
     qc_sapw_conversion(dl_data('foo.xlsx', 'sapflow_hd'), qc_get_sapw_md(pl_data), 25),
     'output_units value is not a character vector'
@@ -165,7 +165,6 @@ test_that('conversion is made correctly', {
   expect_equal(test_results_leafarea$pl_kg_h, test_expected_leafarea, tolerance = 0.001)
 })
 
-
 test_bad_sapw_md <- data.frame(pl_code = c('pl_cm_cm_h', 'pl_cm_m_s', 'pl_dm_dm_h',
                                        'pl_dm_dm_s', 'pl_mm_mm_s', 'pl_g_m_s',
                                        'pl_kg_m_h', 'pl_kg_m_s', 'pl_cm_s',
@@ -198,4 +197,57 @@ test_that('conversion fails when there is NAs in leaf area or sapwood', {
   expect_error(qc_sapw_conversion(test_data, test_bad2_sapw_md,
                                   output_units = 'sapwood'),
                'sapwood area values are missing')
+})
+
+context('I4. Radiation unit conversion')
+
+env_hd <- suppressWarnings(suppressMessages(dl_data('foo_env.csv','environmental_hd')))
+
+test_that('argument checks work', {
+  expect_error(qc_rad_conversion('not a data frame'),
+               'data object is not a data frame')
+  expect_error(
+    qc_rad_conversion(env_hd, 25),
+    'output_units value is not a character vector'
+  )
+  expect_error(
+    qc_rad_conversion(env_hd, '25'),
+    'output_units = "'
+  )
+  expect_message(
+    qc_rad_conversion(env_hd, 'sw_in'),
+    'Radiation in output units already exists. No transformation made.'
+  )
+  expect_warning(
+    qc_rad_conversion(subset(env_hd, select=-sw_in),'ppfd_in'),
+    'Radiation can not be transformed to incoming photosynthetic photon flux density'
+  )
+})
+
+# test data frames
+test_data_sw_in <- data.frame(TIMESTAMP = c(1, 2, 3, 4, 5, 6, 7),
+                        sw_in = c(0.1, 1, 2, 5, 10, 100, 1000))
+
+test_data_ppfd_in <- data.frame(TIMESTAMP = c(1, 2, 3, 4, 5, 6, 7),
+                         ppfd_in = c(0.1, 1, 2, 5, 10, 100, 1000))
+
+# expected results
+test_results_expected_ppfd_in <- c(0.2114, 2.114, 4.228, 10.57, 21.14, 211.4, 2114)
+test_results_expected_sw_in <- c(0.0473, 0.473, 0.946, 2.365, 4.73, 47.3, 473)
+
+# results applying the function
+test_results_ppfd_in <- round(qc_rad_conversion(test_data_sw_in, output_units = 'ppfd_in'), 4)
+test_results_sw_in <- round(qc_rad_conversion(test_data_ppfd_in, output_units = 'sw_in'), 4)
+
+test_that('conversion is made correctly', {
+  expect_equal(test_results_ppfd_in$ppfd_in, test_results_expected_ppfd_in)
+  expect_equal(test_results_sw_in$sw_in, test_results_expected_sw_in)
+})
+
+test_that('the new variable is added to the table and is numeric', {
+  expect_equal(
+    c(names(env_hd),'ppfd_in'),
+    names(qc_rad_conversion(env_hd,'ppfd_in'))
+  )
+  expect_is(qc_rad_conversion(env_hd,'ppfd_in')$ppfd_in, 'numeric')
 })

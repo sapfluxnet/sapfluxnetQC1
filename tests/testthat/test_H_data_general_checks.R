@@ -25,11 +25,11 @@ bad_timestamp <- as.POSIXct(c(
 ), tz = 'Etc/GMT-1')
 
 bad_data_1 <- data.frame(TIMESTAMP = c(
-  "Miercoles, 23 de Mayo, 2015. 10:00", "Miercoles, 23 de Mayo, 2015. 10:15",
-  "Miercoles, 23 de Mayo, 2015. 10:30", "Miercoles, 23 de Mayo, 2015. 10:45",
-  "Miercoles, 23 de Mayo, 2015. 11:00", "Miercoles, 23 de Mayo, 2015. 11:15",
-  "Miercoles, 23 de Mayo, 2015. 11:30", "Miercoles, 23 de Mayo, 2015. 11:45",
-  "Miercoles, 23 de Mayo, 2015. 12:00"
+  "Wednesday, 23 May, 2015. 10:00", "Wednesday, 23 May, 2015. 10:15",
+  "Wednesday, 23 May, 2015. 10:30", "Wednesday, 23 May, 2015. 10:45",
+  "Wednesday, 23 May, 2015. 11:00", "Wednesday, 23 May, 2015. 11:15",
+  "Wednesday, 23 May, 2015. 11:30", "Wednesday, 23 May, 2015. 11:45",
+  "Wednesday, 23 May, 2015. 12:00"
   ),
   Other_var = 1:9,
   stringsAsFactors = FALSE)
