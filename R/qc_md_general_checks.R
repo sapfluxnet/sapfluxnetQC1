@@ -83,7 +83,7 @@ create_dic <- function(dic_name, parent_logger = 'test') {
 
     # 1.4 Plant metadata
     if (dic_name == 'plant_md') {
-      dic <- list(pl_name = 'character', pl_species = 'character',
+      dic <- list(pl_name = c('character', 'numeric', 'integer'), pl_species = 'character',
                   pl_treatment = 'character', pl_dbh = c('numeric', 'integer'),
                   pl_height = c('numeric', 'integer'), pl_age = c('numeric', 'integer'),
                   pl_social = 'character', pl_sapw_area = c('numeric', 'integer'),

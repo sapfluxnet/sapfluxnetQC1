@@ -41,12 +41,30 @@ site_md_mod_2 <- site_md
 site_md_mod_2$si_name <- 4
 site_mod_2_check <- qc_md_cols(site_md_mod_2, 'site_md')
 
+plant_md$pl_sens_calib <- TRUE
+plant_check <- qc_md_cols(plant_md, 'plant_md')
+plant_md_mod <- plant_md
+plant_md_mod$pl_name <- 1:13
+plant_md_mod_2 <- plant_md
+plant_md_mod_2$pl_species <- 1:13
+plant_mod_check <- qc_md_cols(plant_md_mod, 'plant_md')
+plant_mod_2_check <- qc_md_cols(plant_md_mod_2, 'plant_md')
+### añadir test para el resto de metadata
+
 test_that('results are correct', {
   expect_true(all(site_check$PresenceOK))
   expect_false(all(site_check$ClassOK))
   expect_true(all(site_mod_check$ClassOK))
   expect_false(site_mod_2_check$ClassOK[1])
+
+  expect_true(all(plant_check$PresenceOK))
+  expect_true(all(plant_check$ClassOK[-3]))
+  expect_true(all(plant_mod_check$ClassOK[-3]))
+  expect_false(all(plant_mod_2_check$ClassOK[-3]))
 })
+
+
+
 
 context('G2. Factor values checks')
 
