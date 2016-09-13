@@ -671,10 +671,11 @@ qc_start_process <- function(folder = '.', rdata = TRUE,
       } else {
 
         # 2.2 if status exists but QC is not DONE, lets do it
-        # 2.2.1 log setup
-        log_sapfluxnet_setup('Logs/sapfluxnet.log',
-                             logger = code_and_files[['si_code']],
-                             level = "DEBUG")
+        # # 2.2.1 log setup
+        # log_sapfluxnet_setup('Logs/sapfluxnet.log',
+        #                      logger = code_and_files[['si_code']],
+        #                      level = "DEBUG")
+        ## Log setup not necessary, it is done outside, in the main script
 
         # 2.2.2 report folder
         df_report_folder_creation(code_and_files[['si_code']],

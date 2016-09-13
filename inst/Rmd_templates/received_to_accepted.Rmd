@@ -16,7 +16,7 @@ knitr::opts_knit$set(root.dir = params$wd)
 ```{r setup_log, include = FALSE}
 # log setup
 log_file <- "Logs/sapfluxnet.log"
-log_sapfluxnet_setup(log_file, logger = 'DataFlow', level = 'DEBUG')
+log_sapfluxnet_setup(log_file, logger = 'DataFlow.rep_sfn_render', level = 'DEBUG')
 ```
 
 ## Received folder content
@@ -28,6 +28,6 @@ dir('received_data')
 ## Transfer files
 
 ```{r transfer_files}
-df_received_to_accepted(remove = FALSE, parent_logger = 'DataFlow')
+df_received_to_accepted(remove = FALSE, parent_logger = 'DataFlow.rep_sfn_render')
 ```
 

@@ -333,15 +333,15 @@ dl_metadata <- function(file_name, sheet_name,
                          'plant_md', 'environmental_md')
 
     if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
-      stop('Provided sheet name is not a character or is not a metadata sheet
-           Please see function help')
+      stop('Provided sheet name is not a character or is not a metadata sheet. ',
+           'Please see function help')
     }
 
     # check for si_code_loc and if NULL set si_code to NA
     if (is.null(si_code_loc)) {
       si_code_txt <- NA
-      message('si_code_loc set to NULL. If loading other metadata than site_md,
-              please indicate the object containing the site metadata.')
+      message('si_code_loc set to NULL. If loading other metadata than site_md,',
+              ' please indicate the object containing the site metadata.')
     } else {
       si_code_txt <- si_code_loc$si_code[1]
     }
@@ -508,8 +508,8 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
     accepted_sheets <- c('sapflow_hd', 'environmental_hd')
 
     if (!is.character(sheet_name) || !(sheet_name %in% accepted_sheets)) {
-      stop('Provided sheet name is not a character or is not a metadata sheet
-           Please see function help')
+      stop('Provided sheet name is not a character or is not a metadata sheet.',
+           ' Please see function help')
     }
 
     # STEP 1
@@ -520,7 +520,8 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
       # Loading and shaping the data
       # 2.1 sapflow data
       if (sheet_name == 'sapflow_hd') {
-        res <- suppressWarnings(readxl::read_excel(file_name, sheet_name, na = na, skip = 4)) %>%
+        res <- suppressWarnings(readxl::read_excel(file_name, sheet_name,
+                                                   na = na, skip = 4)) %>%
           # 2.1.2 Check and remove duplicate columns
           remove_dupcols() %>%
           # 2.1.3 Remove any extra column that could be created in the read_excel step.
@@ -546,7 +547,8 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
 
       } else {
         # 2.2 environmental data
-        res <- suppressWarnings(readxl::read_excel(file_name, sheet_name, na = na, skip = 3)) %>%
+        res <- suppressWarnings(readxl::read_excel(file_name, sheet_name,
+                                                   na = na, skip = 3)) %>%
           # 2.2.2 check and remove duplicate columns
           remove_dupcols() %>%
           # 2.2.3 Remove any extra column that could be created in the read_excel step.
@@ -640,10 +642,13 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'dl_data', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'dl_data', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'dl_data', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'dl_data', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'dl_data', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'dl_data', sep = '.'))})
 
 }
