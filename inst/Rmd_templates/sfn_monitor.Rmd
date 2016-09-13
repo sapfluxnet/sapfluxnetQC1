@@ -250,7 +250,11 @@ Row {.tabset .tabset-fade}
 ### Reports
 
 ```{r reports_links}
-renderUI({
+fillCol(width = '100%', flex = c(NA),
+        uiOutput('reports_ui',
+                 style = "overflow-y:scroll; max-height: 400px"))
+
+output$reports_ui <- renderUI({
   rep_links <- vector()
   for (report in report_list()) {
     rep_i <- paste0('http://158.109.46.35:8787/file_show?path=/sapfluxnet/',
@@ -287,7 +291,7 @@ fillCol(width = '100%', flex = c(NA),
         selectInput('site_sel_man', label = 'Select site by code:',
                     choices = site_list, selected = site_list[1]),
         # textOutput('manual_changes'),
-        uiOutput('include_txt'))
+        uiOutput('include_txt', style = "overflow-y:scroll; max-height: 400px"))
 
 # mc_file <- reactive({
 #   file.path('Data', input$site_sel_man,
@@ -319,7 +323,7 @@ fillRow(height = '100%', flex = c(1, 1),
                 tags$textarea(id = 'notes', rows = 10, cols = 80),
                 actionButton("write_button", "Add note",
                              icon = icon("pencil", lib = "glyphicon"))),
-        uiOutput('site_notes')
+        uiOutput('site_notes', style = "overflow-y:scroll; max-height: 400px")
 )
 
 add_notes <- function(file, string) {
