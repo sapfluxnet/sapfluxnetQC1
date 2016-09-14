@@ -749,6 +749,11 @@ output$swc <- renderPlotly({
 
 Here you can:
 
+  1. Select an area to zoom it (double click to reset).
+  1. Hover the bars to obtain info from site/species and number of trees.
+  1. Click in the name of a site to remove it from the plot, click it
+     again to add it.
+
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================
@@ -978,15 +983,33 @@ radioButtons('data_sel_vs', label = 'Select sapflow data type:',
                          'Sapflow data sapwood' = '_sapflow_data_sapwood.csv'),
              selected = '_sapflow_data_plant.csv')
 
-numericInput('plant_sel_vs', label = 'Indicate tree index to visualize:',
-             value = 2, min = 2)
+# numericInput('plant_sel_vs', label = 'Indicate tree index to visualize:',
+#              value = 2, min = 2)
+# 
+# numericInput('env_sel_vs', label = 'Indicate env variable index to visualize:',
+#              value = 2, min = 2)
 
-numericInput('env_sel_vs', label = 'Indicate env variable index to visualize:',
-             value = 2, min = 2)
+uiOutput('tree_controls')
+uiOutput('env_controls')
 ```
 
 Row
 --------------------------------------------------------------------------------
+
+```{r on_the_fly_select}
+output$tree_controls <- renderUI({
+  tree_names <- names(get_sapf_data_vs()[-1])
+  checkboxGroupInput('tree_names', "Choose plants:",
+                     choices = tree_names, selected = tree_names[1])
+})
+
+output$env_controls <- renderUI({
+  env_names <- names(get_env_data_vs()[-1])
+  checkboxGroupInput('env_names', "Choose env variables:",
+                     choices = env_names, selected = env_names[1])
+})
+```
+
 
 ### Sapflow
 
@@ -1002,7 +1025,8 @@ output$sapf_ts_vs <- renderDygraph({
   env_md_plot_vs <- get_env_md_vs()
   
   sapf_plot_vs <- sapf_plot_data_vs %>%
-    select(TIMESTAMP, input$plant_sel_vs) %>%
+    select(select_vars_(names(sapf_plot_data_vs),
+                        c('TIMESTAMP', input$tree_names))) %>%
     qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
 
   sapf_plot_vs <- xts::xts(sapf_plot_vs[,-1],
@@ -1040,7 +1064,8 @@ output$env_ts_vs <- renderDygraph({
   env_md_plot_vs <- get_env_md_vs()
 
   env_plot_vs <- env_plot_data_vs %>%
-    select(TIMESTAMP, input$env_sel_vs) %>%
+    select(select_vars_(names(env_plot_data_vs),
+                        c('TIMESTAMP', input$env_names))) %>%
     qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
 
   env_plot_vs <- xts::xts(env_plot_vs[,-1],
