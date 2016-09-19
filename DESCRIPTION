@@ -27,7 +27,8 @@ Imports:
     yaml,
     cowplot,
     mapproj,
-    LakeMetabolizer
+    LakeMetabolizer,
+    RFc
 Suggests:
     knitr,
     testthat,

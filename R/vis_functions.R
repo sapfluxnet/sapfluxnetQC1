@@ -459,3 +459,167 @@ theme_sfn <- function(base_size = 10, base_family = "Lato") {
 
         complete = TRUE)
 }
+
+################################################################################
+#' Plotting a diagram of biomes
+#'
+#' This function produces a ggplot object showing the biomes as colored areas
+#' according to mean annual temperature (MAT) and mean annual precipitation (MAP)
+#' using a SpatialPolygonsDataFrame object obtained with
+#' \code{\link{qc_get_biomes_spdf}}
+#'
+#' @family Visualization Functions
+#'
+#' @param merge_deserts Logical indicating if desert biomes should be merged
+#' in a single biome. By default, deserts are not merged.
+#'
+#' @return a ggplot object showing the biomes.
+#'
+#' @export
+
+# START
+# Function declaration
+vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test'){
+
+  # Using calling handlers to logging
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is merge_deserts logical?
+    if (!(is.logical(merge_deserts))) {
+      stop('merge_deserts must be logical')
+    }
+    # Is merge_deserts NA?
+    if (is.na(merge_deserts)) {
+      stop('merge_deserts must be either TRUE or FALSE')
+    }
+
+    # STEP 1
+    # Get biomes SpatialPointsDataFrame object
+    suppressMessages(
+      biomes_df <- fortify(qc_get_biomes_spdf(merge_deserts = merge_deserts))
+    )
+
+    # STEP 2
+    # Make and return the plot object
+    # 2.1 Make color palette
+    if (merge_deserts){
+
+      pal <- viridis::viridis(9)[c(2,9,3,4,6,7,8,1)]
+
+    } else {
+
+      pal <- viridis::viridis(9)[c(2,3,5,4,9,6,7,8,1)]
+
+    }
+
+    # 2.2 Make the plot object
+    plot <- ggplot() + geom_polygon(data = biomes_df, aes(x = long, y = lat, group = id, fill = id)) +
+      scale_fill_manual('Biomes', values = pal) + xlab('Mean annual precipitation (mm)') +
+      ylab('Mean annual temperature (ºC)')
+    # ylab(expression(paste('Mean annual temperature ', (degree~C))))
+
+    # 2.3 Return the plot object
+    return(plot)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'vis_biome', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'vis_biome', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'vis_biome', sep = '.'))})
+
+}
+
+################################################################################
+#' Plotting a diagram of biomes with sites as dots
+#'
+#' This function produces a ggplot object showing the biomes as colored areas
+#' according to mean annual temperature (MAT) and mean annual precipitation (MAP),
+#' using the function \code{\link{vis_biome}}, and adds the sites on it according
+#' to their values of MAT and MAP.
+#'
+#' @family Visualization Functions
+#'
+#' @param data Data frame of site metadata, including mean annual temperature
+#' (si_mat) and mean annual precipitation (si_map) columns, or at least
+#' latitude (si_lat) and longitude (si_long) columns that will be used to obtain
+#' climatic data with \code{\link{qc_get_biome}}.
+#'
+#' @param merge_deserts Logical indicating if desert biomes should be merged
+#' in a single biome. By default, deserts are not merged.
+#'
+#' @return a ggplot object showing the biomes.
+#'
+#' @export
+
+# START
+# Function declaration
+vis_location_biome <- function(data, merge_deserts = FALSE,
+                               parent_logger = 'test') {
+
+  # Using calling handlers to logging
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is data a data.frame?
+    if (!is.data.frame(data)) {
+      stop('Provided data object is not a data.frame.',
+           ' Please verify if it is the correct object')
+    }
+    # Does data contains a longitude variable?
+    if (is.null(data$si_long)) {
+      stop('There is no longitude variable in this dataset. ',
+           'Please verify if it is the correct data')
+    }
+    # Does data contains a latitude variable?
+    if (is.null(data$si_lat)) {
+      stop('There is no latitude variable in this dataset. ',
+           'Please verify if it is the correct data')
+    }
+    # Is merge_deserts logical?
+    if (!(is.logical(merge_deserts))) {
+      stop('merge_deserts must be logical')
+    }
+    # Is merge_deserts NA?
+    if (is.na(merge_deserts)) {
+      stop('merge_deserts must be either TRUE or FALSE')
+    }
+
+    # STEP 1
+    # Get MAT and MAP if not provided
+    if (!all(c('si_mat', 'si_map') %in% names(data))){
+      data <- qc_get_biome(data, merge_deserts = merge_deserts)
+    }
+
+    # STEP 2
+    # Get biome plot
+    plot <- vis_biome(merge_deserts = merge_deserts)
+
+    # 3.2 Make the plot object
+    plot <- plot +
+      geom_point(data = data, aes(x = si_map, y = si_mat, tooltip = si_code),
+                 color = 'black', shape = 21, fill = 'white', size = 2, stroke = 0.5) +
+      theme_bw() + coord_cartesian(xlim = c (0, 4500), ylim = c(-16, 30), expand = FALSE)
+
+    # 3.3 Return the plot object
+    return(plot)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'vis_location_biome', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'vis_location_biome', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'vis_location_biome', sep = '.'))})
+
+}

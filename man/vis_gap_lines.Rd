@@ -18,6 +18,8 @@ A ggplot object with the basic lines plot, no themes added.
 Concordance lines plot with gaps
 }
 \seealso{
-Other Visualization Functions: \code{\link{vis_plot_the_gap}}
+Other Visualization Functions: \code{\link{vis_biome}},
+  \code{\link{vis_location_biome}},
+  \code{\link{vis_plot_the_gap}}
 }
 

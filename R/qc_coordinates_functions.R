@@ -859,3 +859,205 @@ qc_coordinates <- function(data, maps_folder = getwd(), plot = FALSE,
 
 
 }
+
+################################################################################
+#' Make a SpatialPolygonsDataFrame object of the biomes
+#'
+#' Creates a SpatialPolygonsDataFrame object of the the Whittaker' biomes
+#' modified by Ricklefs (2008) in function of mean annual temperature (MAT)
+#' and mean annual precipitation (MAP) (MAT in degree Celsius and MAP in mm).
+#'
+#' @family Quality Checks Functions
+#'
+#' @param merge_deserts Logical indicating if desert biomes should be merged
+#' in a single biome. By default, deserts are not merged.
+#'
+#' @return An object of class SpatialPolygonsDataFrame
+#'
+#' @export
+
+# START
+# Function declaration
+qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
+
+  # Using calling handlers to logging
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is merge_deserts logical?
+    if (!(is.logical(merge_deserts))) {
+      stop('merge_deserts must be logical')
+    }
+    # Is merge_deserts NA?
+    if (is.na(merge_deserts)) {
+      stop('merge_deserts must be either TRUE or FALSE')
+    }
+
+    # STEP 1
+    # Create the data frame
+    biomes_df <- data.frame(
+      mat = c(29.339, 13.971, 15.371, 17.510, 24.131, 27.074, 28.915, 29.201, 29.339, 13.971, -9.706, -7.572,  4.491, 17.510,
+              15.371, 13.971, 17.510,  4.491, -7.572, -9.706, -6.687, -0.949,  3.098,  7.147, 10.165, 13.918, 18.626, 18.176,
+              17.510, 18.626, 13.918, 10.165,  7.147,  3.098, -0.949,  1.039,  1.998,  2.444,  3.118,  4.446,  7.758, 12.614,
+              18.720, 18.637, 18.626, -0.949, -6.687, -4.395, -4.098, -1.592,  0.914,  4.155,  3.118,  2.444,  1.998,  1.039,
+              -0.949, 18.720, 12.614,  7.758,  4.446,  3.118,  4.155, 15.716, 20.136, 19.392, 18.720, 18.720, 19.392, 20.136,
+              22.278, 23.756, 24.199, 24.714, 25.667, 26.105, 27.414, 27.772, 25.709, 21.736, 18.720, 17.510, 18.176, 18.626,
+              18.637, 18.720, 21.736, 25.709, 27.772, 28.418, 28.915, 27.074, 24.131, 17.510, -6.687, -8.896, -9.706, -13.382,
+              -15.366, -15.217, -8.373, -4.098, -1.592, -4.098, -4.395, -6.687),
+      map = c(21.3,  23.0, 174.6, 535.1, 702.9, 847.9, 992.4, 532.1,  21.3,  23.0,  7.3,  87.2, 314.6, 535.1, 174.6,  23.0,
+              535.1, 314.6,  87.2,   7.3, 202.6, 391.7, 529.9, 783.1, 956.9,1116.5,1269.3, 794.3, 535.1,1269.3,1116.5, 956.9,
+              783.1, 529.9, 391.7, 514.8, 673.4, 968.5,1630.6,1839.7,2028.0,2224.0,2355.7,1837.6,1269.3, 391.7, 202.6, 922.9,
+              1074.1,1405.9,1744.9,2012.3,1630.6, 968.5,673.4, 514.8, 391.7,2355.7,2224.0,2028.0,1839.7,1630.6,2012.3,2930.1,
+              3377.7,2917.0,2355.7,2355.7,2917.0,3377.7,3896.5,4343.1,4415.2,4429.8,4279.0,4113.7,3344.4,2790.6,2574.0,2414.3,
+              2355.7, 535.1, 794.3,1269.3,1837.6,2355.7,2414.3,2574.0,2790.6,1920.3, 992.4, 847.9, 702.9, 535.1, 202.6,  50.8,
+              7.3,  34.8,  98.8, 170.8, 533.0,1074.1,1405.9,1074.1, 922.9, 202.6),
+      biome = c(rep('Subtropical desert', 9), rep('Temperate grassland desert', 7), rep('Mediterranean', 13),
+                rep('Temperate forest', 16), rep('Boreal forest', 12), rep('Temperate rain forest', 10),
+                rep('Tropical rain forest', 14), rep('Tropical forest savanna', 13), rep('Tundra', 12))
+    )
+
+    # STEP 2
+    # Merge deserts if specified
+    if (merge_deserts){
+
+      biome <- as.character(biomes_df$biome)
+
+      biome[grepl('desert', biome, fixed = TRUE)] <- 'Desert'
+
+      biomes_df$biome <- as.factor(biome)
+
+    }
+
+    # STEP 3
+    # Create SpatialPolygonsDataFrame object
+    list_pol <- sapply(as.character(unique(biomes_df$biome)),
+                       function(id_biome,df)
+                         sp::Polygon(cbind(df$map[df$biome == id_biome],
+                                           df$mat[df$biome == id_biome])),
+                       df=biomes_df, USE.NAMES = TRUE)
+
+    sp_biomes <- sp::SpatialPolygons(
+      lapply(1:length(list_pol),
+             function(i, x) {sp::Polygons(list(x[[i]]),
+                                          names(x)[i])},
+             x = list_pol)
+    )
+
+    spdf_biomes <- sp::SpatialPolygonsDataFrame(sp_biomes, data.frame(biome = names(list_pol)),
+                                                match.ID = 'biome')
+
+    # STEP 4
+    # Return SpatialPolygonsDataFrame object
+    return(spdf_biomes)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_get_biomes_spdf', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_get_biomes_spdf', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_get_biomes_spdf', sep = '.'))})
+
+}
+
+################################################################################
+#' Get the biome, temperature and precipitation of a site
+#'
+#' This function takes a data frame of site metadata, including latitude (si_lat)
+#' and longitude (si_long) columns, gets climatic data from WorldClim 1.4 and
+#' returns the same data frame with extra columns of mean annual temperature
+#' (si_mat), mean annual precipitation (si_map) and biome (si_biome) according to
+#' \code{\link{qc_get_biomes_spdf}}.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame of site metadata, including latitude (si_lat)
+#' and longitude (si_long) columns that are used to obtain climatic data.
+#'
+#' @param merge_deserts Logical indicating if desert biomes should be merged
+#' in a single biome. By default, deserts are not merged.
+#'
+#' @return An object of class SpatialPolygonsDataFrame
+#'
+#' @export
+
+# START
+# Function declaration
+qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test'){
+
+  # Using calling handlers to logging
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is data a data.frame?
+    if (!is.data.frame(data)) {
+      stop('Provided data object is not a data.frame.',
+           ' Please verify if it is the correct object')
+    }
+    # Does data contains a longitude variable?
+    if (is.null(data$si_long)) {
+      stop('There is no longitude variable in this dataset. ',
+           'Please verify if it is the correct data')
+    }
+    # Does data contains a latitude variable?
+    if (is.null(data$si_lat)) {
+      stop('There is no latitude variable in this dataset. ',
+           'Please verify if it is the correct data')
+    }
+    # Is merge_deserts logical?
+    if (!(is.logical(merge_deserts))) {
+      stop('merge_deserts must be logical')
+    }
+    # Is merge_deserts NA?
+    if (is.na(merge_deserts)) {
+      stop('merge_deserts must be either TRUE or FALSE')
+    }
+
+    # STEP 1
+    # Obtain MAT and MAP values
+    suppressMessages(
+      t_site <- as.vector(RFc::fcTimeSeriesYearly('airt', data$si_lat, data$si_long,
+                                                  firstYear = 1990, lastYear = 1990, firstDay = 1,
+                                                  lastDay = 365, startHour = 0, stopHour = 23,
+                                                  dataSets = 'WorldClim 1.4')$values)
+    )
+
+    suppressMessages(
+      p_site <- 12*as.vector(RFc::fcTimeSeriesYearly('prate', data$si_lat, data$si_long,
+                                                     firstYear = 1990,lastYear = 1990, firstDay = 1,
+                                                     lastDay = 365, startHour = 0, stopHour = 23,
+                                                     dataSets = 'WorldClim 1.4')$values)
+    )
+
+    # STEP 2
+    # Obtain biome
+    clim_point <- sp::SpatialPoints(data.frame(x = p_site, y = t_site))
+    biome <- sp::over(clim_point, qc_get_biomes_spdf(merge_deserts = merge_deserts))[[1]]
+
+    # STEP 3
+    # Append new variables and return the data frame
+    # 3.1 Append MAT, MAP and biome to data
+    data$si_mat <- t_site
+    data$si_map <- p_site
+    data$si_biome <- biome
+
+    # 3.2 Return data with the new variable
+    return(data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger, 'qc_get_biome', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger, 'qc_get_biome', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger, 'qc_get_biome', sep = '.'))})
+
+}

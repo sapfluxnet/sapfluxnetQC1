@@ -29,6 +29,8 @@ a ggplot object that can be modified adding layers, like any other ggplot
 object.
 }
 \seealso{
-Other Visualization Functions: \code{\link{vis_gap_lines}}
+Other Visualization Functions: \code{\link{vis_biome}},
+  \code{\link{vis_gap_lines}},
+  \code{\link{vis_location_biome}}
 }
 

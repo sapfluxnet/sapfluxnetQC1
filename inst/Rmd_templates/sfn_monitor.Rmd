@@ -749,6 +749,40 @@ output$swc <- renderPlotly({
 
 Here you can:
 
+### **Biomes Info**. Concerned about the climatic and biogeographic range of the data sets? Just take a look here!
+
+```{r}
+
+# si_md file paths
+si_md_paths <- list.files(path = file.path('Data'),
+                           pattern = '_site_md.csv',
+                           full.names = TRUE, recursive = TRUE)
+# data frame with all plant metadatas
+si_md_joined <- lapply(si_md_paths, read_csv,
+                        col_types = c('cccccccnncclncccc')) %>%
+  bind_rows()
+
+si_biomes_df <- si_md_joined %>%
+  select(si_code, si_lat, si_long #, si_mat, si_map
+         )
+
+si_biomes_plot <-  vis_location_biome(si_biomes_df)
+
+fillCol(
+  width = '100%', flex = 1,
+  plotlyOutput('si_biomes')
+)
+
+output$si_biomes <- renderPlotly({
+  ggplotly(si_biomes_plot, tooltip = c('tooltip', 'y', 'x'))
+})
+
+```
+
+***
+
+Here you can:
+
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================
