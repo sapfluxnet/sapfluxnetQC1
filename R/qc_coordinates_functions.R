@@ -996,7 +996,7 @@ qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test'){
     # Argument checks
     # Is data a data.frame?
     if (!is.data.frame(data)) {
-      stop('Provided data object is not a data.frame.',
+      stop('Provided data object is not a data frame.',
            ' Please verify if it is the correct object')
     }
     # Does data contains a longitude variable?
@@ -1044,7 +1044,7 @@ qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test'){
     # 3.1 Append MAT, MAP and biome to data
     data$si_mat <- t_site
     data$si_map <- p_site
-    data$si_biome <- biome
+    data$si_biome <- droplevels(biome)
 
     # 3.2 Return data with the new variable
     return(data)

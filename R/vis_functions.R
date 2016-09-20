@@ -518,7 +518,6 @@ vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test'){
     plot <- ggplot() + geom_polygon(data = biomes_df, aes(x = long, y = lat, group = id, fill = id)) +
       scale_fill_manual('Biomes', values = pal) + xlab('Mean annual precipitation (mm)') +
       ylab('Mean annual temperature (ºC)')
-    # ylab(expression(paste('Mean annual temperature ', (degree~C))))
 
     # 2.3 Return the plot object
     return(plot)
