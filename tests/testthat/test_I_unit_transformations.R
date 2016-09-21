@@ -273,18 +273,17 @@ test_that('Errors are raised correctly', {
 
 test_data_sum <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
                             st_silt_perc = 40, st_sand_perc = 34)
-test_data_res <- qc_soil_texture(test_data_sum)
+suppressWarnings(test_data_res <- qc_soil_texture(test_data_sum))
 
 test_that('Error if sum different from 100', {
   expect_warning(qc_soil_texture(test_data_sum),
                  'The sum of the different percentages of clay, silt and sand is not equal to 100%')
+  expect_false(suppressWarnings(qc_soil_texture(test_data_sum)))
 })
 
 test_data_NA <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = NA,
                            st_silt_perc = 40, st_sand_perc = NA)
-suppressMessages(
-  test_data_res <- qc_soil_texture(test_data_NA)
-)
+suppressMessages(test_data_res <- qc_soil_texture(test_data_NA))
 
 test_that('If NA value for percentage, returns st_soil_texture if not NA', {
   expect_equal(tolower(as.character(test_data_res$st_soil_texture)), test_data_res$st_USDA_soil_texture)
@@ -293,11 +292,12 @@ test_that('If NA value for percentage, returns st_soil_texture if not NA', {
 
 test_data_NA_NA <- data.frame(st_soil_texture = NA, st_clay_perc = NA,
                               st_silt_perc = 40, st_sand_perc = 34)
-test_data_res <- qc_soil_texture(test_data_NA_NA)
+suppressWarnings(test_data_res <- qc_soil_texture(test_data_NA_NA))
 
 test_that('If NA value for percentage AND soil texture', {
   expect_warning(qc_soil_texture(test_data_NA_NA),
                  'There is no information about the soil texture')
+  expect_false(suppressWarnings(qc_soil_texture(test_data_NA_NA)))
 })
 
 test_data_dec <- data.frame(st_soil_texture = NA, st_clay_perc = 0.51,
