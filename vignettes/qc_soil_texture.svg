@@ -1,0 +1,1922 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="297mm"
+   height="420mm"
+   viewBox="0 0 1052.3622 1488.189"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Soil_texture_scheme.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.43"
+     inkscape:cx="862.4125"
+     inkscape:cy="1401.0115"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-nodes="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,435.82677)">
+    <g
+       transform="matrix(0.02484633,0,0,0.02417197,-491.74998,-37.701739)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4705"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id33">
+        <rect
+           class="BoundingBox"
+           x="29158"
+           y="12000"
+           width="3903"
+           height="1302"
+           id="rect4708"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 29922,12000 3138,0 -764,1301 -3137,0 763,-1301 0,0 z m -763,0 0,0 z m 3901,1301 0,0 z"
+           id="path4710"
+           inkscape:connector-curvature="0"
+           style="fill:#6699cc;stroke:none" />
+      </g>
+    </g>
+    <g
+       transform="matrix(0.02543923,0,0,0.03262991,-220.19012,-67.312592)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4629"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id27"
+         transform="translate(145.97702,-7055.5557)">
+        <rect
+           class="BoundingBox"
+           x="16259"
+           y="14100"
+           width="6802"
+           height="1902"
+           id="rect4632"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 16259,14100 6801,0 0,1901 -6801,0 0,-1901 0,0 z m 0,0 0,0 z m 6801,1901 0,0 z"
+           id="path4634"
+           inkscape:connector-curvature="0"
+           style="fill:#ffff66;stroke:none" />
+      </g>
+    </g>
+    <g
+       transform="matrix(0.03543307,0,0,0.03543307,-290.61733,-530.84089)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4455"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id13"
+         transform="translate(-3817.4854,2302.5078)">
+        <rect
+           class="BoundingBox"
+           x="17709"
+           y="2200"
+           width="3902"
+           height="1402"
+           id="rect4458"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 18530.079,3487.4159 c -222.452,0 -444.904,-256.0233 -444.904,-512.0466 0,-256.0234 222.452,-512.0467 444.904,-512.0467 l 1881.956,0 c 222.452,0 445.614,256.0233 445.614,512.0467 0,256.0233 -223.162,512.0466 -445.614,512.0466 l -1881.956,0 z m -444.904,-1024.0933 0,0 z m 2772.474,1024.8248 0,0 z"
+           id="path4460"
+           inkscape:connector-curvature="0"
+           style="fill:#009933;stroke:none" />
+        <text
+           class="TextShape"
+           id="text4462">
+          <tspan
+             class="TextParagraph"
+             font-size="423px"
+             font-weight="400"
+             id="tspan4464"
+             style="font-weight:400;font-size:282.222229px;font-family:Raleway">
+            <tspan
+               class="TextPosition"
+               x="19012"
+               y="3048"
+               id="tspan4466"
+               style="font-size:282.222229px;fill:#000000;stroke:none">START</tspan>
+          </tspan>
+        </text>
+      </g>
+    </g>
+    <g
+       transform="matrix(0.03543307,0,0,0.03543307,-480.80381,-399.77452)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4296"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id4">
+        <rect
+           class="BoundingBox"
+           x="19559"
+           y="4798"
+           width="3302"
+           height="902"
+           id="rect4299"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 20205,4798 2655,0 -647,901 -2654,0 646,-901 0,0 z m -646,0 0,0 z m 3301,901 0,0 z"
+           id="path4301"
+           inkscape:connector-curvature="0"
+           style="fill:#dddddd;stroke:none" />
+      </g>
+    </g>
+    <rect
+       class="BoundingBox"
+       x="-214.20877"
+       y="188.3154"
+       width="156.70155"
+       height="156.9485"
+       id="rect5333"
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round" />
+    <path
+       d="m 193.82163,391.17798 78.2817,-71.73831 78.32774,71.73831 -78.32774,71.78315 -78.2817,-71.78315 0,0 z m 0,-71.73831 0,0 z m 156.60944,143.52146 0,0 z"
+       id="path5335"
+       inkscape:connector-curvature="0"
+       style="fill:#ff9900;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3609"
+       y="376.34344"
+       x="271.87247"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         y="376.34344"
+         x="271.87247"
+         id="tspan3611"
+         sodipodi:role="line">Is there any NA</tspan><tspan
+         id="tspan3613"
+         y="388.84344"
+         x="271.87247"
+         sodipodi:role="line"> in data_perc ?</tspan><tspan
+         id="tspan3615"
+         y="401.34344"
+         x="273.63028"
+         sodipodi:role="line">any (is.na(data_perc)) </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="245.88541"
+       y="-209.10651"
+       id="text3601"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3603"
+         x="245.88541"
+         y="-209.10651"
+         style="font-size:10px">stand_md</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="255.95544"
+       y="270.78397"
+       id="text3605"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3607"
+         x="255.95544"
+         y="270.78397">data_perc</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="283.81494"
+       y="187.57097"
+       id="text3617"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3619"
+         x="283.81494"
+         y="187.57097">Create a data framewith the data</tspan><tspan
+         sodipodi:role="line"
+         x="285.57275"
+         y="200.07097"
+         id="tspan3621"> about the percentages </tspan><tspan
+         sodipodi:role="line"
+         x="283.81494"
+         y="212.57097"
+         id="tspan3623">of clay,silt and sand</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="225.57602"
+       y="483.55841"
+       id="text3657"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3659"
+         x="225.57602"
+         y="483.55841">TRUE</tspan></text>
+    <g
+       transform="matrix(0.01992228,0,0,0.03543307,-124.95387,445.82572)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4629-9"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id27-5"
+         transform="translate(145.97702,-7055.5557)">
+        <rect
+           class="BoundingBox"
+           x="16259"
+           y="14100"
+           width="6802"
+           height="1902"
+           id="rect4632-7"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 16259,14100 6801,0 0,1901 -6801,0 0,-1901 0,0 z m 0,0 0,0 z m 6801,1901 0,0 z"
+           id="path4634-1"
+           inkscape:connector-curvature="0"
+           style="fill:#ffff66;stroke:none" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="269.21622"
+       y="715.32574"
+       id="text3689"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3691"
+         x="270.97403"
+         y="715.32574">Create a new field </tspan><tspan
+         sodipodi:role="line"
+         x="270.97403"
+         y="727.82574"
+         id="tspan3693">&quot;$st_USDA_soil_texture&quot; </tspan><tspan
+         sodipodi:role="line"
+         x="270.97403"
+         y="740.32574"
+         id="tspan3695">with the data of the field </tspan><tspan
+         sodipodi:role="line"
+         x="269.21622"
+         y="752.82574"
+         id="tspan3697">&quot;st_soil_texture&quot;</tspan></text>
+    <g
+       transform="matrix(0.02816709,0,0,0.03543307,-327.79763,613.44819)"
+       style="fill:#ff0000;fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4296-6"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id4-6"
+         style="fill:#ff0000">
+        <rect
+           class="BoundingBox"
+           x="19559"
+           y="4798"
+           width="3302"
+           height="902"
+           id="rect4299-2"
+           style="fill:#ff0000;stroke:none" />
+        <path
+           d="m 20205,4798 2655,0 -647,901 -2654,0 646,-901 0,0 z m -646,0 0,0 z m 3301,901 0,0 z"
+           id="path4301-6"
+           inkscape:connector-curvature="0"
+           style="fill:#ff0000;stroke:none" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="269.63126"
+       y="794.12506"
+       id="text3601-3"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3603-4"
+         x="269.63126"
+         y="794.12506"
+         style="font-size:10px;text-align:center;text-anchor:middle">stand_md</tspan><tspan
+         sodipodi:role="line"
+         x="269.63126"
+         y="806.62506"
+         style="font-size:10px;text-align:center;text-anchor:middle"
+         id="tspan3743">(modified)</tspan></text>
+    <g
+       id="g4715"
+       transform="translate(180.77969,-392.31433)"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g4440"
+         class="com.sun.star.drawing.CustomShape"
+         style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+         transform="matrix(0.02861673,0,0,0.03543307,-720.28641,-169.52856)">
+        <g
+           inkscape:transform-center-x="-10.344828"
+           transform="translate(3503.4484,681.22607)"
+           id="id12">
+          <rect
+             style="fill:none;stroke:none"
+             id="rect4443"
+             height="1302"
+             width="4302"
+             y="6800"
+             x="22659"
+             class="BoundingBox" />
+          <path
+             style="fill:#9966cc;stroke:none"
+             inkscape:connector-curvature="0"
+             id="path4445"
+             d="m 22659,6934 c 163,106 679,105 1069,128 410,-20 944,-28 1059,-126 149,-118 699,-127 1087,-136 502,10 904,23 1086,134 l 0,1035 c -192,-115 -654,-116 -1088,-131 -284,8 -961,16 -1069,132 -123,103 -675,112 -1091,131 -412,-22 -932,-29 -1053,-132 l 0,-1035 z m 0,-134 0,0 z m 4301,1301 0,0 z" />
+        </g>
+      </g>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3793"
+         y="122.45419"
+         x="60.970661"
+         style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="122.45419"
+           x="60.970661"
+           id="tspan3795"
+           sodipodi:role="line">dm_metadata</tspan></text>
+    </g>
+    <rect
+       class="BoundingBox"
+       x="-226.91566"
+       y="169.6693"
+       width="156.70155"
+       height="156.9485"
+       id="rect5333-3"
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round" />
+    <path
+       d="m 437.33683,395.40085 85.09788,-82.37679 85.14785,82.37679 -85.14785,82.42826 -85.09788,-82.42826 0,0 z m 0,-82.37679 0,0 z m 170.24573,164.80505 0,0 z"
+       id="path5335-5"
+       inkscape:connector-curvature="0"
+       style="fill:#ff9900;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3609-1"
+       y="378.79712"
+       x="519.99316"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         id="tspan3615-5"
+         y="378.79712"
+         x="519.99316"
+         sodipodi:role="line">The data about clay,</tspan><tspan
+         id="tspan3846"
+         y="391.29712"
+         x="521.75098"
+         sodipodi:role="line"> silt and sand are </tspan><tspan
+         id="tspan3848"
+         y="403.79712"
+         x="521.75098"
+         sodipodi:role="line">given in decimal and </tspan><tspan
+         id="tspan3930"
+         y="416.29712"
+         x="519.99316"
+         sodipodi:role="line">not in % ?</tspan><tspan
+         id="tspan3838"
+         y="428.79712"
+         x="519.99316"
+         sodipodi:role="line">sum(data_perc) &lt;=1</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3840"
+       y="398.89688"
+       x="152.47525"
+       style="font-style:normal;font-weight:normal;font-size:12.50000095px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="398.89688"
+         x="152.47525"
+         id="tspan3842"
+         sodipodi:role="line" /><tspan
+         id="tspan3844"
+         y="414.52188"
+         x="152.47525"
+         sodipodi:role="line" /></text>
+    <g
+       id="g4629-9-6"
+       class="com.sun.star.drawing.CustomShape"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       transform="matrix(0.02028793,0,0,0.01929581,115.90428,366.24337)"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         transform="translate(145.97702,-7055.5557)"
+         id="id27-5-8">
+        <rect
+           style="fill:none;stroke:none"
+           id="rect4632-7-6"
+           height="1902"
+           width="6802"
+           y="14100"
+           x="16259"
+           class="BoundingBox" />
+        <path
+           style="fill:#ffff66;stroke:none"
+           inkscape:connector-curvature="0"
+           id="path4634-1-1"
+           d="m 16259,14100 6801,0 0,1901 -6801,0 0,-1901 0,0 z m 0,0 0,0 z m 6801,1901 0,0 z" />
+      </g>
+    </g>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3689-0"
+       y="518.01251"
+       x="524.42358"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         id="tspan3697-2"
+         y="518.01251"
+         x="524.42358"
+         sodipodi:role="line">Multiply by 100 all the</tspan><tspan
+         id="tspan3977"
+         y="530.51251"
+         x="524.42358"
+         sodipodi:role="line"> data in data_perc</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="480.20117"
+       y="479.26611"
+       id="text3657-0"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3659-9"
+         x="480.20117"
+         y="479.26611">TRUE</tspan></text>
+    <g
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       transform="matrix(0.03543307,0,0,0.03543307,-446.77207,757.99073)"
+       id="id13-9"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         style="fill:none;stroke:none"
+         id="rect4458-6"
+         height="1402"
+         width="3902"
+         y="2200"
+         x="17709"
+         class="BoundingBox" />
+      <path
+         style="fill:#009933;stroke:none"
+         inkscape:connector-curvature="0"
+         id="path4460-4"
+         d="m 18514.361,3600 c -402.68,0 -805.361,-350 -805.361,-700 0,-350 402.681,-700 805.361,-700 l 3406.703,0 c 402.681,0 806.648,350 806.648,700 0,350 -403.967,700 -806.648,700 l -3406.703,0 z M 17709,2200 l 0,0 z m 5018.712,1401 0,0 z" />
+      <text
+         id="text4462-1"
+         class="TextShape">
+        <tspan
+           style="font-weight:400;font-size:423px;font-family:Raleway"
+           id="tspan4464-6"
+           font-weight="400"
+           font-size="423px"
+           class="TextParagraph" />
+      </text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3922"
+         y="2593.6289"
+         x="20141.369"
+         style="font-style:normal;font-weight:normal;font-size:282.222229px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="2593.6289"
+           x="20190.979"
+           id="tspan3924"
+           sodipodi:role="line">Return </tspan><tspan
+           id="tspan3926"
+           y="2946.4067"
+           x="20141.369"
+           sodipodi:role="line">stand_md$st_USDA_soil_texture</tspan><tspan
+           id="tspan3928"
+           y="3299.1846"
+           x="20141.369"
+           sodipodi:role="line">END</tspan></text>
+    </g>
+    <g
+       transform="matrix(0.03019235,0,0,0.03019637,-425.10118,201.61783)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4705-9"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id33-4">
+        <rect
+           class="BoundingBox"
+           x="29158"
+           y="12000"
+           width="3903"
+           height="1302"
+           id="rect4708-4"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 29922,12000 3138,0 -764,1301 -3137,0 763,-1301 0,0 z m -763,0 0,0 z m 3901,1301 0,0 z"
+           id="path4710-5"
+           inkscape:connector-curvature="0"
+           style="fill:#6699cc;stroke:none" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="516.25592"
+       y="579.64832"
+       id="text3605-7"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3607-9"
+         x="516.25592"
+         y="579.64832">data_perc</tspan><tspan
+         sodipodi:role="line"
+         x="516.25592"
+         y="592.14832"
+         id="tspan4009">(modified)</tspan></text>
+    <text
+       style="font-size:0.42519683px;fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       id="text14499"
+       class="TextShape"
+       x="-521.60693"
+       y="491.78845" />
+    <text
+       style="font-size:0.42519683px;fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="TextShape"
+       id="text4462-1-0"
+       x="-353.45865"
+       y="884.00195">
+      <tspan
+         class="TextParagraph"
+         font-size="423px"
+         font-weight="400"
+         id="tspan4464-6-9"
+         style="font-weight:400;font-size:14.98818874px;font-family:Raleway" />
+    </text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-84.158417"
+       y="575.13446"
+       id="text4550"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4552"
+         x="-84.158417"
+         y="575.13446" /></text>
+    <rect
+       class="BoundingBox"
+       x="775.07068"
+       y="651.29425"
+       width="138.25984"
+       height="49.677166"
+       id="rect4458-6-0"
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       style="font-size:0.42519683px;fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="TextShape"
+       id="text4462-1-4"
+       x="-7.0892344"
+       y="720.98083">
+      <tspan
+         class="TextParagraph"
+         font-size="423px"
+         font-weight="400"
+         id="tspan4464-6-1"
+         style="font-weight:400;font-size:14.98818874px;font-family:Raleway" />
+    </text>
+    <path
+       d="m 696.62096,397.62005 82.2578,-82.37678 82.30617,82.37678 -82.30617,82.42827 -82.2578,-82.42827 0,0 z m 0,-82.37678 0,0 z m 164.56397,164.80505 0,0 z"
+       id="path5335-5-3-0"
+       inkscape:connector-curvature="0"
+       style="fill:#ff9900;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="865.06219"
+       y="389.56708"
+       id="text3657-0-4-4"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3659-9-1-4"
+         x="865.06219"
+         y="389.56708">TRUE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="730.25134"
+       y="490.54578"
+       id="text3661-1-88"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3663-4-2"
+         x="730.25134"
+         y="490.54578">FALSE</tspan></text>
+    <g
+       id="g4711"
+       transform="matrix(0.58783785,0,0,0.27831217,75.495049,186.36268)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="361.00134"
+       y="375.20154"
+       id="text3661"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3663"
+         x="361.00134"
+         y="375.20154">FALSE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="775.89941"
+       y="376.88312"
+       id="text4451-4"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan4453-2"
+         x="777.65723"
+         y="376.88312">The sum of the </tspan><tspan
+         sodipodi:role="line"
+         x="777.65723"
+         y="389.38312"
+         id="tspan5565-9">data are different </tspan><tspan
+         sodipodi:role="line"
+         x="775.89941"
+         y="401.88312"
+         id="tspan6553">from 100% ?</tspan><tspan
+         sodipodi:role="line"
+         x="775.89941"
+         y="414.38312"
+         id="tspan5567-5">sum(data_perc) != 100</tspan></text>
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       id="rect14495-3"
+       height="49.677166"
+       width="178.97244"
+       y="566.78143"
+       x="603.95166"
+       class="BoundingBox"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#cc99ff;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:connector-curvature="0"
+       id="path14497-5"
+       d="m 717.59346,511.60334 c 5.1345,3.29964 21.4251,3.29964 33.7372,3.99431 12.9572,-0.60784 29.7855,-0.86834 33.4415,-3.90748 4.7043,-3.70485 22.0434,-3.96535 34.30167,-4.25479 15.8336,0.31838 28.5489,0.72361 34.2748,4.16796 l 0,32.27278 c -6.0485,-3.58908 -20.6186,-3.61802 -34.3286,-4.08113 -8.97867,0.23156 -30.34997,0.49205 -33.76397,4.11008 -3.8711,3.2128 -21.2908,3.4733 -34.4362,4.05219 -13.011,-0.63678 -29.4091,-0.86833 -33.2264,-4.08114 l 0,-32.27278 z m 0,-4.16796 0,0 z m 135.75517,40.55082 0,0 z"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="736.66223"
+       y="531.66913"
+       id="text4061-5"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan4063-1"
+         x="736.66223"
+         y="531.66913">TT_points:in:classes</tspan></text>
+    <g
+       transform="matrix(0.02233126,0,0,0.02321411,194.53479,345.74833)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4705-9-5-9"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id33-4-3-5">
+        <rect
+           class="BoundingBox"
+           x="29158"
+           y="12000"
+           width="3903"
+           height="1302"
+           id="rect4708-4-6-8"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 29922,12000 3138,0 -764,1301 -3137,0 763,-1301 0,0 z m -763,0 0,0 z m 3901,1301 0,0 z"
+           id="path4710-5-8-7"
+           inkscape:connector-curvature="0"
+           style="fill:#6699cc;stroke:none" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="887.24994"
+       y="642.23383"
+       id="text4115-5"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan4117-3"
+         x="887.24994"
+         y="642.23383">list_abbr</tspan></text>
+    <g
+       transform="matrix(0.02407632,0,0,0.03543307,273.10783,418.17191)"
+       style="fill:#ff0000;fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4296-6-6-9"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id4-6-0-4"
+         style="fill:#ff0000">
+        <rect
+           class="BoundingBox"
+           x="19559"
+           y="4798"
+           width="3302"
+           height="902"
+           id="rect4299-2-6-2"
+           style="fill:#ff0000;stroke:none" />
+        <path
+           d="m 20205,4798 2655,0 -647,901 -2654,0 646,-901 0,0 z m -646,0 0,0 z m 3301,901 0,0 z"
+           id="path4301-6-6-4"
+           inkscape:connector-curvature="0"
+           style="fill:#ff0000;stroke:none" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="787.74866"
+       y="601.12152"
+       id="text3601-3-5-4"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3603-4-4-6"
+         x="787.74866"
+         y="601.12152"
+         style="font-size:10px;text-align:center;text-anchor:middle">stand_md</tspan><tspan
+         sodipodi:role="line"
+         x="787.74866"
+         y="613.62152"
+         style="font-size:10px;text-align:center;text-anchor:middle"
+         id="tspan3743-4-8">(modified)</tspan></text>
+    <rect
+       class="BoundingBox"
+       x="718.61377"
+       y="660.32916"
+       width="138.25984"
+       height="49.677166"
+       id="rect4458-6-6-8"
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       d="m 719.35616,724.45153 c -19.4448,0 -38.8896,-13.1999 -38.8896,-26.3997 0,-13.1998 19.4448,-26.3997 38.8896,-26.3997 l 164.50427,0 c 19.4449,0 38.9517,13.1999 38.9517,26.3997 0,13.1998 -19.5068,26.3997 -38.9517,26.3997 l -164.50427,0 z m -38.8896,-52.7994 0,0 z m 242.34557,52.8372 0,0 z"
+       id="path4460-4-5-1"
+       inkscape:connector-curvature="0"
+       style="fill:#009933;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.50000095px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="803.14624"
+       y="688.53619"
+       id="text3922-8-6"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3924-3-4"
+         x="804.90405"
+         y="688.53619"
+         style="font-size:10px;text-align:center;text-anchor:middle">Return </tspan><tspan
+         sodipodi:role="line"
+         x="803.14624"
+         y="701.03619"
+         id="tspan3928-5-6"
+         style="font-size:10px"><tspan
+   style="font-size:10px;text-align:center;text-anchor:middle"
+   id="tspan4723-0">list_ab</tspan>br[stand_md$st_USDA_soil_texture)]</tspan><tspan
+         sodipodi:role="line"
+         x="803.14624"
+         y="713.53619"
+         id="tspan4243-9"
+         style="font-size:10px">END</tspan></text>
+    <g
+       transform="matrix(0.02495162,0,0,0.02583246,125.00632,238.1604)"
+       style="fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="com.sun.star.drawing.CustomShape"
+       id="g4705-9-4-6"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="id33-4-9-5">
+        <rect
+           class="BoundingBox"
+           x="29158"
+           y="12000"
+           width="3903"
+           height="1302"
+           id="rect4708-4-3-5"
+           style="fill:none;stroke:none" />
+        <path
+           d="m 29922,12000 3138,0 -764,1301 -3137,0 763,-1301 0,0 z m -763,0 0,0 z m 3901,1301 0,0 z"
+           id="path4710-5-9-9"
+           inkscape:connector-curvature="0"
+           style="fill:#6699cc;stroke:none" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="900.539"
+       y="561.4679"
+       id="text3605-7-7-6"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3607-9-7-3"
+         x="900.539"
+         y="561.4679">data_perc</tspan><tspan
+         sodipodi:role="line"
+         x="900.539"
+         y="573.9679"
+         id="tspan4009-6-3">(modified)</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.08226097px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 262.44565,-325.82374 -1.10691,35.58891"
+       id="path6262"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 265.60716,-196.78692 0,22.32181"
+       id="path6266"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.09204125px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 273.60319,462.15363 -1.10581,36.27082"
+       id="path6262-29"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.79267722px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 269.07552,764.35833 -1.13923,18.55"
+       id="path6262-99"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.34108481px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 268.75646,814.19683 0.31344,12.4831"
+       id="path6262-96"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 265.50964,-252.35068 0,22.32181"
+       id="path6266-1"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.07958531px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 606.74626,397.24486 85.62897,0"
+       id="path6379"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 785.90696,543.44881 0,43.53742"
+       id="path6385"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 786.58716,619.63929 1.3606,50.34014"
+       id="path6387"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 853.93413,639.36713 -67.34697,0"
+       id="path6389"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 859.37623,561.81616 -74.14957,-10e-6"
+       id="path6391"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-1"
+       sodipodi:sides="3"
+       sodipodi:cx="789.20276"
+       sodipodi:cy="663.49567"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 789.20276,670.73769 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-53"
+       sodipodi:sides="3"
+       sodipodi:cx="785.23651"
+       sodipodi:cy="580.93653"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 785.23651,588.17855 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-64"
+       sodipodi:sides="3"
+       sodipodi:cx="261.67654"
+       sodipodi:cy="-294.50826"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 261.67654,-287.26624 -3.13589,-5.43152 -3.13588,-5.43152 6.27177,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-65"
+       sodipodi:sides="3"
+       sodipodi:cx="264.75625"
+       sodipodi:cy="-234.95382"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 264.75626,-227.7118 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27177,0 -3.13588,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92"
+       sodipodi:sides="3"
+       sodipodi:cx="264.91727"
+       sodipodi:cy="-178.05349"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 264.91727,-170.81147 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-3"
+       sodipodi:sides="3"
+       sodipodi:cx="272.75101"
+       sodipodi:cy="500.49"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 272.75101,507.73202 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-24"
+       sodipodi:sides="3"
+       sodipodi:cx="268.75101"
+       sodipodi:cy="777.29047"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 268.75101,784.53249 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-97"
+       sodipodi:sides="3"
+       sodipodi:cx="269.40762"
+       sodipodi:cy="829.96784"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 269.40762,837.20986 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6506-07"
+       sodipodi:sides="3"
+       sodipodi:cx="628.62567"
+       sodipodi:cy="696.47766"
+       sodipodi:r1="7.7704043"
+       sodipodi:r2="3.8852022"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 636.39608,696.47766 -5.82781,3.36469 -5.8278,3.36468 0,-6.72937 0,-6.72937 5.8278,3.36469 z"
+       inkscape:transform-center-x="-1.2950663"
+       transform="matrix(0.66666667,0,0,0.88452995,273.37132,-218.35832)"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       d="m 201.68047,-106.20344 65.48722,-64.3094 65.52574,64.3094 -65.52574,64.349591 -65.48722,-64.349591 0,0 z m 0,-64.3094 0,0 z m 131.01296,128.658991 0,0 z"
+       id="path5335-2"
+       inkscape:connector-curvature="0"
+       style="fill:#ff9900;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="265.78619"
+       y="-112.78892"
+       id="text3607"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3609"
+         x="265.78619"
+         y="-112.78892">Is it a data frame ?</tspan><tspan
+         sodipodi:role="line"
+         x="265.78619"
+         y="-100.28892"
+         id="tspan3612">!is.data.frame(data)</tspan></text>
+    <path
+       d="m 189.90238,59.875591 81.5835,-76.69093 81.63149,76.69093 -81.63149,76.738849 -81.5835,-76.738849 0,0 z m 0,-76.69093 0,0 z m 163.21499,153.429779 0,0 z"
+       id="path5335-2-3"
+       inkscape:connector-curvature="0"
+       style="fill:#ff9900;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="271.13071"
+       y="38.43148"
+       id="text3629"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3631"
+         x="272.88852"
+         y="38.43148">Are there all the </tspan><tspan
+         sodipodi:role="line"
+         x="271.13071"
+         y="50.93148"
+         id="tspan3643">variables</tspan><tspan
+         sodipodi:role="line"
+         x="271.13071"
+         y="63.43148"
+         id="tspan3645">st_clay_perc, st_silt_perc,</tspan><tspan
+         sodipodi:role="line"
+         x="272.88852"
+         y="75.93148"
+         id="tspan3641">st_sand_perc and </tspan><tspan
+         sodipodi:role="line"
+         x="272.88852"
+         y="88.43148"
+         id="tspan3639">st_soil_texture ? </tspan></text>
+    <rect
+       class="BoundingBox"
+       x="79.33802"
+       y="-143.01363"
+       width="87.544334"
+       height="49.677166"
+       id="rect4458-6-61"
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       d="m 39.047095,-91.323952 c -9.03443,0 -18.06888,-12.401568 -18.06888,-24.803148 0,-12.40157 9.03445,-24.80315 18.06888,-24.80315 l 76.431975,0 c 9.03445,0 18.09776,12.40158 18.09776,24.80315 0,12.40158 -9.06331,24.803148 -18.09776,24.803148 l -76.431975,0 z m -18.06888,-49.606298 0,0 z m 112.598615,49.641738 0,0 z"
+       id="path4460-4-2"
+       inkscape:connector-curvature="0"
+       style="fill:#ff0066;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       style="font-size:0.3383421px;fill-rule:evenodd;stroke-width:28.22200012;stroke-linejoin:round"
+       class="TextShape"
+       id="text4462-1-5"
+       transform="scale(0.79573049,1.2567069)"
+       x="-1127.8843"
+       y="350.36179">
+      <tspan
+         class="TextParagraph"
+         font-size="423px"
+         font-weight="400"
+         id="tspan4464-6-8"
+         style="font-weight:400;font-size:11.92655849px;font-family:Raleway" />
+    </text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4577"
+       y="-126.82574"
+       x="75.966431"
+       style="font-style:normal;font-weight:normal;font-size:9.99999809px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         y="-126.82574"
+         x="77.724243"
+         id="tspan4579"
+         sodipodi:role="line">STOP </tspan><tspan
+         id="tspan4581"
+         y="-114.32574"
+         x="77.724243"
+         sodipodi:role="line">'Data is not a </tspan><tspan
+         id="tspan4583"
+         y="-101.82574"
+         x="75.966431"
+         sodipodi:role="line">data frame'</tspan></text>
+    <path
+       d="m 192.15827,583.1314 81.58349,-76.69093 81.63149,76.69093 -81.63149,76.73883 -81.58349,-76.73883 0,0 z m 0,-76.69093 0,0 z m 163.21498,153.42976 0,0 z"
+       id="path5335-2-3-0"
+       inkscape:connector-curvature="0"
+       style="fill:#ff9900;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="276.95883"
+       y="566.21716"
+       id="text4525"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan4527"
+         x="278.71664"
+         y="566.21716">Is there any NA in </tspan><tspan
+         sodipodi:role="line"
+         x="278.71664"
+         y="578.71716"
+         id="tspan4529">data$st_soil_texture ? </tspan><tspan
+         sodipodi:role="line"
+         x="276.95883"
+         y="591.21716"
+         id="tspan4531">is.na(data$st_soil_texture)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="151.64542"
+       y="-111.42918"
+       id="text3661-0"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3663-0"
+         x="151.64542"
+         y="-111.42918">FALSE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="222.31567"
+       y="-30.724342"
+       id="text3657-0-4-6"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3659-9-1-9"
+         x="222.31567"
+         y="-30.724342">TRUE</tspan></text>
+    <path
+       d="m 28.293642,87.838311 c -10.38352,0 -20.7670703,-14.83346 -20.7670703,-29.66693 0,-14.83346 10.3835503,-29.66693 20.7670703,-29.66693 l 87.845448,0 c 10.38354,0 20.80026,14.83347 20.80026,29.66693 0,14.83347 -10.41672,29.66693 -20.80026,29.66693 l -87.845448,0 z m -20.7670703,-59.33386 0,0 z m 129.4127783,59.37625 0,0 z"
+       id="path4460-4-2-2"
+       inkscape:connector-curvature="0"
+       style="fill:#ff0066;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4577-1"
+       y="38.75576"
+       x="74.332642"
+       style="font-style:normal;font-weight:normal;font-size:9.99999809px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         y="38.75576"
+         x="76.090454"
+         id="tspan4579-5"
+         sodipodi:role="line">STOP </tspan><tspan
+         id="tspan4583-9"
+         y="51.25576"
+         x="74.332642"
+         sodipodi:role="line">'At least one of the</tspan><tspan
+         y="63.75576"
+         x="76.090454"
+         sodipodi:role="line"
+         id="tspan4622"> required variable </tspan><tspan
+         y="76.25576"
+         x="74.332642"
+         sodipodi:role="line"
+         id="tspan4624">is missing in data'</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="225.02173"
+       y="150.72386"
+       id="text3657-0-4-6-6"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3659-9-1-9-4"
+         x="225.02173"
+         y="150.72386">TRUE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="148.4332"
+       y="53.473412"
+       id="text3661-0-7"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3663-0-7"
+         x="148.4332"
+         y="53.473412">FALSE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="222.17825"
+       y="674.34589"
+       id="text3661-06"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3663-8"
+         x="222.17825"
+         y="674.34589">FALSE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="151.42326"
+       y="573.00122"
+       id="text3657-2"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3659-6"
+         x="151.42326"
+         y="573.00122">TRUE</tspan></text>
+    <path
+       d="m 34.153048,600.97732 c -10.33826,0 -20.67654,-12.40153 -20.67654,-24.80311 0,-12.40157 10.33828,-24.80315 20.67654,-24.80315 l 87.462492,0 c 10.33828,0 20.70962,12.40158 20.70962,24.80315 0,12.40158 -10.37134,24.80311 -20.70962,24.80311 l -87.462492,0 z m -20.67654,-49.60626 0,0 z m 128.848652,49.64176 0,0 z"
+       id="path4460-4-2-9"
+       inkscape:connector-curvature="0"
+       style="fill:#ff0066;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4577-19"
+       y="569.64233"
+       x="80.548058"
+       style="font-style:normal;font-weight:normal;font-size:9.99999809px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         id="tspan4583-2"
+         y="569.64233"
+         x="80.548058"
+         sodipodi:role="line">WARNING</tspan><tspan
+         y="582.14233"
+         x="82.30587"
+         sodipodi:role="line"
+         id="tspan4734">There is no information </tspan><tspan
+         y="594.64233"
+         x="82.30587"
+         sodipodi:role="line"
+         id="tspan4736">about the soil texture </tspan></text>
+    <path
+       d="m 940.64044,443.16507 c -10.15148,0 -20.30297,-20.3608 -20.30297,-40.72164 0,-20.36082 10.15149,-40.72165 20.30297,-40.72165 l 85.88196,0 c 10.1515,0 20.3354,20.36083 20.3354,40.72165 0,20.36084 -10.1839,40.72164 -20.3354,40.72164 l -85.88196,0 z m -20.30297,-81.44329 0,0 z m 126.52033,81.50148 0,0 z"
+       id="path4460-4-2-9-2"
+       inkscape:connector-curvature="0"
+       style="fill:#ff0066;fill-rule:evenodd;stroke:none;stroke-width:28.22200012;stroke-linejoin:round"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="985.40369"
+       y="376.19482"
+       id="text4759"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan4761"
+         x="985.40369"
+         y="376.19482">WARNING</tspan><tspan
+         sodipodi:role="line"
+         x="987.1615"
+         y="388.69482"
+         id="tspan4767">'The sum of the </tspan><tspan
+         sodipodi:role="line"
+         x="987.1615"
+         y="401.19482"
+         id="tspan4765">different percentages </tspan><tspan
+         sodipodi:role="line"
+         x="987.1615"
+         y="413.69482"
+         id="tspan4912">of clay, silt and </tspan><tspan
+         sodipodi:role="line"
+         x="987.1615"
+         y="426.19482"
+         id="tspan4779">sand is not equal </tspan><tspan
+         sodipodi:role="line"
+         x="985.40369"
+         y="438.69482"
+         id="tspan4916">to 100%'</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 274.34169,661.29353 -0.68835,34.4175"
+       id="path4783"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 141.49024,581.44499 51.62621,0"
+       id="path4785"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 523.52421,476.32266 -0.68835,26.15728"
+       id="path4787"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 520.77081,538.96246 0.68835,24.09224"
+       id="path4789"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 271.58829,136.77122 -0.68835,26.15728"
+       id="path4791"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 273.65334,223.50325 -0.68835,28.22233"
+       id="path4793"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 270.14655,284.76636 1.3767,35.10582"
+       id="path4795"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 349.37179,392.14888 89.48543,2.06505"
+       id="path4797"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 136.67179,58.987721 53.00292,0.68835"
+       id="path4799"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 132.5417,-106.9045 68.1466,0.68835"
+       id="path4801"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 268.8349,-44.264699 0.68835,28.91068"
+       id="path4803"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 779.59022,479.56926 0.68835,33.04078"
+       id="path4805"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.91305494px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 861.50815,396.97128 52.49292,-1.38462"
+       id="path4807"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6506-07-8"
+       sodipodi:sides="3"
+       sodipodi:cx="628.62567"
+       sodipodi:cy="696.47766"
+       sodipodi:r1="7.7704043"
+       sodipodi:r2="3.8852022"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 636.39608,696.47766 -5.82781,3.36469 -5.8278,3.36468 0,-6.72937 0,-6.72937 5.8278,3.36469 z"
+       inkscape:transform-center-x="-1.2950663"
+       transform="matrix(0.66666667,0,0,0.88452995,497.14146,-219.77635)"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6506-07-2"
+       sodipodi:sides="3"
+       sodipodi:cx="628.62567"
+       sodipodi:cy="696.47766"
+       sodipodi:r1="7.7704043"
+       sodipodi:r2="3.8852022"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 636.39608,696.47766 -5.82781,3.36469 -5.8278,3.36468 0,-6.72937 0,-6.72937 5.8278,3.36469 z"
+       inkscape:transform-center-x="-1.2950663"
+       transform="matrix(0.66666667,0,0,0.88452995,17.101666,-221.15305)"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6506-07-0"
+       sodipodi:sides="3"
+       sodipodi:cx="628.62567"
+       sodipodi:cy="696.47766"
+       sodipodi:r1="7.7704043"
+       sodipodi:r2="3.8852022"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 636.39608,696.47766 -5.82781,3.36469 -5.8278,3.36468 0,-6.72937 0,-6.72937 5.8278,3.36469 z"
+       inkscape:transform-center-x="1.1948564"
+       transform="matrix(-0.6662941,0.02228504,-0.02956768,-0.88403562,583.76808,1184.5239)"
+       inkscape:transform-center-y="-0.086575407"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6506-07-0-5"
+       sodipodi:sides="3"
+       sodipodi:cx="628.62567"
+       sodipodi:cy="696.47766"
+       sodipodi:r1="7.7704043"
+       sodipodi:r2="3.8852022"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 636.39608,696.47766 -5.82781,3.36469 -5.8278,3.36468 0,-6.72937 0,-6.72937 5.8278,3.36469 z"
+       inkscape:transform-center-x="1.1948564"
+       transform="matrix(-0.6662941,0.02228504,-0.02956768,-0.88403562,579.37451,660.08813)"
+       inkscape:transform-center-y="-0.086575407"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6506-07-0-8"
+       sodipodi:sides="3"
+       sodipodi:cx="628.62567"
+       sodipodi:cy="696.47766"
+       sodipodi:r1="7.7704043"
+       sodipodi:r2="3.8852022"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 636.39608,696.47766 -5.82781,3.36469 -5.8278,3.36468 0,-6.72937 0,-6.72937 5.8278,3.36469 z"
+       inkscape:transform-center-x="1.1948564"
+       transform="matrix(-0.6662941,0.02228504,-0.02956768,-0.88403562,575.24441,494.13082)"
+       inkscape:transform-center-y="-0.086575407"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-9"
+       sodipodi:sides="3"
+       sodipodi:cx="269.58829"
+       sodipodi:cy="-20.541206"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 269.58829,-13.299181 -3.13589,-5.431519 -3.13589,-5.431519 6.27178,0 6.27178,0 -3.13589,5.431519 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-2"
+       sodipodi:sides="3"
+       sodipodi:cx="271.58829"
+       sodipodi:cy="313.37333"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 271.58829,320.61535 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-7"
+       sodipodi:sides="3"
+       sodipodi:cx="271.58829"
+       sodipodi:cy="158.92283"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 271.58829,166.16486 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-1"
+       sodipodi:sides="3"
+       sodipodi:cx="272.21161"
+       sodipodi:cy="246.60343"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 272.21161,253.84545 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-0"
+       sodipodi:sides="3"
+       sodipodi:cx="274.34167"
+       sodipodi:cy="691.14716"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 274.34167,698.38918 -3.13588,-5.43152 -3.13589,-5.43152 6.27177,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-6"
+       sodipodi:sides="3"
+       sodipodi:cx="520.40765"
+       sodipodi:cy="558.55592"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 520.40765,565.79793 -3.13589,-5.43152 -3.13588,-5.43151 6.27177,0 6.27178,0 -3.13589,5.43151 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path6399-92-4"
+       sodipodi:sides="3"
+       sodipodi:cx="523.71936"
+       sodipodi:cy="497.85102"
+       sodipodi:r1="7.2420259"
+       sodipodi:r2="3.6210129"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 523.71936,505.09304 -3.13589,-5.43152 -3.13589,-5.43152 6.27178,0 6.27178,0 -3.13589,5.43152 z"
+       inkscape:transform-center-y="1.8105065"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 560.00673,585.57508 90.17378,0 2.06505,-188.60776"
+       id="path4908"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\CREAF\Desktop\Marie\testSOIL\vignettes\qc_soil_texture_scheme.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>

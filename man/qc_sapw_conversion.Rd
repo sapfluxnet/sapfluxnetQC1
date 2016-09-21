@@ -14,7 +14,7 @@ qc_sapw_conversion(data, sapw_md, output_units = "plant",
 \code{\link{qc_get_sapw_md}} or \code{\link{qc_sapw_area_calculator}}.}
 
 \item{output_units}{Character vector indicating the kind of output units.
-Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
+Allowed values are \code{'plant'}, \code{'sapwood'} and \code{'leaf'}.
 See details to obtain more information}
 }
 \description{
@@ -86,6 +86,7 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_sapf_range_check}},
   \code{\link{qc_sapw_area_calculator}},
   \code{\link{qc_set_timezone}},
+  \code{\link{qc_soil_texture}},
   \code{\link{qc_solar_timestamp}},
   \code{\link{qc_species_names_info}},
   \code{\link{qc_species_names}},

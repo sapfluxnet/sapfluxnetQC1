@@ -247,3 +247,183 @@ test_that('the new variable is added to the table and is numeric', {
   )
   expect_is(qc_rad_conversion(env_hd)$ppfd_in, 'numeric')
 })
+
+context('I5. Soil texture classification')
+
+test_data <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
+                        st_silt_perc = 54, st_sand_perc = 34)
+
+test_that('Errors are raised correctly', {
+  expect_error(qc_soil_texture('test_data'), 'Data is not a data frame')
+  expect_error(qc_soil_texture(test_data[, -1]),
+               'At least one of the required variables is missing in data')
+  expect_error(qc_soil_texture(test_data[, -3]),
+               'At least one of the required variables is missing in data')
+  expect_error(qc_soil_texture(test_data[, - c(2,3)]),
+               'At least one of the required variables is missing in data')
+  expect_error(qc_soil_texture(test_data[, - c(1,3)]),
+               'At least one of the required variables is missing in data')
+  expect_error(qc_soil_texture(test_data[, - c(2,4)]),
+               'At least one of the required variables is missing in data')
+  expect_error(qc_soil_texture(as.data.frame(test_data[, - c(1,2,4)])),
+               'At least one of the required variables is missing in data')
+  expect_error(qc_soil_texture(as.data.frame(test_data[, - c(1,2,3)])),
+               'At least one of the required variables is missing in data')
+})
+
+test_data_sum <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
+                            st_silt_perc = 40, st_sand_perc = 34)
+test_data_res <- qc_soil_texture(test_data_sum)
+
+test_that('Error if sum different from 100', {
+  expect_warning(qc_soil_texture(test_data_sum),
+                 'The sum of the different percentages of clay, silt and sand is not equal to 100%')
+})
+
+test_data_NA <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = NA,
+                           st_silt_perc = 40, st_sand_perc = NA)
+suppressMessages(
+  test_data_res <- qc_soil_texture(test_data_NA)
+)
+
+test_that('If NA value for percentage, returns st_soil_texture if not NA', {
+  expect_equal(tolower(as.character(test_data_res$st_soil_texture)), test_data_res$st_USDA_soil_texture)
+  expect_message(qc_soil_texture(test_data_NA), 'One or more percentages are missing.')
+})
+
+test_data_NA_NA <- data.frame(st_soil_texture = NA, st_clay_perc = NA,
+                              st_silt_perc = 40, st_sand_perc = 34)
+test_data_res <- qc_soil_texture(test_data_NA_NA)
+
+test_that('If NA value for percentage AND soil texture', {
+  expect_warning(qc_soil_texture(test_data_NA_NA),
+                 'There is no information about the soil texture')
+})
+
+test_data_dec <- data.frame(st_soil_texture = NA, st_clay_perc = 0.51,
+                            st_silt_perc = 0.36, st_sand_perc = 0.13)
+test_data_res_dec <- qc_soil_texture(test_data_dec)
+
+test_data_perc <- data.frame(st_soil_texture = NA, st_clay_perc = 51,
+                             st_silt_perc = 36, st_sand_perc = 13)
+test_data_res_perc <- qc_soil_texture(test_data_perc)
+
+test_that('If value in decimal, function converts it to % and the result is the same', {
+  expect_equal(test_data_res_dec$st_USDA_soil_texture, test_data_res_perc$st_USDA_soil_texture)
+})
+
+test_data_dif <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
+                            st_silt_perc = 54, st_sand_perc = 34)
+
+test_that('If returned value differs from original category, it gives a warning', {
+  expect_warning(qc_soil_texture(test_data_dif), 'Calculated soil texture class differs')
+})
+
+# Clay
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 55.5,
+                                st_silt_perc = 10, st_sand_perc = 34.5)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (clay)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'clay')
+})
+
+# Silty clay
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 50,
+                                st_silt_perc = 45, st_sand_perc = 5)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (silty clay)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'silty clay')
+})
+
+# Sandy clay
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 40,
+                                st_silt_perc = 10, st_sand_perc = 50)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (sandy clay)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'sandy clay')
+})
+
+# Clay loam
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 30,
+                                st_silt_perc = 30, st_sand_perc = 40)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (clay loam)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'clay loam')
+})
+
+# Silty clay loam
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 30,
+                                st_silt_perc = 60, st_sand_perc = 10)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (silty clay loam)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'silty clay loam')
+})
+
+# Sandy clay loam
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 30,
+                                st_silt_perc = 20, st_sand_perc = 50)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (sandy clay loam)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'sandy clay loam')
+})
+
+# Loam
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 20,
+                                st_silt_perc = 40, st_sand_perc = 40)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (loam)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'loam')
+})
+
+# Silty loam
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 20,
+                                st_silt_perc = 60, st_sand_perc = 20)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (silty loam)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'silty loam')
+})
+
+
+# Sandy loam
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 10,
+                                st_silt_perc = 20, st_sand_perc = 70)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (sandy loam)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'sandy loam')
+})
+
+# Silt
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 10,
+                                st_silt_perc = 85, st_sand_perc = 5)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (silt)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'silt')
+})
+
+# Loamy sand
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 5,
+                                st_silt_perc = 15, st_sand_perc = 80)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct (loamy sand)', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'loamy sand')
+})
+
+# Sand
+test_data_texture <- data.frame(st_soil_texture = NA, st_clay_perc = 5,
+                                st_silt_perc = 5, st_sand_perc = 90)
+test_data_res <- qc_soil_texture(test_data_texture)
+
+test_that('Category chosen by the function is correct', {
+  expect_equivalent(test_data_res$st_USDA_soil_texture, 'sand')
+})

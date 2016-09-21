@@ -987,7 +987,7 @@ qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
 
 # START
 # Function declaration
-qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test'){
+qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({

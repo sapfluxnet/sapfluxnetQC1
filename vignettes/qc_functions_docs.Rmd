@@ -352,6 +352,19 @@ See function help for details about arguments, (`?qc_sapw_conversion`).
 
 <img src="qc_sapw_conversion.svg" alt="qc_sapw_conversion" style="width: 450px;"/>
 
+## `qc_soil_texture` 
+
+Function that gives the soil texture classification of the USDA in function of 
+the percentages of clay, silt and sand present in the data frame dealing with 
+the stand's metadata.
+Sometimes, some percentages are missing: in this case, the function looks at 
+the metadata "st_soil_texture". If a classification is given, then the function
+will return this classification. If there is no information about the 
+classification, a warning message explains that some information about the soil 
+texture is missing.
+
+<img src="qc_soil_texture.svg" alt="qc_soil_texture" style="width: 500px;"/>
+
 # Report functions
 
 Family of functions dedicated to generate the html reports.

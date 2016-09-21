@@ -182,7 +182,7 @@ qc_sapw_area_calculator <- function(pl_vars, parent_logger = 'test') {
 #' @param leaf_area Numeric value with the plant leaf area in m²
 #'
 #' @param output_units Character vector indicating the kind of output units.
-#'   Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
+#'   Allowed values are \code{'plant'}, \code{'sapwood'} and \code{'leaf'}.
 #'
 #' @return A numeric value resulting from unit conversion
 #'
@@ -1131,7 +1131,7 @@ qc_kg_h <- function(x, sapw_area, leaf_area, output_units,
 #'   \code{\link{qc_get_sapw_md}} or \code{\link{qc_sapw_area_calculator}}.
 #'
 #' @param output_units Character vector indicating the kind of output units.
-#'   Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.
+#'   Allowed values are \code{'plant'}, \code{'sapwood'} and \code{'leaf'}.
 #'   See details to obtain more information
 #'
 #' @export
@@ -1313,4 +1313,137 @@ qc_rad_conversion <- function(data, parent_logger = 'test') {
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger, 'qc_rad_conversion', sep = '.'))})
 
+}
+
+################################################################################
+#' Soil texture classification
+#'
+#' Function to classify soil texture
+#'
+#' Using the percentage of clay, silt and sand in the soil, soil
+#' texture is calculated using the USDA classification if the category
+#' is not given in the data frame.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param data Data frame containing the data about the stand soil texture.
+#'   It must have the variabes st_clay_perc, st_silt_perc, st_sand_perc and
+#'   st_soil_texture.
+#'
+#'
+#' @return The initial data frame with a new variable 'st_USDA_soil_texture'
+#' which containes the soil texture if it is different from NA.
+#'
+#'
+#' @export
+
+# START
+# Function declaration
+qc_soil_texture <- function(data, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    # Is data a data.frame?
+    if (!is.data.frame(data)) {
+      stop('Data is not a data frame')
+    }
+    # Are there the st_clay_perc, st_silt_perc, st_sand_perc and
+    # st_soil_texture variables in data?
+    if (any(is.null(data$st_clay_perc), is.null(data$st_silt_perc),
+            is.null(data$st_sand_perc), is.null(data$st_soil_texture))) {
+      stop('At least one of the required variables is missing in data')
+    }
+
+    # STEP 1
+    # names and temp objects
+    data_perc <- data.frame(CLAY = data$st_clay_perc,
+                            SILT = data$st_silt_perc,
+                            SAND = data$st_sand_perc,
+                            row.names = 'Percentage')
+
+    list_abbr <- list(Cl = 'clay', SiCl = 'silty clay', SaCl ='sandy clay',
+                      ClLo ='clay loam', SiClLo ='silty clay loam',
+                      SaClLo ='sandy clay loam', Lo ='loam', SiLo='silty loam',
+                      SaLo='sandy loam', Si='silt', LoSa ='loamy sand',
+                      Sa= 'sand')
+
+    # STEP 2
+
+    # 2.1 : check missing data about %
+    # IF there is any percentage missing for clay, silt or sand
+
+    #We use IF to see if there is any NA in the data.frame :
+    #     --> if there are some NA : we read the category in st_soil_texture
+    #     --> if there aren't any NA : we use the function of the package
+    #         'soil texture'.
+    if (any(is.na(data_perc))) {
+
+      # If there is no information about clay, silt and sand and neither for
+      # soil texture, the data frame remains the same and a warning message
+      # appears to say that there is no info about the soil texture.
+
+      if (is.na(data$st_soil_texture)){
+        warning('There is no information about the soil texture')
+        return(invisible(FALSE))
+      } else {
+        data$st_USDA_soil_texture <- tolower(data$st_soil_texture)
+        message('One or more percentages are missing. ',
+                'Soil classification taken from the original data')
+        return(data)
+      }
+    } else {
+
+      # 2.2 check the format of data (% or decimal ?)
+      # Are the percentage given in decimal (0.1 instead of 10%) ?
+      # Conversion to percentage if it is the case.
+      if (sum (data_perc) <= 1 ) {
+        data_perc <- data_perc * 100
+      }
+
+      # Check sum of the %
+      # Is the sum of the percentages of clay, silt and sand equal to 100 ?
+      if (sum(data_perc) != 100) {
+        warning('The sum of the different percentages of clay, silt and sand is not equal to 100% ',
+                'and soil texture can not be calculated')
+        return(invisible(FALSE))
+      } else {
+
+        # STEP 3
+        # Obtain the soil texture class
+        # 3.1 Using the package 'soiltexture', find the class of the texture of the soil
+        tmp_soil_texture <- soiltexture::TT.points.in.classes(
+          tri.data = data_perc,
+          class.sys = 'USDA.TT', # We use the USDA classification
+          PiC.type = 't')
+        data$st_USDA_soil_texture <- list_abbr[tmp_soil_texture]
+
+        # 3.2 If soil texture class was already provided, check that it matches
+        if (!is.na(data$st_soil_texture)){
+          if (data$st_USDA_soil_texture != tolower(as.character(data$st_soil_texture))){
+            warning('Calculated soil texture class differs ',
+                    'from the class in the original data.')
+          }
+        }
+
+        # 3.3 Return the data
+        return(data)
+      }
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_soil_texture', sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_soil_texture', sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_soil_texture', sep = '.'))})
 }

@@ -28,7 +28,8 @@ Imports:
     cowplot,
     mapproj,
     LakeMetabolizer,
-    RFc
+    RFc,
+    soiltexture
 Suggests:
     knitr,
     testthat,

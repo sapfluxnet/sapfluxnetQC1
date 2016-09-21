@@ -479,7 +479,7 @@ theme_sfn <- function(base_size = 10, base_family = "Lato") {
 
 # START
 # Function declaration
-vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test'){
+vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to logging
   withCallingHandlers({
@@ -598,16 +598,17 @@ vis_location_biome <- function(data, merge_deserts = FALSE,
     }
 
     # STEP 2
-    # Get biome plot
+    # Make the plot
+    # 2.1 Get biome plot
     plot <- vis_biome(merge_deserts = merge_deserts)
 
-    # 3.2 Make the plot object
+    # 2.2 Make the plot object
     plot <- plot +
       geom_point(data = data, aes(x = si_map, y = si_mat, tooltip = si_code),
                  color = 'black', shape = 21, fill = 'white', size = 2, stroke = 0.5) +
       theme_bw() + coord_cartesian(xlim = c (0, 4500), ylim = c(-16, 30), expand = FALSE)
 
-    # 3.3 Return the plot object
+    # 2.3 Return the plot object
     return(plot)
 
     # END FUNCTION

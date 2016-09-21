@@ -50,7 +50,7 @@ qc_kg_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
 \item{leaf_area}{Numeric value with the plant leaf area in m²}
 
 \item{output_units}{Character vector indicating the kind of output units.
-Allowed values are \code{"plant"}, \code{"sapwood"} and \code{"leaf"}.}
+Allowed values are \code{'plant'}, \code{'sapwood'} and \code{'leaf'}.}
 }
 \value{
 A numeric value resulting from unit conversion
