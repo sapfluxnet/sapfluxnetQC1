@@ -938,40 +938,82 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
 qc_solar_timestamp <- function(data, site_md, env_md, type = 'apparent',
                                parent_logger = 'test') {
 
-  # STEP 0
-  # Argument checks
-  # Are data, site_md and env_md data frames?
-  if(any(!is.data.frame(data), !is.data.frame(site_md), !is.data.frame(env_md))) {
-    stop('data, site_md and/or env_md are not data frames')
-  }
-  # have data the timestamp variable?
-  if(is.null(data$TIMESTAMP)) {
-    stop('data has not a TIMESTAMP variable')
-  }
-  # have metadata objects the mandatory variables?
-  if(any(is.null(site_md$si_lat), is.null(site_md$si_long),
-         is.null(env_md$env_time_zone))) {
-    stop('metadata objects have not the needed variables. See function help')
-  }
+  # Using calling handlers to manage errors
+  withCallingHandlers({
 
-  # STEP 1
-  # Retrieve the accessory info
-  tz <- qc_get_timezone(env_md$env_time_zone)
-  lat <- site_md$si_lat
-  long <- site_md$si_long
-  timestamp <- data$TIMESTAMP
+      # STEP 0
+      # Argument checks
+      # Are data, site_md and env_md data frames?
+      if(any(!is.data.frame(data), !is.data.frame(site_md), !is.data.frame(env_md))) {
+        stop('data, site_md and/or env_md are not data frames')
+      }
+      # have data the timestamp variable?
+      if(is.null(data$TIMESTAMP)) {
+        stop('data has not a TIMESTAMP variable')
+      }
+      # have metadata objects the mandatory variables?
+      if(any(is.null(site_md$si_lat), is.null(site_md$si_long),
+             is.null(env_md$env_time_zone))) {
+        stop('metadata objects have not the needed variables. ',
+             'See function help (?qc_solar_timestamp)')
+      }
+      # Is type a valid value?
+      if (!(type %in% c('mean', 'apparent'))) {
+        stop('type = "', type, '" is not a valid value. See function ',
+             'help (?qc_solar_timestamp) for a list of valid values')
+      }
 
-  # STEP 2
-  # Intermediate objects
+      # STEP 1
+      # Retrieve the accessory info
+      tz <- qc_get_timezone(env_md$env_time_zone)
+      lat <- site_md$si_lat
+      long <- site_md$si_long
+      timestamp <- data$TIMESTAMP
 
-  # 2.1 Equation of time
-  solD <- solaR::fSolD(lat, timestamp)
-  EoT <- solaR::r2sec(solD$EoT)
-  # 2.2 Mean Solar Time
-  mst <- solaR::local2Solar(timestamp, long)
+      # STEP 2
+      # Intermediate objects
+      # 2.2 Mean Solar Time
+      mst <- solaR::local2Solar(timestamp, long)
 
-  # STEP 3
-  # Calculating Apparent Solar Time
+      if (type == 'mean'){
 
+        data$TIMESTAMP <- mst
 
+      } else if (type == 'apparent'){
+
+        # STEP 3
+        # Calculating Apparent Solar Time (Mean Solar Time + Equation of Time)
+        # 2.1 Equation of time
+        solD <- solaR::fSolD(lat, timestamp)
+        EoT <- solaR::r2sec(solD$EoT)
+
+        ast <- sapply(as.Date(index(EoT)),
+                      function(id,vect)
+                        (vect[as.Date(vect) == id] + coredata(EoT)[which(as.Date(index(EoT)) == id)]),
+                      vect = mst)
+
+        ast <- do.call("c", ast)
+
+        data$TIMESTAMP <- ast
+
+      }
+
+      return(data)
+
+      # END FUNCTION
+    },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_solar_timestamp',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_solar_timestamp',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_solar_timestamp',
+                                                        sep = '.'))})
 }
