@@ -29,7 +29,9 @@ Imports:
     mapproj,
     LakeMetabolizer,
     RFc,
-    soiltexture
+    soiltexture,
+    solaR,
+    zoo
 Suggests:
     knitr,
     testthat,

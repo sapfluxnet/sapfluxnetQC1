@@ -987,9 +987,10 @@ qc_solar_timestamp <- function(data, site_md, env_md, type = 'apparent',
         solD <- solaR::fSolD(lat, timestamp)
         EoT <- solaR::r2sec(solD$EoT)
 
-        ast <- sapply(as.Date(index(EoT)),
-                      function(id,vect)
-                        (vect[as.Date(vect) == id] + coredata(EoT)[which(as.Date(index(EoT)) == id)]),
+        ast <- lapply(as.Date(zoo::index(EoT)),
+                      function(id, vect)
+                        (vect[as.Date(vect) == id] +
+                           zoo::coredata(EoT)[which(as.Date(zoo::index(EoT)) == id)]),
                       vect = mst)
 
         ast <- do.call("c", ast)
