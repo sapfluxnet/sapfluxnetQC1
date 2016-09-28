@@ -4,8 +4,7 @@
 \alias{qc_solar_timestamp}
 \title{Solar time conversion}
 \usage{
-qc_solar_timestamp(data, site_md, env_md, type = "apparent",
-  parent_logger = "test")
+qc_solar_timestamp(data, site_md, type = "apparent", parent_logger = "test")
 }
 \arguments{
 \item{data}{Data frame containing the TIMESTAMP variable to convert to solar
@@ -13,8 +12,6 @@ time}
 
 \item{site_md}{Data frame containing the latitude and longitude variables of
 the site (\code{si_lat} and \code{si_long})}
-
-\item{env_md}{Data frame containing the tz variable (\code{env_time_zone})}
 
 \item{type}{Character indicating which kind of solar time is desired,
 \code{mean} or \code{apparent}.}

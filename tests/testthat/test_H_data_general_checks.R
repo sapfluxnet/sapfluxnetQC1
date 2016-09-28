@@ -323,3 +323,64 @@ test_that('NAs returns data frame', {
   expect_is(res_w_nas, 'data.frame')
   expect_length(res_w_nas$row_number, 3)
 })
+
+################################################################################
+context('H7. Solar time conversion')
+
+intervals_data <- data.frame(TIMESTAMP = lubridate::parse_date_time(c(
+  "2010-04-29 22:30:00", "2010-04-29 22:45:00", "2010-04-29 23:00:00",
+  "2010-04-29 23:15:00", "2010-04-29 23:30:00", "2010-04-29 23:45:00",
+  "2010-04-30 00:00:00", "2010-04-30 00:15:00", "2010-04-30 00:30:00"
+),
+orders = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT-1"
+),
+Tree_1 = 1:9,
+Tree_2 = c(NA, NA, NA, NA, 5:9),
+Tree_3 = c(1:8, NA),
+Tree_4 = rep(NA, 9),
+Tree_5 = c(1:3, NA, NA, 6:9),
+stringsAsFactors = FALSE)
+
+site_metadata <- data.frame(
+  si_country = 'ESP',
+  si_lat = 41.33262995,
+  si_long = 1.0144288
+)
+
+test_that('Errors are raised correctly', {
+  expect_error(qc_solar_timestamp(intervals_data, 'site_metadata'),
+               'data and/or site_md are not data frames')
+  expect_error(qc_solar_timestamp(subset(intervals_data, select=-TIMESTAMP), site_metadata),
+               'data has not a TIMESTAMP variable')
+  expect_error(qc_solar_timestamp(intervals_data, subset(site_metadata, select=-si_lat)),
+               'site_md have not the needed variables.')
+  expect_error(qc_solar_timestamp(intervals_data, site_metadata, type = 'other'),
+               'type = "')
+})
+
+results_mean <- as.POSIXct(
+  c("2010-04-29 21:34:03 UTC", "2010-04-29 21:49:03 UTC", "2010-04-29 22:04:03 UTC",
+    "2010-04-29 22:19:03 UTC", "2010-04-29 22:34:03 UTC", "2010-04-29 22:49:03 UTC",
+    "2010-04-29 23:04:03 UTC", "2010-04-29 23:19:03 UTC", "2010-04-29 23:34:03 UTC")
+)
+
+results_apparent <- as.POSIXct(
+  c("2010-04-29 21:36:48 UTC", "2010-04-29 21:51:48 UTC", "2010-04-29 22:06:48 UTC",
+    "2010-04-29 22:21:48 UTC", "2010-04-29 22:36:48 UTC", "2010-04-29 22:51:48 UTC",
+    "2010-04-29 23:06:48 UTC", "2010-04-29 23:21:48 UTC", "2010-04-29 23:36:48 UTC")
+)
+
+test_that('conversion is made correctly', {
+  expect_equal(
+    qc_solar_timestamp(intervals_data, site_metadata, type = 'mean')$TIMESTAMP,
+    results_mean, tolerance = 1
+  )
+  expect_equal(
+    qc_solar_timestamp(intervals_data, site_metadata)$TIMESTAMP,
+    results_apparent, tolerance = 1
+  )
+})
+
+test_that('output is a data frame', {
+  expect_is(qc_solar_timestamp(intervals_data, site_metadata), 'data.frame')
+})
