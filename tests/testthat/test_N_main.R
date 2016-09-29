@@ -1,7 +1,7 @@
 library(sapfluxnetr)
 
 ################################################################################
-context('M1. Get the code and the data files route')
+context('N1. Get the code and the data files route')
 
 dir.create('FakeData')
 
@@ -53,7 +53,7 @@ test_that('results are correct', {
 })
 
 ################################################################################
-context('M2. QC Start Process')
+context('N2. QC Start Process')
 
 test_that('Argument checks work', {
   expect_error(qc_start_process(25),

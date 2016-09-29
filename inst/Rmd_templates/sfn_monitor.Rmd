@@ -782,7 +782,11 @@ output$si_biomes <- renderPlotly({
 ***
 
 Here you can:
-
+  1. Select an area to zoom it (double click to reset).
+  1. Hover the dots to obtain info from site (code, MAT and MAP).
+  1. Click in the name of a biome to remove it from the plot, click it
+     again to add it.
+     
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================
