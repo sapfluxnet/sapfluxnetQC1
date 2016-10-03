@@ -14,7 +14,7 @@ in a single biome. By default, deserts are not merged.}
 An object of class SpatialPolygonsDataFrame
 }
 \description{
-Creates a SpatialPolygonsDataFrame object of the the Whittaker' biomes
+Creates a SpatialPolygonsDataFrame object of the Whittaker's biomes
 modified by Ricklefs (2008) in function of mean annual temperature (MAT)
 and mean annual precipitation (MAP) (MAT in degree Celsius and MAP in mm).
 }

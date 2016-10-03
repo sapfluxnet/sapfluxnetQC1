@@ -863,14 +863,14 @@ qc_coordinates <- function(data, maps_folder = getwd(), plot = FALSE,
 ################################################################################
 #' Make a SpatialPolygonsDataFrame object of the biomes
 #'
-#' Creates a SpatialPolygonsDataFrame object of the the Whittaker' biomes
+#' Creates a SpatialPolygonsDataFrame object of the Whittaker's biomes
 #' modified by Ricklefs (2008) in function of mean annual temperature (MAT)
 #' and mean annual precipitation (MAP) (MAT in degree Celsius and MAP in mm).
 #'
 #' @family Quality Checks Functions
 #'
 #' @param merge_deserts Logical indicating if desert biomes should be merged
-#' in a single biome. By default, deserts are not merged.
+#'    in a single biome. By default, deserts are not merged.
 #'
 #' @return An object of class SpatialPolygonsDataFrame
 #'
@@ -976,12 +976,13 @@ qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
 #' @family Quality Checks Functions
 #'
 #' @param data Data frame of site metadata, including latitude (si_lat)
-#' and longitude (si_long) columns that are used to obtain climatic data.
+#'    and longitude (si_long) columns that are used to obtain climatic data.
 #'
 #' @param merge_deserts Logical indicating if desert biomes should be merged
-#' in a single biome. By default, deserts are not merged.
+#'    in a single biome. By default, deserts are not merged.
 #'
-#' @return An object of class SpatialPolygonsDataFrame
+#' @return The same data frame with extra columns of mean annual temperature
+#'    (si_mat), mean annual precipitation (si_map) and biome (si_biome)
 #'
 #' @export
 
