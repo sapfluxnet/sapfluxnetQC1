@@ -325,62 +325,69 @@ test_that('NAs returns data frame', {
 })
 
 ################################################################################
-context('H7. Solar time conversion')
+context('H7. Extraterrestrial radiation')
 
 intervals_data <- data.frame(TIMESTAMP = lubridate::parse_date_time(c(
-  "2010-04-29 22:30:00", "2010-04-29 22:45:00", "2010-04-29 23:00:00",
-  "2010-04-29 23:15:00", "2010-04-29 23:30:00", "2010-04-29 23:45:00",
-  "2010-04-30 00:00:00", "2010-04-30 00:15:00", "2010-04-30 00:30:00"
+  "2010-04-29 22:30:00", "2010-04-29 23:00:00", "2010-04-30 00:00:00",
+  "2010-04-30 00:30:00", "2010-04-30 01:00:00", "2010-04-30 01:30:00",
+  "2010-04-30 02:00:00", "2010-04-30 02:30:00", "2010-04-30 03:00:00",
+  "2010-04-30 03:30:00", "2010-04-30 04:00:00", "2010-04-30 04:30:00",
+  "2010-04-30 05:00:00", "2010-04-30 05:30:00", "2010-04-30 06:00:00",
+  "2010-04-30 06:30:00", "2010-04-30 07:00:00", "2010-04-30 07:30:00",
+  "2010-04-30 08:00:00", "2010-04-30 08:30:00", "2010-04-30 09:00:00",
+  "2010-04-30 09:30:00", "2010-04-30 10:00:00", "2010-04-30 10:30:00"
 ),
 orders = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT-1"
 ),
-Tree_1 = 1:9,
-Tree_2 = c(NA, NA, NA, NA, 5:9),
-Tree_3 = c(1:8, NA),
-Tree_4 = rep(NA, 9),
-Tree_5 = c(1:3, NA, NA, 6:9),
+ta = 1:24,
+ppfd_in = c(NA, NA, NA, NA, 5:24),
+sw_in = c(1:23, NA),
 stringsAsFactors = FALSE)
 
 site_metadata <- data.frame(
-  si_country = 'ESP',
+  si_code = 'ESP_TIL_MIX',
   si_lat = 41.33262995,
   si_long = 1.0144288
 )
 
 test_that('Errors are raised correctly', {
-  expect_error(qc_solar_timestamp(intervals_data, 'site_metadata'),
+  expect_error(qc_ext_radiation(intervals_data, 'site_metadata'),
                'data and/or site_md are not data frames')
-  expect_error(qc_solar_timestamp(subset(intervals_data, select=-TIMESTAMP), site_metadata),
+  expect_error(qc_ext_radiation(subset(intervals_data, select=-TIMESTAMP), site_metadata),
                'data has not a TIMESTAMP variable')
-  expect_error(qc_solar_timestamp(intervals_data, subset(site_metadata, select=-si_lat)),
+  expect_error(qc_ext_radiation(intervals_data, subset(site_metadata, select=-si_lat)),
                'site_md have not the needed variables.')
-  expect_error(qc_solar_timestamp(intervals_data, site_metadata, type = 'other'),
-               'type = "')
+  expect_error(qc_ext_radiation(intervals_data, site_metadata, add_solar_ts = 'other'),
+               'add_solar_ts must be either TRUE or FALSE')
 })
 
-results_mean <- as.POSIXct(
-  c("2010-04-29 21:34:03 UTC", "2010-04-29 21:49:03 UTC", "2010-04-29 22:04:03 UTC",
-    "2010-04-29 22:19:03 UTC", "2010-04-29 22:34:03 UTC", "2010-04-29 22:49:03 UTC",
-    "2010-04-29 23:04:03 UTC", "2010-04-29 23:19:03 UTC", "2010-04-29 23:34:03 UTC")
-)
-
-results_apparent <- as.POSIXct(
-  c("2010-04-29 21:36:48 UTC", "2010-04-29 21:51:48 UTC", "2010-04-29 22:06:48 UTC",
-    "2010-04-29 22:21:48 UTC", "2010-04-29 22:36:48 UTC", "2010-04-29 22:51:48 UTC",
-    "2010-04-29 23:06:48 UTC", "2010-04-29 23:21:48 UTC", "2010-04-29 23:36:48 UTC")
+results_df <- data.frame(
+  solarTIMESTAMP = as.POSIXct(
+    c("2010-04-29 21:36:42 UTC", "2010-04-29 22:06:42 UTC", "2010-04-29 23:06:42 UTC",
+      "2010-04-29 23:36:42 UTC", "2010-04-30 00:06:48 UTC", "2010-04-30 00:36:48 UTC",
+      "2010-04-30 01:06:48 UTC", "2010-04-30 01:36:48 UTC", "2010-04-30 02:06:48 UTC",
+      "2010-04-30 02:36:48 UTC", "2010-04-30 03:06:48 UTC", "2010-04-30 03:36:48 UTC",
+      "2010-04-30 04:06:48 UTC", "2010-04-30 04:36:48 UTC", "2010-04-30 05:06:48 UTC",
+      "2010-04-30 05:36:48 UTC", "2010-04-30 06:06:48 UTC", "2010-04-30 06:36:48 UTC",
+      "2010-04-30 07:06:48 UTC", "2010-04-30 07:36:48 UTC", "2010-04-30 08:06:48 UTC",
+      "2010-04-30 08:36:48 UTC", "2010-04-30 09:06:48 UTC", "2010-04-30 09:36:48 UTC")),
+  ext_rad = c(0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000,
+              0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 14.04644, 140.38591,
+              268.21702, 395.35217, 519.61563, 638.88085, 751.10679, 854.37289, 946.91193,
+              1027.14026)
 )
 
 test_that('conversion is made correctly', {
   expect_equal(
-    qc_solar_timestamp(intervals_data, site_metadata, type = 'mean')$TIMESTAMP,
-    results_mean, tolerance = 1
+    qc_ext_radiation(intervals_data, site_metadata, add_solar_ts = TRUE)$solarTIMESTAMP,
+    results_df$solarTIMESTAMP, tolerance = 1
   )
   expect_equal(
-    qc_solar_timestamp(intervals_data, site_metadata)$TIMESTAMP,
-    results_apparent, tolerance = 1
+    qc_ext_radiation(intervals_data, site_metadata)$ext_rad,
+    results_df$ext_rad, tolerance = 0.0001
   )
 })
 
 test_that('output is a data frame', {
-  expect_is(qc_solar_timestamp(intervals_data, site_metadata), 'data.frame')
+  expect_is(qc_ext_radiation(intervals_data, site_metadata), 'data.frame')
 })

@@ -904,36 +904,37 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
 ################################################################################
 #' Solar time conversion
 #'
-#' Calculate the Mean Solar Time and Apparent (Real) Solar Time from the
-#' TIMESTAMP
+#' Calculate the Extraterrestrial Radiation from the TIMESTAMP
 #'
-#' In order to obtain the mean solar time and the equation of time for each day
-#' included in the TIMESTAMP functions from \code{solaR} package.
+#' This function uses several functions from \code{solaR} package in order to
+#' obtain the mean solar time, the equation of time for each day included in the
+#' TIMESTAMP and the extraterrestrial radiation for each step of the TIMESTAMP.
 #'
 #' @section Apparent (Real) Solar Time:
 #' The Apparent Solar Time is calculated as:
-#' \deqn{Apparent Solar Time = Mean Solar Time - Equation of Time}
+#' \deqn{Apparent Solar Time = Mean Solar Time + Equation of Time}
 #' The Equation of Time is calculated for each day, whereas the Mean Solar Time
 #' is calculated for each step of the TIMESTAMP.
 #'
 #' @family Quality Checks Functions
 #'
-#' @param data Data frame containing the TIMESTAMP variable to convert to solar
-#'   time
+#' @param data Environmental data frame containing the TIMESTAMP variable.
+#'
 #' @param site_md Data frame containing the latitude and longitude variables of
 #'   the site (\code{si_lat} and \code{si_long})
 #'
-#' @param type Character indicating which kind of solar time is desired,
-#'   \code{mean} or \code{apparent}.
+#' @param add_solar_ts Logical indicating if solar timestamp must be added to
+#'   the environmental data frame.
 #'
-#' @return A data frame exactly as \code{data}, but with the TIMESTAMP converted
-#'   to the indicated solar time.
+#' @return A data frame exactly as \code{data}, but with an additional column
+#'   containing the extraterrestrial radiation in W/m2, and optionally another
+#'   column containing apparent solar timestamp.
 #'
 #' @export
 
 # START
 # Function declaration
-qc_solar_timestamp <- function(data, site_md, type = 'apparent',
+qc_ext_radiation <- function(data, site_md, add_solar_ts = FALSE,
                                parent_logger = 'test') {
 
   # Using calling handlers to manage errors
@@ -941,7 +942,7 @@ qc_solar_timestamp <- function(data, site_md, type = 'apparent',
 
       # STEP 0
       # Argument checks
-      # Are data, site_md and env_md data frames?
+      # Are data and site_md data frames?
       if(any(!is.data.frame(data), !is.data.frame(site_md))) {
         stop('data and/or site_md are not data frames')
       }
@@ -955,9 +956,8 @@ qc_solar_timestamp <- function(data, site_md, type = 'apparent',
              'See function help (?qc_solar_timestamp)')
       }
       # Is type a valid value?
-      if (!(type %in% c('mean', 'apparent'))) {
-        stop('type = "', type, '" is not a valid value. See function ',
-             'help (?qc_solar_timestamp) for a list of valid values')
+      if (!is.logical(add_solar_ts)) {
+        stop('add_solar_ts must be either TRUE or FALSE')
       }
 
       # STEP 1
@@ -971,30 +971,32 @@ qc_solar_timestamp <- function(data, site_md, type = 'apparent',
       # 2.2 Mean Solar Time
       mst <- solaR::local2Solar(timestamp, long)
 
-      if (type == 'mean'){
+      # STEP 3
+      # Calculating Apparent Solar Time (Mean Solar Time + Equation of Time)
+      # 2.1 Equation of time
+      solD <- solaR::fSolD(lat, mst)
+      EoT <- solaR::r2sec(solD$EoT)
 
-        data$TIMESTAMP <- mst
+      ast <- lapply(as.Date(strptime(zoo::index(EoT), format = '%Y-%m-%d')),
+                    function(id, vect)
+                      (vect[as.Date(vect) == id] +
+                         zoo::coredata(EoT)[which(as.Date(strptime(zoo::index(EoT),
+                                                                   format = '%Y-%m-%d')) == id)]),
+                    vect = mst)
 
-      } else if (type == 'apparent'){
+      ast <- do.call("c", ast)
 
-        # STEP 3
-        # Calculating Apparent Solar Time (Mean Solar Time + Equation of Time)
-        # 2.1 Equation of time
-        solD <- solaR::fSolD(lat, timestamp)
-        EoT <- solaR::r2sec(solD$EoT)
+      solD <- solaR::fSolD(lat, ast)
+      solI <- zoo::coredata(solaR::fSolI(solD, BTi = ast)$Bo0)
 
-        ast <- lapply(as.Date(zoo::index(EoT)),
-                      function(id, vect)
-                        (vect[as.Date(vect) == id] +
-                           zoo::coredata(EoT)[which(as.Date(zoo::index(EoT)) == id)]),
-                      vect = mst)
+      data$ext_rad <- solI
 
-        ast <- do.call("c", ast)
-
-        data$TIMESTAMP <- ast
-
+      if (add_solar_ts){
+        data$solarTIMESTAMP <- ast
       }
 
+      # STEP 4
+      # Return data frame with new columns
       return(data)
 
       # END FUNCTION
@@ -1003,14 +1005,14 @@ qc_solar_timestamp <- function(data, site_md, type = 'apparent',
   # handlers
   warning = function(w){logging::logwarn(w$message,
                                          logger = paste(parent_logger,
-                                                        'qc_solar_timestamp',
+                                                        'qc_ext_radiation',
                                                         sep = '.'))},
   error = function(e){logging::logerror(e$message,
                                         logger = paste(parent_logger,
-                                                       'qc_solar_timestamp',
+                                                       'qc_ext_radiation',
                                                        sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
-                                                        'qc_solar_timestamp',
+                                                        'qc_ext_radiation',
                                                         sep = '.'))})
 }
