@@ -909,8 +909,11 @@ output$sapf_ts <- renderDygraph({
 
   dygraph(sapf_plot) %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
               colors = stringr::str_sub(viridis::viridis(length(columns)), 1, -3),
@@ -945,8 +948,11 @@ output$env_ts <- renderDygraph({
 
   dygraph(env_plot) %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
               colors = stringr::str_sub(viridis::viridis(length(columns_env)), 1, -3),
@@ -1034,8 +1040,11 @@ output$sapf_ts_vs <- renderDygraph({
 
   dygraph(sapf_plot_vs, group = 'vs') %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
               colors = stringr::str_sub(viridis::viridis(length(input$tree_names)),
@@ -1073,8 +1082,11 @@ output$env_ts_vs <- renderDygraph({
 
   dygraph(env_plot_vs, group = 'vs') %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
               colors = stringr::str_sub(viridis::viridis(length(input$env_names)),
