@@ -98,7 +98,7 @@ get_env_data <- reactive({
 get_sapf_data <- reactive({
   read_csv(
     file = file.path('Data', input$site_sel, input$level_sel,
-                     paste0(input$site_sel, input$data_sel)),
+                     paste0(input$site_sel, '_', input$data_sel)),
     col_types = cols(
       TIMESTAMP = col_datetime(),
       .default = col_double()
@@ -130,7 +130,7 @@ get_env_data_vs <- reactive({
 get_sapf_data_vs <- reactive({
   read_csv(
     file = file.path('Data', input$site_sel_vs, input$level_sel_vs,
-                     paste0(input$site_sel_vs, input$data_sel_vs)),
+                     paste0(input$site_sel_vs, '_', input$data_sel_vs)),
     col_types = cols(
       TIMESTAMP = col_datetime(),
       .default = col_double()
@@ -149,6 +149,21 @@ dyCrosshair <- function(dygraph,
     options = list(direction = match.arg(direction))
   )
 }
+
+# sapflow units reactive
+sapf_units <- reactive({
+  switch(input$data_sel,
+         sapflow_data_leaf.csv = "cm3 cm-2 h-1 (Leaf)",
+         sapflow_data_plant.csv = "cm3 h-1 (Tree)",
+         sapflow_data_sapwood.csv = "cm3 cm-2 h-1 (Sapwood)")
+})
+
+sapf_units_vs <- reactive({
+  switch(input$data_sel_vs,
+         sapflow_data_leaf.csv = "cm3 cm-2 h-1 (Leaf)",
+         sapflow_data_plant.csv = "cm3 h-1 (Tree)",
+         sapflow_data_sapwood.csv = "cm3 cm-2 h-1 (Sapwood)")
+})
 ```
 
 Control Panel {data-icon="ion-ios-settings-strong"}
@@ -776,10 +791,10 @@ radioButtons('level_sel', label = 'Select data level:',
              selected = 'Lvl_1')
 
 radioButtons('data_sel', label = 'Select sapflow data type:',
-             choices = c('Sapflow data leaf' = '_sapflow_data_leaf.csv',
-                         'Sapflow data plant' = '_sapflow_data_plant.csv',
-                         'Sapflow data sapwood' = '_sapflow_data_sapwood.csv'),
-             selected = '_sapflow_data_plant.csv')
+             choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+                         'Sapflow data plant' = 'sapflow_data_plant.csv',
+                         'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+             selected = 'sapflow_data_plant.csv')
 
 tags$br()
 ```
@@ -907,7 +922,7 @@ output$sapf_ts <- renderDygraph({
                         order.by = sapf_plot$TIMESTAMP,
                         tz = attr(sapf_plot$TIMESTAMP, 'tzone'))
 
-  dygraph(sapf_plot) %>%
+  dygraph(sapf_plot, ylab = sapf_units()) %>%
     dyHighlight(highlightCircleSize = 5,
                 highlightSeriesBackgroundAlpha = 0.5,
                 hideOnMouseOut = FALSE,
@@ -984,10 +999,10 @@ radioButtons('level_sel_vs', label = 'Select data level:',
              selected = 'Lvl_1')
 
 radioButtons('data_sel_vs', label = 'Select sapflow data type:',
-             choices = c('Sapflow data leaf' = '_sapflow_data_leaf.csv',
-                         'Sapflow data plant' = '_sapflow_data_plant.csv',
-                         'Sapflow data sapwood' = '_sapflow_data_sapwood.csv'),
-             selected = '_sapflow_data_plant.csv')
+             choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+                         'Sapflow data plant' = 'sapflow_data_plant.csv',
+                         'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+             selected = 'sapflow_data_plant.csv')
 
 # numericInput('plant_sel_vs', label = 'Indicate tree index to visualize:',
 #              value = 2, min = 2)
@@ -1038,7 +1053,7 @@ output$sapf_ts_vs <- renderDygraph({
                            order.by = sapf_plot_vs$TIMESTAMP,
                            tz = attr(sapf_plot_vs$TIMESTAMP, 'tzone'))
 
-  dygraph(sapf_plot_vs, group = 'vs') %>%
+  dygraph(sapf_plot_vs, group = 'vs', ylab = sapf_units_vs()) %>%
     dyHighlight(highlightCircleSize = 5,
                 highlightSeriesBackgroundAlpha = 0.5,
                 hideOnMouseOut = FALSE,
