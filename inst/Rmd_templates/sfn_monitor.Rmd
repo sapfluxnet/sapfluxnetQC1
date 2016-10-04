@@ -1025,8 +1025,7 @@ output$sapf_ts_vs <- renderDygraph({
   env_md_plot_vs <- get_env_md_vs()
   
   sapf_plot_vs <- sapf_plot_data_vs %>%
-    select(select_vars_(names(sapf_plot_data_vs),
-                        c('TIMESTAMP', input$tree_names))) %>%
+    select(one_of(c('TIMESTAMP', input$tree_names))) %>%
     qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
 
   sapf_plot_vs <- xts::xts(sapf_plot_vs[,-1],
@@ -1039,7 +1038,8 @@ output$sapf_ts_vs <- renderDygraph({
                 hideOnMouseOut = FALSE) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
-              colors = stringr::str_sub(viridis::viridis(1), 1, -3),
+              colors = stringr::str_sub(viridis::viridis(length(input$tree_names)),
+                                        1, -3),
               drawGrid = FALSE) %>%
     dyLegend(width = 1000) %>%
     dyRoller(rollPeriod = 1) %>%
@@ -1064,8 +1064,7 @@ output$env_ts_vs <- renderDygraph({
   env_md_plot_vs <- get_env_md_vs()
 
   env_plot_vs <- env_plot_data_vs %>%
-    select(select_vars_(names(env_plot_data_vs),
-                        c('TIMESTAMP', input$env_names))) %>%
+    select(one_of(c('TIMESTAMP', input$env_names))) %>%
     qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
 
   env_plot_vs <- xts::xts(env_plot_vs[,-1],
@@ -1078,7 +1077,8 @@ output$env_ts_vs <- renderDygraph({
                 hideOnMouseOut = FALSE) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
-              colors = stringr::str_sub(viridis::viridis(1), 1, -3),
+              colors = stringr::str_sub(viridis::viridis(length(input$env_names)),
+                                        1, -3),
               drawGrid = FALSE) %>%
     dyLegend(width = 1000) %>%
     dyRoller(rollPeriod = 1) %>%
