@@ -98,7 +98,7 @@ get_env_data <- reactive({
 get_sapf_data <- reactive({
   read_csv(
     file = file.path('Data', input$site_sel, input$level_sel,
-                     paste0(input$site_sel, input$data_sel)),
+                     paste0(input$site_sel, '_', input$data_sel)),
     col_types = cols(
       TIMESTAMP = col_datetime(),
       .default = col_double()
@@ -130,7 +130,7 @@ get_env_data_vs <- reactive({
 get_sapf_data_vs <- reactive({
   read_csv(
     file = file.path('Data', input$site_sel_vs, input$level_sel_vs,
-                     paste0(input$site_sel_vs, input$data_sel_vs)),
+                     paste0(input$site_sel_vs, '_', input$data_sel_vs)),
     col_types = cols(
       TIMESTAMP = col_datetime(),
       .default = col_double()
@@ -149,6 +149,21 @@ dyCrosshair <- function(dygraph,
     options = list(direction = match.arg(direction))
   )
 }
+
+# sapflow units reactive
+sapf_units <- reactive({
+  switch(input$data_sel,
+         sapflow_data_leaf.csv = "cm3 cm-2 h-1 (Leaf)",
+         sapflow_data_plant.csv = "cm3 h-1 (Tree)",
+         sapflow_data_sapwood.csv = "cm3 cm-2 h-1 (Sapwood)")
+})
+
+sapf_units_vs <- reactive({
+  switch(input$data_sel_vs,
+         sapflow_data_leaf.csv = "cm3 cm-2 h-1 (Leaf)",
+         sapflow_data_plant.csv = "cm3 h-1 (Tree)",
+         sapflow_data_sapwood.csv = "cm3 cm-2 h-1 (Sapwood)")
+})
 ```
 
 Control Panel {data-icon="ion-ios-settings-strong"}
@@ -749,10 +764,14 @@ output$swc <- renderPlotly({
 
 Here you can:
 
+  1. Select an area to zoom it (double click to reset).
+  1. Hover the bars to obtain info from site and env variables.
+  1. Click in the name of a site to remove it from the plot, click it
+     again to add it.
+
 ### **Biomes Info**. Concerned about the climatic and biogeographic range of the data sets? Just take a look here!
 
 ```{r}
-
 # si_md file paths
 si_md_paths <- list.files(path = file.path('Data'),
                            pattern = '_site_md.csv',
@@ -776,7 +795,6 @@ fillCol(
 output$si_biomes <- renderPlotly({
   ggplotly(si_biomes_plot, tooltip = c('tooltip', 'y', 'x'))
 })
-
 ```
 
 ***
@@ -786,7 +804,6 @@ Here you can:
   1. Hover the dots to obtain info from site (code, MAT and MAP).
   1. Click in the name of a biome to remove it from the plot, click it
      again to add it.
-     
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================
@@ -809,10 +826,10 @@ radioButtons('level_sel', label = 'Select data level:',
              selected = 'Lvl_1')
 
 radioButtons('data_sel', label = 'Select sapflow data type:',
-             choices = c('Sapflow data leaf' = '_sapflow_data_leaf.csv',
-                         'Sapflow data plant' = '_sapflow_data_plant.csv',
-                         'Sapflow data sapwood' = '_sapflow_data_sapwood.csv'),
-             selected = '_sapflow_data_plant.csv')
+             choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+                         'Sapflow data plant' = 'sapflow_data_plant.csv',
+                         'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+             selected = 'sapflow_data_plant.csv')
 
 tags$br()
 ```
@@ -940,10 +957,13 @@ output$sapf_ts <- renderDygraph({
                         order.by = sapf_plot$TIMESTAMP,
                         tz = attr(sapf_plot$TIMESTAMP, 'tzone'))
 
-  dygraph(sapf_plot) %>%
+  dygraph(sapf_plot, ylab = sapf_units()) %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
               colors = stringr::str_sub(viridis::viridis(length(columns)), 1, -3),
@@ -978,8 +998,11 @@ output$env_ts <- renderDygraph({
 
   dygraph(env_plot) %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
               colors = stringr::str_sub(viridis::viridis(length(columns_env)), 1, -3),
@@ -1011,20 +1034,38 @@ radioButtons('level_sel_vs', label = 'Select data level:',
              selected = 'Lvl_1')
 
 radioButtons('data_sel_vs', label = 'Select sapflow data type:',
-             choices = c('Sapflow data leaf' = '_sapflow_data_leaf.csv',
-                         'Sapflow data plant' = '_sapflow_data_plant.csv',
-                         'Sapflow data sapwood' = '_sapflow_data_sapwood.csv'),
-             selected = '_sapflow_data_plant.csv')
+             choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+                         'Sapflow data plant' = 'sapflow_data_plant.csv',
+                         'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+             selected = 'sapflow_data_plant.csv')
 
-numericInput('plant_sel_vs', label = 'Indicate tree index to visualize:',
-             value = 2, min = 2)
+# numericInput('plant_sel_vs', label = 'Indicate tree index to visualize:',
+#              value = 2, min = 2)
+# 
+# numericInput('env_sel_vs', label = 'Indicate env variable index to visualize:',
+#              value = 2, min = 2)
 
-numericInput('env_sel_vs', label = 'Indicate env variable index to visualize:',
-             value = 2, min = 2)
+uiOutput('tree_controls')
+uiOutput('env_controls')
 ```
 
 Row
 --------------------------------------------------------------------------------
+
+```{r on_the_fly_select}
+output$tree_controls <- renderUI({
+  tree_names <- names(get_sapf_data_vs()[-1])
+  checkboxGroupInput('tree_names', "Choose plants:",
+                     choices = tree_names, selected = tree_names[1])
+})
+
+output$env_controls <- renderUI({
+  env_names <- names(get_env_data_vs()[-1])
+  checkboxGroupInput('env_names', "Choose env variables:",
+                     choices = env_names, selected = env_names[1])
+})
+```
+
 
 ### Sapflow
 
@@ -1040,20 +1081,24 @@ output$sapf_ts_vs <- renderDygraph({
   env_md_plot_vs <- get_env_md_vs()
   
   sapf_plot_vs <- sapf_plot_data_vs %>%
-    select(TIMESTAMP, input$plant_sel_vs) %>%
+    select(one_of(c('TIMESTAMP', input$tree_names))) %>%
     qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
 
   sapf_plot_vs <- xts::xts(sapf_plot_vs[,-1],
                            order.by = sapf_plot_vs$TIMESTAMP,
                            tz = attr(sapf_plot_vs$TIMESTAMP, 'tzone'))
 
-  dygraph(sapf_plot_vs, group = 'vs') %>%
+  dygraph(sapf_plot_vs, group = 'vs', ylab = sapf_units_vs()) %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
-              colors = stringr::str_sub(viridis::viridis(1), 1, -3),
+              colors = stringr::str_sub(viridis::viridis(length(input$tree_names)),
+                                        1, -3),
               drawGrid = FALSE) %>%
     dyLegend(width = 1000) %>%
     dyRoller(rollPeriod = 1) %>%
@@ -1078,7 +1123,7 @@ output$env_ts_vs <- renderDygraph({
   env_md_plot_vs <- get_env_md_vs()
 
   env_plot_vs <- env_plot_data_vs %>%
-    select(TIMESTAMP, input$env_sel_vs) %>%
+    select(one_of(c('TIMESTAMP', input$env_names))) %>%
     qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
 
   env_plot_vs <- xts::xts(env_plot_vs[,-1],
@@ -1087,11 +1132,15 @@ output$env_ts_vs <- renderDygraph({
 
   dygraph(env_plot_vs, group = 'vs') %>%
     dyHighlight(highlightCircleSize = 5,
-                highlightSeriesBackgroundAlpha = 0.8,
-                hideOnMouseOut = FALSE) %>%
+                highlightSeriesBackgroundAlpha = 0.5,
+                hideOnMouseOut = FALSE,
+                highlightSeriesOpts = list(
+                  strokeWidth = 3
+                )) %>%
     dyCrosshair(direction = 'both') %>%
     dyOptions(useDataTimezone = TRUE, retainDateWindow = TRUE,
-              colors = stringr::str_sub(viridis::viridis(1), 1, -3),
+              colors = stringr::str_sub(viridis::viridis(length(input$env_names)),
+                                        1, -3),
               drawGrid = FALSE) %>%
     dyLegend(width = 1000) %>%
     dyRoller(rollPeriod = 1) %>%
