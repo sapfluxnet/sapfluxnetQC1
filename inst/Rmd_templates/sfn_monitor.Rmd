@@ -22,6 +22,7 @@ library(stringr)
 library(leaflet)
 library(ggplot2)
 library(plotly)
+library(ggpic)
 
 # reactives
 
@@ -558,6 +559,13 @@ fillCol(width = '100%', flex = 1,
           plotlyOutput("st_density_basal", width = "100%"))
 )
 
+# pics for Height ans Soil Depth plot
+# tree <- as.matrix(as.raster(rsvg::rsvg(
+#   system.file('pics', 'pine_tree.svg', package = 'ggpic')
+# )))
+# 
+# root <- as.matrix(as.raster(rsvg::rsvg('root.svg')))
+
 # stand_md file paths
 stand_md_paths <- list.files(path = file.path('Data'),
                              pattern = '_stand_md.csv',
@@ -569,10 +577,12 @@ stand_md_joined <- lapply(stand_md_paths, read.csv) %>% bind_rows()
 st_height_depth_plot <- stand_md_joined %>%
   ggplot(aes(x = si_code)) +
   # geom_ribbon(aes(ymax = st_height, ymin = 0), fill = 'green') +
-  geom_bar(aes(y = st_height), stat = 'identity', fill = '#440154FF',
+  geom_bar(aes(y = st_height),
+           stat = 'identity', fill = '#440154FF',
            position = 'dodge') +
   # geom_ribbon(aes(ymax = st_soil_depth*(-1/100), ymin = 0), fill = 'brown') +
-  geom_bar(aes(y = st_soil_depth*(-1/100)), stat = 'identity', fill = '#FDE725FF',
+  geom_bar(aes(y = st_soil_depth*(-1/100)),
+           stat = 'identity', fill = '#FDE725FF',
            position = 'dodge') +
   labs(x = 'Site', y = 'meters', title = 'Height and Soil Depth') +
   theme_bw() +
@@ -587,8 +597,7 @@ st_aspect_terrain_plot <- stand_md_joined %>%
   summarise(n = n()) %>%
   ggplot(aes(x = factor(st_aspect, levels = c('Flat', 'N', 'E', 'S', 'W')),
              y = st_terrain, size = n)) +
-  geom_point(aes(colour = n)) +
-  viridis::scale_color_viridis(discrete = FALSE) +
+  geom_point(colour = viridis::viridis(1)) +
   labs(x = 'Aspect', y = 'Terrain', title = 'Aspect and Terrrain') +
   theme_bw() +
   theme(
