@@ -163,6 +163,23 @@ setGeneric(
   }
 )
 
+#' Replacement generics
+#'
+#' Generic functions for replacement functions for SfnData
+#'
+#' @name sfn_replacement_generics
+NULL
+
+#' @rdname sfn_replacement_generics
+#' @export
+setGeneric(
+  "get_sapf<-",
+  function(object, value) {
+    standardGeneric("get_sapf<-")
+  }
+)
+
+
 #' SfnData get methods
 #'
 #' Methods to get the info from the SfnData class slots
@@ -351,5 +368,22 @@ setMethod(
       plant_md = slot(x, "plant_md"),
       env_md = slot(x, "env_md")
     )
+  }
+)
+
+#' Replacement methods
+#'
+#' Methods for replacing the slots with new data or metadata
+#'
+#' @name sfn_replacement
+NULL
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_sapf", "SfnData",
+  function(object, value) {
+    slot(object, "sapf") <- value
+    return(object)
   }
 )
