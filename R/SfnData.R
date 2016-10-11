@@ -292,12 +292,13 @@ setMethod(
     # object class
     cat(class(object), " object\n", sep = "")
     # site code
-    cat("Data from site: ", get_si_code(object), "\n", sep = "")
+    cat("Data from ", get_si_code(object), " site\n", sep = "")
     # number of trees
     cat("Sapflow data contains ", length(names(get_sapf(object)[-1])),
         " trees/plants\n", sep = "")
     # env_vars
-    cat("Environmental data variables: ", names(get_env(object)[-1]), "\n",
-        sep = "")
+    cat("Environmental data variables:\n",
+        paste(names(get_env(object)[-1])),
+        "\n", sep = " ")
   }
 )
