@@ -52,7 +52,7 @@ SfnData <- setClass(
 NULL
 
 #' @rdname sfn_get_generics
-get_sapf <- setGeneric(
+setGeneric(
   "get_sapf",
   function(object, ...) {
     standardGeneric("get_sapf")
@@ -60,7 +60,7 @@ get_sapf <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_env <- setGeneric(
+setGeneric(
   "get_env",
   function(object, ...) {
     standardGeneric("get_env")
@@ -68,7 +68,7 @@ get_env <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_sapf_flags <- setGeneric(
+setGeneric(
   "get_sapf_flags",
   function(object, ...) {
     standardGeneric("get_sapf_flags")
@@ -76,7 +76,7 @@ get_sapf_flags <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_env_flags <- setGeneric(
+setGeneric(
   "get_env_flags",
   function(object, ...) {
     standardGeneric("get_env_flags")
@@ -84,7 +84,7 @@ get_env_flags <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_sapf_timestamp <- setGeneric(
+setGeneric(
   "get_sapf_timestamp",
   function(object, ...) {
     standardGeneric("get_sapf_timestamp")
@@ -92,7 +92,7 @@ get_sapf_timestamp <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_env_timestamp <- setGeneric(
+setGeneric(
   "get_env_timestamp",
   function(object, ...) {
     standardGeneric("get_env_timestamp")
@@ -100,7 +100,7 @@ get_env_timestamp <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_site_md <- setGeneric(
+setGeneric(
   "get_site_md",
   function(object, ...) {
     standardGeneric("get_site_md")
@@ -108,7 +108,7 @@ get_site_md <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_stand_md <- setGeneric(
+setGeneric(
   "get_stand_md",
   function(object, ...) {
     standardGeneric("get_stand_md")
@@ -116,7 +116,7 @@ get_stand_md <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_species_md <- setGeneric(
+setGeneric(
   "get_species_md",
   function(object, ...) {
     standardGeneric("get_species_md")
@@ -124,7 +124,7 @@ get_species_md <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_plant_md <- setGeneric(
+setGeneric(
   "get_plant_md",
   function(object, ...) {
     standardGeneric("get_plant_md")
@@ -132,7 +132,7 @@ get_plant_md <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_env_md <- setGeneric(
+setGeneric(
   "get_env_md",
   function(object, ...) {
     standardGeneric("get_env_md")
@@ -140,7 +140,7 @@ get_env_md <- setGeneric(
 )
 
 #' @rdname sfn_get_generics
-get_si_code <- setGeneric(
+setGeneric(
   "get_si_code",
   function(object, ...) {
     standardGeneric("get_si_code")
@@ -162,7 +162,7 @@ NULL
 setMethod(
   "get_sapf", "SfnData",
   function(object) {
-    object@sapf
+    slot(object, "sapf")
   }
 )
 
@@ -170,6 +170,96 @@ setMethod(
 setMethod(
   "get_env", "SfnData",
   function(object) {
-    object@env
+    slot(object, "env")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_sapf_flags", "SfnData",
+  function(object) {
+    slot(object, "sapf_flags")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_env_flags", "SfnData",
+  function(object) {
+    slot(object, "env_flags")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_sapf_timestamp", "SfnData",
+  function(object) {
+    slot(object, "sapf_timestamp")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_env_timestamp", "SfnData",
+  function(object) {
+    slot(object, "env_timestamp")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_si_code", "SfnData",
+  function(object) {
+    slot(object, "si_code")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_site_md", "SfnData",
+  function(object) {
+    slot(object, "site_md")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_stand_md", "SfnData",
+  function(object) {
+    slot(object, "stand_md")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_species_md", "SfnData",
+  function(object) {
+    slot(object, "species_md")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_plant_md", "SfnData",
+  function(object) {
+    slot(object, "plant_md")
+  }
+)
+
+#' @rdname sfn_get_methods
+setMethod(
+  "get_env_md", "SfnData",
+  function(object) {
+    slot(object, "env_md")
+  }
+)
+
+#' Show method for SfnData
+#'
+#' @param object SfnData object to show
+setMethod(
+  "show", "SfnData",
+  definition = function(object) {
+    cat(class(object), " object.\n", sep = "")
   }
 )
