@@ -25,6 +25,10 @@
 #' @slot plant_md A data frame containing the plant metadata
 #'
 #' @slot env_md A data frame containing the env metadata
+#'
+#' @import methods
+#' @export SfnData
+#' @exportClass SfnData
 
 SfnData <- setClass(
   'SfnData',
@@ -52,6 +56,7 @@ SfnData <- setClass(
 NULL
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_sapf",
   function(object, ...) {
@@ -60,6 +65,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_env",
   function(object, ...) {
@@ -68,6 +74,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_sapf_flags",
   function(object, ...) {
@@ -76,6 +83,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_env_flags",
   function(object, ...) {
@@ -84,6 +92,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_sapf_timestamp",
   function(object, ...) {
@@ -92,6 +101,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_env_timestamp",
   function(object, ...) {
@@ -100,6 +110,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_site_md",
   function(object, ...) {
@@ -108,6 +119,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_stand_md",
   function(object, ...) {
@@ -116,6 +128,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_species_md",
   function(object, ...) {
@@ -124,6 +137,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_plant_md",
   function(object, ...) {
@@ -132,6 +146,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_env_md",
   function(object, ...) {
@@ -140,6 +155,7 @@ setGeneric(
 )
 
 #' @rdname sfn_get_generics
+#' @export
 setGeneric(
   "get_si_code",
   function(object, ...) {
@@ -159,6 +175,7 @@ setGeneric(
 NULL
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_sapf", "SfnData",
   function(object) {
@@ -167,6 +184,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_env", "SfnData",
   function(object) {
@@ -175,6 +193,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_sapf_flags", "SfnData",
   function(object) {
@@ -183,6 +202,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_env_flags", "SfnData",
   function(object) {
@@ -191,6 +211,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_sapf_timestamp", "SfnData",
   function(object) {
@@ -199,6 +220,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_env_timestamp", "SfnData",
   function(object) {
@@ -207,6 +229,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_si_code", "SfnData",
   function(object) {
@@ -215,6 +238,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_site_md", "SfnData",
   function(object) {
@@ -223,6 +247,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_stand_md", "SfnData",
   function(object) {
@@ -231,6 +256,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_species_md", "SfnData",
   function(object) {
@@ -239,6 +265,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_plant_md", "SfnData",
   function(object) {
@@ -247,6 +274,7 @@ setMethod(
 )
 
 #' @rdname sfn_get_methods
+#' @export
 setMethod(
   "get_env_md", "SfnData",
   function(object) {
@@ -257,9 +285,19 @@ setMethod(
 #' Show method for SfnData
 #'
 #' @param object SfnData object to show
+#' @export
 setMethod(
   "show", "SfnData",
   definition = function(object) {
-    cat(class(object), " object.\n", sep = "")
+    # object class
+    cat(class(object), " object\n", sep = "")
+    # site code
+    cat("Data from site: ", get_si_code(object), "\n", sep = "")
+    # number of trees
+    cat("Sapflow data contains ", length(names(get_sapf(object)[-1])),
+        " trees/plants\n", sep = "")
+    # env_vars
+    cat("Environmental data variables: ", names(get_env(object)[-1]), "\n",
+        sep = "")
   }
 )

@@ -139,10 +139,10 @@ test_that('files are created OK and in the correct places', {
 
 ################################################################################
 # cleaning
-unlink('FakeData', recursive = TRUE)
-unlink('received_data', recursive = TRUE)
-unlink('Data', recursive = TRUE)
-unlink('Logs', recursive = TRUE)
-unlink('Reports', recursive = TRUE)
-unlink('Templates', recursive = TRUE)
-unlink('ESP_adm0.rds')
+# unlink('FakeData', recursive = TRUE)
+# unlink('received_data', recursive = TRUE)
+# unlink('Data', recursive = TRUE)
+# unlink('Logs', recursive = TRUE)
+# unlink('Reports', recursive = TRUE)
+# unlink('Templates', recursive = TRUE)
+# unlink('ESP_adm0.rds')
