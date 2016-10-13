@@ -22,7 +22,7 @@ library(stringr)
 library(leaflet)
 library(ggplot2)
 library(plotly)
-library(ggpic)
+# library(ggpic)
 
 # reactives
 
