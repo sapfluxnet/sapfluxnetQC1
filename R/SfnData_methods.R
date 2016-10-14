@@ -212,3 +212,84 @@ setReplaceMethod(
     return(object)
   }
 )
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_sapf_flags", "SfnData",
+  function(object, value) {
+    slot(object, "get_sapf_flags") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_env_flags", "SfnData",
+  function(object, value) {
+    slot(object, "get_env_flags") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_si_code", "SfnData",
+  function(object, value) {
+    slot(object, "get_si_code") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_site_md", "SfnData",
+  function(object, value) {
+    slot(object, "get_site_md") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_stand_md", "SfnData",
+  function(object, value) {
+    slot(object, "get_stand_md") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_species_md", "SfnData",
+  function(object, value) {
+    slot(object, "get_species_md") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_plant_md", "SfnData",
+  function(object, value) {
+    slot(object, "get_plant_md") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_env_md", "SfnData",
+  function(object, value) {
+    slot(object, "get_env_md") <- value
+    return(object)
+  }
+)
+

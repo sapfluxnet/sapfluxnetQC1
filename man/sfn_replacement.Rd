@@ -3,13 +3,37 @@
 \docType{methods}
 \name{sfn_replacement}
 \alias{get_env<-,SfnData-method}
+\alias{get_env_flags<-,SfnData-method}
+\alias{get_env_md<-,SfnData-method}
+\alias{get_plant_md<-,SfnData-method}
 \alias{get_sapf<-,SfnData-method}
+\alias{get_sapf_flags<-,SfnData-method}
+\alias{get_si_code<-,SfnData-method}
+\alias{get_site_md<-,SfnData-method}
+\alias{get_species_md<-,SfnData-method}
+\alias{get_stand_md<-,SfnData-method}
 \alias{sfn_replacement}
 \title{Replacement methods}
 \usage{
 \S4method{get_sapf}{SfnData}(object) <- value
 
 \S4method{get_env}{SfnData}(object) <- value
+
+\S4method{get_sapf_flags}{SfnData}(object) <- value
+
+\S4method{get_env_flags}{SfnData}(object) <- value
+
+\S4method{get_si_code}{SfnData}(object) <- value
+
+\S4method{get_site_md}{SfnData}(object) <- value
+
+\S4method{get_stand_md}{SfnData}(object) <- value
+
+\S4method{get_species_md}{SfnData}(object) <- value
+
+\S4method{get_plant_md}{SfnData}(object) <- value
+
+\S4method{get_env_md}{SfnData}(object) <- value
 }
 \description{
 Methods for replacing the slots with new data or metadata
