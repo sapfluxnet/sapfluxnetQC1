@@ -130,12 +130,16 @@ setMethod(
     # site code
     cat("Data from ", get_si_code(object), " site\n", sep = "")
     # number of trees
-    cat("Sapflow data contains ", length(names(get_sapf(object)[-1])),
-        " trees/plants\n", sep = "")
+    cat("Sapflow data:", nrow(get_sapf(object)), "observations of",
+        length(names(get_sapf(object)[-1])), "trees/plants\n")
     # env_vars
-    cat("Environmental data variables:\n",
-        paste(names(get_env(object)[-1])),
-        "\n", sep = " ")
+    cat("Environmental data:", nrow(get_env(object)), "observations.\n",
+        "Env vars:", paste(names(get_env(object)[-1])))
+
+    # cat("Environmental data variables included:\n",
+    #     paste(names(get_env(object)[-1])),
+    #     "\n", sep = " ")
+    # cat("With ", nrow(get_env(object)), " observations.\n")
   }
 )
 
@@ -293,3 +297,41 @@ setReplaceMethod(
   }
 )
 
+#' Validity method for SfnData class
+#'
+#' @name sfn_validity
+setValidity(
+  "SfnData",
+  function(object) {
+    # initial values
+    info <- NULL
+    valid <- TRUE
+
+    # check timestamp variable
+    if (is.null(get_sapf(object)$TIMESTAMP) | is.null(get_env(object)$TIMESTAMP)) {
+      valid <- FALSE
+      info <- c(info, 'No TIMESTAMP variable in sapf or env slots')
+    }
+
+    # check if si_code is empty
+    if (get_si_code(object) == '') {
+      valid <- FALSE
+      info <- c(info, 'si_code slot can not be an empty string')
+    }
+
+    # check for metadata presence
+    if (any(nrow(get_site_md(object)) < 1, nrow(get_stand_md(object)) < 1,
+            nrow(get_species_md(object)) < 1, nrow(get_plant_md(object)) < 1,
+            nrow(get_env_md(object)) < 1)) {
+      valid <- FALSE
+      info <- c(info, 'metadata slots can not be empty data frames')
+    }
+
+    # check for...
+
+    # return validity or info
+    if (valid) {
+      return(TRUE)
+    } else { return(info) }
+  }
+)
