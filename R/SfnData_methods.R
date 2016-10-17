@@ -341,7 +341,7 @@ setValidity(
       length(get_timestamp(object)) != length(get_si_code(object))
     )) {
       valid <- FALSE
-      info <- c(info, 'dimensions are incorrect')
+      info <- c(info, 'dimensions are incorrect, they must fulfill "nrow(sapf_data) == nrow(env_data) == length(timestamp) == length(si_code)"')
     }
 
     # check if si_code is empty
@@ -358,7 +358,19 @@ setValidity(
       info <- c(info, 'metadata slots can not be empty data frames')
     }
 
-    # check for...
+    # check for timestamp presence
+    if (length(get_timestamp(object)) < 1) {
+      valid <- FALSE
+      info <- c(info, 'TIMESTAMP must be of length >= 1')
+    }
+
+    # check for si_code presence
+    if (length(get_si_code(object)) < 1) {
+      valid <- FALSE
+      info <- c(info, 'si_code must be of length >= 1')
+    }
+
+    # insert more checks here
 
     # return validity or info
     if (valid) {
