@@ -15,7 +15,15 @@ NULL
 setMethod(
   "get_sapf", "SfnData",
   function(object) {
-    slot(object, "sapf_data")
+    # data and timestamp
+    .sapf <- slot(object, "sapf_data")
+    .timestamp <- slot(object, "timestamp")
+
+    # combining both
+    res <- cbind(.timestamp, .sapf)
+
+    # return
+    return(res)
   }
 )
 
@@ -24,7 +32,15 @@ setMethod(
 setMethod(
   "get_env", "SfnData",
   function(object) {
-    slot(object, "env_data")
+    # data and timestamp
+    .env <- slot(object, "env_data")
+    .timestamp <- slot(object, "timestamp")
+
+    # combining both
+    res <- cbind(.timestamp, .env)
+
+    # return
+    return(res)
   }
 )
 
@@ -302,38 +318,41 @@ setReplaceMethod(
 #' Validity method for SfnData class
 #'
 #' @name sfn_validity
-# setValidity(
-#   "SfnData",
-#   function(object) {
-#     # initial values
-#     info <- NULL
-#     valid <- TRUE
-#
-#     # check timestamp variable
-#     if (is.null(get_sapf(object)$TIMESTAMP) | is.null(get_env(object)$TIMESTAMP)) {
-#       valid <- FALSE
-#       info <- c(info, 'No TIMESTAMP variable in sapf or env slots')
-#     }
-#
-#     # check if si_code is empty
-#     if (get_si_code(object) == '') {
-#       valid <- FALSE
-#       info <- c(info, 'si_code slot can not be an empty string')
-#     }
-#
-#     # check for metadata presence
-#     if (any(nrow(get_site_md(object)) < 1, nrow(get_stand_md(object)) < 1,
-#             nrow(get_species_md(object)) < 1, nrow(get_plant_md(object)) < 1,
-#             nrow(get_env_md(object)) < 1)) {
-#       valid <- FALSE
-#       info <- c(info, 'metadata slots can not be empty data frames')
-#     }
-#
-#     # check for...
-#
-#     # return validity or info
-#     if (valid) {
-#       return(TRUE)
-#     } else { return(info) }
-#   }
-# )
+setValidity(
+  "SfnData",
+  function(object) {
+    # initial values
+    info <- NULL
+    valid <- TRUE
+
+    # check timestamp variable
+    # if (is.null(get_sapf(object)$TIMESTAMP) | is.null(get_env(object)$TIMESTAMP)) {
+    #   valid <- FALSE
+    #   info <- c(info, 'No TIMESTAMP variable in sapf or env slots')
+    # }
+
+    # check dimensions
+    # TO DO
+
+    # check if si_code is empty
+    if (get_si_code(object) == '') {
+      valid <- FALSE
+      info <- c(info, 'si_code slot can not be an empty string')
+    }
+
+    # check for metadata presence
+    if (any(nrow(get_site_md(object)) < 1, nrow(get_stand_md(object)) < 1,
+            nrow(get_species_md(object)) < 1, nrow(get_plant_md(object)) < 1,
+            nrow(get_env_md(object)) < 1)) {
+      valid <- FALSE
+      info <- c(info, 'metadata slots can not be empty data frames')
+    }
+
+    # check for...
+
+    # return validity or info
+    if (valid) {
+      return(TRUE)
+    } else { return(info) }
+  }
+)
