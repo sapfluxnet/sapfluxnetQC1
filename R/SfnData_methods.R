@@ -140,43 +140,47 @@ setMethod(
 #' @param object SfnData object
 #'
 #' @export
-# setMethod(
-#   "[", "SfnData",
-#   function(x, i, j, k, l, drop = "missing") {
-#
-#     # subsetting the slots for subset
-#     .sapf <- slot(x, "sapf")[i, j]
-#     .env <- slot(x, "env")[k, l]
-#
-#     # if no flags, create an empty data.frame
-#     if (nrow(get_sapf_flags(x)) < 1) {
-#       .sapf_flags <- data.frame()
-#     } else {
-#       .sapf_flags <- slot(x, "sapf_flags")[i, j]
-#     }
-#
-#     if (nrow(get_env_flags(x)) < 1) {
-#       .env_flags <- data.frame()
-#     } else {
-#       .env_flags <- slot(x, "env_flags")[k, l]
-#     }
-#
-#     # create the SfnData object, the metadata slots remain without modifications
-#     # as well as si_code
-#     SfnData(
-#       sapf = .sapf,
-#       env = .env,
-#       sapf_flags = .sapf_flags,
-#       env_flags = .env_flags,
-#       si_code = slot(x, "si_code"),
-#       site_md = slot(x, "site_md"),
-#       stand_md = slot(x, "stand_md"),
-#       species_md = slot(x, "species_md"),
-#       plant_md = slot(x, "plant_md"),
-#       env_md = slot(x, "env_md")
-#     )
-#   }
-# )
+setMethod(
+  "[", "SfnData",
+  function(x, i, j, k, drop = "missing") {
+
+    # subsetting the slots for subset
+    .sapf <- slot(x, "sapf_data")[i, j]
+    .env <- slot(x, "env_data")[i, k]
+
+    # if no flags, create an empty data.frame
+    if (nrow(get_sapf_flags(x)) < 1) {
+      .sapf_flags <- data.frame()
+    } else {
+      .sapf_flags <- slot(x, "sapf_flags")[i, j]
+    }
+
+    if (nrow(get_env_flags(x)) < 1) {
+      .env_flags <- data.frame()
+    } else {
+      .env_flags <- slot(x, "env_flags")[i, k]
+    }
+
+    .timestamp <- slot(x, "timestamp")[i]
+    .si_code <- slot(x, "si_code")[i]
+
+    # create the SfnData object, the metadata slots remain without modifications
+    # as well as si_code
+    SfnData(
+      sapf = .sapf,
+      env = .env,
+      sapf_flags = .sapf_flags,
+      env_flags = .env_flags,
+      timestmap = .timestamp,
+      si_code = .si_code,
+      site_md = slot(x, "site_md"),
+      stand_md = slot(x, "stand_md"),
+      species_md = slot(x, "species_md"),
+      plant_md = slot(x, "plant_md"),
+      env_md = slot(x, "env_md")
+    )
+  }
+)
 
 #' Replacement methods
 #'
