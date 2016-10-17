@@ -143,7 +143,8 @@ setMethod(
     cat("Environmental data:", nrow(get_env(object)), "observations.\n",
         "Env vars:", paste(names(get_env(object)[-1])))
     # timestamp span
-    # TO DO
+    cat("TIMESTAMP span, from", tail(get_timestamp(object), 1),
+        "to", head(get_timestamp(object), 1))
   }
 )
 
