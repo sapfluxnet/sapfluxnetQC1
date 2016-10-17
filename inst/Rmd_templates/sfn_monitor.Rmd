@@ -781,28 +781,28 @@ Here you can:
 ### **Biomes Info**. Concerned about the climatic and biogeographic range of the data sets? Just take a look here!
 
 ```{r}
-# si_md file paths
-si_md_paths <- list.files(path = file.path('Data'),
-                           pattern = '_site_md.csv',
-                           full.names = TRUE, recursive = TRUE)
-# data frame with all site metadata
-si_biomes_df <- lapply(si_md_paths, read_csv) %>%
-  bind_rows() %>%
-  select(
-    si_code, si_lat, si_long
-    #, si_mat, si_map
-  )
-
-si_biomes_plot <-  vis_location_biome(si_biomes_df)
-
-fillCol(
-  width = '100%', flex = 1,
-  plotlyOutput('si_biomes')
-)
-
-output$si_biomes <- renderPlotly({
-  ggplotly(si_biomes_plot, tooltip = c('tooltip', 'y', 'x'))
-})
+# # si_md file paths
+# si_md_paths <- list.files(path = file.path('Data'),
+#                            pattern = '_site_md.csv',
+#                            full.names = TRUE, recursive = TRUE)
+# # data frame with all site metadata
+# si_biomes_df <- lapply(si_md_paths, read_csv) %>%
+#   bind_rows() %>%
+#   select(
+#     si_code, si_lat, si_long
+#     #, si_mat, si_map
+#   )
+# 
+# si_biomes_plot <-  vis_location_biome(si_biomes_df)
+# 
+# fillCol(
+#   width = '100%', flex = 1,
+#   plotlyOutput('si_biomes')
+# )
+# 
+# output$si_biomes <- renderPlotly({
+#   ggplotly(si_biomes_plot, tooltip = c('tooltip', 'y', 'x'))
+# })
 ```
 
 ***
@@ -812,6 +812,8 @@ Here you can:
   1. Hover the dots to obtain info from site (code, MAT and MAP).
   1. Click in the name of a biome to remove it from the plot, click it
      again to add it.
+
+  > NOTE: Biomes plot not working at the moment due to porblems in RFc package
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================
