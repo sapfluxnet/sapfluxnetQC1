@@ -8,13 +8,11 @@
 \S4method{[}{SfnData}(x, i, j, k, drop = "missing")
 }
 \arguments{
-\item{i}{sapflow data row index}
+\item{i}{data row index}
 
 \item{j}{sapflow data column index}
 
-\item{k}{env data row index}
-
-\item{l}{env data column index}
+\item{k}{env data column index}
 
 \item{object}{SfnData object}
 }

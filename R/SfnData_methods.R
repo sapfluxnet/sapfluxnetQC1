@@ -150,10 +150,9 @@ setMethod(
 
 #' Sub-setting operation
 #'
-#' @param i sapflow data row index
+#' @param i data row index
 #' @param j sapflow data column index
-#' @param k env data row index
-#' @param l env data column index
+#' @param k env data column index
 #' @param object SfnData object
 #'
 #' @export
@@ -333,7 +332,17 @@ setValidity(
     # }
 
     # check dimensions
-    # TO DO
+    if (any(
+      nrow(get_sapf(object)) != nrow(get_env(object)),
+      nrow(get_sapf(object)) != length(get_timestamp(object)),
+      nrow(get_env(object)) != length(get_timestamp(object)),
+      nrow(get_sapf(object)) != length(get_si_code(object)),
+      nrow(get_env(object)) != length(get_si_code(object)),
+      length(get_timestamp(object)) != length(get_si_code(object))
+    )) {
+      valid <- FALSE
+      info <- c(info, 'dimensions are incorrect')
+    }
 
     # check if si_code is empty
     if (get_si_code(object) == '') {
