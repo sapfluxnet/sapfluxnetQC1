@@ -11,17 +11,21 @@ An S4 class for sapfluxnet data
 \section{Slots}{
 
 \describe{
-\item{\code{sapf}}{A data frame with the sapf data}
+\item{\code{sapf_data}}{A data frame with the sapf data}
 
-\item{\code{env}}{A data frame with the env data}
+\item{\code{env_data}}{A data frame with the env data}
 
-\item{\code{sapf_flags}}{A data frame with the same dimensions of \code{sapf} with the
-flag info for each tree/TIMESTAMP combination}
+\item{\code{sapf_flags}}{A data frame with the same dimensions of \code{sapf_data}
+with the flag info for each tree/TIMESTAMP combination}
 
-\item{\code{env_flags}}{A data frame with the same dimensions of \code{env} with the
-flag info for each tree/TIMESTAMP combination}
+\item{\code{env_flags}}{A data frame with the same dimensions of \code{env_data} with
+the flag info for each env_var/TIMESTAMP combination}
 
-\item{\code{si_code}}{A character indicating the site code}
+\item{\code{si_code}}{A character vector of length \code{nrow(sapf_data)} indicating
+the site code}
+
+\item{\code{timestamp}}{A POSIXct vector of length \code{nrow(sapf_data)} with the
+timestamp}
 
 \item{\code{site_md}}{A data frame containing the site metadata}
 

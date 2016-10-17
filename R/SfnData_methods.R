@@ -15,7 +15,7 @@ NULL
 setMethod(
   "get_sapf", "SfnData",
   function(object) {
-    slot(object, "sapf")
+    slot(object, "sapf_data")
   }
 )
 
@@ -24,7 +24,7 @@ setMethod(
 setMethod(
   "get_env", "SfnData",
   function(object) {
-    slot(object, "env")
+    slot(object, "env_data")
   }
 )
 
@@ -46,23 +46,14 @@ setMethod(
   }
 )
 
-# #' @rdname sfn_get_methods
-# #' @export
-# setMethod(
-#   "get_sapf_timestamp", "SfnData",
-#   function(object) {
-#     slot(object, "sapf_timestamp")
-#   }
-# )
-
-# #' @rdname sfn_get_methods
-# #' @export
-# setMethod(
-#   "get_env_timestamp", "SfnData",
-#   function(object) {
-#     slot(object, "env_timestamp")
-#   }
-# )
+#' @rdname sfn_get_methods
+#' @export
+setMethod(
+  "get_timestamp", "SfnData",
+  function(object) {
+    slot(object, "timestamp")
+  }
+)
 
 #' @rdname sfn_get_methods
 #' @export
@@ -128,18 +119,15 @@ setMethod(
     # object class
     cat(class(object), " object\n", sep = "")
     # site code
-    cat("Data from ", get_si_code(object), " site\n", sep = "")
+    cat("Data from ", unique(get_si_code(object)), " site/s\n", sep = "")
     # number of trees
     cat("Sapflow data:", nrow(get_sapf(object)), "observations of",
         length(names(get_sapf(object)[-1])), "trees/plants\n")
     # env_vars
     cat("Environmental data:", nrow(get_env(object)), "observations.\n",
         "Env vars:", paste(names(get_env(object)[-1])))
-
-    # cat("Environmental data variables included:\n",
-    #     paste(names(get_env(object)[-1])),
-    #     "\n", sep = " ")
-    # cat("With ", nrow(get_env(object)), " observations.\n")
+    # timestamp span
+    # TO DO
   }
 )
 
@@ -152,43 +140,43 @@ setMethod(
 #' @param object SfnData object
 #'
 #' @export
-setMethod(
-  "[", "SfnData",
-  function(x, i, j, k, l, drop = "missing") {
-
-    # subsetting the slots for subset
-    .sapf <- slot(x, "sapf")[i, j]
-    .env <- slot(x, "env")[k, l]
-
-    # if no flags, create an empty data.frame
-    if (nrow(get_sapf_flags(x)) < 1) {
-      .sapf_flags <- data.frame()
-    } else {
-      .sapf_flags <- slot(x, "sapf_flags")[i, j]
-    }
-
-    if (nrow(get_env_flags(x)) < 1) {
-      .env_flags <- data.frame()
-    } else {
-      .env_flags <- slot(x, "env_flags")[k, l]
-    }
-
-    # create the SfnData object, the metadata slots remain without modifications
-    # as well as si_code
-    SfnData(
-      sapf = .sapf,
-      env = .env,
-      sapf_flags = .sapf_flags,
-      env_flags = .env_flags,
-      si_code = slot(x, "si_code"),
-      site_md = slot(x, "site_md"),
-      stand_md = slot(x, "stand_md"),
-      species_md = slot(x, "species_md"),
-      plant_md = slot(x, "plant_md"),
-      env_md = slot(x, "env_md")
-    )
-  }
-)
+# setMethod(
+#   "[", "SfnData",
+#   function(x, i, j, k, l, drop = "missing") {
+#
+#     # subsetting the slots for subset
+#     .sapf <- slot(x, "sapf")[i, j]
+#     .env <- slot(x, "env")[k, l]
+#
+#     # if no flags, create an empty data.frame
+#     if (nrow(get_sapf_flags(x)) < 1) {
+#       .sapf_flags <- data.frame()
+#     } else {
+#       .sapf_flags <- slot(x, "sapf_flags")[i, j]
+#     }
+#
+#     if (nrow(get_env_flags(x)) < 1) {
+#       .env_flags <- data.frame()
+#     } else {
+#       .env_flags <- slot(x, "env_flags")[k, l]
+#     }
+#
+#     # create the SfnData object, the metadata slots remain without modifications
+#     # as well as si_code
+#     SfnData(
+#       sapf = .sapf,
+#       env = .env,
+#       sapf_flags = .sapf_flags,
+#       env_flags = .env_flags,
+#       si_code = slot(x, "si_code"),
+#       site_md = slot(x, "site_md"),
+#       stand_md = slot(x, "stand_md"),
+#       species_md = slot(x, "species_md"),
+#       plant_md = slot(x, "plant_md"),
+#       env_md = slot(x, "env_md")
+#     )
+#   }
+# )
 
 #' Replacement methods
 #'
@@ -202,7 +190,7 @@ NULL
 setReplaceMethod(
   "get_sapf", "SfnData",
   function(object, value) {
-    slot(object, "sapf") <- value
+    slot(object, "sapf_data") <- value
     return(object)
   }
 )
@@ -212,7 +200,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_env", "SfnData",
   function(object, value) {
-    slot(object, "env") <- value
+    slot(object, "env_data") <- value
     return(object)
   }
 )
@@ -222,7 +210,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_sapf_flags", "SfnData",
   function(object, value) {
-    slot(object, "get_sapf_flags") <- value
+    slot(object, "sapf_flags") <- value
     return(object)
   }
 )
@@ -232,7 +220,17 @@ setReplaceMethod(
 setReplaceMethod(
   "get_env_flags", "SfnData",
   function(object, value) {
-    slot(object, "get_env_flags") <- value
+    slot(object, "env_flags") <- value
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_timestamp", "SfnData",
+  function(object, value) {
+    slot(object, "timestamp") <- value
     return(object)
   }
 )
@@ -242,7 +240,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_si_code", "SfnData",
   function(object, value) {
-    slot(object, "get_si_code") <- value
+    slot(object, "si_code") <- value
     return(object)
   }
 )
@@ -252,7 +250,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_site_md", "SfnData",
   function(object, value) {
-    slot(object, "get_site_md") <- value
+    slot(object, "site_md") <- value
     return(object)
   }
 )
@@ -262,7 +260,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_stand_md", "SfnData",
   function(object, value) {
-    slot(object, "get_stand_md") <- value
+    slot(object, "stand_md") <- value
     return(object)
   }
 )
@@ -272,7 +270,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_species_md", "SfnData",
   function(object, value) {
-    slot(object, "get_species_md") <- value
+    slot(object, "species_md") <- value
     return(object)
   }
 )
@@ -282,7 +280,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_plant_md", "SfnData",
   function(object, value) {
-    slot(object, "get_plant_md") <- value
+    slot(object, "plant_md") <- value
     return(object)
   }
 )
@@ -292,7 +290,7 @@ setReplaceMethod(
 setReplaceMethod(
   "get_env_md", "SfnData",
   function(object, value) {
-    slot(object, "get_env_md") <- value
+    slot(object, "env_md") <- value
     return(object)
   }
 )
@@ -300,38 +298,38 @@ setReplaceMethod(
 #' Validity method for SfnData class
 #'
 #' @name sfn_validity
-setValidity(
-  "SfnData",
-  function(object) {
-    # initial values
-    info <- NULL
-    valid <- TRUE
-
-    # check timestamp variable
-    if (is.null(get_sapf(object)$TIMESTAMP) | is.null(get_env(object)$TIMESTAMP)) {
-      valid <- FALSE
-      info <- c(info, 'No TIMESTAMP variable in sapf or env slots')
-    }
-
-    # check if si_code is empty
-    if (get_si_code(object) == '') {
-      valid <- FALSE
-      info <- c(info, 'si_code slot can not be an empty string')
-    }
-
-    # check for metadata presence
-    if (any(nrow(get_site_md(object)) < 1, nrow(get_stand_md(object)) < 1,
-            nrow(get_species_md(object)) < 1, nrow(get_plant_md(object)) < 1,
-            nrow(get_env_md(object)) < 1)) {
-      valid <- FALSE
-      info <- c(info, 'metadata slots can not be empty data frames')
-    }
-
-    # check for...
-
-    # return validity or info
-    if (valid) {
-      return(TRUE)
-    } else { return(info) }
-  }
-)
+# setValidity(
+#   "SfnData",
+#   function(object) {
+#     # initial values
+#     info <- NULL
+#     valid <- TRUE
+#
+#     # check timestamp variable
+#     if (is.null(get_sapf(object)$TIMESTAMP) | is.null(get_env(object)$TIMESTAMP)) {
+#       valid <- FALSE
+#       info <- c(info, 'No TIMESTAMP variable in sapf or env slots')
+#     }
+#
+#     # check if si_code is empty
+#     if (get_si_code(object) == '') {
+#       valid <- FALSE
+#       info <- c(info, 'si_code slot can not be an empty string')
+#     }
+#
+#     # check for metadata presence
+#     if (any(nrow(get_site_md(object)) < 1, nrow(get_stand_md(object)) < 1,
+#             nrow(get_species_md(object)) < 1, nrow(get_plant_md(object)) < 1,
+#             nrow(get_env_md(object)) < 1)) {
+#       valid <- FALSE
+#       info <- c(info, 'metadata slots can not be empty data frames')
+#     }
+#
+#     # check for...
+#
+#     # return validity or info
+#     if (valid) {
+#       return(TRUE)
+#     } else { return(info) }
+#   }
+# )

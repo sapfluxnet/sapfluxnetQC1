@@ -12,8 +12,9 @@
 \alias{get_site_md<-,SfnData-method}
 \alias{get_species_md<-,SfnData-method}
 \alias{get_stand_md<-,SfnData-method}
+\alias{get_timestamp<-,SfnData-method}
 \alias{sfn_replacement}
-\title{Replacement methods}
+\title{Sub-setting operation}
 \usage{
 \S4method{get_sapf}{SfnData}(object) <- value
 
@@ -22,6 +23,8 @@
 \S4method{get_sapf_flags}{SfnData}(object) <- value
 
 \S4method{get_env_flags}{SfnData}(object) <- value
+
+\S4method{get_timestamp}{SfnData}(object) <- value
 
 \S4method{get_si_code}{SfnData}(object) <- value
 
@@ -35,7 +38,18 @@
 
 \S4method{get_env_md}{SfnData}(object) <- value
 }
+\arguments{
+\item{object}{SfnData object}
+
+\item{i}{sapflow data row index}
+
+\item{j}{sapflow data column index}
+
+\item{k}{env data row index}
+
+\item{l}{env data column index}
+}
 \description{
-Methods for replacing the slots with new data or metadata
+Sub-setting operation
 }
 

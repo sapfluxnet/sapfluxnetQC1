@@ -11,6 +11,7 @@
 \alias{get_site_md}
 \alias{get_species_md}
 \alias{get_stand_md}
+\alias{get_timestamp}
 \alias{sfn_get_generics}
 \title{SfnData custom get generics}
 \usage{
@@ -22,6 +23,10 @@ get_sapf_flags(object, ...)
 
 get_env_flags(object, ...)
 
+get_timestamp(object, ...)
+
+get_si_code(object, ...)
+
 get_site_md(object, ...)
 
 get_stand_md(object, ...)
@@ -31,8 +36,6 @@ get_species_md(object, ...)
 get_plant_md(object, ...)
 
 get_env_md(object, ...)
-
-get_si_code(object, ...)
 }
 \description{
 Generics for getting the info in the slots of SfnData

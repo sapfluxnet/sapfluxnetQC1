@@ -12,6 +12,7 @@
 \alias{get_site_md,SfnData-method}
 \alias{get_species_md,SfnData-method}
 \alias{get_stand_md,SfnData-method}
+\alias{get_timestamp,SfnData-method}
 \alias{sfn_get_methods}
 \title{SfnData get methods}
 \usage{
@@ -22,6 +23,8 @@
 \S4method{get_sapf_flags}{SfnData}(object)
 
 \S4method{get_env_flags}{SfnData}(object)
+
+\S4method{get_timestamp}{SfnData}(object)
 
 \S4method{get_si_code}{SfnData}(object)
 

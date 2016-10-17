@@ -11,6 +11,7 @@
 \alias{get_site_md<-}
 \alias{get_species_md<-}
 \alias{get_stand_md<-}
+\alias{get_timestamp<-}
 \alias{sfn_replacement_generics}
 \title{Replacement generics}
 \usage{
@@ -21,6 +22,8 @@ get_env(object) <- value
 get_sapf_flags(object) <- value
 
 get_env_flags(object) <- value
+
+get_timestamp(object) <- value
 
 get_si_code(object) <- value
 

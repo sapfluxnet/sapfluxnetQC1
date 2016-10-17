@@ -42,23 +42,23 @@ setGeneric(
   }
 )
 
-# #' @rdname sfn_get_generics
-# #' @export
-# setGeneric(
-#   "get_sapf_timestamp",
-#   function(object, ...) {
-#     standardGeneric("get_sapf_timestamp")
-#   }
-# )
+#' @rdname sfn_get_generics
+#' @export
+setGeneric(
+  "get_timestamp",
+  function(object, ...) {
+    standardGeneric("get_timestamp")
+  }
+)
 
-# #' @rdname sfn_get_generics
-# #' @export
-# setGeneric(
-#   "get_env_timestamp",
-#   function(object, ...) {
-#     standardGeneric("get_env_timestamp")
-#   }
-# )
+#' @rdname sfn_get_generics
+#' @export
+setGeneric(
+  "get_si_code",
+  function(object, ...) {
+    standardGeneric("get_si_code")
+  }
+)
 
 #' @rdname sfn_get_generics
 #' @export
@@ -105,15 +105,6 @@ setGeneric(
   }
 )
 
-#' @rdname sfn_get_generics
-#' @export
-setGeneric(
-  "get_si_code",
-  function(object, ...) {
-    standardGeneric("get_si_code")
-  }
-)
-
 #' Replacement generics
 #'
 #' Generic functions for replacement functions for SfnData
@@ -154,6 +145,15 @@ setGeneric(
   "get_env_flags<-",
   function(object, value) {
     standardGeneric("get_env_flags<-")
+  }
+)
+
+#' @rdname sfn_replacement_generics
+#' @export
+setGeneric(
+  "get_timestamp<-",
+  function(object, value) {
+    standardGeneric("get_timestamp<-")
   }
 )
 
