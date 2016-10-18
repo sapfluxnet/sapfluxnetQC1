@@ -49,7 +49,14 @@ setMethod(
 setMethod(
   "get_sapf_flags", "SfnData",
   function(object) {
-    slot(object, "sapf_flags")
+    .sapf_flags <- slot(object, "sapf_flags")
+    .timestamp <- slot(object, "timestamp")
+
+    # combining both
+    res <- cbind(.timestamp, .sapf_flags)
+
+    # return
+    return(res)
   }
 )
 
@@ -58,7 +65,14 @@ setMethod(
 setMethod(
   "get_env_flags", "SfnData",
   function(object) {
-    slot(object, "env_flags")
+    .env_flags <- slot(object, "env_flags")
+    .timestamp <- slot(object, "timestamp")
+
+    # combining both
+    res <- cbind(.timestamp, .env_flags)
+
+    # return
+    return(res)
   }
 )
 
