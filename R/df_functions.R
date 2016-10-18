@@ -966,3 +966,121 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
                                                         'df_reset_data_status',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Create a SfnData object from results of Quality Checks
+#'
+#' This function gather all the data and metadata generated in the QC process
+#' and build an SfnData class object
+#'
+#' @family Data Flow
+#'
+#' @param sapf_data
+#'
+#' @param env_data
+#'
+#' @param site_md
+#'
+#' @param stand_md
+#'
+#' @param species_md
+#'
+#' @param plant_md
+#'
+#' @param env_md
+#'
+#' @return A SfnData object with all the data and metadata of the site
+#'
+#' @export
+
+# START
+# Function declaration
+sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
+                                 site_md = NULL, stand_md = NULL,
+                                 species_md = NULL, plant_md = NULL,
+                                 env_md = NULL) {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+
+    # STEP 1
+    # Initialising some slots
+    sapf_flags <- data.frame()
+    env_flags <- data.frame()
+
+    # STEP 2
+    # match nrow between sapf and env data, and if new rows are
+    # needed, flag them!!
+
+    ############################################################################
+    sapf_tstamp <- sapf_data_fixed %>%
+      select(TIMESTAMP)
+
+    env_tstamp <- env_data_fixed %>%
+      select(TIMESTAMP)
+
+    tstamp_join <- full_join(sapf_tstamp, env_tstamp)
+
+    new_sapf <- full_join(tstamp_join, sapf_data_fixed, "TIMESTAMP")
+
+    identical(new_sapf, sapf_data_fixed)
+
+    new_env <- full_join(tstamp_join, env_data_fixed, "TIMESTAMP")
+
+    identical(new_env, env_data_fixed)
+
+    foo <- is.na(sapf_data_fixed)
+
+    sapf_flags <- sapf_data_fixed[,-1] %>%
+      is.na() %>%
+      tibble::as_tibble() %>%
+      mutate_all(funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      mutate_all(funs(replace(., which(. == FALSE), ""))) %>%
+      mutate(TIMESTAMP = sapf_data_fixed$TIMESTAMP) %>%
+      full_join(tstamp_join, "TIMESTAMP") %>%
+      select(-TIMESTAMP) %>%
+      mutate_all(funs(replace(., which(is.na(.)), "NA_ADDED")))
+
+    env_flags <- env_data_fixed[, -1] %>%
+      is.na() %>%
+      tibble::as_tibble() %>%
+      mutate_all(funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      mutate_all(funs(replace(., which(. == FALSE), ""))) %>%
+      mutate(TIMESTAMP = env_data_fixed$TIMESTAMP) %>%
+      full_join(tstamp_join, "TIMESTAMP") %>%
+      select(-TIMESTAMP) %>%
+      mutate_all(funs(replace(., which(is.na(.)), "NA_ADDED")))
+
+    AUS_ELL_HB <- SfnData(sapf_data = new_sapf[, -1],
+                          env_data = new_env[, -1],
+                          sapf_flags = sapf_flags,
+                          env_flags = env_flags,
+                          timestamp = tstamp_join[[1]],
+                          si_code = rep(site_md$si_code, length(tstamp_join[[1]])),
+                          site_md = site_md_coordfix,
+                          stand_md = stand_md,
+                          species_md = species_md_spnames,
+                          plant_md = plant_md_spnames,
+                          env_md = env_md)
+    ############################################################################
+
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'sfn_data_constructor',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'sfn_data_constructor',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'sfn_data_constructor',
+                                                        sep = '.'))})
+}
