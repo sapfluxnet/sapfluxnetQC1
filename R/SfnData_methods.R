@@ -359,7 +359,7 @@ setValidity(
     }
 
     # check if si_code is empty
-    if (get_si_code(object) == '') {
+    if (any(get_si_code(object) == '')) {
       valid <- FALSE
       info <- c(info, 'si_code slot can not be an empty string')
     }
