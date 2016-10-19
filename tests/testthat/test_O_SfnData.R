@@ -151,20 +151,44 @@ test_that('get methods work', {
 
 test_that('assignation method works', {
   foo_sapf <- get_sapf(foo_sfndata)
+  foo_env <- get_env(foo_sfndata)
   foo_sapf[,-1] <- foo_sapf[,-1]*5
+  foo_env[,-1] <- foo_env[,-1]*5
   bar_sapf <- foo_sapf[-(1:5), -1]
+  bar_env <- foo_env[-(1:5), -1]
 
   expect_error((get_sapf(foo_sfndata) <- bar_sapf),
                'new data is not valid')
+  expect_error((get_sapf(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_sapf(foo_sfndata) <- '1'),
+               'assignment of an object of class “character” is not valid')
+  expect_error((get_env(foo_sfndata) <- bar_env),
+               'new data is not valid')
+  expect_error((get_env(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_env(foo_sfndata) <- '1'),
+               'assignment of an object of class “character” is not valid')
+  expect_error((get_sapf_flags(foo_sfndata) <- bar_sapf),
+               'new data is not valid')
+  expect_error((get_sapf_flags(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_sapf_flags(foo_sfndata) <- '1'),
+               'assignment of an object of class “character” is not valid')
+  expect_error((get_env_flags(foo_sfndata) <- bar_env),
+               'new data is not valid')
+  expect_error((get_env_flags(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_env_flags(foo_sfndata) <- '1'),
+               'assignment of an object of class “character” is not valid')
+  expect_error((get_si_code(foo_sfndata) <- 'FOO_FOO_FOO'),
+               'dimensions are incorrect')
+  expect_error((get_si_code(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_timestamp(foo_sfndata) <- '2011-06-23 21:59:59 -03'),
+               'assignment of an object of class “character” is not valid')
+  expect_error((get_timestamp(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_timestamp(foo_sfndata) <- as.POSIXct('2011-06-23 21:59:59 -03')),
+               'dimensions are incorrect')
 })
-################################################################################
-# cleaning
-# unlink('FakeData', recursive = TRUE)
-# unlink('received_data', recursive = TRUE)
-# unlink('Data', recursive = TRUE)
-# unlink('Logs', recursive = TRUE)
-# unlink('Reports', recursive = TRUE)
-# unlink('Templates', recursive = TRUE)
-# unlink('ESP_adm0.rds')
-
-

@@ -436,7 +436,16 @@ setValidity(
       nrow(slot(object, "env_data")) != length(slot(object, "timestamp")),
       nrow(slot(object, "sapf_data")) != length(slot(object, "si_code")),
       nrow(slot(object, "env_data")) != length(slot(object, "si_code")),
-      length(slot(object, "timestamp")) != length(slot(object, "si_code"))
+      length(slot(object, "timestamp")) != length(slot(object, "si_code")),
+      nrow(slot(object, "sapf_flags")) != nrow(slot(object, "sapf_data")),
+      nrow(slot(object, "sapf_flags")) != nrow(slot(object, "env_data")),
+      nrow(slot(object, "env_flags")) != nrow(slot(object, "sapf_data")),
+      nrow(slot(object, "env_flags")) != nrow(slot(object, "env_data")),
+      nrow(slot(object, "sapf_flags")) != nrow(slot(object, "env_flags")),
+      nrow(slot(object, "sapf_flags")) != length(slot(object, "timestamp")),
+      nrow(slot(object, "env_flags")) != length(slot(object, "timestamp")),
+      nrow(slot(object, "sapf_flags")) != length(slot(object, "si_code")),
+      nrow(slot(object, "env_flags")) != length(slot(object, "si_code"))
     )) {
       valid <- FALSE
       info <- c(info, 'dimensions are incorrect, they must fulfill "nrow(sapf_data) == nrow(env_data) == length(timestamp) == length(si_code)"')
