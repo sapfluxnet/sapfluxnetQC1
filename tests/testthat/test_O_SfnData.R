@@ -30,3 +30,5 @@ foo_sfndata <- SfnData(
 # unlink('Reports', recursive = TRUE)
 # unlink('Templates', recursive = TRUE)
 # unlink('ESP_adm0.rds')
+
+

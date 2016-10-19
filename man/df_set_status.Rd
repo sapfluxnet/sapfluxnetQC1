@@ -40,6 +40,7 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_received_to_accepted}},
   \code{\link{df_report_folder_creation}},
   \code{\link{df_reset_data_status}},
-  \code{\link{df_start_status}}
+  \code{\link{df_start_status}},
+  \code{\link{sfn_data_constructor}}
 }
 

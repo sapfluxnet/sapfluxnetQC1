@@ -151,14 +151,14 @@ setMethod(
     # site code
     cat("Data from ", unique(get_si_code(object)), " site/s\n", sep = "")
     # number of trees
-    cat("Sapflow data:", nrow(get_sapf(object)), "observations of",
-        length(names(get_sapf(object))), "trees/plants\n")
+    cat("Sapflow data:", nrow(slot(object, "sapf_data")), "observations of",
+        length(names(slot(object, "sapf_data"))), "trees/plants\n")
     # env_vars
-    cat("Environmental data:", nrow(get_env(object)), "observations.\n",
-        "Env vars:", paste(names(get_env(object))), "\n")
+    cat("Environmental data:", nrow(slot(object, "env_data")), "observations.\n",
+        "Env vars:", paste(names(slot(object, "env_data"))), "\n")
     # timestamp span
-    cat("TIMESTAMP span, from", tail(get_timestamp(object), 1),
-        "to", head(get_timestamp(object), 1))
+    cat("TIMESTAMP span, from", as.character(head(get_timestamp(object), 1)),
+        "to", as.character(tail(get_timestamp(object), 1)))
   }
 )
 
