@@ -998,13 +998,21 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
 sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
                                  site_md = NULL, stand_md = NULL,
                                  species_md = NULL, plant_md = NULL,
-                                 env_md = NULL) {
+                                 env_md = NULL, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
 
     # STEP 0
     # Argument checks
+    if (any(
+      !is.data.frame(sapf_data), !is.data.frame(env_data),
+      !is.data.frame(site_md), !is.data.frame(stand_md),
+      !is.data.frame(species_md), !is.data.frame(plant_md),
+      !is.data.frame(env_md)
+    )) {
+      stop('Data and/or metadata objects provided are not data.frames')
+    }
 
     # STEP 1
     # match nrow between sapf and env data, and if new rows are

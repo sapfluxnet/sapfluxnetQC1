@@ -7,20 +7,147 @@ context('O1. SfnData Class')
 load('foo_objects.RData')
 
 # build the SfnData object with foo_data
-foo_sfndata <- SfnData(
-  sapf_data = sapf_data_fixed[, -1],
-  env_data = env_data_fixed[, -1],
-  sapf_flags = data.frame(),
-  env_flags = data.frame(),
-  timestamp = sapf_data_fixed[[1]],
-  si_code = site_md$si_code,
-  site_md = site_md_coordfix,
-  stand_md = stand_md,
-  species_md = species_md_spnames,
-  plant_md = plant_md_spnames,
-  env_md = env_md
+foo_sfndata <- sfn_data_constructor(
+  sapf_data_fixed,
+  env_data_fixed,
+  site_md_coordfix,
+  stand_md,
+  species_md_spnames,
+  plant_md_spnames,
+  env_md
 )
 
+test_that('SfnData class works', {
+  expect_is(foo_sfndata, "SfnData")
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = c(1,2,3),
+      env_data = env_data_fixed,
+      site_md = site_md_coordfix,
+      stand_md = stand_md,
+      species_md = species_md_spnames,
+      plant_md = plant_md_spnames,
+      env_md = env_md
+    ),
+    'Data and/or metadata objects provided are not data.frames')
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = sapf_data_fixed,
+      env_data = c(1,2,3),
+      site_md = site_md_coordfix,
+      stand_md = stand_md,
+      species_md = species_md_spnames,
+      plant_md = plant_md_spnames,
+      env_md = env_md
+    ),
+  'Data and/or metadata objects provided are not data.frames')
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = sapf_data_fixed,
+      env_data = env_data_fixed,
+      site_md = c(1,2,3),
+      stand_md = stand_md,
+      species_md = species_md_spnames,
+      plant_md = plant_md_spnames,
+      env_md = env_md
+    ),
+    'Data and/or metadata objects provided are not data.frames')
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = sapf_data_fixed,
+      env_data = env_data_fixed,
+      site_md = site_md_coordfix,
+      stand_md = c(1,2,3),
+      species_md = species_md_spnames,
+      plant_md = plant_md_spnames,
+      env_md = env_md
+    ),
+    'Data and/or metadata objects provided are not data.frames')
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = sapf_data_fixed,
+      env_data = env_data_fixed,
+      site_md = site_md_coordfix,
+      stand_md = stand_md,
+      species_md = c(1,2,3),
+      plant_md = plant_md_spnames,
+      env_md = env_md
+    ),
+    'Data and/or metadata objects provided are not data.frames')
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = sapf_data_fixed,
+      env_data = env_data_fixed,
+      site_md = site_md_coordfix,
+      stand_md = stand_md,
+      species_md = species_md_spnames,
+      plant_md = c(1,2,3),
+      env_md = env_md
+    ),
+    'Data and/or metadata objects provided are not data.frames')
+  expect_error(
+    sfn_data_constructor(
+      sapf_data = sapf_data_fixed,
+      env_data = env_data_fixed,
+      site_md = site_md_coordfix,
+      stand_md = stand_md,
+      species_md = species_md_spnames,
+      plant_md = plant_md_spnames,
+      env_md = c(1,2,3)
+    ),
+    'Data and/or metadata objects provided are not data.frames')
+})
+
+test_that('show method works', {
+  expect_output(show(foo_sfndata), 'SfnData object')
+  expect_output(show(foo_sfndata), 'Sapflow data: 2310 observations of 5 trees/plants')
+  expect_output(show(foo_sfndata), 'Environmental data: 2310 observations.')
+  expect_output(show(foo_sfndata),
+                'TIMESTAMP span, from 2011-06-23 21:59:59 to 2011-11-24 05:00:00')
+  expect_output(show(foo_sfndata), 'Present FLAGS in data:  NA_PRESENT ')
+})
+
+test_that('subset method works', {
+  foo_subset <- foo_sfndata[1:2000, 1:3, 1:2]
+
+  expect_equal(nrow(get_sapf(foo_subset)), 2000)
+  expect_equal(nrow(get_env(foo_subset)), 2000)
+  expect_equal(length(get_timestamp(foo_subset)), 2000)
+  expect_equal(length(get_si_code(foo_subset)), 2000)
+  expect_equal(nrow(get_sapf_flags(foo_subset)), 2000)
+  expect_equal(nrow(get_env_flags(foo_subset)), 2000)
+  expect_equal(ncol(get_sapf(foo_subset)), 4)
+  expect_equal(ncol(get_env(foo_subset)), 3)
+  expect_equal(ncol(get_sapf_flags(foo_subset)), 4)
+  expect_equal(ncol(get_env_flags(foo_subset)), 3)
+  expect_identical(get_site_md(foo_subset), get_site_md(foo_sfndata))
+  expect_identical(get_stand_md(foo_subset), get_stand_md(foo_sfndata))
+  expect_identical(get_species_md(foo_subset), get_species_md(foo_sfndata))
+  expect_identical(get_plant_md(foo_subset), get_plant_md(foo_sfndata))
+  expect_identical(get_env_md(foo_subset), get_env_md(foo_sfndata))
+})
+
+test_that('get methods work', {
+  expect_is(get_sapf(foo_sfndata), 'data.frame')
+  expect_equal(ncol(get_sapf(foo_sfndata)), 6)
+  expect_equal(nrow(get_sapf(foo_sfndata)), 2310)
+  expect_is(get_env(foo_sfndata), 'data.frame')
+  expect_equal(ncol(get_env(foo_sfndata)), 5)
+  expect_equal(nrow(get_env(foo_sfndata)), 2310)
+  expect_is(get_sapf_flags(foo_sfndata), 'data.frame')
+  expect_equal(ncol(get_sapf_flags(foo_sfndata)), 6)
+  expect_equal(nrow(get_sapf_flags(foo_sfndata)), 2310)
+  expect_is(get_env_flags(foo_sfndata), 'data.frame')
+  expect_equal(ncol(get_env_flags(foo_sfndata)), 5)
+  expect_equal(nrow(get_env_flags(foo_sfndata)), 2310)
+  expect_equal(length(get_si_code(foo_sfndata)), 2310)
+  expect_equal(length(get_timestamp(foo_sfndata)), 2310)
+  expect_is(get_site_md(foo_sfndata), 'data.frame')
+  expect_is(get_stand_md(foo_sfndata), 'data.frame')
+  expect_is(get_species_md(foo_sfndata), 'data.frame')
+  expect_is(get_plant_md(foo_sfndata), 'data.frame')
+  expect_is(get_env_md(foo_sfndata), 'data.frame')
+})
 ################################################################################
 # cleaning
 # unlink('FakeData', recursive = TRUE)
