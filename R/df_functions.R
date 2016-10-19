@@ -1007,67 +1007,57 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
     # Argument checks
 
     # STEP 1
-    # Initialising some slots
-    sapf_flags <- data.frame()
-    env_flags <- data.frame()
-
-    # STEP 2
     # match nrow between sapf and env data, and if new rows are
     # needed, flag them!!
 
-    ############################################################################
-    sapf_tstamp <- sapf_data_fixed %>%
-      select(TIMESTAMP)
+    # 1.1 New timestamp with the full join of sapf and env
+    sapf_timestamp <- sapf_data %>% dplyr::select(TIMESTAMP)
+    env_timestamp <- env_data %>% dplyr::select(TIMESTAMP)
+    timestamp_join <- dplyr::full_join(sapf_timestamp, env_timestamp)
 
-    env_tstamp <- env_data_fixed %>%
-      select(TIMESTAMP)
+    # 1.2 Data with the new timestamp and NAs where the rows are added
+    .sapf_data <- dplyr::full_join(timestamp_join, sapf_data, "TIMESTAMP")
+    .env_data <- dplyr::full_join(timestamp_join, env_data, "TIMESTAMP")
 
-    tstamp_join <- full_join(sapf_tstamp, env_tstamp)
-
-    new_sapf <- full_join(tstamp_join, sapf_data_fixed, "TIMESTAMP")
-
-    identical(new_sapf, sapf_data_fixed)
-
-    new_env <- full_join(tstamp_join, env_data_fixed, "TIMESTAMP")
-
-    identical(new_env, env_data_fixed)
-
-    foo <- is.na(sapf_data_fixed)
-
-    sapf_flags <- sapf_data_fixed[,-1] %>%
+    # 1.3 flags indicating the pre-existent NAs and the new added NAs
+    .sapf_flags <- sapf_data[,-1] %>%
       is.na() %>%
       tibble::as_tibble() %>%
-      mutate_all(funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
-      mutate_all(funs(replace(., which(. == FALSE), ""))) %>%
-      mutate(TIMESTAMP = sapf_data_fixed$TIMESTAMP) %>%
-      full_join(tstamp_join, "TIMESTAMP") %>%
-      select(-TIMESTAMP) %>%
-      mutate_all(funs(replace(., which(is.na(.)), "NA_ADDED")))
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
+      dplyr::mutate(TIMESTAMP = sapf_data$TIMESTAMP) %>%
+      dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
+      dplyr::select(-TIMESTAMP) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
 
-    env_flags <- env_data_fixed[, -1] %>%
+    .env_flags <- env_data[,-1] %>%
       is.na() %>%
       tibble::as_tibble() %>%
-      mutate_all(funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
-      mutate_all(funs(replace(., which(. == FALSE), ""))) %>%
-      mutate(TIMESTAMP = env_data_fixed$TIMESTAMP) %>%
-      full_join(tstamp_join, "TIMESTAMP") %>%
-      select(-TIMESTAMP) %>%
-      mutate_all(funs(replace(., which(is.na(.)), "NA_ADDED")))
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
+      dplyr::mutate(TIMESTAMP = env_data$TIMESTAMP) %>%
+      dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
+      dplyr::select(-TIMESTAMP) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
 
-    AUS_ELL_HB <- SfnData(sapf_data = new_sapf[, -1],
-                          env_data = new_env[, -1],
-                          sapf_flags = sapf_flags,
-                          env_flags = env_flags,
-                          timestamp = tstamp_join[[1]],
-                          si_code = rep(site_md$si_code, length(tstamp_join[[1]])),
-                          site_md = site_md_coordfix,
-                          stand_md = stand_md,
-                          species_md = species_md_spnames,
-                          plant_md = plant_md_spnames,
-                          env_md = env_md)
-    ############################################################################
+    # STEP 2
+    # Build the SfnData object and return it
+    res <- SfnData(
+      sapf_data = .sapf_data[, -1],
+      env_data = .env_data[, -1],
+      sapf_flags = .sapf_flags,
+      env_flags = .env_flags,
+      timestamp = timestamp_join[[1]],
+      si_code = rep(site_md$si_code, length(timestamp_join[[1]])),
+      site_md = site_md,
+      stand_md = stand_md,
+      species_md = species_md,
+      plant_md = plant_md,
+      env_md = env_md
+    )
 
-
+    # 2.1 Return it!!
+    return(res)
   },
 
   # handlers

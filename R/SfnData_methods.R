@@ -158,7 +158,14 @@ setMethod(
         "Env vars:", paste(names(slot(object, "env_data"))), "\n")
     # timestamp span
     cat("TIMESTAMP span, from", as.character(head(get_timestamp(object), 1)),
-        "to", as.character(tail(get_timestamp(object), 1)))
+        "to", as.character(tail(get_timestamp(object), 1)), "\n")
+    # flags info
+    unique_flags <- unique(c(unique(unlist(lapply(slot(object, "sapf_flags"),
+                                                  unique))),
+                             unique(unlist(lapply(slot(object, "env_flags"),
+                                                  unique)))))
+
+    cat("Present FLAGS in data:", unique_flags, "\n")
   }
 )
 
@@ -197,11 +204,11 @@ setMethod(
     # create the SfnData object, the metadata slots remain without modifications
     # as well as si_code
     SfnData(
-      sapf = .sapf,
-      env = .env,
+      sapf_data = .sapf,
+      env_data = .env,
       sapf_flags = .sapf_flags,
       env_flags = .env_flags,
-      timestmap = .timestamp,
+      timestamp = .timestamp,
       si_code = .si_code,
       site_md = slot(x, "site_md"),
       stand_md = slot(x, "stand_md"),
