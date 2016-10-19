@@ -232,6 +232,13 @@ setReplaceMethod(
   "get_sapf", "SfnData",
   function(object, value) {
     slot(object, "sapf_data") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -242,6 +249,13 @@ setReplaceMethod(
   "get_env", "SfnData",
   function(object, value) {
     slot(object, "env_data") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -252,6 +266,13 @@ setReplaceMethod(
   "get_sapf_flags", "SfnData",
   function(object, value) {
     slot(object, "sapf_flags") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -262,6 +283,13 @@ setReplaceMethod(
   "get_env_flags", "SfnData",
   function(object, value) {
     slot(object, "env_flags") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -272,6 +300,13 @@ setReplaceMethod(
   "get_timestamp", "SfnData",
   function(object, value) {
     slot(object, "timestamp") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -282,6 +317,13 @@ setReplaceMethod(
   "get_si_code", "SfnData",
   function(object, value) {
     slot(object, "si_code") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -292,6 +334,13 @@ setReplaceMethod(
   "get_site_md", "SfnData",
   function(object, value) {
     slot(object, "site_md") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -302,6 +351,13 @@ setReplaceMethod(
   "get_stand_md", "SfnData",
   function(object, value) {
     slot(object, "stand_md") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -312,6 +368,13 @@ setReplaceMethod(
   "get_species_md", "SfnData",
   function(object, value) {
     slot(object, "species_md") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -322,6 +385,13 @@ setReplaceMethod(
   "get_plant_md", "SfnData",
   function(object, value) {
     slot(object, "plant_md") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -332,6 +402,13 @@ setReplaceMethod(
   "get_env_md", "SfnData",
   function(object, value) {
     slot(object, "env_md") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
     return(object)
   }
 )
@@ -354,39 +431,39 @@ setValidity(
 
     # check dimensions
     if (any(
-      nrow(get_sapf(object)) != nrow(get_env(object)),
-      nrow(get_sapf(object)) != length(get_timestamp(object)),
-      nrow(get_env(object)) != length(get_timestamp(object)),
-      nrow(get_sapf(object)) != length(get_si_code(object)),
-      nrow(get_env(object)) != length(get_si_code(object)),
-      length(get_timestamp(object)) != length(get_si_code(object))
+      nrow(slot(object, "sapf_data")) != nrow(slot(object, "env_data")),
+      nrow(slot(object, "sapf_data")) != length(slot(object, "timestamp")),
+      nrow(slot(object, "env_data")) != length(slot(object, "timestamp")),
+      nrow(slot(object, "sapf_data")) != length(slot(object, "si_code")),
+      nrow(slot(object, "env_data")) != length(slot(object, "si_code")),
+      length(slot(object, "timestamp")) != length(slot(object, "si_code"))
     )) {
       valid <- FALSE
       info <- c(info, 'dimensions are incorrect, they must fulfill "nrow(sapf_data) == nrow(env_data) == length(timestamp) == length(si_code)"')
     }
 
     # check if si_code is empty
-    if (any(get_si_code(object) == '')) {
+    if (any(slot(object, "si_code") == '')) {
       valid <- FALSE
       info <- c(info, 'si_code slot can not be an empty string')
     }
 
     # check for metadata presence
-    if (any(nrow(get_site_md(object)) < 1, nrow(get_stand_md(object)) < 1,
-            nrow(get_species_md(object)) < 1, nrow(get_plant_md(object)) < 1,
-            nrow(get_env_md(object)) < 1)) {
+    if (any(nrow(slot(object, "site_md")) < 1, nrow(slot(object, "stand_md")) < 1,
+            nrow(slot(object, "species_md")) < 1, nrow(slot(object, "plant_md")) < 1,
+            nrow(slot(object, "env_md")) < 1)) {
       valid <- FALSE
       info <- c(info, 'metadata slots can not be empty data frames')
     }
 
     # check for timestamp presence
-    if (length(get_timestamp(object)) < 1) {
+    if (length(slot(object, "timestamp")) < 1) {
       valid <- FALSE
       info <- c(info, 'TIMESTAMP must be of length >= 1')
     }
 
     # check for si_code presence
-    if (length(get_si_code(object)) < 1) {
+    if (length(slot(object, "si_code")) < 1) {
       valid <- FALSE
       info <- c(info, 'si_code must be of length >= 1')
     }

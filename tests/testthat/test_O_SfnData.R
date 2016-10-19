@@ -148,6 +148,15 @@ test_that('get methods work', {
   expect_is(get_plant_md(foo_sfndata), 'data.frame')
   expect_is(get_env_md(foo_sfndata), 'data.frame')
 })
+
+test_that('assignation method works', {
+  foo_sapf <- get_sapf(foo_sfndata)
+  foo_sapf[,-1] <- foo_sapf[,-1]*5
+  bar_sapf <- foo_sapf[-(1:5), -1]
+
+  expect_error((get_sapf(foo_sfndata) <- bar_sapf),
+               'new data is not valid')
+})
 ################################################################################
 # cleaning
 # unlink('FakeData', recursive = TRUE)
