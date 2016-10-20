@@ -38,7 +38,18 @@
 
 \S4method{get_env_md}{SfnData}(object) <- value
 }
+\value{
+The same SfnData object with the corresponding slot changed to the
+  value provided. An error if the value provided generates an invalid
+  SfnData object.
+}
 \description{
 Methods for replacing the slots with new data or metadata
+}
+\details{
+The replacement object must be a valid object for that slot, i.e. for sapflow
+data slot a data frame with the same dimensions and without TIMESTAMP variable
+is needed. A validity check is done before returning the replaced SfnData
+object and an error is returned if this check fails.
 }
 

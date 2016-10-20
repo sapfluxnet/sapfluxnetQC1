@@ -19,8 +19,6 @@
 #'
 #' @param object Object of class SfnData from which data is retrieved
 #'
-#' @param ... Further arguments to pass on to methods
-#'
 #' @name sfn_get_methods
 #' @include SfnData_class.R SfnData_generics.R
 NULL
@@ -237,6 +235,15 @@ setMethod(
 #' Replacement methods
 #'
 #' Methods for replacing the slots with new data or metadata
+#'
+#' The replacement object must be a valid object for that slot, i.e. for sapflow
+#' data slot a data frame with the same dimensions and without TIMESTAMP variable
+#' is needed. A validity check is done before returning the replaced SfnData
+#' object and an error is returned if this check fails.
+#'
+#' @return The same SfnData object with the corresponding slot changed to the
+#'   value provided. An error if the value provided generates an invalid
+#'   SfnData object.
 #'
 #' @name sfn_replacement
 NULL

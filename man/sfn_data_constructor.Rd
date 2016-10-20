@@ -35,8 +35,8 @@ and build an SfnData class object
 all relevant data and metadata for a site. Sapflow and environmental data
 are converted to the same timestamp span and added rows are flagged as
 \code{NA_ADDED}. Original NAs are also flagged as \code{NA_PRESENT}. For
-info about the available slots see \code{\link{SfnData}} and
-\code{\link{sfn_get_methods}}.
+info about the available slots see \code{\link{SfnData}},
+\code{\link{sfn_get_methods}} and \code{\link{sfn_replacement}}
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},

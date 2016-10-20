@@ -40,8 +40,6 @@
 }
 \arguments{
 \item{object}{Object of class SfnData from which data is retrieved}
-
-\item{...}{Further arguments to pass on to methods}
 }
 \description{
 Methods to get the info from the SfnData class slots
