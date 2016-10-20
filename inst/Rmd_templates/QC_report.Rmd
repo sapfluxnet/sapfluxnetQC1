@@ -757,10 +757,23 @@ df_accepted_to_lvl1(
           env_md, parent_logger = 'DataFlow', rdata = params$rdata
         )
 
-# saving Rdata object to use it in shiny apps
+# saving Rdata file with all the objects (just in case)
 save(list = ls(all.names = TRUE),
      file = file.path('Data', params$code, 'Lvl_1',
                             paste(params$code, 'objects.RData', sep = '_')),
+     envir = environment())
+
+# create the SfnData object and save it as a RData file for later use
+sfn_data_object <- sfn_data_constructor(
+  sapf_data = sapf_data_fixed, env_data = env_data_fixed,
+  site_md = site_md_coordfix, stand_md = stand_md, plant_md = plant_md,
+  species_md = species_md, env_md = env_md
+)
+
+assign(params$code, sfn_data_object)
+save(list = c(params$code),
+     file = file.path('Data', params$code, 'Lvl_1',
+                      paste(params$code, '.RData', sep = '')),
      envir = environment())
 ```
 
