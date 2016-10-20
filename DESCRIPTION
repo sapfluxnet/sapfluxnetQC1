@@ -1,7 +1,7 @@
 Package: sapfluxnetr
 Type: Package
 Title: Package with functions related to sapfluxnet project data
-Version: 0.0.7
+Version: 0.0.8
 Authors@R: c(
     person("Victor", "Granda", email = "v.granda@creaf.uab.cat", role = c("aut", "cre")),
     person("Guillem", "Bagaria", email = "g.bagaria@creaf.uab.cat", role = c("aut")),
