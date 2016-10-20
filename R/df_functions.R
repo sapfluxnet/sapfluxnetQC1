@@ -973,21 +973,28 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
 #' This function gather all the data and metadata generated in the QC process
 #' and build an SfnData class object
 #'
+#' \code{sfn_data_constructor} function generates a SfnData object containing
+#' all relevant data and metadata for a site. Sapflow and environmental data
+#' are converted to the same timestamp span and added rows are flagged as
+#' \code{NA_ADDED}. Original NAs are also flagged as \code{NA_PRESENT}. For
+#' info about the available slots see \code{\link{SfnData}} and
+#' \code{\link{sfn_get_methods}}.
+#'
 #' @family Data Flow
 #'
-#' @param sapf_data
+#' @param sapf_data Data frame with sapflow data after QC process
 #'
-#' @param env_data
+#' @param env_data Data frame with environmental data after QC process
 #'
-#' @param site_md
+#' @param site_md Data frame with the site metadata after QC process
 #'
-#' @param stand_md
+#' @param stand_md Data frame with the stand metadata after QC process
 #'
-#' @param species_md
+#' @param species_md Data frame with the species metadata after QC process
 #'
-#' @param plant_md
+#' @param plant_md Data frame with the plant metadata after QC process
 #'
-#' @param env_md
+#' @param env_md Data frame with the environmental after QC process
 #'
 #' @return A SfnData object with all the data and metadata of the site
 #'

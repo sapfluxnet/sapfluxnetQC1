@@ -9,19 +9,19 @@ sfn_data_constructor(sapf_data = NULL, env_data = NULL, site_md = NULL,
   parent_logger = "test")
 }
 \arguments{
-\item{sapf_data}{}
+\item{sapf_data}{Data frame with sapflow data after QC process}
 
-\item{env_data}{}
+\item{env_data}{Data frame with environmental data after QC process}
 
-\item{site_md}{}
+\item{site_md}{Data frame with the site metadata after QC process}
 
-\item{stand_md}{}
+\item{stand_md}{Data frame with the stand metadata after QC process}
 
-\item{species_md}{}
+\item{species_md}{Data frame with the species metadata after QC process}
 
-\item{plant_md}{}
+\item{plant_md}{Data frame with the plant metadata after QC process}
 
-\item{env_md}{}
+\item{env_md}{Data frame with the environmental after QC process}
 }
 \value{
 A SfnData object with all the data and metadata of the site
@@ -29,6 +29,14 @@ A SfnData object with all the data and metadata of the site
 \description{
 This function gather all the data and metadata generated in the QC process
 and build an SfnData class object
+}
+\details{
+\code{sfn_data_constructor} function generates a SfnData object containing
+all relevant data and metadata for a site. Sapflow and environmental data
+are converted to the same timestamp span and added rows are flagged as
+\code{NA_ADDED}. Original NAs are also flagged as \code{NA_PRESENT}. For
+info about the available slots see \code{\link{SfnData}} and
+\code{\link{sfn_get_methods}}.
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},

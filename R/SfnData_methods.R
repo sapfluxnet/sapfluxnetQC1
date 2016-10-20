@@ -2,6 +2,21 @@
 #'
 #' Methods to get the info from the SfnData class slots
 #'
+#' \code{get_sapf} and \code{get_env} methods retrieve sapflow or environmental
+#' data and timestamp to create a functional dataset to work with.
+#'
+#' \code{get_sapf_flags} and \code{get_env_flags} methods retrieve sapflow or
+#' environmental flags also with the timestamp.
+#'
+#' \code{get_timestamp} method retrieve only the timestamp as POSIXct vector.
+#'
+#' \code{get_si_code} method retrieve a character vector with length(timestamp)
+#' containing the site code.
+#'
+#' \code{get_site_md}, \code{get_stand_md}, \code{get_species_md},
+#' \code{get_plant_md} and \code{get_env_md} methods retrieve the corresponding
+#' metadata.
+#'
 #' @param object Object of class SfnData from which data is retrieved
 #'
 #' @param ... Further arguments to pass on to methods
