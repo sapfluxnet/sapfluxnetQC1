@@ -966,3 +966,126 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
                                                         'df_reset_data_status',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Create a SfnData object from results of Quality Checks
+#'
+#' This function gather all the data and metadata generated in the QC process
+#' and build an SfnData class object
+#'
+#' \code{sfn_data_constructor} function generates a SfnData object containing
+#' all relevant data and metadata for a site. Sapflow and environmental data
+#' are converted to the same timestamp span and added rows are flagged as
+#' \code{NA_ADDED}. Original NAs are also flagged as \code{NA_PRESENT}. For
+#' info about the available slots see \code{\link{SfnData}},
+#' \code{\link{sfn_get_methods}} and \code{\link{sfn_replacement}}
+#'
+#' @family Data Flow
+#'
+#' @param sapf_data Data frame with sapflow data after QC process
+#'
+#' @param env_data Data frame with environmental data after QC process
+#'
+#' @param site_md Data frame with the site metadata after QC process
+#'
+#' @param stand_md Data frame with the stand metadata after QC process
+#'
+#' @param species_md Data frame with the species metadata after QC process
+#'
+#' @param plant_md Data frame with the plant metadata after QC process
+#'
+#' @param env_md Data frame with the environmental after QC process
+#'
+#' @return A SfnData object with all the data and metadata of the site
+#'
+#' @export
+
+# START
+# Function declaration
+sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
+                                 site_md = NULL, stand_md = NULL,
+                                 species_md = NULL, plant_md = NULL,
+                                 env_md = NULL, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (any(
+      !is.data.frame(sapf_data), !is.data.frame(env_data),
+      !is.data.frame(site_md), !is.data.frame(stand_md),
+      !is.data.frame(species_md), !is.data.frame(plant_md),
+      !is.data.frame(env_md)
+    )) {
+      stop('Data and/or metadata objects provided are not data.frames')
+    }
+
+    # STEP 1
+    # match nrow between sapf and env data, and if new rows are
+    # needed, flag them!!
+
+    # 1.1 New timestamp with the full join of sapf and env
+    sapf_timestamp <- sapf_data %>% dplyr::select(TIMESTAMP)
+    env_timestamp <- env_data %>% dplyr::select(TIMESTAMP)
+    timestamp_join <- dplyr::full_join(sapf_timestamp, env_timestamp)
+
+    # 1.2 Data with the new timestamp and NAs where the rows are added
+    .sapf_data <- dplyr::full_join(timestamp_join, sapf_data, "TIMESTAMP")
+    .env_data <- dplyr::full_join(timestamp_join, env_data, "TIMESTAMP")
+
+    # 1.3 flags indicating the pre-existent NAs and the new added NAs
+    .sapf_flags <- sapf_data[,-1] %>%
+      is.na() %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
+      dplyr::mutate(TIMESTAMP = sapf_data$TIMESTAMP) %>%
+      dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
+      dplyr::select(-TIMESTAMP) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
+
+    .env_flags <- env_data[,-1] %>%
+      is.na() %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
+      dplyr::mutate(TIMESTAMP = env_data$TIMESTAMP) %>%
+      dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
+      dplyr::select(-TIMESTAMP) %>%
+      dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
+
+    # STEP 2
+    # Build the SfnData object and return it
+    res <- SfnData(
+      sapf_data = .sapf_data[, -1],
+      env_data = .env_data[, -1],
+      sapf_flags = .sapf_flags,
+      env_flags = .env_flags,
+      timestamp = timestamp_join[[1]],
+      si_code = rep(site_md$si_code, length(timestamp_join[[1]])),
+      site_md = site_md,
+      stand_md = stand_md,
+      species_md = species_md,
+      plant_md = plant_md,
+      env_md = env_md
+    )
+
+    # 2.1 Return it!!
+    return(res)
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'sfn_data_constructor',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'sfn_data_constructor',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'sfn_data_constructor',
+                                                        sep = '.'))})
+}

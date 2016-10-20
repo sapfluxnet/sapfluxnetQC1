@@ -6,7 +6,8 @@ Authors@R: c(
     person("Victor", "Granda", email = "v.granda@creaf.uab.cat", role = c("aut", "cre")),
     person("Guillem", "Bagaria", email = "g.bagaria@creaf.uab.cat", role = c("aut")),
     person("Marie", "Sirot", email = "marie_sirot@hotmail.fr", role = c("ctb")))
-Description: Functions to make easy, reproducible and semiautomatized quality checks of submmited data
+Description: Functions to make easy, reproducible and semiautomatized quality
+    checks of submmited data
 License: What license is it under?
 LazyData: TRUE
 RoxygenNote: 5.0.1
@@ -39,3 +40,23 @@ Suggests:
     testthat,
     rmarkdown
 VignetteBuilder: knitr
+Collate:
+    'SfnData_class.R'
+    'SfnData_generics.R'
+    'SfnData_methods.R'
+    'df_functions.R'
+    'dl_data_loading_functions.R'
+    'log_functions.R'
+    'qc_coordinates_functions.R'
+    'qc_data_general_checks.R'
+    'qc_gaps_functions.R'
+    'qc_gaps_functions_eff.R'
+    'qc_main.R'
+    'qc_md_general_checks.R'
+    'qc_numerical_metadata_functions.R'
+    'qc_plant_functions.R'
+    'qc_sitemd_checks.R'
+    'qc_species_functions.R'
+    'qc_unit_transformations.R'
+    'rep_functions.R'
+    'vis_functions.R'
