@@ -30,10 +30,10 @@ setMethod(
   function(object) {
     # data and timestamp
     .sapf <- slot(object, "sapf_data")
-    .timestamp <- slot(object, "timestamp")
+    TIMESTAMP <- slot(object, "timestamp")
 
     # combining both
-    res <- cbind(.timestamp, .sapf)
+    res <- cbind(TIMESTAMP, .sapf)
 
     # return
     return(res)
@@ -47,10 +47,10 @@ setMethod(
   function(object) {
     # data and timestamp
     .env <- slot(object, "env_data")
-    .timestamp <- slot(object, "timestamp")
+    TIMESTAMP <- slot(object, "timestamp")
 
     # combining both
-    res <- cbind(.timestamp, .env)
+    res <- cbind(TIMESTAMP, .env)
 
     # return
     return(res)
@@ -63,10 +63,10 @@ setMethod(
   "get_sapf_flags", "SfnData",
   function(object) {
     .sapf_flags <- slot(object, "sapf_flags")
-    .timestamp <- slot(object, "timestamp")
+    TIMESTAMP <- slot(object, "timestamp")
 
     # combining both
-    res <- cbind(.timestamp, .sapf_flags)
+    res <- cbind(TIMESTAMP, .sapf_flags)
 
     # return
     return(res)
@@ -79,10 +79,10 @@ setMethod(
   "get_env_flags", "SfnData",
   function(object) {
     .env_flags <- slot(object, "env_flags")
-    .timestamp <- slot(object, "timestamp")
+    TIMESTAMP <- slot(object, "timestamp")
 
     # combining both
-    res <- cbind(.timestamp, .env_flags)
+    res <- cbind(TIMESTAMP, .env_flags)
 
     # return
     return(res)
@@ -211,7 +211,7 @@ setMethod(
       .env_flags <- slot(x, "env_flags")[i, k]
     }
 
-    .timestamp <- slot(x, "timestamp")[i]
+    TIMESTAMP <- slot(x, "timestamp")[i]
     .si_code <- slot(x, "si_code")[i]
 
     # create the SfnData object, the metadata slots remain without modifications
@@ -221,7 +221,7 @@ setMethod(
       env_data = .env,
       sapf_flags = .sapf_flags,
       env_flags = .env_flags,
-      timestamp = .timestamp,
+      timestamp = TIMESTAMP,
       si_code = .si_code,
       site_md = slot(x, "site_md"),
       stand_md = slot(x, "stand_md"),
