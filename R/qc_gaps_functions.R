@@ -108,13 +108,19 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
     # Build the results data frame
     res_df <- data.frame(
       Object = id,
-      gap_start = as.POSIXct(start, origin = lubridate::origin),
-      gap_end = as.POSIXct(end, origin = lubridate::origin),
+      gap_start = as.POSIXct(start, origin = lubridate::origin,
+                             tz = attr(data$TIMESTAMP, 'tzone')),
+      gap_end = as.POSIXct(end, origin = lubridate::origin,
+                           tz = attr(data$TIMESTAMP, 'tzone')),
       stringsAsFactors = FALSE
     )
 
-    timestamp_interval <- lubridate::int_length(lubridate::interval(data$TIMESTAMP[[1]],
-                                                                    data$TIMESTAMP[[length(data$TIMESTAMP)]]))/60
+    timestamp_interval <- lubridate::int_length(
+      lubridate::interval(
+        data$TIMESTAMP[[1]],
+        data$TIMESTAMP[[length(data$TIMESTAMP)]]
+      )
+    )/60
 
     res <- res_df %>%
       # interval in minutes
