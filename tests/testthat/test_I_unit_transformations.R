@@ -427,3 +427,36 @@ test_data_res <- qc_soil_texture(test_data_texture)
 test_that('Category chosen by the function is correct', {
   expect_equivalent(test_data_res$st_USDA_soil_texture, 'sand')
 })
+
+################################################################################
+
+context('I6. qc_transformation_vars')
+
+test_that('results are ok', {
+  load('FOO.RData')
+  transf_vars_info <- qc_transformation_vars(FOO)
+
+  expect_is(transf_vars_info, 'data.frame')
+  expect_false(transf_vars_info$Presence[1])
+  expect_false(transf_vars_info$Presence[8])
+  expect_equal(sum(transf_vars_info$Presence == TRUE), 6)
+
+  get_plant_md(FOO)$pl_sap_units <- NA
+  transf_vars_info <- qc_transformation_vars(FOO)
+
+  expect_is(transf_vars_info, 'data.frame')
+  expect_false(transf_vars_info$Presence[1])
+  expect_false(transf_vars_info$Presence[8])
+  expect_false(transf_vars_info$Presence[6])
+  expect_equal(sum(transf_vars_info$Presence == TRUE), 5)
+
+  get_plant_md(FOO)$pl_sapw_area <- c(77.06, NA, 391.30)
+  transf_vars_info <- qc_transformation_vars(FOO)
+
+  expect_is(transf_vars_info, 'data.frame')
+  expect_false(transf_vars_info$Presence[1])
+  expect_false(transf_vars_info$Presence[8])
+  expect_false(transf_vars_info$Presence[6])
+  expect_true(transf_vars_info$Presence[7])
+  expect_equal(sum(transf_vars_info$Presence == TRUE), 5)
+})

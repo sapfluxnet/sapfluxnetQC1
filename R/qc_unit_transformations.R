@@ -1451,3 +1451,109 @@ qc_soil_texture <- function(data, parent_logger = 'test') {
                                          logger = paste(parent_logger,
                                                         'qc_soil_texture', sep = '.'))})
 }
+
+################################################################################
+#' Presence of variables needed for transformations summary
+#'
+#' Summary table for variables needed for unit and any other kind of conversions
+#'
+#' This function generates a table (data frame) with information about the
+#' presence of the variables needed for unit, radiation, solar time and others
+#' data transformations/conversions.
+#'
+#' @family Unit conversion
+#'
+#' @param sfndata SfnData object for the site containing all the information
+#'
+#' @return A data frame with the following columns:
+#'
+#'   \itemize{
+#'     \item{Variable: Variable name}
+#'     \item{Location: Variable location (i.e. env_data or env_md)}
+#'     \item{Trasformation: Tranformation/Conversion for whihc the variable is needed}
+#'     \item{Presence: Logical indicating if the variable is present}
+#'   }
+#'
+#' @export
+
+# START
+# Function declaration
+qc_transformation_vars <- function(sfndata, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Checking arguments
+    # Is sfndata a SfnData object?
+    if (!is(sfndata, "SfnData")) {
+      stop('Data provided is not a SfnData object')
+    }
+
+    # STEP 1
+    # Radiation conversion
+    rad_vars <- c('sw_in', 'ppfd_in')
+    rad_loc <- rep('env_data', length(rad_vars))
+    rad_transf <- rep('radiation_conversion', length(rad_vars))
+    rad_presence <- c(
+      !is.null(get_env(sfndata)$sw_in),
+      !is.null(get_env(sfndata)$ppfd_in)
+    )
+
+    # STEP 2
+    # Extraterrestrial radiation
+    exr_vars <- c('TIMESTAMP', 'si_lat', 'si_long')
+    exr_loc <- c('env_data', 'site_md', 'site_md')
+    exr_transf <- rep('solar_time', length(exr_vars))
+    exr_presence <- c(
+      !all(is.na(get_env(sfndata)$TIMESTAMP)),
+      !all(is.na(get_site_md(sfndata)$si_lat)),
+      !all(is.na(get_site_md(sfndata)$si_long))
+    )
+
+    # STEP 3
+    # Sapflow unit transformations
+    sfu_vars <- c('pl_sap_units', 'pl_sapw_area', 'pl_leaf_area')
+    sfu_loc <- rep('plant_md', length(sfu_vars))
+    sfu_transf <- rep('sapf_units', length(sfu_vars))
+    sfu_presence <- c(
+      !all(is.na(get_plant_md(sfndata)$pl_sap_units)),
+      !all(is.na(get_plant_md(sfndata)$pl_sapw_area)),
+      !all(is.na(get_plant_md(sfndata)$pl_leaf_area))
+    )
+
+    # STEP n
+    # combining vector for each transformation in a data frame
+    vars <- c(rad_vars, exr_vars, sfu_vars)
+    loc <- c(rad_loc, exr_loc, sfu_loc)
+    transf <- c(rad_transf, exr_transf, sfu_transf)
+    presence <- c(rad_presence, exr_presence, sfu_presence)
+
+    # n.1 data frame
+    res <- data.frame(
+      Variable = vars,
+      Location = loc,
+      Transformation = transf,
+      Presence = presence,
+      stringsAsFactors = FALSE
+    )
+
+    return(res)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_transformation_vars',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_transformation_vars',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_transformation_vars',
+                                                        sep = '.'))})
+}
