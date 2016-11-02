@@ -30,7 +30,6 @@ Imports:
     yaml,
     cowplot,
     mapproj,
-    LakeMetabolizer,
     RFc,
     soiltexture,
     solaR,

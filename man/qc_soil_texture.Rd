@@ -13,7 +13,7 @@ st_soil_texture.}
 }
 \value{
 The initial data frame with a new variable 'st_USDA_soil_texture'
-which containes the soil texture if it is different from NA.
+which contains the soil texture if it is different from NA.
 }
 \description{
 Function to classify soil texture

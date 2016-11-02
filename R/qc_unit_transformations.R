@@ -1287,14 +1287,18 @@ qc_rad_conversion <- function(data, parent_logger = 'test') {
     # 1.3 If only sw_in appears in the data frame, transformation to ppfd_in is made
     } else if ('sw_in' %in% names(data)){
 
-      ppfd_in <- LakeMetabolizer::sw.to.par.base(data$sw_in)
-      data <- cbind(data, ppfd_in)
+      # ppfd_in <- LakeMetabolizer::sw.to.par.base(data$sw_in)
+      # data <- cbind(data, ppfd_in)
+      # coefficient from Britton and Dodd (1976)
+      data$ppfd_in <- data$sw_in * 2.114
 
     # 1.3 If only ppfd_in appears in the data frame, transformation to sw_in is made
     } else if ('ppfd_in' %in% names(data)){
 
-      sw_in <- LakeMetabolizer::par.to.sw.base(data$ppfd_in)
-      data <- cbind(data,sw_in)
+      # sw_in <- LakeMetabolizer::par.to.sw.base(data$ppfd_in)
+      # data <- cbind(data,sw_in)
+      # coefficient from Britton and Dodd (1976)
+      data$sw_in <- data$ppfd_in * 0.473
 
     }
 
