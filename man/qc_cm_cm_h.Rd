@@ -86,6 +86,7 @@ Conversion of sap flow units to sapwood level
 \item \code{qc_kg_h}: Conversion of sap flow units from kg·h⁻¹
 }}
 \seealso{
-Other Unit conversion: \code{\link{qc_transformation_vars}}
+Other Unit conversion: \code{\link{qc_transf_list}},
+  \code{\link{qc_transformation_vars}}
 }
 

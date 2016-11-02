@@ -460,3 +460,15 @@ test_that('results are ok', {
   expect_true(transf_vars_info$Presence[7])
   expect_equal(sum(transf_vars_info$Presence == TRUE), 5)
 })
+
+################################################################################
+
+context('I7. qc_transf_list')
+
+load('FOO.RData')
+transf_vars_info <- qc_transformation_vars(FOO)
+transf_list <- qc_transf_list(transf_vars_info)
+
+test_that('results are correct', {
+  expect_is(transf_list, 'data.frame')
+})

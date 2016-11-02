@@ -28,6 +28,7 @@ presence of the variables needed for unit, radiation, solar time and others
 data transformations/conversions.
 }
 \seealso{
-Other Unit conversion: \code{\link{qc_cm_cm_h}}
+Other Unit conversion: \code{\link{qc_cm_cm_h}},
+  \code{\link{qc_transf_list}}
 }
 
