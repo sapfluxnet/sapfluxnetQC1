@@ -7,7 +7,7 @@ foo_data <- data.frame(
     "2003-06-03 00:00:00 UTC", "2003-06-03 00:14:59 UTC", "2003-06-03 00:30:00 UTC",
     "2003-06-03 00:45:00 UTC", "2003-06-03 00:59:59 UTC", "2003-06-03 01:15:00 UTC",
     "2003-06-03 01:30:00 UTC", "2003-06-03 01:44:59 UTC", "2003-06-03 02:00:00 UTC"
-  )),
+  ), tz = 'Etc/GMT+0'),
   A = c(1,2,3,NA,NA,NA,7,8,9),
   B = c(1,2,NA,NA,5,6,NA,NA,9),
   C = c(NA,NA,3,4,5,6,7,8,NA),
@@ -30,6 +30,10 @@ test_that('Results are correct', {
   expect_equal(length(foo_res_trim[,1]), 4)
   expect_false(any(foo_res$gap_coverage >= 100))
   expect_false(any(foo_res_trim$gap_coverage >= 100))
+  expect_identical(attr(foo_data$TIMESTAMP, 'tzone'),
+                   attr(foo_res$gap_start, 'tzone'))
+  expect_identical(attr(foo_data$TIMESTAMP, 'tzone'),
+                   attr(foo_res_trim$gap_start, 'tzone'))
 })
 
 context('K2. Plot the gap')
