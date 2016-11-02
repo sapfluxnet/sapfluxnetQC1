@@ -1332,7 +1332,7 @@ qc_rad_conversion <- function(data, parent_logger = 'test') {
 #'
 #'
 #' @return The initial data frame with a new variable 'st_USDA_soil_texture'
-#' which containes the soil texture if it is different from NA.
+#' which contains the soil texture if it is different from NA.
 #'
 #'
 #' @export
@@ -1364,11 +1364,11 @@ qc_soil_texture <- function(data, parent_logger = 'test') {
                             SAND = data$st_sand_perc,
                             row.names = 'Percentage')
 
-    list_abbr <- list(Cl = 'clay', SiCl = 'silty clay', SaCl ='sandy clay',
-                      ClLo ='clay loam', SiClLo ='silty clay loam',
-                      SaClLo ='sandy clay loam', Lo ='loam', SiLo='silty loam',
-                      SaLo='sandy loam', Si='silt', LoSa ='loamy sand',
-                      Sa= 'sand')
+    list_abbr <- list(Cl = 'clay', SiCl = 'silty clay', SaCl = 'sandy clay',
+                      ClLo = 'clay loam', SiClLo = 'silty clay loam',
+                      SaClLo = 'sandy clay loam', Lo = 'loam', SiLo = 'silty loam',
+                      SaLo = 'sandy loam', Si = 'silt', LoSa = 'loamy sand',
+                      Sa = 'sand')
 
     # STEP 2
 
