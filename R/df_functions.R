@@ -1028,7 +1028,7 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
     # 1.1 New timestamp with the full join of sapf and env
     sapf_timestamp <- sapf_data %>% dplyr::select(TIMESTAMP)
     env_timestamp <- env_data %>% dplyr::select(TIMESTAMP)
-    timestamp_join <- dplyr::full_join(sapf_timestamp, env_timestamp)
+    timestamp_join <- dplyr::full_join(sapf_timestamp, env_timestamp, "TIMESTAMP")
 
     # 1.2 Data with the new timestamp and NAs where the rows are added
     .sapf_data <- dplyr::full_join(timestamp_join, sapf_data, "TIMESTAMP") %>%
