@@ -1031,8 +1031,10 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
     timestamp_join <- dplyr::full_join(sapf_timestamp, env_timestamp)
 
     # 1.2 Data with the new timestamp and NAs where the rows are added
-    .sapf_data <- dplyr::full_join(timestamp_join, sapf_data, "TIMESTAMP")
-    .env_data <- dplyr::full_join(timestamp_join, env_data, "TIMESTAMP")
+    .sapf_data <- dplyr::full_join(timestamp_join, sapf_data, "TIMESTAMP") %>%
+      dplyr::arrange(TIMESTAMP)
+    .env_data <- dplyr::full_join(timestamp_join, env_data, "TIMESTAMP") %>%
+      dplyr::arrange(TIMESTAMP)
 
     # 1.3 flags indicating the pre-existent NAs and the new added NAs
     .sapf_flags <- sapf_data[,-1] %>%
@@ -1042,6 +1044,7 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
       dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
       dplyr::mutate(TIMESTAMP = sapf_data$TIMESTAMP) %>%
       dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
+      dplyr::arrange(TIMESTAMP) %>%
       dplyr::select(-TIMESTAMP) %>%
       dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
 
@@ -1052,8 +1055,11 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
       dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
       dplyr::mutate(TIMESTAMP = env_data$TIMESTAMP) %>%
       dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
+      dplyr::arrange(TIMESTAMP) %>%
       dplyr::select(-TIMESTAMP) %>%
       dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
+
+    timestamp_join <- timestamp_join %>% dplyr::arrange(TIMESTAMP)
 
     # STEP 2
     # Build the SfnData object and return it

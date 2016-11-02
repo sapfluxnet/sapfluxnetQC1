@@ -767,7 +767,8 @@ save(list = ls(all.names = TRUE),
 sfn_data_object <- sfn_data_constructor(
   sapf_data = sapf_data_fixed, env_data = env_data_fixed,
   site_md = site_md_coordfix, stand_md = stand_md, plant_md = plant_md,
-  species_md = species_md, env_md = env_md
+  species_md = species_md, env_md = env_md,
+  parent_logger = logger_name
 )
 
 assign(params$code, sfn_data_object)
