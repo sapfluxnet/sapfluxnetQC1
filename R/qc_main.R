@@ -400,6 +400,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
                                   env_gaps_info, sapf_data_fixed_plant,
                                   sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
                                   sapf_timestamp_nas, env_timestamp_nas,
+                                  transformations_table,
                                   parent_logger = 'test') {
 
   # Using calling handlers to manage errors
@@ -537,37 +538,15 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       }
     }
 
-    # 2.9 Unit conversion plant
-    if (is.null(sapf_data_fixed_plant)) {
-      step <- c(step, 'Unit conversion to plant level')
+    # 2.9 transformation table
+    if (any(!transformations_table$Available)) {
+      step <- c(step, 'Data conversion and transformations')
       status <- c(status, 'WARNING')
-      description <- c(description, 'Unit conversion to plant level failed')
+      description <- c(description, 'One or more conversions/transformations are not available')
     } else {
-      step <- c(step, 'Unit conversion to plant level')
+      step <- c(step, 'Data conversion and transformations')
       status <- c(status, 'PASS')
-      description <- c(description, 'Unit conversion to plant level done without problems')
-    }
-
-    # 2.10 Unit conversion sapwood
-    if (is.null(sapf_data_fixed_sapwood)) {
-      step <- c(step, 'Unit conversion to sapwood level')
-      status <- c(status, 'WARNING')
-      description <- c(description, 'Unit conversion to sapwood level failed')
-    } else {
-      step <- c(step, 'Unit conversion to sapwood level')
-      status <- c(status, 'PASS')
-      description <- c(description, 'Unit conversion to sapwood level done without problems')
-    }
-
-    # 2.11 Unit conversion leaf
-    if (is.null(sapf_data_fixed_leaf)) {
-      step <- c(step, 'Unit conversion to leaf area level')
-      status <- c(status, 'WARNING')
-      description <- c(description, 'Unit conversion to leaf area level failed')
-    } else {
-      step <- c(step, 'Unit conversion to leaf area level')
-      status <- c(status, 'PASS')
-      description <- c(description, 'Unit conversion to leaf area level done without problems')
+      description <- c(description, 'All conversions/transformations are available')
     }
 
     # FINAL STEP
