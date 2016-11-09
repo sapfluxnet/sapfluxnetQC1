@@ -10,26 +10,26 @@ library(dplyr)
 log_sapfluxnet_setup('Logs/sapfluxnet.log', 'data_load')
 
 ## site_md
-site_md <- dl_metadata('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'site_md', parent_logger = 'data_load')
+site_md <- dl_metadata('Data/foo/Accepted/foo_metadata.xlsx', 'site_md', parent_logger = 'data_load')
 
 ## stand_md
-stand_md <- dl_metadata('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'stand_md', si_code_loc = site_md, parent_logger = 'data_load')
+stand_md <- dl_metadata('Data/foo/Accepted/foo_metadata.xlsx', 'stand_md', si_code_loc = site_md, parent_logger = 'data_load')
 
 ## species_md
-species_md <- dl_metadata('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'species_md', si_code_loc = site_md, parent_logger = 'data_load')
+species_md <- dl_metadata('Data/foo/Accepted/foo_metadata.xlsx', 'species_md', si_code_loc = site_md, parent_logger = 'data_load')
 
 ## plant_md
-plant_md <- dl_metadata('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'plant_md', si_code_loc = site_md, parent_logger = 'data_load')
+plant_md <- dl_metadata('Data/foo/Accepted/foo_metadata.xlsx', 'plant_md', si_code_loc = site_md, parent_logger = 'data_load')
 
 ## env_md
-env_md <- dl_metadata('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'environmental_md', si_code_loc = site_md, parent_logger = 'data_load')
+env_md <- dl_metadata('Data/foo/Accepted/foo_metadata.xlsx', 'environmental_md', si_code_loc = site_md, parent_logger = 'data_load')
 
 ## sapf_data
-sapf_data <- dl_data('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'sapflow_hd',
+sapf_data <- dl_data('Data/foo/Accepted/foo_metadata.xlsx', 'sapflow_hd',
                      n = 2000, parent_logger = 'data_load')
 
 ## env_data
-env_data <- dl_data('Data/AUS_MAR_MSD_MOD/Accepted/AUS_MAR_MSD_MOD_metadata.xlsx', 'environmental_hd',
+env_data <- dl_data('Data/foo/Accepted/foo_metadata.xlsx', 'environmental_hd',
                     n = 2000, parent_logger = 'data_load')
 
 ################################################################################
@@ -45,7 +45,7 @@ md_cols <- bind_rows(
   qc_md_cols(env_md, 'environmental_md', parent_logger = 'md_qc')
 )
 
-## factor variables values 
+## factor variables values
 factor_values <- qc_factor_values(site_md, stand_md, species_md, plant_md, env_md,
                                   parent_logger = 'md_qc')
 
@@ -83,9 +83,9 @@ env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = 'md_q
 
 ################################################################################
 # table
-# qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
-#                     species_md, plant_md, species_md_spnames, plant_md_spnames,
-#                     sp_verification, env_var_presence, 'md_qc')
+qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
+                    species_md, plant_md, species_md_spnames, plant_md_spnames,
+                    sp_verification, env_var_presence, 'md_qc')
 ################################################################################
 
 ################################################################################
@@ -199,7 +199,8 @@ sapf_data_fixed_leaf <- tryCatch(sapf_data_fixed_leaf, error = function(e) retur
 #                       'data_qc')
 ################################################################################
 
-# df_accepted_to_lvl1('AUS_MAR_MSD_MOD', sapf_data_fixed_plant, sapf_data_fixed_sapwood,
-#                     sapf_data_fixed_leaf, env_data_fixed, site_md_coordfix,
-#                     stand_md, plant_md, species_md, env_md, rdata = FALSE,
-#                     parent_logger = 'DataFlow')
+df_accepted_to_lvl1(
+  'foo', sapf_data_fixed, env_data_fixed,
+  site_md_coordfix, stand_md, plant_md, species_md,
+  env_md, parent_logger = 'DataFlow'
+)

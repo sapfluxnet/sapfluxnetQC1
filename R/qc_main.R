@@ -384,12 +384,6 @@ qc_md_results_table <- function(md_cols, factor_values,
 #'
 #' @param env_gaps_info
 #'
-#' @param sapf_data_fixed_plant
-#'
-#' @param sapf_data_fixed_sapwood
-#'
-#' @param sapf_data_fixed_leaf
-#'
 #' @export
 
 # START
@@ -397,9 +391,7 @@ qc_md_results_table <- function(md_cols, factor_values,
 qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
                                   timestamp_errors_env, sapw_md,
                                   timestamp_concordance, sapf_gaps_info,
-                                  env_gaps_info, sapf_data_fixed_plant,
-                                  sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
-                                  sapf_timestamp_nas, env_timestamp_nas,
+                                  env_gaps_info, sapf_timestamp_nas, env_timestamp_nas,
                                   transformations_table,
                                   parent_logger = 'test') {
 

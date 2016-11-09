@@ -1,5 +1,9 @@
 library(sapfluxnetr)
 
+log_sapfluxnet_setup('main_test.log',
+                     logger = 'test',
+                     level = 'DEBUG')
+
 ################################################################################
 context('N1. Get the code and the data files route')
 
@@ -39,9 +43,9 @@ ex_one <- list(si_code = 'foo',
                env_file = 'FakeData/foo_metadata.xlsx')
 
 ex_three <- list(si_code = 'foo',
-               md_file = 'FakeData/foo_metadata.xlsx',
-               sapf_file = 'FakeData/foo_sapflow_data.csv',
-               env_file = 'FakeData/foo_env_data.csv')
+                 md_file = 'FakeData/foo_metadata.xlsx',
+                 sapf_file = 'FakeData/foo_sapflow_data.csv',
+                 env_file = 'FakeData/foo_env_data.csv')
 
 test_that('results are correct', {
   expect_is(res_one, 'list')
@@ -110,6 +114,25 @@ test_that('files are created OK and in the correct places', {
   expect_true(file.exists(file.path('Templates', 'QC_report.Rmd')))
   expect_true(file.exists(file.path('Data', 'foo', 'foo_status.yaml')))
   expect_true(file.exists(file.path('Data', 'bar', 'bar_status.yaml')))
+
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_sapf_data.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_env_data.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_site_md.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_stand_md.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_species_md.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_plant_md.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_env_md.csv')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo_objects.RData')))
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_1', 'foo.RData')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_sapf_data.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_env_data.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_site_md.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_stand_md.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_species_md.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_plant_md.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_env_md.csv')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar_objects.RData')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_1', 'bar.RData')))
 
   expect_length(list.files(file.path('Reports', 'foo'),
                            pattern = 'QC_report.html'), 1)

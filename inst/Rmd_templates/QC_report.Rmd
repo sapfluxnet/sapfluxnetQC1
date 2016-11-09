@@ -498,9 +498,7 @@ List of remarks provided by the contributor/s
 qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
                       timestamp_errors_env, sapw_md,
                       timestamp_concordance, sapf_gaps_info,
-                      env_gaps_info, sapf_data_fixed_plant,
-                      sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
-                      sapf_timestamp_nas, env_timestamp_nas,
+                      env_gaps_info, sapf_timestamp_nas, env_timestamp_nas,
                       parent_logger = logger_name)
 ################################################################################
 ```
@@ -732,10 +730,9 @@ log_sapfluxnet_setup('Logs/sapfluxnet.log',
                      level = 'WARNING')
 # 2.2.6 saving the fixed datasets and the objects created in the level1 folder
 df_accepted_to_lvl1(
-          params$code,
-          sapf_data_fixed_plant, sapf_data_fixed_sapwood, sapf_data_fixed_leaf,
-          env_data_fixed, site_md_coordfix, stand_md, plant_md, species_md,
-          env_md, parent_logger = 'DataFlow', rdata = params$rdata
+          params$code, sapf_data_fixed, env_data_fixed,
+          site_md_coordfix, stand_md, plant_md, species_md,
+          env_md, parent_logger = 'DataFlow'
         )
 
 # saving Rdata file with all the objects (just in case)

@@ -24,9 +24,6 @@ df_accepted_to_lvl1(si_code, sapf_data = NULL, env_data = NULL,
 \item{species_md}{Data frame with the fixed species metadata}
 
 \item{env_md}{Data frame with the fixed environmental metadata}
-
-\item{rdata}{Logical indicating if an RData file must be created with the
-objects generated in the QC. Default to FALSE.}
 }
 \value{
 Nothing

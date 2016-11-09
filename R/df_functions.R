@@ -561,9 +561,6 @@ df_get_data_folders <- function(parent_logger = 'test') {
 #'
 #' @param env_md Data frame with the fixed environmental metadata
 #'
-#' @param rdata Logical indicating if an RData file must be created with the
-#'   objects generated in the QC. Default to FALSE.
-#'
 #' @return Nothing
 #'
 #' @export
