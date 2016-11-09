@@ -15,7 +15,6 @@ output:
     toc: yes
 ---
 
-
 ```{r, include=FALSE}
 # root folder
 knitr::opts_knit$set(root.dir = params$wd)
@@ -38,18 +37,15 @@ SITE: `r params$code`
 
 # Metadata QC
 
-## Quick Summary
+## Quick summary
 
-```{r qc, echo=FALSE, message=FALSE, warning=FALSE}
-################################################################################
-# libraries
+```{r qc, message=FALSE, warning=FALSE}
+# Libraries
 library(sapfluxnetr)
 library(dplyr)
 library(DT)
-# library(dygraphs)
-# library(xts)
-################################################################################
-# data load
+
+# Data load
 ## site_md
 site_md <- dl_metadata(params$md_file, 'site_md', parent_logger = logger_name)
 
@@ -78,7 +74,9 @@ env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = '',
                     parent_logger = logger_name)
 
 ################################################################################
+
 # md qc
+
 ## metadata columns
 md_cols <- bind_rows(
   qc_md_cols(site_md, 'site_md', parent_logger = logger_name),
@@ -89,8 +87,8 @@ md_cols <- bind_rows(
 )
 
 ## factor variables values 
-factor_values <- qc_factor_values(site_md, stand_md, species_md, plant_md, env_md,
-                                  parent_logger = logger_name)
+factor_values <- qc_factor_values(site_md, stand_md, species_md,
+                                  plant_md, env_md, parent_logger = logger_name)
 
 ## email
 email_check <- qc_email_check(site_md, parent_logger = logger_name)
@@ -102,13 +100,17 @@ site_md_coordfix <- qc_coordinates(site_md, parent_logger = logger_name)
 stand_md <- qc_soil_texture(stand_md, parent_logger = logger_name)
 
 ## species
-species_md_spnames <- qc_species_names_info(species_md$sp_name,
-                                            parent_logger = logger_name) %>%
+species_md_spnames <- qc_species_names_info(
+  species_md$sp_name,
+  parent_logger = logger_name
+) %>%
   mutate(Md = 'sp')
-plant_md_spnames <- qc_species_names_info(plant_md$pl_species,
-                                            parent_logger = logger_name) %>%
-  mutate(Md = 'pl')
 
+plant_md_spnames <- qc_species_names_info(
+  plant_md$pl_species,
+  parent_logger = logger_name
+) %>%
+  mutate(Md = 'pl')
 
 species_md$sp_name <- qc_species_names(species_md$sp_name,
                                        parent_logger = logger_name)
@@ -121,17 +123,12 @@ sp_verification <- qc_species_verification(species_md, plant_md,
 pl_treatments_check <- qc_pl_treatments(plant_md, parent_logger = logger_name)
 
 ## environmental vars presence
-env_var_presence <- qc_env_vars_presence(env_data, env_md, parent_logger = logger_name)
+env_var_presence <- qc_env_vars_presence(
+  env_data, env_md, parent_logger = logger_name
+)
 
 ################################################################################
-# table
-qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
-                    species_md, plant_md, species_md_spnames, plant_md_spnames,
-                    sp_verification, env_var_presence,
-                    parent_logger = logger_name)
-################################################################################
 
-################################################################################
 # data qc
 ## timestamp
 ### sapf
@@ -160,75 +157,80 @@ timestamp_errors_env <- qc_timestamp_errors(
 )
 
 ## Timestamp concordance
-timestamp_concordance <- qc_timestamp_concordance(sapf_data_fixed, env_data_fixed,
-                                                       plot = FALSE, parent_logger = logger_name)
-timestamp_concordance_plot <- qc_timestamp_concordance(sapf_data_fixed, env_data_fixed,
-                                                       plot = TRUE, parent_logger = logger_name)
+timestamp_concordance <- qc_timestamp_concordance(
+  sapf_data_fixed, env_data_fixed,
+  plot = FALSE, parent_logger = logger_name
+)
+timestamp_concordance_plot <- qc_timestamp_concordance(
+  sapf_data_fixed, env_data_fixed,
+  plot = TRUE, parent_logger = logger_name
+)
 
 ### concordance and gaps info
-gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed, parent_logger = logger_name)
+gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed,
+                                parent_logger = logger_name)
 
 ## Gaps
-### No trimmed
-sapf_gaps_info <- qc_mind_the_gap(sapf_data_fixed, parent_logger = logger_name)
-env_gaps_info <- qc_mind_the_gap(env_data_fixed, parent_logger = logger_name)
-### Trimmed
-# sapf_gaps_trim_info <- qc_mind_the_gap(sapf_data_fixed, trim = TRUE, parent_logger = 'data_qc')
-# env_gaps_trim_info <- qc_mind_the_gap(env_data_fixed, trim = TRUE, parent_logger = 'data_qc')
+sapf_gaps_info <- qc_mind_the_gap(
+  sapf_data_fixed, parent_logger = logger_name
+)
+env_gaps_info <- qc_mind_the_gap(
+  env_data_fixed, parent_logger = logger_name
+)
 
 ### plots
 #### calendars
 sapf_gaps_cal <- vis_gaps_calendar(sapf_data_fixed, parent_logger = logger_name)
 env_gaps_cal <- vis_gaps_calendar(env_data_fixed, parent_logger = logger_name)
+
 #### plot the gaps coverage
 sapf_gaps_plot <- vis_plot_the_gap(sapf_gaps_info, type = "gap_coverage",
                                    parent_logger = logger_name)
 env_gaps_plot <- vis_plot_the_gap(env_gaps_info, type = "gap_coverage",
-                                   parent_logger = logger_name)
-# sapf_gaps_trim_plot <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_coverage",
-#                                    parent_logger = 'data_qc')
-# env_gaps_trim_plot <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_coverage",
-                                   # parent_logger = 'data_qc')
+                                  parent_logger = logger_name)
+
 #### plot the gaps interval
 sapf_gaps_plot_int <- vis_plot_the_gap(sapf_gaps_info, type = "gap_interval",
                                    parent_logger = logger_name)
 env_gaps_plot_int <- vis_plot_the_gap(env_gaps_info, type = "gap_interval",
                                    parent_logger = logger_name)
-# sapf_gaps_trim_plot_int <- vis_plot_the_gap(sapf_gaps_trim_info, type = "gap_interval",
-#                                    parent_logger = 'data_qc')
-# env_gaps_trim_plot_int <- vis_plot_the_gap(env_gaps_trim_info, type = "gap_interval",
-#                                    parent_logger = 'data_qc')
 
-## Unit conversion
-sapw_md <- qc_sapw_area_calculator(qc_get_sapw_md(plant_md,
-                                                  parent_logger = logger_name),
-                                   parent_logger = logger_name)
+################################################################################
+# create the SfnData object and save it as a RData file for later use
+## sfndata_object
+sfn_data_object <- sfn_data_constructor(
+  sapf_data = sapf_data_fixed, env_data = env_data_fixed,
+  site_md = site_md_coordfix, stand_md = stand_md, plant_md = plant_md,
+  species_md = species_md, env_md = env_md,
+  parent_logger = logger_name
+)
 
-### plant units
-#### check if errors
-sapf_data_fixed_plant <- tryCatch({
-  qc_sapw_conversion(sapf_data_fixed, sapw_md,
-                     output_units = 'plant',
-                     parent_logger = logger_name)
-}, error = function(e) return(NULL))
+# save it!
+assign(params$code, sfn_data_object)
+save(list = c(params$code),
+     file = file.path('Data', params$code, 'Lvl_1',
+                      paste(params$code, '.RData', sep = '')),
+     envir = environment())
 
-### sapwood units
-#### check if errors
-sapf_data_fixed_sapwood <- tryCatch({
-   qc_sapw_conversion(sapf_data_fixed, sapw_md,
-                      output_units = 'sapwood',
-                      parent_logger = logger_name)
-}, error = function(e) return(NULL))
+################################################################################
+# trasnformations availabilty
+transformations_table <- qc_transformation_vars(
+  sfn_data_object, parent_logger = logger_name
+) %>%
+  qc_transf_list(parent_logger = logger_name)
 
-### leaf units
-#### check if errors
-sapf_data_fixed_leaf <- tryCatch({
-  qc_sapw_conversion(sapf_data_fixed, sapw_md,
-                     output_units = 'leaf',
-                     parent_logger = logger_name)
-}, error = function(e) return(NULL))
 ```
 
+
+```{r md_qc_table, message=FALSE, warning=FALSE}
+################################################################################
+# results md_qc table
+qc_md_results_table(md_cols, factor_values, email_check, site_md_coordfix,
+                    species_md, plant_md, species_md_spnames, plant_md_spnames,
+                    sp_verification, env_var_presence,
+                    parent_logger = logger_name)
+################################################################################
+```
 
 > **NOTE: Metadata Quality Checks are under continous development. Checks made and
   results presentation can change in the future to adapt to new insights in
@@ -476,7 +478,7 @@ List of remarks provided by the contributor/s
 
 **Plant level remarks**
 
-`r if (is.null(plant_md_spnames$pl_remarks)) {'*No remarks*'} else {plant_md_spnames$pl_remarks}`
+`r if (is.null(plant_md$pl_remarks)) {'*No remarks*'} else {plant_md_spnames$pl_remarks}`
 
 ***
 
@@ -702,41 +704,24 @@ suppressWarnings(cowplot::ggdraw() +
 
 ***
 
-## Unit Conversion and standarization
+## Unit Conversion, standarization and transformation
 
-The following table shows the needed variables to perform the unit conversion
-and standardization. Look for missing variables if WARNINGS were raised in this
-section.
+The following table shows the available transformations
 
 ```{r unit conversion}
-sapw_md %>%
+trasnformations_table %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller'),
-            caption = 'Sapwood related variables needed to unit conversion',
+            caption = 'Unit conversion, standarization and transformation',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
-  formatStyle('pl_sap_units',
-              backgroundColor = styleEqual(c(NA),
-                                           c('#d91e18'))) %>%
-  formatStyle('pl_leaf_area',
-              backgroundColor = styleEqual(c(NA),
-                                           c('#89c4f4'))) %>%
-  formatStyle('pl_dbh',
-              backgroundColor = styleEqual(c(NA),
-                                           c('#89c4f4'))) %>%
-  formatStyle('pl_sapw_depth',
-              backgroundColor = styleEqual(c(NA),
-                                           c('#89c4f4'))) %>%
-  formatStyle('pl_bark_thick',
-              backgroundColor = styleEqual(c(NA),
-                                           c('#89c4f4'))) %>%
-  formatStyle('pl_sapw_area_est',
-              backgroundColor = styleEqual(c(NA),
+                           scroller = TRUE, scrollY = 450,
+                           fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+  formatStyle('Available',
+              backgroundColor = styleEqual(c(FALSE),
                                            c('#d91e18')))
 ```
 
@@ -758,19 +743,3 @@ save(list = ls(all.names = TRUE),
      file = file.path('Data', params$code, 'Lvl_1',
                             paste(params$code, 'objects.RData', sep = '_')),
      envir = environment())
-
-# create the SfnData object and save it as a RData file for later use
-sfn_data_object <- sfn_data_constructor(
-  sapf_data = sapf_data_fixed, env_data = env_data_fixed,
-  site_md = site_md_coordfix, stand_md = stand_md, plant_md = plant_md,
-  species_md = species_md, env_md = env_md,
-  parent_logger = logger_name
-)
-
-assign(params$code, sfn_data_object)
-save(list = c(params$code),
-     file = file.path('Data', params$code, 'Lvl_1',
-                      paste(params$code, '.RData', sep = '')),
-     envir = environment())
-```
-
