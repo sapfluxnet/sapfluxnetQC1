@@ -478,7 +478,7 @@ List of remarks provided by the contributor/s
 
 **Plant level remarks**
 
-`r if (is.null(plant_md$pl_remarks)) {'*No remarks*'} else {plant_md_spnames$pl_remarks}`
+`r if (is.null(plant_md$pl_remarks)) {'*No remarks*'} else {plant_md$pl_remarks}`
 
 ***
 
@@ -499,7 +499,7 @@ qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
                       timestamp_errors_env, sapw_md,
                       timestamp_concordance, sapf_gaps_info,
                       env_gaps_info, sapf_timestamp_nas, env_timestamp_nas,
-                      parent_logger = logger_name)
+                      transformations_table, parent_logger = logger_name)
 ################################################################################
 ```
 
@@ -707,7 +707,7 @@ suppressWarnings(cowplot::ggdraw() +
 The following table shows the available transformations
 
 ```{r unit conversion}
-trasnformations_table %>%
+transformations_table %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller'),
             caption = 'Unit conversion, standarization and transformation',

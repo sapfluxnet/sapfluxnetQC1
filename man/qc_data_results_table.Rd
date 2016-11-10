@@ -25,6 +25,12 @@ qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
 \item{sapf_gaps_info}{}
 
 \item{env_gaps_info}{}
+
+\item{sapf_timestamp_nas}{}
+
+\item{env_timestamp_nas}{}
+
+\item{transformations_table}{}
 }
 \description{
 Data QC codified results in one data frame

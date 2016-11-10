@@ -70,7 +70,7 @@ test_that('each metadata object has the correct number of variables', {
   expect_equal(length(names(site_md)), 20)
   expect_equal(length(names(stand_md)), 17)
   expect_equal(length(names(species_md)), 5)
-  expect_equal(length(names(plant_md)), 24)
+  expect_equal(length(names(plant_md)), 25)
   expect_equal(length(names(env_md)), 17)
   expect_equal(length(names(site_md_nan)), 20)
   expect_equal(length(names(stand_md_nan)), 17)

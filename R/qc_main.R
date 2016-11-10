@@ -384,6 +384,12 @@ qc_md_results_table <- function(md_cols, factor_values,
 #'
 #' @param env_gaps_info
 #'
+#' @param sapf_timestamp_nas
+#'
+#' @param env_timestamp_nas
+#'
+#' @param transformations_table
+#'
 #' @export
 
 # START
