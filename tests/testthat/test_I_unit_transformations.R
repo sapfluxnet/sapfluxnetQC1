@@ -428,6 +428,13 @@ test_that('Category chosen by the function is correct', {
   expect_equivalent(test_data_res$st_USDA_soil_texture, 'sand')
 })
 
+## test that results not produces lists as columns
+
+test_that('st_USDA_soil_texture is not a list', {
+  expect_is(test_data_res$st_USDA_soil_texture, 'character')
+  expect_false(is.list(test_data_res$st_USDA_soil_texture))
+})
+
 ################################################################################
 
 context('I6. qc_transformation_vars')
