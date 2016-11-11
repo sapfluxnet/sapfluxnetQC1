@@ -161,14 +161,10 @@ timestamp_concordance <- qc_timestamp_concordance(
   sapf_data_fixed, env_data_fixed,
   plot = FALSE, parent_logger = logger_name
 )
-timestamp_concordance_plot <- qc_timestamp_concordance(
-  sapf_data_fixed, env_data_fixed,
-  plot = TRUE, parent_logger = logger_name
-)
-
-### concordance and gaps info
-gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed,
-                                parent_logger = logger_name)
+# timestamp_concordance_plot <- qc_timestamp_concordance(
+#   sapf_data_fixed, env_data_fixed,
+#   plot = TRUE, parent_logger = logger_name
+# )
 
 ## Gaps
 sapf_gaps_info <- qc_mind_the_gap(
@@ -177,6 +173,12 @@ sapf_gaps_info <- qc_mind_the_gap(
 env_gaps_info <- qc_mind_the_gap(
   env_data_fixed, parent_logger = logger_name
 )
+
+### concordance and gaps info
+gap_lines_plot <- vis_gap_lines(sapf_gaps_info, env_gaps_info,
+                                qc_time_interval(sapf_data_fixed),
+                                qc_time_interval(env_data_fixed),
+                                parent_logger = logger_name)
 
 ### plots
 #### calendars

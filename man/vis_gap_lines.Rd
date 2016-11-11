@@ -4,12 +4,21 @@
 \alias{vis_gap_lines}
 \title{TIMESTAMP with gaps visualization}
 \usage{
-vis_gap_lines(sapf_data = NULL, env_data = NULL, parent_logger = "test")
+vis_gap_lines(sapf_gaps = NULL, env_gaps = NULL, sapf_intervals = NULL,
+  env_intervals = NULL, parent_logger = "test")
 }
 \arguments{
-\item{sapf_data}{Data frame with the sapflow data}
+\item{sapf_gaps}{Data frame with the sapflow gap info as obtained from
+\code{\link{qc_mind_the_gap}}}
 
-\item{env_data}{Data frame with the environmental data}
+\item{env_gaps}{Data frame with the env gap info as obtained from
+\code{\link{qc_mind_the_gap}}}
+
+\item{sapf_intervals}{Data frame with the sapflow intervals info as obtained from
+\code{\link{qc_time_interval}}}
+
+\item{env_intervals}{Data frame with the env intervals info as obtained from
+\code{\link{qc_time_interval}}}
 }
 \value{
 A ggplot object with the basic lines plot, no themes added.

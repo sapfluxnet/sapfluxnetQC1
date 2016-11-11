@@ -183,9 +183,17 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
 #'
 #' @family Visualization Functions
 #'
-#' @param sapf_data Data frame with the sapflow data
+#' @param sapf_gaps Data frame with the sapflow gap info as obtained from
+#'   \code{\link{qc_mind_the_gap}}
 #'
-#' @param env_data Data frame with the environmental data
+#' @param env_gaps Data frame with the env gap info as obtained from
+#'   \code{\link{qc_mind_the_gap}}
+#'
+#' @param sapf_intervals Data frame with the sapflow intervals info as obtained from
+#'   \code{\link{qc_time_interval}}
+#'
+#' @param env_intervals Data frame with the env intervals info as obtained from
+#'   \code{\link{qc_time_interval}}
 #'
 #' @return A ggplot object with the basic lines plot, no themes added.
 #'
@@ -193,94 +201,20 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
 
 # START
 # Function declaration
-vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
+vis_gap_lines <- function(sapf_gaps = NULL, env_gaps = NULL,
+                          sapf_intervals = NULL, env_intervals = NULL,
                           parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
 
-    # # STEP 0
-    # # Argument checks
-    # if (any(!is.data.frame(sapf_gaps_info), !is.data.frame(env_gaps_info))) {
-    #   stop('One or both gaps_info objects are not data frames')
-    # }
-    # # has gaps_info the necessary variables
-    # if (any(is.null(sapf_gaps_info$Id), is.null(sapf_gaps_info$gap_start),
-    #         is.null(sapf_gaps_info$gap_end), is.null(sapf_gaps_info$timestamp_start),
-    #         is.null(sapf_gaps_info$timestamp_end),
-    #         is.null(env_gaps_info$Id), is.null(env_gaps_info$gap_start),
-    #         is.null(env_gaps_info$gap_end), is.null(env_gaps_info$timestamp_start),
-    #         is.null(env_gaps_info$timestamp_end))) {
-    #   stop('gaps_info objects lack one or more mandatory variables')
-    # }
-    #
-    # # STEP 1
-    # # Creating the necessary data frame to use geom_segment
-    # # First data is filtered by Id (object) and after that in a for loop
-    # # the plot data is generated for each object. Finally all object data is
-    # # row binded
-    #
-    # # 1.1 Initiate res vectors
-    # x_start <- vector()
-    # x_end <- vector()
-    # y_start <- vector()
-    # y_end <- vector()
-    #
-    # # 1.2 Join the both datasets (sapf and env)
-    # gaps_info <- dplyr::bind_rows(env_gaps_info, sapf_gaps_info)
-    #
-    # # 1.3 Get the object names
-    # object_names <- unique(gaps_info$Id)
-    #
-    # # 1.4 For loop
-    # for (obj in object_names) {
-    #   # data by object
-    #   tmp_data <- gaps_info %>%
-    #     dplyr::filter(Id == obj)
-    #   # update the vectors
-    #   x_start <- c(x_start, tmp_data$timestamp_start[[1]], tmp_data$gap_end)
-    #   x_end <- c(x_end, tmp_data$gap_start, tmp_data$timestamp_end[[1]])
-    #   y_start <- c(y_start, as.character(tmp_data$Id), as.character(tmp_data$Id[[1]]))
-    #   y_end <- c(y_end, as.character(tmp_data$Id), as.character(tmp_data$Id[[1]]))
-    # }
-    #
-    # # STEP 2
-    # # Build the plot data
-    # plot_data <- data.frame(
-    #   x_start = as.POSIXct(x_start, origin = lubridate::origin),
-    #   x_end = as.POSIXct(x_end, origin = lubridate::origin),
-    #   y_start = y_start,
-    #   y_end = y_end
-    # ) %>%
-    #   dplyr::mutate(y_start = factor(y_start, levels = rev(unique(y_start)))) %>%
-    #   dplyr::mutate(y_end = factor(y_end, levels = rev(unique(y_end))))
-    #
-    # # STEP 3
-    # # Build the plot
-    # res_plot <- ggplot(plot_data, aes(x = x_start, y = y_start, color = y_start)) +
-    #   geom_segment(aes(xend = x_end, yend = y_end)) +
-    #   geom_point(aes(x = x_start, y = y_start)) +
-    #   geom_point(aes(x = x_end, y = y_end)) +
-    #   scale_x_datetime(date_breaks = '1 month') +
-    #   scale_colour_manual(values = c(rep('steelblue',
-    #                                      length(unique(sapf_gaps_info$Id))),
-    #                                  rep('darkgreen',
-    #                                      length(unique(env_gaps_info$Id))))) +
-    #   labs(x = 'TIMESTAMP', y = 'Object') +
-    #   theme(legend.position = 'none')
-    #
-    # # 3.1 And return it, by the power of return!!
-    # return(res_plot)
-    #
-    # # END FUNCTION
-
     # STEP 1
     # Get the data ready to plot
     # 1.1 sapf
-    sapf_intervals <- qc_time_interval(sapf_data)
+    # sapf_intervals <- qc_time_interval(sapf_data)
     sapf_intervals$Object[1] <- 'Total_sapf'
 
-    sapf_gaps <- qc_mind_the_gap(sapf_data)
+    # sapf_gaps <- qc_mind_the_gap(sapf_data)
 
     # if no gaps, no join
     if (sapf_gaps$Object[1] == 'No gaps found') {
@@ -290,10 +224,10 @@ vis_gap_lines <- function(sapf_data = NULL, env_data = NULL,
     }
 
     # 1.2 env
-    env_intervals <- qc_time_interval(env_data)
+    # env_intervals <- qc_time_interval(env_data)
     env_intervals$Object[1] <- 'Total_env'
 
-    env_gaps <- qc_mind_the_gap(env_data)
+    # env_gaps <- qc_mind_the_gap(env_data)
 
     # if no gaps, no join
     if (env_gaps$Object[1] == 'No gaps found') {
