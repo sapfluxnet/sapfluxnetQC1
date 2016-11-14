@@ -93,8 +93,9 @@ factor_values <- qc_factor_values(site_md, stand_md, species_md,
 ## email
 email_check <- qc_email_check(site_md, parent_logger = logger_name)
 
-## coordinates
-site_md_coordfix <- qc_coordinates(site_md, parent_logger = logger_name)
+## coordinates and biome
+site_md_coordfix <- qc_coordinates(site_md, parent_logger = logger_name) %>%
+  qc_get_biome(merge_deserts = FALSE, parent_logger = logger_name)
 
 ## soil_texture
 stand_md <- qc_soil_texture(stand_md, parent_logger = logger_name)

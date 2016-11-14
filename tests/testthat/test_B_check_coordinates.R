@@ -126,4 +126,5 @@ test_that('the new variables are added and their type is correct', {
 test_that('new data is correct', {
   expect_equal(qc_get_biome(foo_data), results_foo_data, tolerance = .0001)
   expect_equal(qc_get_biome(foo_data, merge_deserts = TRUE), results_foo_data_md, tolerance = .0001)
+  expect_is(qc_get_biome(foo_data), 'data.frame')
 })
