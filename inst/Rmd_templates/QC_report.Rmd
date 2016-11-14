@@ -722,7 +722,7 @@ transformations_table %>%
                            scroller = TRUE, scrollY = 450,
                            fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
   formatStyle('Available',
-              backgroundColor = styleEqual(c(FALSE),
+              backgroundColor = styleEqual(c('false'),
                                            c('#d91e18')))
 ```
 
