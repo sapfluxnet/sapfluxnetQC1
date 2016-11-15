@@ -10,7 +10,8 @@ output:
 runtime: shiny
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
+################################################################################
 # libraries
 library(flexdashboard)
 library(sapfluxnetr)
@@ -22,9 +23,9 @@ library(stringr)
 library(leaflet)
 library(ggplot2)
 library(plotly)
-# library(ggpic)
 
-# reactives
+################################################################################
+# events and reactives
 
 ## QC button
 observeEvent(
@@ -32,16 +33,21 @@ observeEvent(
   handlerExpr = source('main_script.R')
 )
 
-## sites names
+## Update_files button
+observeEvent(
+  eventExpr = input$update_button,
+  handlerExpr = df_copy_templates()
+)
+
+## Refresh button (sites and reports)
 sites <- eventReactive(
   eventExpr = input$refresh_button,
   valueExpr = list.dirs('Data', full.names = FALSE, recursive = FALSE)
 )
 
-## update files
-observeEvent(
-  eventExpr = input$update_button,
-  handlerExpr = df_copy_templates()
+report_list <- eventReactive(
+  eventExpr = input$refresh_button,
+  valueExpr = list.files('Reports', full.names = TRUE, recursive = TRUE)
 )
 
 ## number of sites stored in LVL1 (QC passed)
@@ -64,81 +70,28 @@ qc_ok_n <- reactive({
   qc_ok
 })
 
-## get list of reports
-report_list <- eventReactive(
-  eventExpr = input$refresh_button,
-  valueExpr = list.files('Reports', full.names = TRUE, recursive = TRUE)
-)
-
-## get the log
+## Log
 log_lines <- reactiveFileReader(1000, session = getDefaultReactiveDomain(),
                                 filePath = file.path('Logs', 'sapfluxnet.log'),
                                 readFunc = read_csv, col_names = c('Entries'))
 
-## env_md
-get_env_md <- reactive({
-  read_csv(
-    file = file.path('Data', input$site_sel, input$level_sel,
-                     paste0(input$site_sel, '_env_md.csv'))
-  )
+## Get data (SfnData)
+load_sfn_data <- reactive({
+  load(file.path('Data', input$site_sel, input$level_sel,
+                 paste0(input$site_sel, '.RData')))
+  sfn_data <- eval(as.name(input$site_sel))
+  return(sfn_data)
 })
 
-## env_data
-get_env_data <- reactive({
-  read_csv(
-    file = file.path('Data', input$site_sel, input$level_sel,
-                     paste0(input$site_sel, '_env_data.csv')),
-    col_types = cols(
-      TIMESTAMP = col_datetime(),
-      .default = col_double()
-    )
-  )
+load_sfn_data_vs <- reactive({
+  load(file.path('Data', input$site_sel_vs, input$level_sel_vs,
+                 paste0(input$site_sel_vs, '.RData')))
+  sfn_data_vs <- eval(as.name(input$site_sel_vs))
+  return(sfn_data_vs)
 })
 
-## sapf_data
-get_sapf_data <- reactive({
-  read_csv(
-    file = file.path('Data', input$site_sel, input$level_sel,
-                     paste0(input$site_sel, '_', input$data_sel)),
-    col_types = cols(
-      TIMESTAMP = col_datetime(),
-      .default = col_double()
-    )
-  )
-})
-
-## env_md_vs
-get_env_md_vs <- reactive({
-  read_csv(
-    file = file.path('Data', input$site_sel_vs, input$level_sel_vs,
-                     paste0(input$site_sel_vs, '_env_md.csv'))
-  )
-})
-
-## env_data_vs
-get_env_data_vs <- reactive({
-  read_csv(
-    file = file.path('Data', input$site_sel_vs, input$level_sel_vs,
-                     paste0(input$site_sel_vs, '_env_data.csv')),
-    col_types = cols(
-      TIMESTAMP = col_datetime(),
-      .default = col_double()
-    )
-  )
-})
-
-## sapf_data
-get_sapf_data_vs <- reactive({
-  read_csv(
-    file = file.path('Data', input$site_sel_vs, input$level_sel_vs,
-                     paste0(input$site_sel_vs, '_', input$data_sel_vs)),
-    col_types = cols(
-      TIMESTAMP = col_datetime(),
-      .default = col_double()
-    )
-  )
-})
-
+################################################################################
+## Helper functions
 # dyCrosshair plugin
 dyCrosshair <- function(dygraph, 
                         direction = c("both", "horizontal", "vertical")) {
@@ -151,20 +104,49 @@ dyCrosshair <- function(dygraph,
   )
 }
 
-# sapflow units reactive
-sapf_units <- reactive({
-  switch(input$data_sel,
-         sapflow_data_leaf.csv = "cm3 cm-2 h-1 (Leaf)",
-         sapflow_data_plant.csv = "cm3 h-1 (Tree)",
-         sapflow_data_sapwood.csv = "cm3 cm-2 h-1 (Sapwood)")
-})
-
-sapf_units_vs <- reactive({
-  switch(input$data_sel_vs,
-         sapflow_data_leaf.csv = "cm3 cm-2 h-1 (Leaf)",
-         sapflow_data_plant.csv = "cm3 h-1 (Tree)",
-         sapflow_data_sapwood.csv = "cm3 cm-2 h-1 (Sapwood)")
-})
+# load and bind
+load_and_bind <- function(metadata) {
+  code_list <- list.files(file.path("Data"))
+  
+  object_list <- lapply(
+    code_list,
+    function(x) {
+      if (file.exists(file.path('Data', x, 'Lvl_1', paste0(x, '.RData')))) {
+        load(file.path('Data', x, 'Lvl_1', paste0(x, '.RData')))
+        return(eval(as.name(x)))
+      }
+    }
+  )
+  
+  if (metadata == 'site_md') {
+    res <- lapply(object_list[!vapply(object_list, is.null, logical(1))],
+                  get_site_md) %>% bind_rows
+  }
+  if (metadata == 'stand_md') {
+    res <- lapply(object_list[!vapply(object_list, is.null, logical(1))],
+                  get_stand_md) %>% bind_rows
+  }
+  if (metadata == 'species_md') {
+    res <- lapply(object_list[!vapply(object_list, is.null, logical(1))],
+                  get_species_md) %>% bind_rows
+  }
+  if (metadata == 'plant_md') {
+    res <- lapply(
+      object_list[!vapply(object_list, is.null, logical(1))],
+      function(x) {
+        tmp <- get_plant_md(x)
+        tmp$pl_name <- as.character(tmp$pl_name)
+        tmp
+      }
+    ) %>% bind_rows
+  }
+  if (metadata == 'env_md') {
+    res <- lapply(object_list[!vapply(object_list, is.null, logical(1))],
+                  get_env_md) %>% bind_rows
+  }
+  
+  return(res)
+}
 ```
 
 Control Panel {data-icon="ion-ios-settings-strong"}
@@ -306,14 +288,8 @@ site_list <- list.dirs('Data', full.names = FALSE, recursive = FALSE)
 fillCol(width = '100%', flex = c(NA),
         selectInput('site_sel_man', label = 'Select site by code:',
                     choices = site_list, selected = site_list[1]),
-        # textOutput('manual_changes'),
         uiOutput('include_txt', style = "overflow-y:scroll; max-height: 400px"))
 
-# mc_file <- reactive({
-#   file.path('Data', input$site_sel_man,
-#             paste0(input$site_sel_man, '_manual_changes.txt'))
-# })
-# 
 output$include_txt <- renderUI(
   if (file.exists(file.path('Data', input$site_sel_man,
                             paste0(input$site_sel_man,
@@ -371,7 +347,6 @@ output$site_notes <- renderUI(
 )
 ```
 
-
 Global Overview {data-icon="ion-android-globe" .storyboard}
 ================================================================================
 
@@ -383,12 +358,7 @@ fillRow(height = '100%', flex = 1,
   leafletOutput("contrb_map", width = "100%")
 )
 
-# site_md file paths
-site_md_paths <- list.files(path = file.path('Data'),
-                            pattern = '_site_md.csv',
-                            full.names = TRUE, recursive = TRUE)
-# data frame with all site metadatas
-site_md_joined <- lapply(site_md_paths, read_csv) %>% bind_rows()
+site_md_joined <- load_and_bind('site_md')
 
 # color palette function for circleMarkers in map
 color_data <- site_md_joined$si_country
@@ -461,18 +431,14 @@ Can you see the little mark you leave four years ago in that tree? Yes?
 ```{r}
 # custom layout to allow call to put more things
 fillRow(height = '100%', flex = 1,
-  plotlyOutput("sp_bar", width = "100%"),
+  plotOutput("sp_bar", width = "100%"),
   fillCol(width = "100%", flex = 1,
-          plotlyOutput("sp_leaf_habit", height = "100%"),
-          plotlyOutput("sp_genus", height = "100%"))
+          plotOutput("sp_leaf_habit", height = "100%"),
+          plotOutput("sp_genus", height = "100%"))
 )
 
-# species_md file paths
-species_md_paths <- list.files(path = file.path('Data'),
-                               pattern = '_species_md.csv',
-                               full.names = TRUE, recursive = TRUE)
 # data frame with all species metadatas
-species_md_joined <- lapply(species_md_paths, read_csv) %>% bind_rows()
+species_md_joined <- load_and_bind('species_md')
 
 # barplot of species
 sp_bar_plot <- species_md_joined %>%
@@ -518,16 +484,16 @@ sp_genus_plot <- species_md_joined %>%
   )
     
 # render plotly elements
-output$sp_bar <- renderPlotly({
-  ggplotly(sp_bar_plot)
+output$sp_bar <- renderPlot({
+  sp_bar_plot
 })
 
-output$sp_leaf_habit <- renderPlotly({
-  ggplotly(sp_leaf_plot)
+output$sp_leaf_habit <- renderPlot({
+  sp_leaf_plot
 })
 
-output$sp_genus <- renderPlotly({
-  ggplotly(sp_genus_plot)
+output$sp_genus <- renderPlot({
+  sp_genus_plot
 })
 ```
 
@@ -555,23 +521,12 @@ from
 fillCol(width = '100%', flex = 1,
   plotOutput("st_height_soil_depth", height = "100%"),
   fillRow(height = "100%", flex = 1,
-          plotlyOutput("st_aspect_terrain", width = "100%"),
-          plotlyOutput("st_density_basal", width = "100%"))
+          plotOutput("st_aspect_terrain", width = "100%"),
+          plotOutput("st_density_basal", width = "100%"))
 )
 
-# pics for Height ans Soil Depth plot
-# tree <- as.matrix(as.raster(rsvg::rsvg(
-#   system.file('pics', 'pine_tree.svg', package = 'ggpic')
-# )))
-# 
-# root <- as.matrix(as.raster(rsvg::rsvg('root.svg')))
-
-# stand_md file paths
-stand_md_paths <- list.files(path = file.path('Data'),
-                             pattern = '_stand_md.csv',
-                             full.names = TRUE, recursive = TRUE)
 # data frame with all stand metadatas
-stand_md_joined <- lapply(stand_md_paths, read.csv) %>% bind_rows()
+stand_md_joined <- load_and_bind('stand_md')
 
 # height and soil depth plot
 st_height_depth_plot <- stand_md_joined %>%
@@ -625,12 +580,12 @@ output$st_height_soil_depth <- renderPlot({
   st_height_depth_plot
 })
 
-output$st_aspect_terrain <- renderPlotly({
-  ggplotly(st_aspect_terrain_plot)
+output$st_aspect_terrain <- renderPlot({
+  st_aspect_terrain_plot
 })
 
-output$st_density_basal <- renderPlotly({
-  ggplotly(st_density_basal_area_plot)
+output$st_density_basal <- renderPlot({
+  st_density_basal_area_plot
 })
 ```
 
@@ -650,14 +605,7 @@ Here you can:
 ### **Plant Info**. Where all the plants feel like home!
 
 ```{r}
-# plant_md file paths
-plant_md_paths <- list.files(path = file.path('Data'),
-                             pattern = '_plant_md.csv',
-                             full.names = TRUE, recursive = TRUE)
-# data frame with all plant metadatas
-plant_md_joined <- lapply(plant_md_paths, read_csv,
-                          col_types = c('ncncnnnccccnnlccnnccncccc')) %>%
-  bind_rows()
+plant_md_joined <- load_and_bind('plant_md')
 
 fillCol(
   width = '100%', flex = c(NA, 1),
@@ -674,10 +622,10 @@ fillCol(
                             'pl_social', 'pl_species', 'pl_treatment', 'si_code'),
                 selected = 'si_code')
   ),
-  plotlyOutput('dbh', height = "100%")
+  plotOutput('dbh', height = "100%")
 )
 
-output$dbh <- renderPlotly({
+output$dbh <- renderPlot({
   dbh_plot <- plant_md_joined %>%
     ggplot(aes_string(x = 'pl_dbh', y = input$pl_var,
                       colour = input$pl_factor)) +
@@ -691,7 +639,7 @@ output$dbh <- renderPlotly({
       # axis.text.y = element_text(angle = 30),
     )
     
-  ggplotly(dbh_plot)
+  dbh_plot
 })
 ```
 
@@ -709,14 +657,8 @@ Here you can:
 ### **Environmental Info**. Worried about environmental metadata? Here you'll find the answers
 
 ```{r}
-# env_md file paths
-env_md_paths <- list.files(path = file.path('Data'),
-                           pattern = '_env_md.csv',
-                           full.names = TRUE, recursive = TRUE)
 # data frame with all plant metadatas
-env_md_joined <- lapply(env_md_paths, read_csv,
-                        col_types = c('cccccccnncclncccc')) %>%
-  bind_rows()
+env_md_joined <- load_and_bind('env_md')
 
 env_vars_plot <- env_md_joined %>%
   select(si_code, env_netrad, env_ppfd_in, env_precip, env_rh, env_sw_in,
@@ -754,16 +696,16 @@ env_swc_plot <- env_md_joined %>%
 
 fillCol(
   width = '100%', flex = 1,
-  plotlyOutput('env_vars'),
-  plotlyOutput('swc')
+  plotOutput('env_vars'),
+  plotOutput('swc')
 )
 
-output$env_vars <- renderPlotly({
-  ggplotly(env_vars_plot)
+output$env_vars <- renderPlot({
+  env_vars_plot
 })
 
-output$swc <- renderPlotly({
-  ggplotly(env_swc_plot)
+output$swc <- renderPlot({
+  env_swc_plot
 })
 
 
@@ -781,28 +723,19 @@ Here you can:
 ### **Biomes Info**. Concerned about the climatic and biogeographic range of the data sets? Just take a look here!
 
 ```{r}
-# # si_md file paths
-# si_md_paths <- list.files(path = file.path('Data'),
-#                            pattern = '_site_md.csv',
-#                            full.names = TRUE, recursive = TRUE)
-# # data frame with all site metadata
-# si_biomes_df <- lapply(si_md_paths, read_csv) %>%
-#   bind_rows() %>%
-#   select(
-#     si_code, si_lat, si_long
-#     #, si_mat, si_map
-#   )
-# 
-# si_biomes_plot <-  vis_location_biome(si_biomes_df)
-# 
-# fillCol(
-#   width = '100%', flex = 1,
-#   plotlyOutput('si_biomes')
-# )
-# 
-# output$si_biomes <- renderPlotly({
-#   ggplotly(si_biomes_plot, tooltip = c('tooltip', 'y', 'x'))
-# })
+# data frame with all site metadata
+si_biomes_df <- load_and_bind('site_md')
+
+si_biomes_plot <-  vis_location_biome(si_biomes_df)
+
+fillCol(
+  width = '100%', flex = 1,
+  plotOutput('si_biomes')
+)
+
+output$si_biomes <- renderPlot({
+  si_biomes_plot
+})
 ```
 
 ***
@@ -835,11 +768,11 @@ radioButtons('level_sel', label = 'Select data level:',
              choices = c('Level 1' = 'Lvl_1', 'Level 2' = 'Lvl_2'),
              selected = 'Lvl_1')
 
-radioButtons('data_sel', label = 'Select sapflow data type:',
-             choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
-                         'Sapflow data plant' = 'sapflow_data_plant.csv',
-                         'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
-             selected = 'sapflow_data_plant.csv')
+# radioButtons('data_sel', label = 'Select sapflow data type:',
+#              choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+#                          'Sapflow data plant' = 'sapflow_data_plant.csv',
+#                          'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+#              selected = 'sapflow_data_plant.csv')
 
 tags$br()
 ```
@@ -862,19 +795,8 @@ fillRow(height = '100%', flex = 1,
 
 output$sapf_dt <- DT::renderDataTable({
   
-  saf_data_table <- get_sapf_data()
-  env_md <- get_env_md()
-  
-  sapf_data <- saf_data_table %>%
-    qc_as_timestamp(env_md, parent_logger = NULL)
-  # if (!is.null(input$sapfts_date_window)) {
-  #   t0 <- input$sapfts_date_window[[1]]
-  #   tf <- input$sapfts_date_window[[2]]
-  # } else {
-  #   t0 <- sapf_data_table$TIMESTAMP[1]
-  #   tf <- sapf_data_table$TIMESTAMP[nrow(sapf_data_table)]
-  # }
-  DT::datatable(sapf_data,
+  sapf_data_table <- get_sapf(load_sfn_data())
+  DT::datatable(sapf_data_table,
                 extensions = c('Scroller', 'FixedColumns'),
                 filter = 'none',
                 class = 'display compact',
@@ -907,19 +829,9 @@ fillRow(height = '100%', flex = 1,
 
 output$env_dt <- DT::renderDataTable({
   
-  env_data_table <- get_env_data()
-  env_md <- get_env_md()
+  env_data_table <- get_env(load_sfn_data())
   
-  env_data <- env_data_table %>%
-    qc_as_timestamp(env_md, parent_logger = NULL)
-  # if (!is.null(input$sapfts_date_window)) {
-  #   t0 <- input$sapfts_date_window[[1]]
-  #   tf <- input$sapfts_date_window[[2]]
-  # } else {
-  #   t0 <- sapf_data_table$TIMESTAMP[1]
-  #   tf <- sapf_data_table$TIMESTAMP[nrow(sapf_data_table)]
-  # }
-  DT::datatable(env_data,
+  DT::datatable(env_data_table,
                 extensions = c('Scroller', 'FixedColumns'),
                 filter = 'none',
                 class = 'display compact',
@@ -955,19 +867,17 @@ fillRow(height = '100%', flex = 1,
 
 output$sapf_ts <- renderDygraph({
   
-  sapf_plot_data <- get_sapf_data()
-  env_md_plot <- get_env_md()
+  sapf_plot_data <- get_sapf(load_sfn_data())
   columns <- input$sapf_dt_columns_selected
   
   sapf_plot <- sapf_plot_data %>%
-    select(TIMESTAMP, columns) %>%
-    qc_as_timestamp(env_md_plot, parent_logger = NULL)
+    select(TIMESTAMP, columns)
 
   sapf_plot <- xts::xts(sapf_plot[,-1],
                         order.by = sapf_plot$TIMESTAMP,
                         tz = attr(sapf_plot$TIMESTAMP, 'tzone'))
 
-  dygraph(sapf_plot, ylab = sapf_units()) %>%
+  dygraph(sapf_plot, ylab = get_plant_md(load_sfn_data())$pl_sap_units[1]) %>%
     dyHighlight(highlightCircleSize = 5,
                 highlightSeriesBackgroundAlpha = 0.5,
                 hideOnMouseOut = FALSE,
@@ -994,14 +904,12 @@ fillRow(height = '100%', flex = 1,
 
 output$env_ts <- renderDygraph({
   
-  env_plot_data <- get_env_data()
-  env_md_plot <- get_env_md()
+  env_plot_data <- get_env(load_sfn_data())
   columns_env <- input$env_dt_columns_selected
 
   env_plot <- env_plot_data %>%
-    select(TIMESTAMP, columns_env) %>%
-    qc_as_timestamp(env_md_plot, parent_logger = NULL)
-
+    select(TIMESTAMP, columns_env)
+  
   env_plot <- xts::xts(env_plot[,-1],
                        order.by = env_plot$TIMESTAMP,
                        tz = attr(env_plot$TIMESTAMP, 'tzone'))
@@ -1043,17 +951,11 @@ radioButtons('level_sel_vs', label = 'Select data level:',
              choices = c('Level 1' = 'Lvl_1', 'Level 2' = 'Lvl_2'),
              selected = 'Lvl_1')
 
-radioButtons('data_sel_vs', label = 'Select sapflow data type:',
-             choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
-                         'Sapflow data plant' = 'sapflow_data_plant.csv',
-                         'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
-             selected = 'sapflow_data_plant.csv')
-
-# numericInput('plant_sel_vs', label = 'Indicate tree index to visualize:',
-#              value = 2, min = 2)
-# 
-# numericInput('env_sel_vs', label = 'Indicate env variable index to visualize:',
-#              value = 2, min = 2)
+# radioButtons('data_sel_vs', label = 'Select sapflow data type:',
+#              choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+#                          'Sapflow data plant' = 'sapflow_data_plant.csv',
+#                          'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+#              selected = 'sapflow_data_plant.csv')
 
 uiOutput('tree_controls')
 uiOutput('env_controls')
@@ -1064,18 +966,18 @@ Row
 
 ```{r on_the_fly_select}
 output$tree_controls <- renderUI({
-  tree_names <- names(get_sapf_data_vs()[-1])
+  tree_names <- names(get_sapf(load_sfn_data_vs())[,-1])
   checkboxGroupInput('tree_names', "Choose plants:",
                      choices = tree_names, selected = tree_names[1])
 })
 
 output$env_controls <- renderUI({
-  env_names <- names(get_env_data_vs()[-1])
+  load_sfn_data_vs()
+  env_names <- names(get_env(load_sfn_data_vs())[,-1])
   checkboxGroupInput('env_names', "Choose env variables:",
                      choices = env_names, selected = env_names[1])
 })
 ```
-
 
 ### Sapflow
 
@@ -1087,18 +989,17 @@ fillRow(height = '100%', flex = 1,
 
 output$sapf_ts_vs <- renderDygraph({
   
-  sapf_plot_data_vs <- get_sapf_data_vs()
-  env_md_plot_vs <- get_env_md_vs()
+  sapf_plot_data_vs <- get_sapf(load_sfn_data_vs())
   
   sapf_plot_vs <- sapf_plot_data_vs %>%
-    select(one_of(c('TIMESTAMP', input$tree_names))) %>%
-    qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
+    select(one_of(c('TIMESTAMP', input$tree_names)))
 
   sapf_plot_vs <- xts::xts(sapf_plot_vs[,-1],
                            order.by = sapf_plot_vs$TIMESTAMP,
                            tz = attr(sapf_plot_vs$TIMESTAMP, 'tzone'))
 
-  dygraph(sapf_plot_vs, group = 'vs', ylab = sapf_units_vs()) %>%
+  dygraph(sapf_plot_vs, group = 'vs',
+          ylab = get_plant_md(load_sfn_data_vs())$pl_sap_units[1]) %>%
     dyHighlight(highlightCircleSize = 5,
                 highlightSeriesBackgroundAlpha = 0.5,
                 hideOnMouseOut = FALSE,
@@ -1129,12 +1030,10 @@ fillRow(height = '100%', flex = 1,
 
 output$env_ts_vs <- renderDygraph({
   
-  env_plot_data_vs <- get_env_data_vs()
-  env_md_plot_vs <- get_env_md_vs()
+  env_plot_data_vs <- get_env(load_sfn_data_vs())
 
   env_plot_vs <- env_plot_data_vs %>%
-    select(one_of(c('TIMESTAMP', input$env_names))) %>%
-    qc_as_timestamp(env_md_plot_vs, parent_logger = NULL)
+    select(one_of(c('TIMESTAMP', input$env_names)))
 
   env_plot_vs <- xts::xts(env_plot_vs[,-1],
                           order.by = env_plot_vs$TIMESTAMP,
