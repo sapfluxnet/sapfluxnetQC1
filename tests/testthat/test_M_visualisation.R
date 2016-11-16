@@ -1,4 +1,4 @@
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 
 ################################################################################
 context('M1. Biomes plot')

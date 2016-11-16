@@ -1,4 +1,4 @@
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 
 context('B1. Coordinates argument checks')
 

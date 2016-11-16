@@ -1,4 +1,4 @@
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 
 context('C1. Fix latlong errors arguments')
 

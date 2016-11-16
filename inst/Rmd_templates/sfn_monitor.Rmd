@@ -14,7 +14,7 @@ runtime: shiny
 ################################################################################
 # libraries
 library(flexdashboard)
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 library(readr)
 library(dplyr)
 library(tidyr)
@@ -54,7 +54,7 @@ report_list <- eventReactive(
 qc_ran_n <- reactive({
   qc_ran <- 0
   for (si in sites()) {
-    status <- sapfluxnetr::df_get_status(si, parent_logger = NULL)
+    status <- sapfluxnetQC1::df_get_status(si, parent_logger = NULL)
     if (status$LVL1$STORED) {qc_ran <- qc_ran + 1}
   }
   qc_ran
@@ -64,7 +64,7 @@ qc_ran_n <- reactive({
 qc_ok_n <- reactive({
   qc_ok <- 0
   for (si in sites()) {
-    status <- sapfluxnetr::df_get_status(si, parent_logger = NULL)
+    status <- sapfluxnetQC1::df_get_status(si, parent_logger = NULL)
     if (status$LVL2$STORED) {qc_ok <- qc_ok + 1}
   }
   qc_ok
@@ -183,7 +183,7 @@ tags$br()
 ```
 
 Press `Update files` button to update templates and scripts files after an
-update in `sapfluxnetr` package.
+update in `sapfluxnetQC1` package.
 
 ```{r}
 actionButton('update_button', 'Update files',

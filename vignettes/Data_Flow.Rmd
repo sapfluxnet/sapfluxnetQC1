@@ -13,7 +13,7 @@ vignette: >
 
 Data flow starts the moment a contributor send his/her data to the system.
 This vignette aims to document this data flow and the functions of the
-`sapfluxnetr` package that make it possible.  
+`sapfluxnetQC1` package that make it possible.  
 
 Figure 1 summarises the project folder tree:  
 
@@ -24,7 +24,7 @@ Figure 1 summarises the project folder tree:
 Each dataset submitted by contributors starts in the `Received_data` folder.
 Here data is stored temporarily until it is moved to the
 `Data/site_code/Accepted` folder by executing `df_received_to_accepted` function
-in the `sapfluxnetr` package.
+in the `sapfluxnetQC1` package.
 
 ## `df_received_to_accepted`
 

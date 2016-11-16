@@ -22,7 +22,7 @@ There is two scripts in the main folder of the project (`/sapfluxnet`):
 
 ### `main_script.R`
 
-This script is in charge of loading the `sapfluxnetr` package, move any new
+This script is in charge of loading the `sapfluxnetQC1` package, move any new
 data from received to accepted folder, and start the QC process.  
 It is a very small and simple script, which takes advantage of all the functions
 present in the package. It is intended to be executed by a cron job

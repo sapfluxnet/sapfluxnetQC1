@@ -1,4 +1,4 @@
 library(testthat)
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 
 test_check("sapfluxnetr")

@@ -1,4 +1,4 @@
-library(testthat)
+library(sapfluxnetQC1)
 
 context('L1. Sapflow ranges tests')
 

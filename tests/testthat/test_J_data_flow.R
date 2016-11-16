@@ -1,4 +1,4 @@
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 library(tools)
 
 ################################################################################

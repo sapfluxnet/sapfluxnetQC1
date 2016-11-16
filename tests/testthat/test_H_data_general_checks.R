@@ -1,4 +1,4 @@
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 ################################################################################
 context('H1. TIMESTAMP format')
 

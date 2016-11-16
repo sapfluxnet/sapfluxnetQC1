@@ -1,4 +1,4 @@
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 
 log_sapfluxnet_setup('main_test.log',
                      logger = 'test',

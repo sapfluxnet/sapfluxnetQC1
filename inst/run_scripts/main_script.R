@@ -1,6 +1,6 @@
 # Main script
 
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 
 ################################################################################
 # server preparation, run only once!!!!!!!

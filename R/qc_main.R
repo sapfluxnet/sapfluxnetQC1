@@ -261,7 +261,7 @@ qc_md_results_table <- function(md_cols, factor_values,
     }
 
 
-    # if (isTRUE(tryCatch(sapfluxnetr::qc_species_names(species_md$sp_name),
+    # if (isTRUE(tryCatch(sapfluxnetQC1::qc_species_names(species_md$sp_name),
     #                     error = function(e) return(TRUE)))) {
     #   step <- c(step, 'Species names spelling (species_md)')
     #   status <- c(status, 'WARNING')
@@ -283,7 +283,7 @@ qc_md_results_table <- function(md_cols, factor_values,
       description <- c(description, 'No mispelling in species names')
     }
 
-    # if (isTRUE(tryCatch(sapfluxnetr::qc_species_names(plant_md$pl_species),
+    # if (isTRUE(tryCatch(sapfluxnetQC1::qc_species_names(plant_md$pl_species),
     #                     error = function(e) return(TRUE)))) {
     #   step <- c(step, 'Species names spelling (plant_md)')
     #   status <- c(status, 'WARNING')

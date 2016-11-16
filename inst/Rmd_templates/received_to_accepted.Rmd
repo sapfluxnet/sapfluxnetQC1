@@ -8,7 +8,7 @@ params:
 
 ```{r setup, include = FALSE}
 # libraries
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 # root folder
 knitr::opts_knit$set(root.dir = params$wd)
 ```

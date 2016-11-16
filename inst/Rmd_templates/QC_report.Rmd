@@ -41,7 +41,7 @@ SITE: `r params$code`
 
 ```{r qc, message=FALSE, warning=FALSE}
 # Libraries
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 library(dplyr)
 library(DT)
 

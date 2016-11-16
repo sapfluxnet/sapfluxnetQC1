@@ -34,7 +34,7 @@ SITE: `r params$code`
 ```{r qc, echo=FALSE, message=FALSE, warning=FALSE}
 ################################################################################
 # libraries
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 library(dplyr)
 library(DT)
 # library(dygraphs)

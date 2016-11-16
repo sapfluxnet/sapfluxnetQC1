@@ -1,5 +1,5 @@
 # Libraries
-library(sapfluxnetr)
+library(sapfluxnetQC1)
 library(dplyr)
 library(DT)
 

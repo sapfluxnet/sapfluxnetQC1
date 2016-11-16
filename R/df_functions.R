@@ -728,31 +728,31 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
       # Copy templates for file transfer and quality check to Template folder
       file.copy(
         system.file('Rmd_templates', 'received_to_accepted.Rmd',
-                    package = 'sapfluxnetr'),
+                    package = 'sapfluxnetQC1'),
         file.path('Templates'), overwrite = TRUE
       )
       file.copy(
         system.file('Rmd_templates', 'QC_report.Rmd',
-                    package = 'sapfluxnetr'),
+                    package = 'sapfluxnetQC1'),
         file.path('Templates'), overwrite = TRUE
       )
 
       # Copy template for shiny web app to parent directory
       file.copy(
         system.file('Rmd_templates', 'sfn_monitor.Rmd',
-                    package = 'sapfluxnetr'),
+                    package = 'sapfluxnetQC1'),
         file.path('.'), overwrite = TRUE
       )
 
       # Copy scripts to parent directory
       file.copy(
         system.file('run_scripts', 'main_script.R',
-                    package = 'sapfluxnetr'),
+                    package = 'sapfluxnetQC1'),
         file.path('.'), overwrite = TRUE
       )
       file.copy(
         system.file('run_scripts', 'debug_script.R',
-                    package = 'sapfluxnetr'),
+                    package = 'sapfluxnetQC1'),
         file.path('.'), overwrite = TRUE
       )
 
@@ -778,31 +778,31 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
     # Copy templates for file transfer and quality check to Template folder
     file.copy(
       system.file('Rmd_templates', 'received_to_accepted.Rmd',
-                  package = 'sapfluxnetr'),
+                  package = 'sapfluxnetQC1'),
       file.path('Templates'), overwrite = TRUE
     )
     file.copy(
       system.file('Rmd_templates', 'QC_report.Rmd',
-                  package = 'sapfluxnetr'),
+                  package = 'sapfluxnetQC1'),
       file.path('Templates'), overwrite = TRUE
     )
 
     # Copy template for shiny web app to parent directory
     file.copy(
       system.file('Rmd_templates', 'sfn_monitor.Rmd',
-                  package = 'sapfluxnetr'),
+                  package = 'sapfluxnetQC1'),
       file.path('.'), overwrite = TRUE
     )
 
     # Copy scripts to parent directory
     file.copy(
       system.file('run_scripts', 'main_script.R',
-                  package = 'sapfluxnetr'),
+                  package = 'sapfluxnetQC1'),
       file.path('.'), overwrite = TRUE
     )
     file.copy(
       system.file('run_scripts', 'debug_script.R',
-                  package = 'sapfluxnetr'),
+                  package = 'sapfluxnetQC1'),
       file.path('.'), overwrite = TRUE
     )
 

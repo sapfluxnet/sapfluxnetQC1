@@ -1,4 +1,4 @@
-library(testthat)
+library(sapfluxnetQC1)
 
 context('K1. Mind the gap')
 

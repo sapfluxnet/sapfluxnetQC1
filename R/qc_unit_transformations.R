@@ -1165,19 +1165,19 @@ qc_sapw_conversion <- function(data, sapw_md, output_units = 'plant',
 
     # 1.1 create a list/dictionary with the conversion functions
     funs_list <- list(
-      '“cm3 cm-2 h-1”' = sapfluxnetr::qc_cm_cm_h,
-      '“cm3 m-2 s-1”' = sapfluxnetr::qc_cm_m_s,
-      '“dm3 dm-2 h-1”' = sapfluxnetr::qc_dm_dm_h,
-      '“dm3 dm-2 s-1”' = sapfluxnetr::qc_dm_dm_s,
-      '“mm3 mm-2 s-1”' = sapfluxnetr::qc_mm_mm_s,
-      '“g m-2 s-1”' = sapfluxnetr::qc_g_m_s,
-      '“kg m-2 h-1”' = sapfluxnetr::qc_kg_m_h,
-      '“kg m-2 s-1”' = sapfluxnetr::qc_kg_m_s,
-      '“cm3 s-1”' = sapfluxnetr::qc_cm_s,
-      '“cm3 h-1”' = sapfluxnetr::qc_cm_h,
-      '“dm3 h-1”' = sapfluxnetr::qc_dm_h,
-      '“g h-1”' = sapfluxnetr::qc_g_h,
-      '“kg h-1”' = sapfluxnetr::qc_kg_h
+      '“cm3 cm-2 h-1”' = sapfluxnetQC1::qc_cm_cm_h,
+      '“cm3 m-2 s-1”' = sapfluxnetQC1::qc_cm_m_s,
+      '“dm3 dm-2 h-1”' = sapfluxnetQC1::qc_dm_dm_h,
+      '“dm3 dm-2 s-1”' = sapfluxnetQC1::qc_dm_dm_s,
+      '“mm3 mm-2 s-1”' = sapfluxnetQC1::qc_mm_mm_s,
+      '“g m-2 s-1”' = sapfluxnetQC1::qc_g_m_s,
+      '“kg m-2 h-1”' = sapfluxnetQC1::qc_kg_m_h,
+      '“kg m-2 s-1”' = sapfluxnetQC1::qc_kg_m_s,
+      '“cm3 s-1”' = sapfluxnetQC1::qc_cm_s,
+      '“cm3 h-1”' = sapfluxnetQC1::qc_cm_h,
+      '“dm3 h-1”' = sapfluxnetQC1::qc_dm_h,
+      '“g h-1”' = sapfluxnetQC1::qc_g_h,
+      '“kg h-1”' = sapfluxnetQC1::qc_kg_h
     )
 
     # 1.2 TIMESTAMP variable is not needed for the loop, drop it
