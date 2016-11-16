@@ -1,4 +1,4 @@
-Package: sapfluxnetr
+Package: sapfluxnetQC1
 Type: Package
 Title: Package with functions related to sapfluxnet project data
 Version: 0.0.9
