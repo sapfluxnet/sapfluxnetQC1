@@ -53,6 +53,7 @@ Collate:
     'qc_main.R'
     'qc_md_general_checks.R'
     'qc_numerical_metadata_functions.R'
+    'qc_outliers.R'
     'qc_plant_functions.R'
     'qc_sitemd_checks.R'
     'qc_species_functions.R'
