@@ -260,7 +260,7 @@ md_cols %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('IsNA',
               backgroundColor = styleEqual(c('TRUE', 'FALSE'),
                                            c('#89c4f4', 'transparent'))) %>%
@@ -294,7 +294,7 @@ factor_values %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('NA_presence',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('transparent', '#89c4f4')))
@@ -320,7 +320,7 @@ email_check %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('Is_correct',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -346,7 +346,7 @@ site_md_coordfix %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('is_inside_country',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -378,7 +378,7 @@ species_md_spnames %>%
                                              list(width = '50px',
                                                   targets = 4)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('Concordance',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -401,7 +401,7 @@ sp_verification %>%
                                              list(width = '100px',
                                                   targets = 3)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('Concordance',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -424,7 +424,7 @@ datatable(pl_treatments_check, class = 'display compact', rownames = FALSE, filt
                                            list(className = 'dt-right',
                                                 targets = 0)),
                          scroller = TRUE,
-                         scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
+                         scrollY = 450, scrollCollapse = TRUE))
 ```
 
 ***
@@ -448,7 +448,7 @@ env_var_presence %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('Concordance',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
@@ -543,7 +543,7 @@ timestamp_sapf %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
+                           scrollY = 450, scrollCollapse = TRUE))
 ```
 
 ```{r sapf_timestamp_nas}
@@ -561,7 +561,7 @@ if (is.logical(sapf_timestamp_nas)) {
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) 
+                           scrollY = 450, scrollCollapse = TRUE)) 
 }
 ```
 
@@ -580,7 +580,7 @@ if (is.logical(env_timestamp_nas)) {
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) 
+                           scrollY = 450, scrollCollapse = TRUE)) 
 }
 ```
 
@@ -598,7 +598,7 @@ timestamp_errors_sapf %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
+                           scrollY = 450, scrollCollapse = TRUE))
 ```
 
 ```{r timestamp_cont_errors_env}
@@ -615,7 +615,7 @@ timestamp_errors_env %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
+                           scrollY = 450, scrollCollapse = TRUE))
 ```
 
 TIMESTAMP concordance between sapflow and environmental data
@@ -631,7 +631,7 @@ TIMESTAMP concordance between sapflow and environmental data
 #                            #                   list(className = 'dt-right',
 #                            #                        targets = 0)),
 #                            scroller = TRUE,
-#                            scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE))
+#                            scrollY = 450, scrollCollapse = TRUE))
 
 # timestamp_concordance_plot
 gap_lines_plot
@@ -656,7 +656,7 @@ sapf_gaps_info %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatPercentage('gap_coverage', 2) %>%
   formatStyle('gap_coverage',
               backgroundColor = styleInterval(c(.10, .25),
@@ -687,7 +687,7 @@ env_gaps_info %>%
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
-                           scrollY = 450, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
   formatPercentage('gap_coverage', 2) %>%
   formatStyle('gap_coverage',
               backgroundColor = styleInterval(c(.1, .25),
