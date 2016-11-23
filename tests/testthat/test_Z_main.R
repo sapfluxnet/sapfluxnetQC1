@@ -5,7 +5,7 @@ log_sapfluxnet_setup('main_test.log',
                      level = 'DEBUG')
 
 ################################################################################
-context('N1. Get the code and the data files route')
+context('Z1. Get the code and the data files route')
 
 dir.create('FakeData')
 
@@ -57,7 +57,7 @@ test_that('results are correct', {
 })
 
 ################################################################################
-context('N2. QC Start Process')
+context('Z2. QC Start Process')
 
 test_that('Argument checks work', {
   expect_error(qc_start_process(25),
@@ -71,11 +71,11 @@ dir.create('received_data')
 df_folder_structure()
 
 file.copy(
-  system.file("Rmd_templates", "received_to_accepted.Rmd", package = "sapfluxnetr"),
+  system.file("Rmd_templates", "received_to_accepted.Rmd", package = "sapfluxnetQC1"),
   file.path('Templates', "received_to_accepted.Rmd")
 )
 file.copy(
-  system.file("Rmd_templates", "QC_report.Rmd", package = "sapfluxnetr"),
+  system.file("Rmd_templates", "QC_report.Rmd", package = "sapfluxnetQC1"),
   file.path('Templates', "QC_report.Rmd")
 )
 

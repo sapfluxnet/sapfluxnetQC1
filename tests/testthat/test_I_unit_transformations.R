@@ -248,6 +248,7 @@ test_that('the new variable is added to the table and is numeric', {
   expect_is(qc_rad_conversion(env_hd)$ppfd_in, 'numeric')
 })
 
+################################################################################
 context('I5. Soil texture classification')
 
 test_data <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
@@ -433,6 +434,18 @@ test_that('Category chosen by the function is correct', {
 test_that('st_USDA_soil_texture is not a list', {
   expect_is(test_data_res$st_USDA_soil_texture, 'character')
   expect_false(is.list(test_data_res$st_USDA_soil_texture))
+})
+
+## test that when several classes are returned the first one is returned
+test_several <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 20,
+                           st_silt_perc = 20, st_sand_perc = 60)
+test_several_res <- suppressWarnings(qc_soil_texture(test_several))
+
+test_that('st_USDA_soil_texture is correctly generated when several classes', {
+  expect_warning(qc_soil_texture(test_several),
+                 'Calculated soil texture class differs ')
+  expect_identical(test_several_res$st_USDA_soil_texture,
+                   'sandy clay loam')
 })
 
 ################################################################################

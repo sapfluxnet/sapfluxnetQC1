@@ -1421,8 +1421,9 @@ qc_soil_texture <- function(data, parent_logger = 'test') {
         tmp_soil_texture <- soiltexture::TT.points.in.classes(
           tri.data = data_perc,
           class.sys = 'USDA.TT', # We use the USDA classification
-          PiC.type = 't')
-        data$st_USDA_soil_texture <- list_abbr[[tmp_soil_texture]]
+          PiC.type = 't') %>%
+          stringr::str_split(., ", ")
+        data$st_USDA_soil_texture <- list_abbr[[tmp_soil_texture[[1]][[1]]]]
 
         # 3.2 If soil texture class was already provided, check that it matches
         if (!is.na(data$st_soil_texture)){
