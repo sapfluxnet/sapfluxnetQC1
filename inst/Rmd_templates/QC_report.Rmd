@@ -219,9 +219,7 @@ save(list = c(params$code),
 # trasnformations availabilty
 transformations_table <- qc_transformation_vars(
   sfn_data_object, parent_logger = logger_name
-) %>%
-  qc_transf_list(parent_logger = logger_name)
-
+)
 ```
 
 
@@ -722,18 +720,23 @@ The following table shows the available transformations
 
 ```{r unit conversion}
 transformations_table %>%
+  mutate(Presence = as.character(Presence)) %>%
   datatable(class = 'display compact', rownames = FALSE, filter = 'none',
             extensions = c('Scroller'),
             caption = 'Unit conversion, standarization and transformation',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
+                                                  width = '10%',
+                                                  targets = 3),
+                                             list(className = 'dt-center',
                                                   width = '15%',
-                                                  targets = 1),
+                                                  targets = c(1:2)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           scroller = TRUE, scrollY = 450, scrollCollapse = TRUE)) %>%
-  formatStyle('Available',
-              backgroundColor = styleEqual(c('false', 'true'),
+                           scroller = TRUE, scrollY = 450,
+                           scrollCollapse = TRUE)) %>%
+  formatStyle('Presence',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
 ```
 
