@@ -539,7 +539,10 @@ timestamp_sapf %>%
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '40%',
-                                                  targets = c(1,2)),
+                                                  targets = 2),
+                                             list(className = 'dt-center',
+                                                  width = '20%',
+                                                  targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
@@ -556,7 +559,7 @@ if (is.logical(sapf_timestamp_nas)) {
             caption = 'Sapflow TIMESTAMP NAs info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
-                                                  width = '40%',
+                                                  width = '25%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
@@ -575,7 +578,7 @@ if (is.logical(env_timestamp_nas)) {
             caption = 'Environmental TIMESTAMP NAs info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
-                                                  width = '40%',
+                                                  width = '25%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
@@ -593,7 +596,7 @@ timestamp_errors_sapf %>%
             caption = 'Sapflow TIMESTAMP continuity info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
-                                                  width = '40%',
+                                                  width = '25%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
@@ -610,7 +613,7 @@ timestamp_errors_env %>%
             caption = 'Environmental TIMESTAMP continuity info',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
-                                                  width = '40%',
+                                                  width = '25%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
@@ -652,7 +655,10 @@ sapf_gaps_info %>%
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '20%',
-                                                  targets = c(1:4)),
+                                                  targets = c(1:2)),
+                                             list(className = 'dt-center',
+                                                  width = '15%',
+                                                  targets = c(3:4)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
@@ -661,7 +667,8 @@ sapf_gaps_info %>%
   formatStyle('gap_coverage',
               backgroundColor = styleInterval(c(.10, .25),
                                               c('#89c4f4', '#f39c12',
-                                                '#d91e18')))
+                                                '#d91e18'))) %>%
+  formatRound('gap_interval', 3)
 ```
 
 ```{r gaps_info_cal, fig.width=12, fig.height=6, message=FALSE}
@@ -683,16 +690,20 @@ env_gaps_info %>%
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
                                                   width = '20%',
-                                                  targets = c(1:4)),
+                                                  targets = c(1:2)),
+                                             list(className = 'dt-center',
+                                                  width = '15%',
+                                                  targets = c(3:4)),
                                              list(className = 'dt-right',
                                                   targets = 0)),
                            scroller = TRUE,
                            scrollY = 450, scrollCollapse = TRUE)) %>%
   formatPercentage('gap_coverage', 2) %>%
   formatStyle('gap_coverage',
-              backgroundColor = styleInterval(c(.1, .25),
+              backgroundColor = styleInterval(c(.10, .25),
                                               c('#89c4f4', '#f39c12',
-                                                '#d91e18')))
+                                                '#d91e18'))) %>%
+  formatRound('gap_interval', 3)
 ```
 
 ```{r env_gaps_info_cal, fig.width=12, fig.height=6, message=FALSE}
@@ -716,14 +727,14 @@ transformations_table %>%
             caption = 'Unit conversion, standarization and transformation',
             options = list(dom = 'ti',
                            columnDefs = list(list(className = 'dt-center',
+                                                  width = '15%',
                                                   targets = 1),
                                              list(className = 'dt-right',
                                                   targets = 0)),
-                           scroller = TRUE, scrollY = 450,
-                           fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+                           scroller = TRUE, scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('Available',
-              backgroundColor = styleEqual(c('false'),
-                                           c('#d91e18')))
+              backgroundColor = styleEqual(c('false', 'true'),
+                                           c('#d91e18', 'transparent')))
 ```
 
 ```{r}

@@ -325,20 +325,21 @@ qc_md_results_table <- function(md_cols, factor_values,
 
     # STEP 10
     # Return the datatable
-    res_table <- DT::datatable(res, class = 'display', rownames = FALSE,
-                               extensions = c('Scroller', 'FixedColumns'),
-                               caption = 'Table 1: Metadata Quality Check Summary',
-                               options = list(dom = 't',
-                                              columnDefs = list(list(className = 'dt-center',
-                                                                     targets = 1),
-                                                                list(className = 'dt-right',
-                                                                     targets = 0),
-                                                                list(width = '45%',
-                                                                     targets = c(0, 2)),
-                                                                list(width = '10%',
-                                                                     targets = 1)),
-                                              pageLength = 25,
-                                              scrollY = 650, fixedColumns = TRUE, scrollCollapse = TRUE)) %>%
+    res_table <- DT::datatable(
+      res, class = 'display', rownames = FALSE,
+      extensions = c('Scroller'),
+      caption = 'Metadata Quality Check Summary',
+      options = list(dom = 't',
+                     columnDefs = list(list(className = 'dt-center',
+                                            targets = 1),
+                                       list(className = 'dt-right',
+                                            targets = 0),
+                                       list(width = '45%',
+                                            targets = c(0, 2)),
+                                       list(width = '10%',
+                                            targets = 1)),
+                     scrollY = 650, scrollCollapse = TRUE)
+    ) %>%
       DT::formatStyle('Status',
                       backgroundColor = DT::styleEqual(c('PASS', 'INFO',
                                                          'WARNING', 'ERROR'),
@@ -352,11 +353,17 @@ qc_md_results_table <- function(md_cols, factor_values,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_md_results_table', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_md_results_table',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_md_results_table', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_md_results_table',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_md_results_table', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_md_results_table',
+                                                        sep = '.'))})
 
 
 }
@@ -555,21 +562,21 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     )
 
     # return the table
-    res_table <- DT::datatable(res, class = 'display', rownames = FALSE,
-                               extensions = c('Scroller', 'FixedColumns'),
-                               caption = 'Table 1: Data Quality Check Summary',
-                               options = list(dom = 't',
-                                              columnDefs = list(list(className = 'dt-center',
-                                                                     targets = 1),
-                                                                list(className = 'dt-right',
-                                                                     targets = 0),
-                                                                list(width = '45%',
-                                                                     targets = c(0, 2)),
-                                                                list(width = '10%',
-                                                                     targets = 1)),
-                                              pageLength = 25,
-                                              scrollY = 650, fixedColumns = TRUE,
-                                              scrollCollapse = TRUE)) %>%
+    res_table <- DT::datatable(
+      res, class = 'display', rownames = FALSE,
+      extensions = c('Scroller'),
+      caption = 'Data Quality Check Summary',
+      options = list(dom = 't',
+                     columnDefs = list(list(className = 'dt-center',
+                                            targets = 1),
+                                       list(className = 'dt-right',
+                                            targets = 0),
+                                       list(width = '45%',
+                                            targets = c(0, 2)),
+                                       list(width = '10%',
+                                            targets = 1)),
+                     scrollY = 650, scrollCollapse = TRUE)
+    ) %>%
       DT::formatStyle('Status',
                       backgroundColor = DT::styleEqual(c('PASS', 'INFO',
                                                          'WARNING', 'ERROR'),
@@ -585,13 +592,16 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
   # handlers
   warning = function(w){logging::logwarn(w$message,
                                          logger = paste(parent_logger,
-                                                        'qc_data_results_table', sep = '.'))},
+                                                        'qc_data_results_table',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
                                         logger = paste(parent_logger,
-                                                       'qc_data_results_table', sep = '.'))},
+                                                       'qc_data_results_table',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
-                                                        'qc_data_results_table', sep = '.'))})
+                                                        'qc_data_results_table',
+                                                        sep = '.'))})
 }
 
 ################################################################################
