@@ -295,7 +295,10 @@ factor_values %>%
                            scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('NA_presence',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
-                                           c('transparent', '#89c4f4')))
+                                           c('transparent', '#89c4f4'))) %>%
+  formatStyle('Check_result',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
 ```
 
 ***
