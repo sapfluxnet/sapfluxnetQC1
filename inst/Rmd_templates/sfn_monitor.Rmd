@@ -22,7 +22,8 @@ library(dygraphs)
 library(stringr)
 library(leaflet)
 library(ggplot2)
-library(plotly)
+library(ggiraph)
+# library(plotly)
 
 ################################################################################
 # events and reactives
@@ -431,10 +432,10 @@ Can you see the little mark you leave four years ago in that tree? Yes?
 ```{r}
 # custom layout to allow call to put more things
 fillRow(height = '100%', flex = 1,
-  plotOutput("sp_bar", width = "100%"),
+  ggiraphOutput("sp_bar", width = "100%"),
   fillCol(width = "100%", flex = 1,
-          plotOutput("sp_leaf_habit", height = "100%"),
-          plotOutput("sp_genus", height = "100%"))
+          ggiraphOutput("sp_leaf_habit", height = "100%"),
+          ggiraphOutput("sp_genus", height = "100%"))
 )
 
 # data frame with all species metadatas
@@ -445,7 +446,8 @@ sp_bar_plot <- species_md_joined %>%
   group_by(sp_name, si_code) %>%
   summarise(n = sum(sp_ntrees)) %>%
   ggplot(aes(x = reorder(sp_name, n, sum), y = n, fill = si_code)) +
-  geom_bar(stat = 'identity') +
+  geom_bar_interactive(aes(tooltip = si_code, data_id = si_code),
+                       stat = 'identity') +
   viridis::scale_fill_viridis(discrete = TRUE) +
   labs(x = '', y = 'Number of plants', title = 'Species') +
   coord_flip() +
@@ -459,7 +461,8 @@ sp_leaf_plot <- species_md_joined %>%
   group_by(sp_leaf_habit, sp_name) %>%
   summarise(n = sum(sp_ntrees)) %>%
   ggplot(aes(x = reorder(sp_leaf_habit, n, sum), y = n, fill = sp_name)) +
-  geom_bar(stat = 'identity') +
+  geom_bar_interactive(aes(tooltip = sp_name, data_id = sp_name),
+                       stat = 'identity') +
   viridis::scale_fill_viridis(discrete = TRUE) +
   labs(x = '', y = 'Number of plants', title = 'Leaf habit') +
   coord_flip() +
@@ -474,7 +477,8 @@ sp_genus_plot <- species_md_joined %>%
   group_by(sp_genus, si_code) %>%
   summarise(n = sum(sp_ntrees)) %>%
   ggplot(aes(x = reorder(sp_genus, n, sum), y = n, fill = si_code)) +
-  geom_bar(stat = 'identity') +
+  geom_bar_interactive(aes(tooltip = si_code, data_id = si_code),
+                        stat = 'identity') +
   viridis::scale_fill_viridis(discrete = TRUE) +
   labs(x = '', y = 'Number of plants', title = 'Genus') +
   coord_flip() +
@@ -484,16 +488,21 @@ sp_genus_plot <- species_md_joined %>%
   )
     
 # render plotly elements
-output$sp_bar <- renderPlot({
-  sp_bar_plot
+output$sp_bar <- renderggiraph({
+  ggiraph(code = {print(sp_bar_plot)},
+          width = 0.95, width_svg = 6, height_svg = 6.5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:5px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill:red")
 })
 
-output$sp_leaf_habit <- renderPlot({
-  sp_leaf_plot
+output$sp_leaf_habit <- renderggiraph({
+  ggiraph(code = {print(sp_leaf_plot)},
+          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5)
 })
 
-output$sp_genus <- renderPlot({
-  sp_genus_plot
+output$sp_genus <- renderggiraph({
+  ggiraph(code = {print(sp_genus_plot)},
+          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5)
 })
 ```
 
