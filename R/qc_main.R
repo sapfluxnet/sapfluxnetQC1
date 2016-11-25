@@ -544,7 +544,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
     }
 
     # 2.9 transformation table
-    if (any(!transformations_table$Available)) {
+    if (any(!transformations_table$Presence)) {
       step <- c(step, 'Data conversion and transformations')
       status <- c(status, 'WARNING')
       description <- c(description, 'One or more conversions/transformations are not available')

@@ -354,7 +354,7 @@ theme_sfn <- function(base_size = 10, base_family = "Lato") {
                                     margin = margin(r = 0.8 * half_line,
                                                     l = 0.8 * half_line/2)),
         legend.background = element_rect(colour  = NA, fill = ),
-        legend.margin = unit(1, "pt"),
+        legend.spacing = unit(1, "pt"),
         legend.key = element_rect(colour = NA),
         legend.key.size = unit(1, "lines"),
         legend.key.height = NULL,
@@ -538,7 +538,9 @@ vis_location_biome <- function(data, merge_deserts = FALSE,
 
     # 2.2 Make the plot object
     plot <- plot +
-      geom_point(data = data, aes(x = si_map, y = si_mat, tooltip = si_code),
+      geom_point(data = data, aes(x = si_map, y = si_mat
+                                  # , tooltip = si_code
+                                  ),
                  color = 'black', shape = 21, fill = 'white', size = 2, stroke = 0.5) +
       theme_bw() + coord_cartesian(xlim = c (0, 4500), ylim = c(-16, 30), expand = FALSE)
 
