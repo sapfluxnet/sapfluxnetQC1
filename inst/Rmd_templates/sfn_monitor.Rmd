@@ -429,7 +429,7 @@ Can you see the little mark you leave four years ago in that tree? Yes?
 
 ### **Species Info**. Are you a species info junkie? Here you have a feast!
 
-```{r}
+```{r species_info}
 # custom layout to allow call to put more things
 fillRow(height = '100%', flex = 1,
   ggiraphOutput("sp_bar", width = "100%"),
@@ -453,7 +453,8 @@ sp_bar_plot <- species_md_joined %>%
   coord_flip() +
   theme_bw() +
   theme(
-    legend.title = element_blank()
+    legend.title = element_blank(),
+    legend.position = 'none'
   )
 
 # barplot of leaf habit
@@ -468,7 +469,8 @@ sp_leaf_plot <- species_md_joined %>%
   coord_flip() +
   theme_bw() +
   theme(
-    legend.title = element_blank()
+    legend.title = element_blank(),
+    legend.position = 'none'
   )
 
 # genus plot
@@ -484,25 +486,30 @@ sp_genus_plot <- species_md_joined %>%
   coord_flip() +
   theme_bw() +
   theme(
-    legend.title = element_blank()
+    legend.title = element_blank(),
+    legend.position = 'none'
   )
     
 # render plotly elements
 output$sp_bar <- renderggiraph({
   ggiraph(code = {print(sp_bar_plot)},
           width = 0.95, width_svg = 6, height_svg = 6.5, zoom_max = 5,
-          tooltip_extra_css = "background-color:black;font-style:italic;padding:5px;border-radius:10px 20px 10px 20px;color:white",
-          hover_css = "fill:red")
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
 })
 
 output$sp_leaf_habit <- renderggiraph({
   ggiraph(code = {print(sp_leaf_plot)},
-          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5)
+          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
 })
 
 output$sp_genus <- renderggiraph({
   ggiraph(code = {print(sp_genus_plot)},
-          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5)
+          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
 })
 ```
 
@@ -526,12 +533,12 @@ from
 
 ### **Stand Info**. Interested on stand level? This is the place.
 
-```{r}
+```{r stand_info}
 fillCol(width = '100%', flex = 1,
-  plotOutput("st_height_soil_depth", height = "100%"),
+  ggiraphOutput("st_height_soil_depth", height = "100%"),
   fillRow(height = "100%", flex = 1,
-          plotOutput("st_aspect_terrain", width = "100%"),
-          plotOutput("st_density_basal", width = "100%"))
+          ggiraphOutput("st_aspect_terrain", width = "100%"),
+          ggiraphOutput("st_density_basal", width = "100%"))
 )
 
 # data frame with all stand metadatas
@@ -541,13 +548,14 @@ stand_md_joined <- load_and_bind('stand_md')
 st_height_depth_plot <- stand_md_joined %>%
   ggplot(aes(x = si_code)) +
   # geom_ribbon(aes(ymax = st_height, ymin = 0), fill = 'green') +
-  geom_bar(aes(y = st_height),
-           stat = 'identity', fill = '#440154FF',
-           position = 'dodge') +
+  geom_bar_interactive(aes(y = st_height, tooltip = st_height, data_id = si_code),
+                       stat = 'identity', fill = '#440154FF',
+                       position = 'dodge') +
   # geom_ribbon(aes(ymax = st_soil_depth*(-1/100), ymin = 0), fill = 'brown') +
-  geom_bar(aes(y = st_soil_depth*(-1/100)),
-           stat = 'identity', fill = '#FDE725FF',
-           position = 'dodge') +
+  geom_bar_interactive(aes(y = st_soil_depth*(-1/100),
+                           tooltip = abs(st_soil_depth*(-1/100)), data_id = si_code),
+                       stat = 'identity', fill = '#FDE725FF',
+                       position = 'dodge') +
   labs(x = 'Site', y = 'meters', title = 'Height and Soil Depth') +
   theme_bw() +
   theme(
@@ -561,7 +569,7 @@ st_aspect_terrain_plot <- stand_md_joined %>%
   summarise(n = n()) %>%
   ggplot(aes(x = factor(st_aspect, levels = c('Flat', 'N', 'E', 'S', 'W')),
              y = st_terrain, size = n)) +
-  geom_point(colour = viridis::viridis(1)) +
+  geom_point_interactive(aes(tooltip = n), colour = viridis::viridis(1)) +
   labs(x = 'Aspect', y = 'Terrain', title = 'Aspect and Terrrain') +
   theme_bw() +
   theme(
@@ -574,27 +582,38 @@ st_aspect_terrain_plot <- stand_md_joined %>%
 # density and basal area plot
 st_density_basal_area_plot <- stand_md_joined %>%
   ggplot(aes(x = st_density, y = st_basal_area, colour = si_code)) +
-  geom_point() +
+  geom_point_interactive(aes(tooltip = si_code, data_id = si_code)) +
   viridis::scale_color_viridis(discrete = TRUE) +
   labs(x = 'Density', y = 'Basal area', title = 'Density and Basal area') +
   theme_bw() +
   theme(
-    legend.title = element_blank()
+    legend.title = element_blank(),
+    legend.position = 'none'
     # axis.text.x = element_text(angle = 30),
     # axis.text.y = element_text(angle = 30),
   )
 
 # plotly objects
-output$st_height_soil_depth <- renderPlot({
-  st_height_depth_plot
+output$st_height_soil_depth <- renderggiraph({
+  ggiraph(code = {print(st_height_depth_plot)},
+          width = 0.95, width_svg = 12, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
 })
 
-output$st_aspect_terrain <- renderPlot({
-  st_aspect_terrain_plot
+output$st_aspect_terrain <- renderggiraph({
+  ggiraph(code = {print(st_aspect_terrain_plot)},
+          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
 })
 
-output$st_density_basal <- renderPlot({
-  st_density_basal_area_plot
+output$st_density_basal <- renderggiraph({
+  ggiraph(code = {print(st_density_basal_area_plot)},
+          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4",
+          selected_css = "stroke:black;r:4pt;")
 })
 ```
 
@@ -607,13 +626,9 @@ Here you can:
   1. Click in the name of a site/species to remove it from the plot, click it
      again to add it.
 
-  > NOTE: At the moment, only Aspect/Terrain and Density/Basal_area plots
-    allow this. Height/Soil_depth plot is not interactive as plotly don't
-    manage well negative stacked bars :(
-
 ### **Plant Info**. Where all the plants feel like home!
 
-```{r}
+```{r plant_info}
 plant_md_joined <- load_and_bind('plant_md')
 
 fillCol(
@@ -631,24 +646,31 @@ fillCol(
                             'pl_social', 'pl_species', 'pl_treatment', 'si_code'),
                 selected = 'si_code')
   ),
-  plotOutput('dbh', height = "100%")
+  ggiraphOutput('dbh', height = "100%")
 )
 
-output$dbh <- renderPlot({
+output$dbh <- renderggiraph({
   dbh_plot <- plant_md_joined %>%
     ggplot(aes_string(x = 'pl_dbh', y = input$pl_var,
                       colour = input$pl_factor)) +
-    geom_point(size = 2) +
+    geom_point_interactive(aes_string(tooltip = input$pl_factor,
+                                      data_id = input$pl_factor),
+                           size = 2) +
     viridis::scale_color_viridis(discrete = TRUE) +
     labs(x = 'DBH', y = input$pl_var, title = 'DBH') +
     theme_bw() +
     theme(
-      legend.title = element_blank()
+      legend.title = element_blank(),
+      legend.position = 'none'
       # axis.text.x = element_text(angle = 30),
       # axis.text.y = element_text(angle = 30),
     )
-    
-  dbh_plot
+  
+  ggiraph(code = {print(dbh_plot)},
+          width = 0.95, width_svg = 12, height_svg = 5.8, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4",
+          selected_css = "stroke:black;r:4pt;")
 })
 ```
 
@@ -665,7 +687,7 @@ Here you can:
 
 ### **Environmental Info**. Worried about environmental metadata? Here you'll find the answers
 
-```{r}
+```{r env_info}
 # data frame with all plant metadatas
 env_md_joined <- load_and_bind('env_md')
 
@@ -674,17 +696,19 @@ env_vars_plot <- env_md_joined %>%
          env_ta, env_vpd, env_ws) %>%
   gather(Variable, Value, starts_with('env_')) %>%
   mutate(n = 1) %>%
-  ggplot(aes(x = Variable, fill = si_code)) +
-  geom_bar(stat = 'count', position = 'stack') +
-  facet_grid(~Value) +
-  scale_x_discrete(labels = c('netrad', 'ppfd', 'precip', 'rh', 'sw_in',
-                              'ta', 'vpd', 'ws')) +
+  ggplot(aes(x = Value, fill = si_code)) +
+  geom_bar_interactive(aes(tooltip = si_code, data_id = si_code),
+                       stat = 'count', position = 'stack') +
+  facet_grid(~Variable) +
+  scale_x_discrete(breaks = c('Above canopy', 'Within canopy', 'Clearing',
+                              'Off-site', 'Not provided')) +
   viridis::scale_fill_viridis(discrete = TRUE) +
   labs(x = '', y = 'Number of sites', title = 'Environmental variables') +
   theme_bw() +
   theme(
-    legend.title = element_blank()
-    # axis.text.x = element_text(angle = 30)
+    legend.title = element_blank(),
+    legend.position = 'none',
+    axis.text.x = element_text(angle = 90)
     # axis.text.y = element_text(angle = 30)
   )
 
@@ -692,29 +716,39 @@ env_swc_plot <- env_md_joined %>%
   select(si_code, env_swc_shallow_depth, env_swc_deep_depth) %>%
   gather(Deep, Value, starts_with('env_')) %>%
   ggplot(aes(x = Value, fill = si_code)) +
-  geom_histogram(binwidth = 10) +
+  geom_bar_interactive(aes(tooltip = si_code, data_id = si_code),
+                       stat = 'bin', position = 'stack',
+                       binwidth = 10) +
   facet_grid(~Deep) +
   viridis::scale_fill_viridis(discrete = TRUE) +
   labs(x = 'Deep in cm', y = 'Count', title = 'Soil water content deep') +
   theme_bw() +
   theme(
-    legend.title = element_blank()
+    legend.title = element_blank(),
+    legend.position = 'none'
     # axis.text.x = element_text(angle = 30)
     # axis.text.y = element_text(angle = 30)
   )
 
 fillCol(
   width = '100%', flex = 1,
-  plotOutput('env_vars'),
-  plotOutput('swc')
+  ggiraphOutput('env_vars'),
+  ggiraphOutput('swc')
 )
 
-output$env_vars <- renderPlot({
-  env_vars_plot
+output$env_vars <- renderggiraph({
+  ggiraph(code = {print(env_vars_plot)},
+          width = 0.95, width_svg = 12, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+  
 })
 
-output$swc <- renderPlot({
-  env_swc_plot
+output$swc <- renderggiraph({
+  ggiraph(code = {print(env_swc_plot)},
+          width = 0.95, width_svg = 12, height_svg = 3.2, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
 })
 
 
@@ -731,7 +765,7 @@ Here you can:
 
 ### **Biomes Info**. Concerned about the climatic and biogeographic range of the data sets? Just take a look here!
 
-```{r}
+```{r biomes_info}
 # data frame with all site metadata
 si_biomes_df <- load_and_bind('site_md')
 
@@ -739,23 +773,26 @@ si_biomes_plot <-  vis_location_biome(si_biomes_df)
 
 fillCol(
   width = '100%', flex = 1,
-  plotOutput('si_biomes')
+  ggiraphOutput('si_biomes')
 )
 
-output$si_biomes <- renderPlot({
-  si_biomes_plot
+output$si_biomes <- renderggiraph({
+  ggiraph(code = {print(si_biomes_plot)},
+          width = 0.95, width_svg = 12, height_svg = 5.8, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4",
+          selected_css = "stroke:black;r:4pt;")
 })
 ```
 
 ***
 
-Here you can:
+Here you can:  
+
   1. Select an area to zoom it (double click to reset).
   1. Hover the dots to obtain info from site (code, MAT and MAP).
   1. Click in the name of a biome to remove it from the plot, click it
      again to add it.
-
-  > NOTE: Biomes plot not working at the moment due to porblems in RFc package
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================

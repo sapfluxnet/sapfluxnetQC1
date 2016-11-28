@@ -1,4 +1,5 @@
 library(sapfluxnetQC1)
+suppressMessages(library(ggiraph))
 
 ################################################################################
 context('M1. Biomes plot')
@@ -11,7 +12,7 @@ test_that('argument checks work', {
 })
 
 test_that('plot is created', {
-  expect_is(vis_biome(), 'ggplot')
+  expect_is(suppressWarnings(vis_biome()), 'ggplot')
 })
 
 context('M2. Biomes plot with sites')
@@ -38,5 +39,5 @@ test_that('argument checks work', {
 })
 
 test_that('plot is created', {
-  expect_is(vis_location_biome(foo_data), 'ggplot')
+  expect_is(suppressWarnings(vis_location_biome(foo_data)), 'ggplot')
 })

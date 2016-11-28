@@ -449,8 +449,13 @@ vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test') {
     }
 
     # 2.2 Make the plot object
-    plot <- ggplot() + geom_polygon(data = biomes_df, aes(x = long, y = lat, group = id, fill = id)) +
-      scale_fill_manual('Biomes', values = pal) + xlab('Mean annual precipitation (mm)') +
+    plot <- ggplot() +
+      ggiraph::geom_polygon_interactive(data = biomes_df,
+                                        aes(tooltip = id, data_id = id,
+                                            x = long, y = lat, group = id,
+                                            fill = id)) +
+      scale_fill_manual('Biomes', values = pal) +
+      xlab('Mean annual precipitation (mm)') +
       ylab('Mean annual temperature (ºC)')
 
     # 2.3 Return the plot object
@@ -461,11 +466,17 @@ vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'vis_biome', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'vis_biome',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'vis_biome', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'vis_biome',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'vis_biome', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'vis_biome',
+                                                        sep = '.'))})
 
 }
 
@@ -538,11 +549,13 @@ vis_location_biome <- function(data, merge_deserts = FALSE,
 
     # 2.2 Make the plot object
     plot <- plot +
-      geom_point(data = data, aes(x = si_map, y = si_mat
-                                  # , tooltip = si_code
-                                  ),
-                 color = 'black', shape = 21, fill = 'white', size = 2, stroke = 0.5) +
-      theme_bw() + coord_cartesian(xlim = c (0, 4500), ylim = c(-16, 30), expand = FALSE)
+      ggiraph::geom_point_interactive(data = data, aes(
+        x = si_map, y = si_mat,
+        tooltip = si_code, data_id = si_code
+      ),
+      color = 'black', shape = 21, fill = 'white', size = 2, stroke = 0.5) +
+      theme_bw() +
+      coord_cartesian(xlim = c (0, 4500), ylim = c(-16, 30), expand = FALSE)
 
     # 2.3 Return the plot object
     return(plot)
