@@ -338,7 +338,7 @@ qc_md_results_table <- function(md_cols, factor_values,
                                             targets = c(0, 2)),
                                        list(width = '10%',
                                             targets = 1)),
-                     scrollY = 650, scrollCollapse = TRUE)
+                     scrollY = 750, scrollCollapse = TRUE)
     ) %>%
       DT::formatStyle('Status',
                       backgroundColor = DT::styleEqual(c('PASS', 'INFO',
@@ -575,7 +575,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
                                             targets = c(0, 2)),
                                        list(width = '10%',
                                             targets = 1)),
-                     scrollY = 650, scrollCollapse = TRUE)
+                     scrollY = 750, scrollCollapse = TRUE)
     ) %>%
       DT::formatStyle('Status',
                       backgroundColor = DT::styleEqual(c('PASS', 'INFO',
