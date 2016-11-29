@@ -493,21 +493,21 @@ sp_genus_plot <- species_md_joined %>%
 # render plotly elements
 output$sp_bar <- renderggiraph({
   ggiraph(code = {print(sp_bar_plot)},
-          width = 0.95, width_svg = 6, height_svg = 6.5, zoom_max = 5,
+          width = 0.95, width_svg = 5.5, height_svg = 5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
 
 output$sp_leaf_habit <- renderggiraph({
   ggiraph(code = {print(sp_leaf_plot)},
-          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 5.5, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
 
 output$sp_genus <- renderggiraph({
   ggiraph(code = {print(sp_genus_plot)},
-          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 5.5, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -596,21 +596,21 @@ st_density_basal_area_plot <- stand_md_joined %>%
 # plotly objects
 output$st_height_soil_depth <- renderggiraph({
   ggiraph(code = {print(st_height_depth_plot)},
-          width = 0.95, width_svg = 12, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 11, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
 
 output$st_aspect_terrain <- renderggiraph({
   ggiraph(code = {print(st_aspect_terrain_plot)},
-          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 5.5, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
 
 output$st_density_basal <- renderggiraph({
   ggiraph(code = {print(st_density_basal_area_plot)},
-          width = 0.95, width_svg = 6, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 5.5, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4",
           selected_css = "stroke:black;r:4pt;")
@@ -667,7 +667,7 @@ output$dbh <- renderggiraph({
     )
   
   ggiraph(code = {print(dbh_plot)},
-          width = 0.95, width_svg = 12, height_svg = 5.8, zoom_max = 5,
+          width = 0.95, width_svg = 11, height_svg = 5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4",
           selected_css = "stroke:black;r:4pt;")
@@ -738,7 +738,7 @@ fillCol(
 
 output$env_vars <- renderggiraph({
   ggiraph(code = {print(env_vars_plot)},
-          width = 0.95, width_svg = 12, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 11, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
   
@@ -746,7 +746,7 @@ output$env_vars <- renderggiraph({
 
 output$swc <- renderggiraph({
   ggiraph(code = {print(env_swc_plot)},
-          width = 0.95, width_svg = 12, height_svg = 3.2, zoom_max = 5,
+          width = 0.95, width_svg = 11, height_svg = 2.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -778,7 +778,7 @@ fillCol(
 
 output$si_biomes <- renderggiraph({
   ggiraph(code = {print(si_biomes_plot)},
-          width = 0.95, width_svg = 12, height_svg = 5.8, zoom_max = 5,
+          width = 0.95, width_svg = 11, height_svg = 5.5, zoom_max = 5,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4",
           selected_css = "stroke:black;r:4pt;")
