@@ -794,6 +794,241 @@ Here you can:
   1. Click in the name of a biome to remove it from the plot, click it
      again to add it.
 
+Metadata {data-icon="ion-clipboard" data-navmenu="Site Inspector"}
+================================================================================
+
+Sidebar {.sidebar data-width=200}
+--------------------------------------------------------------------------------
+
+### Data selection
+
+Select the site code and data level
+
+```{r sidebar_metadata}
+site_list <- list.dirs('Data', full.names = FALSE, recursive = FALSE)
+
+selectInput('md_site_sel', label = 'Select site by code:',
+            choices = site_list, selected = site_list[1])
+
+radioButtons('md_level_sel', label = 'Select data level:',
+             choices = c('Level 1' = 'Lvl_1', 'Level 2' = 'Lvl_2'),
+             selected = 'Lvl_1')
+
+# radioButtons('data_sel', label = 'Select sapflow data type:',
+#              choices = c('Sapflow data leaf' = 'sapflow_data_leaf.csv',
+#                          'Sapflow data plant' = 'sapflow_data_plant.csv',
+#                          'Sapflow data sapwood' = 'sapflow_data_sapwood.csv'),
+#              selected = 'sapflow_data_plant.csv')
+
+tags$br()
+```
+
+Row
+--------------------------------------------------------------------------------
+
+## Site and stand metadata
+
+```{r site_stand_md_insp}
+fillRow(height = '100%', flex = 1,
+  ggiraphOutput('si_elev_plot', width = "14%"),
+  ggiraphOutput('st_age_plot', width = "14%"),
+  ggiraphOutput('st_height_plot', width = "14%"),
+  ggiraphOutput('st_density_plot', width = "14%"),
+  ggiraphOutput('st_basal_area_plot', width = "14%"),
+  ggiraphOutput('st_lai_plot', width = "14%"),
+  ggiraphOutput('st_soil_depth_plot', width = "14%")
+)
+
+site_md_joined <- load_and_bind('site_md')
+
+site_md_data_plot <- site_md_joined %>%
+  select(si_code, si_elev)
+
+stand_md_data_plot <- stand_md_joined %>%
+  select(si_code, st_age, st_height, st_density,
+         st_basal_area, st_lai, st_soil_depth)
+
+site_stand_md <- full_join(site_md_data_plot, stand_md_data_plot,
+                           by = 'si_code') %>%
+  gather("Var", "Value", si_elev:st_soil_depth)
+
+output$si_elev_plot <- renderggiraph({
+  
+  si_elev_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  si_elev_plot <- si_elev_data %>%
+  filter(Var == 'si_elev') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(si_elev_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$st_age_plot <- renderggiraph({
+  
+  st_age_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  st_age_plot <- st_age_data %>%
+  filter(Var == 'st_age') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(st_age_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$st_height_plot <- renderggiraph({
+  
+  st_height_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  st_height_plot <- st_height_data %>%
+  filter(Var == 'st_height') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(st_height_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$st_density_plot <- renderggiraph({
+  
+  st_density_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  st_density_plot <- st_density_data %>%
+  filter(Var == 'st_density') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(st_density_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$st_basal_area_plot <- renderggiraph({
+  
+  st_basal_area_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  st_basal_area_plot <- st_basal_area_data %>%
+  filter(Var == 'st_basal_area') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(st_basal_area_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$st_lai_plot <- renderggiraph({
+  
+  st_lai_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  st_lai_plot <- st_lai_data %>%
+  filter(Var == 'st_lai') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(st_lai_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$st_soil_depth_plot <- renderggiraph({
+  
+  st_soil_depth_data <- site_stand_md %>%
+    mutate(colour = as.character(si_code == input$md_site_sel))
+  
+  st_soil_depth_plot <- st_soil_depth_data %>%
+  filter(Var == 'st_soil_depth') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = si_code,
+                             colour = colour),
+                         # position = 'jitter',
+                         size = 4, alpha = 0.8) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                      labels = c('Others', input$md_site_sel)) +
+  theme_sfn()
+  
+  ggiraph(code = {print(st_soil_depth_plot)},
+          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+```
+
+
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
 ================================================================================
 
@@ -802,7 +1037,7 @@ Sidebar {.sidebar data-width=200}
 
 ### Data selection
 
-Select the site code, data level and data units
+Select the site code and data level
 
 ```{r sidebar_site_insp}
 site_list <- list.dirs('Data', full.names = FALSE, recursive = FALSE)
