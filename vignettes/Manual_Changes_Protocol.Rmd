@@ -54,3 +54,44 @@ of the change.
                   autofix.
                   si_lat variable was changed from 42.9 to 38.2 in the ESP_VAL_SOR_metadata.xlsx
                   file
+
+# Complete process
+
+The complete process for manual changes is as follows:
+
+1. Download the data to be changed
+
+1. Locally perform the manual changes and save them. Create the mandatory txt
+   file (as explained above)
+
+1. Before uploading the changed-data the server must be prepared:
+
+    + move the data from `/data/metadata` to `/sapfluxnet/discarded_data`:
+    
+        ```
+        $ cd /data/metadata
+        /data/metadata$ sudo mv FOO_FOO_metadata.xlsx /sapfluxnet/discarded_data/
+        ```
+    
+    + remove the old data from `/sapfluxnet/received_data`:
+    
+        ```
+        /data/metadata$ cd /sapfluxnet/received_data
+        /sapfluxnet/received_data$ sudo rv FOO_FOO_metadata.xlsx
+        ```
+    
+    + if data has been processed before in the production instance, status for
+      the site must be resetted (in RStudio):
+    
+        ```
+        > df_reset_status('FOO_FOO')
+        ```
+
+1. Follow the usual upload process (upload form in sapfluxnet webpage) to re-send
+   the changed data
+
+1. Run the `main_script.R` to generate the new report
+
+1. If a manual changes txt already exists in the data folder in the server,
+   update the content to reflect the new changes. If not, upload the file created
+   in step 2.
