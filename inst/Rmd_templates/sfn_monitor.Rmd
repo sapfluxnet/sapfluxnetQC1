@@ -823,21 +823,26 @@ radioButtons('md_level_sel', label = 'Select data level:',
 tags$br()
 ```
 
-Row
+Row {.tabset .tabset-fade}
 --------------------------------------------------------------------------------
 
-## Site and stand metadata
+### Site and stand metadata
 
 ```{r site_stand_md_insp}
-fillRow(height = '100%', flex = 1,
-  ggiraphOutput('si_elev_plot', width = "14%"),
-  ggiraphOutput('st_age_plot', width = "14%"),
-  ggiraphOutput('st_height_plot', width = "14%"),
-  ggiraphOutput('st_density_plot', width = "14%"),
-  ggiraphOutput('st_basal_area_plot', width = "14%"),
-  ggiraphOutput('st_lai_plot', width = "14%"),
-  ggiraphOutput('st_soil_depth_plot', width = "14%")
-)
+fillCol(width = '100%', flex = 1,
+        fillRow(height = '100%', flex = 1,
+                ggiraphOutput('si_elev_plot', width = "100%"),
+                ggiraphOutput('st_age_plot', width = "100%"),
+                ggiraphOutput('st_height_plot', width = "100%")),
+        fillRow(height = '100%',flex = 1,
+                ggiraphOutput('st_density_plot', width = "100%"),
+                ggiraphOutput('st_basal_area_plot', width = "100%"),
+                ggiraphOutput('st_lai_plot', width = "100%")),
+        fillRow(height = '100%',flex = 1,
+                ggiraphOutput('st_soil_depth_plot', width = "100%"),
+                NULL,
+                NULL)
+        )
 
 site_md_joined <- load_and_bind('site_md')
 
@@ -860,19 +865,23 @@ output$si_elev_plot <- renderggiraph({
   si_elev_plot <- si_elev_data %>%
   filter(Var == 'si_elev') %>%
   ggplot(aes(x = Var, y = Value)) +
-  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
-  geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+    geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                             fill = 'grey85', alpha = 0.3,
+                             outlier.size = 0) +
+    geom_point_interactive(aes(data_id = si_code,
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(si_elev_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -886,18 +895,22 @@ output$st_age_plot <- renderggiraph({
   filter(Var == 'st_age') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
+                           fill = 'grey85', alpha = 0.3,
+                             outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(st_age_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -911,18 +924,22 @@ output$st_height_plot <- renderggiraph({
   filter(Var == 'st_height') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
+                           fill = 'grey85', alpha = 0.3,
+                             outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(st_height_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -936,18 +953,22 @@ output$st_density_plot <- renderggiraph({
   filter(Var == 'st_density') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
+                           fill = 'grey85', alpha = 0.3,
+                             outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(st_density_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -961,18 +982,22 @@ output$st_basal_area_plot <- renderggiraph({
   filter(Var == 'st_basal_area') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
+                           fill = 'grey85', alpha = 0.3,
+                             outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(st_basal_area_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -986,18 +1011,22 @@ output$st_lai_plot <- renderggiraph({
   filter(Var == 'st_lai') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(st_lai_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
@@ -1011,22 +1040,357 @@ output$st_soil_depth_plot <- renderggiraph({
   filter(Var == 'st_soil_depth') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3) +
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
-                             tooltip = si_code,
-                             colour = colour),
-                         # position = 'jitter',
-                         size = 4, alpha = 0.8) +
-  scale_colour_manual(values = c('darkgrey', 'red'),
-                      labels = c('Others', input$md_site_sel)) +
-  theme_sfn()
+                               tooltip = si_code,
+                               colour = colour,
+                               alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+    scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+    scale_alpha_manual(values = c(0.15, 1)) +
+    guides(alpha = FALSE) +
+    theme_sfn()
   
   ggiraph(code = {print(st_soil_depth_plot)},
-          width = 0.95, width_svg = 6, height_svg = 5, zoom_max = 5,
+          width = 0.95, width_svg = 4.4, height_svg = 2,
           tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
           hover_css = "fill-opacity:.4")
 })
 ```
+
+### Species and plant metadata
+
+```{r species_plant_md_insp}
+fillCol(width = '100%', flex = 1,
+        fillRow(height = '100%', flex = 1,
+                ggiraphOutput('sp_basal_area_perc_plot', width = "100%"),
+                ggiraphOutput('pl_age_plot', width = "100%"),
+                ggiraphOutput('pl_bark_thick_plot', width = "100%"),
+                ggiraphOutput('pl_dbh_plot', width = "100%")),
+        fillRow(height = '100%',flex = 1,
+                ggiraphOutput('pl_height_plot', width = "100%"),
+                ggiraphOutput('pl_leaf_area_plot', width = "100%"),
+                ggiraphOutput('pl_sapw_area_plot', width = "100%"),
+                ggiraphOutput('pl_sapw_depth_plot', width = "100%")),
+        fillRow(height = '100%',flex = 1,
+                ggiraphOutput('pl_sens_hgt_plot', width = "100%"),
+                ggiraphOutput('pl_sens_length_plot', width = "100%"),
+                ggiraphOutput('pl_sens_timestep_plot', width = "100%"),
+                NULL)
+        )
+
+
+species_md_data_plot <- species_md_joined %>%
+  select(si_code, sp_name, sp_basal_area_perc) %>%
+  gather("Var", "Value", sp_basal_area_perc)
+
+plant_md_data_plot <- plant_md_joined %>%
+  select(si_code, pl_code, pl_age, pl_bark_thick, pl_dbh, pl_height,
+         pl_leaf_area, pl_sapw_area, pl_sapw_depth, pl_sens_hgt,
+         pl_sens_length, pl_sens_timestep) %>%
+  gather("Var", "Value", pl_age:pl_sens_timestep)
+
+output$sp_basal_area_perc_plot <- renderggiraph({
+  
+  sp_basal_area_perc_plot <- species_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'sp_basal_area_perc') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = sp_name,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(sp_basal_area_perc_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_age_plot <- renderggiraph({
+  
+  pl_age_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_age') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_age_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_bark_thick_plot <- renderggiraph({
+  
+  pl_bark_thick_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_bark_thick') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_bark_thick_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_dbh_plot <- renderggiraph({
+  
+  pl_dbh_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_dbh') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_dbh_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_height_plot <- renderggiraph({
+  
+  pl_height_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_height') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_height_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_leaf_area_plot <- renderggiraph({
+  
+  pl_leaf_area_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_leaf_area') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_leaf_area_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_sapw_area_plot <- renderggiraph({
+  
+  pl_sapw_area_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_sapw_area') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_sapw_area_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_sapw_depth_plot <- renderggiraph({
+  
+  pl_sapw_depth_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_sapw_depth') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_sapw_depth_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_sens_hgt_plot <- renderggiraph({
+  
+  pl_sens_hgt_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_sens_hgt') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_sens_hgt_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_sens_length_plot <- renderggiraph({
+  
+  pl_sens_length_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_sens_length') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_sens_length_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+
+output$pl_sens_timestep_plot <- renderggiraph({
+  
+  pl_sens_timestep_plot <- plant_md_data_plot %>%
+  mutate(colour = as.character(si_code == input$md_site_sel)) %>%
+  filter(Var == 'pl_sens_timestep') %>%
+  ggplot(aes(x = Var, y = Value)) +
+  geom_boxplot_interactive(aes(data_id = Var, tooltip = Var),
+                           fill = 'grey85', alpha = 0.3,
+                           outlier.size = 0) +
+  geom_point_interactive(aes(data_id = si_code,
+                             tooltip = pl_code,
+                             colour = colour,
+                             alpha = colour),
+                           position = position_jitter(width = 0.2, height = 0),
+                           size = 4) +
+  scale_colour_manual(values = c('darkgrey', 'red'),
+                        labels = c('Others', input$md_site_sel)) +
+  scale_alpha_manual(values = c(0.15, 1)) +
+  guides(alpha = FALSE) +
+  theme_sfn()
+  
+  ggiraph(code = {print(pl_sens_timestep_plot)},
+          width = 0.95, width_svg = 4.4, height_svg = 2,
+          tooltip_extra_css = "background-color:black;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;color:white",
+          hover_css = "fill-opacity:.4")
+})
+```
+
 
 
 Data & TimeSeries {data-icon="ion-ios-search-strong" data-navmenu="Site Inspector"}
