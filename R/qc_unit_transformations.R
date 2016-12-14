@@ -1390,8 +1390,9 @@ qc_soil_texture <- function(data, parent_logger = 'test') {
       # appears to say that there is no info about the soil texture.
 
       if (is.na(data$st_soil_texture)){
-        warning('There is no information about the soil texture')
-        return(invisible(FALSE))
+        warning('There is no information about the soil texture, ',
+                'returning the original data')
+        return(data)
       } else {
         data$st_USDA_soil_texture <- tolower(data$st_soil_texture)
         message('One or more percentages are missing. ',
@@ -1412,7 +1413,7 @@ qc_soil_texture <- function(data, parent_logger = 'test') {
       if (sum(data_perc) != 100) {
         warning('The sum of the different percentages of clay, silt and sand is not equal to 100% ',
                 'and soil texture can not be calculated')
-        return(invisible(FALSE))
+        return(data)
       } else {
 
         # STEP 3
