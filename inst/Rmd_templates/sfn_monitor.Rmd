@@ -866,7 +866,7 @@ output$si_elev_plot <- renderggiraph({
   filter(Var == 'si_elev') %>%
   ggplot(aes(x = Var, y = Value)) +
     geom_violin(aes(data_id = Var, tooltip = Var),
-                             fill = 'grey85', alpha = 0.3,
+                             fill = '#FDE3A7', alpha = 0.3,
                              outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -875,7 +875,7 @@ output$si_elev_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[m]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -896,7 +896,7 @@ output$st_age_plot <- renderggiraph({
   filter(Var == 'st_age') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                              outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -905,7 +905,7 @@ output$st_age_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[years]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -926,7 +926,7 @@ output$st_height_plot <- renderggiraph({
   filter(Var == 'st_height') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                              outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -935,7 +935,7 @@ output$st_height_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[m]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -956,7 +956,7 @@ output$st_density_plot <- renderggiraph({
   filter(Var == 'st_density') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                              outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -965,7 +965,7 @@ output$st_density_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[stems/ha]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -986,7 +986,7 @@ output$st_basal_area_plot <- renderggiraph({
   filter(Var == 'st_basal_area') %>%
   ggplot(aes(x = Var, y = Value)) +
     geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                              outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -995,7 +995,7 @@ output$st_basal_area_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[m²/ha]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -1016,7 +1016,7 @@ output$st_lai_plot <- renderggiraph({
   filter(Var == 'st_lai') %>%
   ggplot(aes(x = Var, y = Value)) +
     geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -1025,7 +1025,7 @@ output$st_lai_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[m²/m²]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -1046,7 +1046,7 @@ output$st_soil_depth_plot <- renderggiraph({
   filter(Var == 'st_soil_depth') %>%
   ggplot(aes(x = Var, y = Value)) +
     geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                                tooltip = si_code,
@@ -1055,7 +1055,7 @@ output$st_soil_depth_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[cm]') +
-    scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
     scale_alpha_manual(values = c(0.15, 1)) +
     guides(alpha = FALSE) +
@@ -1107,7 +1107,7 @@ output$sp_basal_area_perc_plot <- renderggiraph({
   filter(Var == 'sp_basal_area_perc') %>%
   ggplot(aes(x = Var, y = Value)) +
     geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
     geom_point_interactive(aes(data_id = si_code,
                              tooltip = sp_name,
@@ -1116,7 +1116,7 @@ output$sp_basal_area_perc_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[%]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1135,7 +1135,7 @@ output$pl_age_plot <- renderggiraph({
   filter(Var == 'pl_age') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1144,7 +1144,7 @@ output$pl_age_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[years]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1163,7 +1163,7 @@ output$pl_bark_thick_plot <- renderggiraph({
   filter(Var == 'pl_bark_thick') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1172,7 +1172,7 @@ output$pl_bark_thick_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[mm]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1191,7 +1191,7 @@ output$pl_dbh_plot <- renderggiraph({
   filter(Var == 'pl_dbh') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1200,7 +1200,7 @@ output$pl_dbh_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[cm]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1219,7 +1219,7 @@ output$pl_height_plot <- renderggiraph({
   filter(Var == 'pl_height') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1228,7 +1228,7 @@ output$pl_height_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[m]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1247,7 +1247,7 @@ output$pl_leaf_area_plot <- renderggiraph({
   filter(Var == 'pl_leaf_area') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1256,7 +1256,7 @@ output$pl_leaf_area_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[m²]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1275,7 +1275,7 @@ output$pl_sapw_area_plot <- renderggiraph({
   filter(Var == 'pl_sapw_area') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1284,7 +1284,7 @@ output$pl_sapw_area_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[cm²]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1303,7 +1303,7 @@ output$pl_sapw_depth_plot <- renderggiraph({
   filter(Var == 'pl_sapw_depth') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1312,7 +1312,7 @@ output$pl_sapw_depth_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[cm]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1331,7 +1331,7 @@ output$pl_sens_hgt_plot <- renderggiraph({
   filter(Var == 'pl_sens_hgt') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1341,7 +1341,7 @@ output$pl_sens_hgt_plot <- renderggiraph({
                            size = 4) +
     
     labs(x = '', y = '[m]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1360,7 +1360,7 @@ output$pl_sens_length_plot <- renderggiraph({
   filter(Var == 'pl_sens_length') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1369,7 +1369,7 @@ output$pl_sens_length_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[mm]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+  scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
@@ -1388,7 +1388,7 @@ output$pl_sens_timestep_plot <- renderggiraph({
   filter(Var == 'pl_sens_timestep') %>%
   ggplot(aes(x = Var, y = Value)) +
   geom_violin(aes(data_id = Var, tooltip = Var),
-                           fill = 'grey85', alpha = 0.3,
+                           fill = '#FDE3A7', alpha = 0.3,
                            outlier.size = 0) +
   geom_point_interactive(aes(data_id = si_code,
                              tooltip = pl_code,
@@ -1397,7 +1397,7 @@ output$pl_sens_timestep_plot <- renderggiraph({
                            position = position_jitter(width = 0.2, height = 0),
                            size = 4) +
     labs(x = '', y = '[min]') +
-  scale_colour_manual(values = c('darkgrey', 'red'),
+    scale_colour_manual(values = c('#6C7A89', 'red'),
                         labels = c('Others', input$md_site_sel)) +
   scale_alpha_manual(values = c(0.15, 1)) +
   guides(alpha = FALSE) +
