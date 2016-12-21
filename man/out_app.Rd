@@ -4,7 +4,7 @@
 \alias{out_app}
 \title{outliers_app function}
 \usage{
-out_app()
+out_app(parent_logger = "test")
 }
 \value{
 An interactive app to manage outliers

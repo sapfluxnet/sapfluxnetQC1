@@ -25,7 +25,7 @@
 
 # START
 # Function declaration
-out_app <- function() {
+out_app <- function(parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -35,6 +35,10 @@ out_app <- function() {
 
     # 0.1 site codes list
     site_list <- list.dirs('Data', full.names = FALSE, recursive = FALSE)
+
+    # 0.2 libraries
+    # require(sapfluxnetQC1)
+    # require(shiny)
 
     # STEP 1
     # Defining the app
@@ -51,8 +55,7 @@ out_app <- function() {
           # sidebar to select site, tree and env_var
           sidebarPanel(
             selectInput('site_sel', 'Select site', site_list, site_list[1]),
-            uiOutput('tree_controls'),
-            uiOutput('env_controls'),
+            uiOutput('tree_env'),
             width = 3
           ),
 
@@ -68,7 +71,7 @@ out_app <- function() {
                 fluidRow(
                   column(
                     width = 12,
-                    dygraphOutput("time_series", height = "250px")
+                    dygraphs::dygraphOutput("time_series", height = "250px")
                   ),
 
                   # row with table and selectors
@@ -96,7 +99,78 @@ out_app <- function() {
             )
           )
         )
-      )
+      ),
+
+      # 1.2 SERVER
+      server = function(input, output) {
+
+        # # load the site SfnData object
+        # observeEvent(
+        #   eventExpr = input$site_sel,
+        #   handlerExpr = {
+        #     name <- paste0(input$site_sel, '.RData')
+        #     load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
+        #   }
+        # )
+
+        # tree and env input
+        output$tree_env <- renderUI({
+          name <- paste0(input$site_sel, '.RData')
+          load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
+          names_trees <- names(get_sapf(eval(as.name(input$site_sel)))[, -1])
+          names_env <- names(get_env(eval(as.name(input$site_sel)))[, -1])
+          names_sel <- c(names_trees, names_env)
+          checkboxGroupInput('tree_env', 'Choose tree or env var',
+                             choices = names_sel, selected = names_sel[1])
+        })
+
+        # dygraph output
+        output$time_series <- dygraphs::renderDygraph({
+          # data
+          name <- paste0(input$site_sel, '.RData')
+          load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
+          sapf_data <- get_sapf(eval(as.name(input$site_sel)))
+          sapf_flags <- get_sapf_flags(eval(as.name(input$site_sel)))
+          env_data <- get_env(eval(as.name(input$site_sel)))
+          env_flags <- get_env_flags(eval(as.name(input$site_sel)))
+          sapf_data_out <- sapf_data
+          env_data_out <- env_data
+
+          # subsets with/without outliers
+          tmp_sapf <- lapply(1:ncol(sapf_data), function(i) {
+            sapf_data[stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
+            sapf_data_out[!stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
+          })
+
+          tmp_env <- lapply(1:ncol(env_data), function(i) {
+            env_data[stringr::str_detect(env_flags[,i], 'OUT_WARN'), i] <- NA
+            env_data_out[!stringr::str_detect(env_flags[,i], 'OUT_WARN'), i] <- NA
+          })
+
+          names(sapf_data_out) <- paste0(names(sapf_data_out), '_out')
+          names(env_data_out) <- paste0(names(env_data_out), '_out')
+
+          # data joined
+          data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out, env_data, env_data_out)
+
+          # clean a little
+          rm(sapf_data, env_data, sapf_data_out, env_data_out)
+
+          # dygraph
+          data_dg %>%
+            dplyr::select_('TIMESTAMP', input$tree_env,
+                           paste0(input$tree_env, '_out')) %>%
+            xts::xts(order.by = data_dg$'TIMESTAMP',
+                     tz = attr(data_dg$'TIMESTAMP', 'tzone')) %>%
+            dygraphs::dygraph('time_series') %>%
+            dygraphs::dySeries(input$tree_env,
+                               label = 'no_out', color = 'green') %>%
+            dygraphs::dySeries(paste0(input$tree_env, '_out'),
+                               label = 'out', color = 'red') %>%
+            dygraphs::dyRangeSelector()
+        })
+
+      }
     )
   },
 
