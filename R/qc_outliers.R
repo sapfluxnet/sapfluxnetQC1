@@ -35,7 +35,7 @@ NULL
 
 # START
 # Function declaration
-out_tukeyline <- function(y, k = 5L, parent_logger = 'test') {
+out_tukeyline <- function(y, k = 25L, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -91,7 +91,7 @@ out_tukeyline <- function(y, k = 5L, parent_logger = 'test') {
 
 # START
 # Function declaration
-out_medianreg <- function(y, k = 5L, parent_logger = 'test') {
+out_medianreg <- function(y, k = 25L, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -147,7 +147,7 @@ out_medianreg <- function(y, k = 5L, parent_logger = 'test') {
 
 # START
 # Function declaration
-out_median <- function(y, k = 5L, parent_logger = 'test') {
+out_median <- function(y, k = 25L, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -228,7 +228,7 @@ out_median <- function(y, k = 5L, parent_logger = 'test') {
 
 # START
 # Function declaration
-out_hampel_filter <- function(y, k = 5L, t0 = 3L,
+out_hampel_filter <- function(y, k = 25L, t0 = 10L,
                               method = 'hampel', reverse = TRUE,
                               parent_logger = 'test') {
 
@@ -350,7 +350,7 @@ out_hampel_filter <- function(y, k = 5L, t0 = 3L,
 
 # START
 # Function declaration
-out_remove <- function(sfn_data, k = 5L, t0 = 3L,
+out_remove <- function(sfn_data, k = 25L, t0 = 10L,
                        method = 'hampel', reverse = TRUE,
                        substitute = FALSE, parent_logger = 'test') {
 
