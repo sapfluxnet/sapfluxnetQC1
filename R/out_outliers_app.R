@@ -154,18 +154,19 @@ out_app <- function(parent_logger = 'test') {
           data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out, env_data, env_data_out)
 
           # clean a little
-          rm(sapf_data, env_data, sapf_data_out, env_data_out)
+          rm(sapf_data, env_data, sapf_data_out, env_data_out, sapf_flags, env_flags)
 
           # dygraph
-          data_dg %>%
-            dplyr::select_('TIMESTAMP', input$tree_env,
-                           paste0(input$tree_env, '_out')) %>%
-            xts::xts(order.by = data_dg$'TIMESTAMP',
-                     tz = attr(data_dg$'TIMESTAMP', 'tzone')) %>%
+          var_names <- c(input$tree_env,
+                         paste0(input$tree_env, '_out'))
+          data_dg[, c(var_names[1], var_names[2])] %>%
+            # dplyr::select_(var_names[1], var_names[2]) %>%
+            xts::xts(order.by = data_dg$TIMESTAMP,
+                     tz = attr(data_dg$TIMESTAMP, 'tzone')) %>%
             dygraphs::dygraph('time_series') %>%
-            dygraphs::dySeries(input$tree_env,
+            dygraphs::dySeries(var_names[1],
                                label = 'no_out', color = 'green') %>%
-            dygraphs::dySeries(paste0(input$tree_env, '_out'),
+            dygraphs::dySeries(var_names[2],
                                label = 'out', color = 'red') %>%
             dygraphs::dyRangeSelector()
         })
