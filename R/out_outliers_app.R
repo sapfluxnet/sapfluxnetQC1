@@ -136,7 +136,7 @@ out_app <- function(parent_logger = 'test') {
           sapf_data_out <- sapf_data
           env_data_out <- env_data
 
-          # subsets with/without outliers
+          # subsets with/without outliers !!!! not working
           tmp_sapf <- lapply(1:ncol(sapf_data), function(i) {
             sapf_data[stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
             sapf_data_out[!stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
@@ -150,7 +150,7 @@ out_app <- function(parent_logger = 'test') {
           names(sapf_data_out) <- paste0(names(sapf_data_out), '_out')
           names(env_data_out) <- paste0(names(env_data_out), '_out')
 
-          # data joined
+          # data joined !!!! repetated names
           data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out, env_data, env_data_out)
 
           # clean a little
