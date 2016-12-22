@@ -104,63 +104,61 @@ out_app <- function(parent_logger = 'test') {
       # 1.2 SERVER
       server = function(input, output) {
 
-        # # load the site SfnData object
-        # observeEvent(
-        #   eventExpr = input$site_sel,
-        #   handlerExpr = {
-        #     name <- paste0(input$site_sel, '.RData')
-        #     load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
-        #   }
-        # )
+        # load the site SfnData object
+        sfndataInput <- reactive({
+          name <- paste0(input$site_sel, '.RData')
+          load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
+          eval(as.name(input$site_sel))
+        })
 
         # tree and env input
         output$tree_env <- renderUI({
-          name <- paste0(input$site_sel, '.RData')
-          load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
-          names_trees <- names(get_sapf(eval(as.name(input$site_sel)))[, -1])
-          names_env <- names(get_env(eval(as.name(input$site_sel)))[, -1])
+          sfndata <- sfndataInput()
+          names_trees <- names(get_sapf(sfndata)[, -1])
+          names_env <- names(get_env(sfndata)[, -1])
           names_sel <- c(names_trees, names_env)
-          checkboxGroupInput('tree_env', 'Choose tree or env var',
+          radioButtons('tree_env', 'Choose tree or env var',
                              choices = names_sel, selected = names_sel[1])
         })
 
         # dygraph output
         output$time_series <- dygraphs::renderDygraph({
           # data
-          name <- paste0(input$site_sel, '.RData')
-          load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
-          sapf_data <- get_sapf(eval(as.name(input$site_sel)))
-          sapf_flags <- get_sapf_flags(eval(as.name(input$site_sel)))
-          env_data <- get_env(eval(as.name(input$site_sel)))
-          env_flags <- get_env_flags(eval(as.name(input$site_sel)))
+          sfndata <- sfndataInput()
+          sapf_data <- get_sapf(sfndata)
+          sapf_flags <- get_sapf_flags(sfndata)
+          env_data <- get_env(sfndata)
+          env_flags <- get_env_flags(sfndata)
           sapf_data_out <- sapf_data
           env_data_out <- env_data
 
-          # subsets with/without outliers !!!! not working
-          tmp_sapf <- lapply(1:ncol(sapf_data), function(i) {
+          # subsets with/without outliers
+          for (i in 1:ncol(sapf_data)) {
             sapf_data[stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
             sapf_data_out[!stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
-          })
+          }
 
-          tmp_env <- lapply(1:ncol(env_data), function(i) {
+          for (i in 1:ncol(env_data)) {
             env_data[stringr::str_detect(env_flags[,i], 'OUT_WARN'), i] <- NA
             env_data_out[!stringr::str_detect(env_flags[,i], 'OUT_WARN'), i] <- NA
-          })
+          }
 
           names(sapf_data_out) <- paste0(names(sapf_data_out), '_out')
           names(env_data_out) <- paste0(names(env_data_out), '_out')
 
-          # data joined !!!! repetated names
-          data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out, env_data, env_data_out)
+          # data joined
+          data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out[,-1],
+                                      env_data[,-1], env_data_out[,-1])
 
           # clean a little
-          rm(sapf_data, env_data, sapf_data_out, env_data_out, sapf_flags, env_flags)
+          rm(sapf_data, env_data, sapf_data_out,
+             env_data_out, sapf_flags, env_flags)
 
           # dygraph
           var_names <- c(input$tree_env,
                          paste0(input$tree_env, '_out'))
-          data_dg[, c(var_names[1], var_names[2])] %>%
-            # dplyr::select_(var_names[1], var_names[2]) %>%
+          data_dg %>%
+            dplyr::select_(var_names[1], var_names[2]) %>%
             xts::xts(order.by = data_dg$TIMESTAMP,
                      tz = attr(data_dg$TIMESTAMP, 'tzone')) %>%
             dygraphs::dygraph('time_series') %>%
