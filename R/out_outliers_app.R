@@ -169,6 +169,16 @@ out_app <- function(parent_logger = 'test') {
             dygraphs::dyRangeSelector()
         })
 
+        # outliers table
+        output$out_table <- renderTable({
+          sfndata <- sfndataInput()
+          get_sapf_flags(sfndata) %>%
+            dplyr::select_('TIMESTAMP', input$tree_env) %>%
+            dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
+                                            x = as.name(input$tree_env))) %>%
+            dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP))
+        }, striped = TRUE, spacing = "s", align = 'cc')
+
       }
     )
   },
