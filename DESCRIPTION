@@ -22,6 +22,7 @@ Imports:
     dplyr,
     tidyr,
     stringr,
+    lazyeval,
     lubridate,
     data.table,
     tools,

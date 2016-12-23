@@ -80,13 +80,15 @@ out_app <- function(parent_logger = 'test') {
                     # out table column
                     column(
                       width = 6,
-                      tableOutput("out_table")
+                      shiny::br(),
+                      DT::dataTableOutput("out_table")
                     ),
 
                     # selectors column
                     column(
-                      width = 6#,
-                      #?????
+                      width = 6,
+                      shiny::br(),
+                      verbatimTextOutput("sel_rows")
                     )
                   )
                 )
@@ -170,14 +172,33 @@ out_app <- function(parent_logger = 'test') {
         })
 
         # outliers table
-        output$out_table <- renderTable({
+        # output$out_table <- renderTable({
+        #   sfndata <- sfndataInput()
+        #   get_sapf_flags(sfndata) %>%
+        #     dplyr::select_('TIMESTAMP', input$tree_env) %>%
+        # dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
+        #                                 x = as.name(input$tree_env))) %>%
+        #     dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP))
+        # }, rownames = TRUE, striped = TRUE, spacing = "s", align = 'lcc')
+        output$out_table <- DT::renderDataTable({
           sfndata <- sfndataInput()
           get_sapf_flags(sfndata) %>%
+            dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
             dplyr::select_('TIMESTAMP', input$tree_env) %>%
             dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
                                             x = as.name(input$tree_env))) %>%
-            dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP))
-        }, striped = TRUE, spacing = "s", align = 'cc')
+            dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP)) %>%
+            DT::datatable()
+        })
+
+        # selected rows
+        output$sel_rows <- renderPrint({
+          rows_selected <- input$out_table_rows_selected
+          if (length(rows_selected)) {
+            cat("Rows selected for outlier remove:\n\n")
+            cat(rows_selected, sep = ', ')
+          }
+        })
 
       }
     )
