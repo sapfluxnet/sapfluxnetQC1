@@ -168,7 +168,8 @@ out_app <- function(parent_logger = 'test') {
                                label = 'no_out', color = 'green') %>%
             dygraphs::dySeries(var_names[2],
                                label = 'out', color = 'red') %>%
-            dygraphs::dyRangeSelector()
+            dygraphs::dyRangeSelector() %>%
+            dygraphs::dyOptions(useDataTimezone = TRUE)
         })
 
         # outliers table
@@ -184,16 +185,33 @@ out_app <- function(parent_logger = 'test') {
           sfndata <- sfndataInput()
           get_sapf_flags(sfndata) %>%
             dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
-            dplyr::select_('TIMESTAMP', input$tree_env) %>%
+            dplyr::mutate(index = rownames(.)) %>%
+            dplyr::select_('index', 'TIMESTAMP', input$tree_env) %>%
             dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
                                             x = as.name(input$tree_env))) %>%
             dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP)) %>%
-            DT::datatable()
+            DT::datatable(extensions = 'Scroller',
+                          options = list(dom = 't',
+                                         deferRender = TRUE,
+                                         scrollY = 350,
+                                         scroller = TRUE))
         })
 
         # selected rows
         output$sel_rows <- renderPrint({
-          rows_selected <- input$out_table_rows_selected
+          selected <- input$out_table_rows_selected
+          sfndata <- sfndataInput()
+          indexes <- get_sapf_flags(sfndata) %>%
+            dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
+            dplyr::mutate(index = rownames(.)) %>%
+            dplyr::select_('index', 'TIMESTAMP', input$tree_env) %>%
+            dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
+                                            x = as.name(input$tree_env))) %>%
+            dplyr::select_('index') %>%
+            unlist()
+
+          rows_selected <- indexes[selected]
+
           if (length(rows_selected)) {
             cat("Rows selected for outlier remove:\n\n")
             cat(rows_selected, sep = ', ')
