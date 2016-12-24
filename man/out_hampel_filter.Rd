@@ -4,8 +4,8 @@
 \alias{out_hampel_filter}
 \title{Hampel filter}
 \usage{
-out_hampel_filter(y, k = 5L, t0 = 3L, method = "hampel", reverse = TRUE,
-  parent_logger = "test")
+out_hampel_filter(y, k = 25L, t0 = 10L, method = "hampel",
+  reverse = TRUE, parent_logger = "test")
 }
 \arguments{
 \item{y}{vector of values for outlier substitution}

@@ -7,11 +7,11 @@
 \alias{outlier_subs}
 \title{Outliers substitution}
 \usage{
-out_tukeyline(y, k = 5L, parent_logger = "test")
+out_tukeyline(y, k = 25L, parent_logger = "test")
 
-out_medianreg(y, k = 5L, parent_logger = "test")
+out_medianreg(y, k = 25L, parent_logger = "test")
 
-out_median(y, k = 5L, parent_logger = "test")
+out_median(y, k = 25L, parent_logger = "test")
 }
 \arguments{
 \item{y}{vector of values for outlier substitution}
