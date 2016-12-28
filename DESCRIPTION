@@ -32,6 +32,7 @@ Imports:
     yaml,
     cowplot,
     mapproj,
+    purrr,
     RFc,
     soiltexture,
     solaR,

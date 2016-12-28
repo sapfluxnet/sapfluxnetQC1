@@ -1,0 +1,30 @@
+
+
+### TO DO
+# 1. Funciones para level 2:
+#    1.1 folders
+#    1.2 process
+#    1.3 status
+#    1.4 rangos
+# 2. alterar funciones:
+#    2.1 out_remove para comprobar el timestep y ajustar k al efecto
+#    2.2
+# 3. templates:
+#    3.1 report level2
+#    3.2 script outliers (template para cada sitio a ajustar interactivamente)
+
+
+1.1 folders
+
+idea:
+
+proceso 1 -> función que mira en el status y genera una lista con aquellos que
+han sido seleccionados para pasar a level 2
+
+proceso 2 -> función que recoge la lista del proceso 1 y crea la estructura
+necesaria en la carpeta del level 2
+
+proceso 3 -> función que mueve los archivos
+
+función 1: proceso 1             -> df_who_ready_to_lvl2
+función 2: proceso 2, proceso3   -> df_lvl1_to_lvl2

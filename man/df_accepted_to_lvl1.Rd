@@ -45,6 +45,7 @@ Other Data Flow: \code{\link{df_copy_templates}},
   \code{\link{df_reset_data_status}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}},
+  \code{\link{df_who_ready_to_lvl2}},
   \code{\link{sfn_data_constructor}}
 }
 

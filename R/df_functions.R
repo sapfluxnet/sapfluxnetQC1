@@ -1046,3 +1046,61 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
                                                         'sfn_data_constructor',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Who is ready for level 2?
+#'
+#' Check the site status files to list who is ready to move to level 2
+#'
+#' @family Data Flow
+#'
+#' @return A list with length equal to the number of sites containing the
+#'   TO_LVL2 flag of the status files.
+#'
+#' @export
+
+# START
+# Function declaration
+df_who_ready_to_lvl2 <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Getting the site codes to pass to df_get_status
+    site_folders <- df_get_data_folders(parent_logger = parent_logger) %>%
+      stringr::str_sub(6, -1)
+
+    # STEP 2
+    # Get the statuses
+    whos_ready <- site_folders %>%
+      purrr::map(df_get_status, parent_logger = parent_logger) %>%
+      # STEP 3
+      # Get the TO_LVL2 flag
+      purrr::at_depth(1, c('LVL1', 'TO_LVL2'))
+
+    # STEP 3
+    # Name the list elements
+    names(whos_ready) <- site_folders
+
+    # STEP 4
+    # Return the list
+    return(whos_ready)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_who_ready_to_lvl2',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_who_ready_to_lvl2',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_who_ready_to_lvl2',
+                                                        sep = '.'))})
+}
