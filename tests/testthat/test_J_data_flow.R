@@ -400,7 +400,7 @@ test_that('results are as expected',{
 # testing if empty
 unlink(file.path('Data', 'bar', 'bar_status.yaml'))
 
-whos_ready_2 <- df_who_ready_to_lvl2()
+whos_ready_2 <- suppressWarnings(df_who_ready_to_lvl2())
 
 test_that('if any is null there is an error', {
   expect_is(whos_ready_2, 'logical')

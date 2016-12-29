@@ -1105,3 +1105,67 @@ df_who_ready_to_lvl2 <- function(parent_logger = 'test') {
                                                         'df_who_ready_to_lvl2',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Build the folder structure of level 2
+#'
+#' Take a site code and build the level 2 tree folder
+#'
+#' @family Data Flow
+#'
+#' @param si_code Site code as character
+#'
+#' @return Nothing, if dir is created ok silent exit, if not it throws an error
+#'
+#' @export
+
+# START
+# Function declaration
+df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Parameters check
+    # is si_code a character
+    if (!is.character(si_code)) {
+      stop('si_code provided is not a character')
+    }
+
+    # STEP 1
+    # Dir creation
+    # 1.1 folder name
+    lvl_root_name <- file.path('Data', si_code, 'Lvl_2')
+
+    # 1.3 heck if dirs already exists and if not, create it (all with dir.create)
+    dir.create(file.path(lvl_root_name, 'lvl_2_out_warn'), showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_out_rem'), showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_unit_trans'), showWarnings = TRUE)
+
+    # STEP 2
+    # Check if creation went well
+    if (all(dir.exists(file.path(lvl_root_name, c('lvl_2_out_warn',
+                                                   'lvl_2_out_rem',
+                                                   'lvl_2_unit_trans'))))) {
+      return()
+    } else {
+      stop("One or more folders can not be created in level 2. ",
+           "Please revise manually")
+    }
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl2_folder_structure',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_lvl2_folder_structure',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl2_folder_structure',
+                                                        sep = '.'))})
+}

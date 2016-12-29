@@ -13,6 +13,7 @@
          mas control sobre los errores en el report y no copiaria antes de tiempo
          los archivos. ademas con safely podemos hacerlo mejor en ese aspecto.
          Añadir opcion debug que haga que guarde todos los objetos así seria perfect.
+     2.3 df_start_status para evitar usar NULL y usar en cambio NA
 # 3. templates:
 #    3.1 report level2
 #    3.2 script outliers (template para cada sitio a ajustar interactivamente)
@@ -29,6 +30,15 @@ proceso 2 -> función que recoge la lista del proceso 1 y crea la estructura
 necesaria en la carpeta del level 2
 
 proceso 3 -> función que mueve los archivos
+
+df_lvl1_to_lvl2
+|
+|____ df_who_ready_to_lvl2
+       |
+       |___ df_lvl2_folder_structure
+       |
+       |___
+
 
 función 1: proceso 1             -> df_who_ready_to_lvl2
 función 2: proceso 2, proceso3   -> df_lvl1_to_lvl2
