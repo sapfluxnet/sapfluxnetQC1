@@ -332,6 +332,7 @@ test_that('files had been renamed correctly', {
   expect_match(old_files, "(.csv|.RData|.xlsx)")
 })
 
+################################################################################
 context('J8. Saving templates and running scripts to folders')
 
 unlink('Templates', recursive = TRUE)
@@ -349,6 +350,64 @@ test_that('function works', {
   expect_true(all(c('sfn_monitor.Rmd','main_script.R','debug_script.R') %in% dir('.')))
   expect_true(df_copy_templates())
 })
+
+################################################################################
+context('J9. who is ready to level 2?')
+
+# preparing the data folder
+unlink('Data', recursive = TRUE)
+
+dir.create(file.path('Data'))
+dir.create(file.path('Data', 'foo'))
+dir.create(file.path('Data', 'bar'))
+dir.create(file.path('Data', 'baz'))
+
+# creating empty statuses
+df_start_status('foo')
+df_start_status('bar')
+df_start_status('baz')
+
+# populate the statuses
+df_set_status(
+  'foo',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = TRUE)
+)
+
+df_set_status(
+  'bar',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = FALSE)
+)
+
+df_set_status(
+  'baz',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = NA)
+)
+
+# testing if function works
+whos_ready <- df_who_ready_to_lvl2()
+
+test_that('results are as expected',{
+  expect_is(whos_ready, 'logical')
+  expect_length(whos_ready, 3)
+  expect_true(whos_ready['foo'])
+  expect_false(whos_ready['bar'])
+  expect_true(is.na(whos_ready['baz']))
+})
+
+# testing if null
+df_set_status(
+  'bar',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = NULL)
+)
+
+test_that('if any is null there is an error', {
+  expect_error(df_who_ready_to_lvl2(), 'from a NULL to a logical')
+})
+
 
 ################################################################################
 # cleaning

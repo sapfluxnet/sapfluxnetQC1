@@ -8,7 +8,11 @@
 #    1.4 rangos
 # 2. alterar funciones:
 #    2.1 out_remove para comprobar el timestep y ajustar k al efecto
-#    2.2
+#    2.2 Refactor QC_report y qc_main (start_process) para sacar del report el
+#        save y el acceted to level 1, usando el objeto SfnData creado. Esto daria
+         mas control sobre los errores en el report y no copiaria antes de tiempo
+         los archivos. ademas con safely podemos hacerlo mejor en ese aspecto.
+         Añadir opcion debug que haga que guarde todos los objetos así seria perfect.
 # 3. templates:
 #    3.1 report level2
 #    3.2 script outliers (template para cada sitio a ajustar interactivamente)
@@ -28,3 +32,4 @@ proceso 3 -> función que mueve los archivos
 
 función 1: proceso 1             -> df_who_ready_to_lvl2
 función 2: proceso 2, proceso3   -> df_lvl1_to_lvl2
+
