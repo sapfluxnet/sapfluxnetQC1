@@ -397,17 +397,18 @@ test_that('results are as expected',{
   expect_true(is.na(whos_ready['baz']))
 })
 
-# testing if null
-df_set_status(
-  'bar',
-  QC = list(DONE = TRUE, DATE = Sys.Date()),
-  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = NULL)
-)
+# testing if empty
+unlink(file.path('Data', 'bar', 'bar_status.yaml'))
+
+whos_ready_2 <- df_who_ready_to_lvl2()
 
 test_that('if any is null there is an error', {
-  expect_error(df_who_ready_to_lvl2(), 'from a NULL to a logical')
+  expect_is(whos_ready_2, 'logical')
+  expect_length(whos_ready_2, 3)
+  expect_true(whos_ready_2['foo'])
+  expect_true(is.na(whos_ready_2['bar']))
+  expect_true(is.na(whos_ready_2['baz']))
 })
-
 
 ################################################################################
 # cleaning

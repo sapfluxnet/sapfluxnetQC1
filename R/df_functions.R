@@ -1077,7 +1077,7 @@ df_who_ready_to_lvl2 <- function(parent_logger = 'test') {
       purrr::map(df_get_status, parent_logger = parent_logger) %>%
       # STEP 3
       # Get the TO_LVL2 flag
-      purrr::at_depth(1, c('LVL1', 'TO_LVL2')) %>%
+      purrr::at_depth(1, c('LVL1', 'TO_LVL2'), .null = NA) %>%
       purrr::flatten_lgl()
 
     # STEP 3
