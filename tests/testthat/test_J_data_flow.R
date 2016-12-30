@@ -411,6 +411,27 @@ test_that('if any is null there is an error', {
 })
 
 ################################################################################
+context('J10. lvl2_folder_structure')
+
+dir.create(file.path('Data', 'foo', 'Lvl_2'))
+
+df_lvl2_folder_structure('foo')
+
+test_that('folders are created ok', {
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_out_warn')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_out_rem')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_unit_trans')))
+})
+
+test_that('function throws an error when not creating the folders', {
+  expect_error(suppressWarnings(df_lvl2_folder_structure('xyz')),
+               'One or more folders can not be created in level 2')
+})
+
+################################################################################
 # cleaning
 unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)

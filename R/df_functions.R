@@ -1146,8 +1146,8 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
     # STEP 2
     # Check if creation went well
     if (all(dir.exists(file.path(lvl_root_name, c('lvl_2_out_warn',
-                                                   'lvl_2_out_rem',
-                                                   'lvl_2_unit_trans'))))) {
+                                                  'lvl_2_out_rem',
+                                                  'lvl_2_unit_trans'))))) {
       return()
     } else {
       stop("One or more folders can not be created in level 2. ",
