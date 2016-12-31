@@ -462,8 +462,8 @@ dir.create(file.path('Data', 'baz', 'Lvl_2'))
 df_lvl2_folder_structure('bar')
 df_lvl2_folder_structure('baz')
 
-foo <- SfnData()
-bar <- SfnData()
+foo <- SfnData(si_code = 'foo')
+bar <- SfnData(si_code = 'bar')
 
 save(foo, file = file.path('Data', 'foo', 'Lvl_1', 'foo.RData'))
 save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'foo.RData'))
@@ -499,6 +499,61 @@ test_that('objects are loaded fine or rise an error', {
   expect_error(df_read_SfnData('baz', 'unit_trans'),
                'does not exist.')
 })
+
+################################################################################
+context('J12. Write SfnData to location')
+
+baz <- SfnData(si_code = 'baz')
+df_write_SfnData(baz, 'Lvl_1')
+df_write_SfnData(baz, 'Lvl_2')
+df_write_SfnData(baz, 'out_warn')
+df_write_SfnData(baz, 'out_rem')
+df_write_SfnData(baz, 'unit_trans')
+
+test_that('objects are written to RData files fine', {
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1',
+                                    'out_warn', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1',
+                                    'out_rem', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1',
+                                    'unit_trans', 'baz.RData')))
+})
+
+test_that('error rise if file already exists', {
+  expect_error(df_write_SfnData(baz, 'Lvl_1'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'Lvl_2'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'out_warn'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'out_rem'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'unit_trans'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'Lvl_1'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'Lvl_2'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'out_warn'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'out_rem'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'unit_trans'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'Lvl_1'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'Lvl_2'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'out_warn'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'out_rem'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'unit_trans'),
+               'object already exists')
+})
+
 
 ################################################################################
 # cleaning

@@ -1204,7 +1204,7 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
 #' Accesory function to load an specified SfnData object
 #'
 #' Given a site code and a level description, \code{df_read_SfnData} will return
-#' the selected SfnData object.
+#' the selected SfnData object from the selected location
 #'
 #' @family Data Flow
 #'
@@ -1212,7 +1212,7 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
 #'
 #' @param level Level to read from as a character string
 #'
-#' @return Nothing, the desired site data is loaded.
+#' @return A SfnData object.
 #'
 #' @export
 
@@ -1264,5 +1264,78 @@ df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
                                                         'df_load_SfnData',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Write SfnData
+#'
+#' Accesory function to write an SfnData object to a fixed location
+#'
+#' Given a site code and a level description, \code{df_write_SfnData} will save
+#' the selected SfnData object in the selected location
+#'
+#' @family Data Flow
+#'
+#' @param SfnData SfnData object
+#'
+#' @param level Level to read from as a character string
+#'
+#' @return Nothing, the desired site data is saved.
+#'
+#' @export
+
+# START
+# Function declaration
+df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
+                                                "out_rem", "unit_trans"),
+                             parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checking (done by match.arg)
+    level <- match.arg(level)
+    level <- switch(level,
+                    Lvl_1 = 'Lvl_1',
+                    Lvl_2 = 'Lvl_2',
+                    out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
+                    out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
+                    unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
+    # SfnData
+    if (class(SfnData) != 'SfnData') {
+      stop('object provided is not an SfnData object')
+    }
+
+    # STEP 1
+    # file name
+    code <- get_si_code(SfnData)
+    file_name <- file.path('Data', code, level, paste0(code, '.RData'))
+
+    # 1.1 Check if file exists
+    if (file.exists(file_name)) {
+      stop(code, ' object already exists in ', level)
+    }
+
+    # STEP 2
+    # Write the object
+    save(SfnData, file = file_name)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_write_SfnData',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_write_SfnData',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_write_SfnData',
                                                         sep = '.'))})
 }

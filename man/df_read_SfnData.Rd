@@ -13,14 +13,14 @@ df_read_SfnData(si_code, level = c("Lvl_1", "Lvl_2", "out_warn", "out_rem",
 \item{level}{Level to read from as a character string}
 }
 \value{
-Nothing, the desired site data is loaded.
+A SfnData object.
 }
 \description{
 Accesory function to load an specified SfnData object
 }
 \details{
 Given a site code and a level description, \code{df_read_SfnData} will return
-the selected SfnData object.
+the selected SfnData object from the selected location
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
@@ -35,6 +35,7 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}},
   \code{\link{df_who_ready_to_lvl2}},
+  \code{\link{df_write_SfnData}},
   \code{\link{sfn_data_constructor}}
 }
 
