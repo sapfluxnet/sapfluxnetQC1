@@ -462,8 +462,9 @@ dir.create(file.path('Data', 'baz', 'Lvl_2'))
 df_lvl2_folder_structure('bar')
 df_lvl2_folder_structure('baz')
 
-foo <- SfnData(si_code = 'foo')
-bar <- SfnData(si_code = 'bar')
+load('FOO.RData')
+foo <- FOO
+bar <- FOO
 
 save(foo, file = file.path('Data', 'foo', 'Lvl_1', 'foo.RData'))
 save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'foo.RData'))
@@ -503,7 +504,7 @@ test_that('objects are loaded fine or rise an error', {
 ################################################################################
 context('J12. Write SfnData to location')
 
-baz <- SfnData(si_code = 'baz')
+baz <- FOO
 df_write_SfnData(baz, 'Lvl_1')
 df_write_SfnData(baz, 'Lvl_2')
 df_write_SfnData(baz, 'out_warn')
@@ -513,12 +514,12 @@ df_write_SfnData(baz, 'unit_trans')
 test_that('objects are written to RData files fine', {
   expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1', 'baz.RData')))
   expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2', 'baz.RData')))
-  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1',
-                                    'out_warn', 'baz.RData')))
-  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1',
-                                    'out_rem', 'baz.RData')))
-  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1',
-                                    'unit_trans', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+                                    'lvl_2_out_warn', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+                                    'lvl_2_out_rem', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+                                    'lvl_2_unit_trans', 'baz.RData')))
 })
 
 test_that('error rise if file already exists', {

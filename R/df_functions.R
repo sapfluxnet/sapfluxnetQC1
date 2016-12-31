@@ -1310,7 +1310,7 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
 
     # STEP 1
     # file name
-    code <- get_si_code(SfnData)
+    code <- deparse(substitute(SfnData))
     file_name <- file.path('Data', code, level, paste0(code, '.RData'))
 
     # 1.1 Check if file exists
