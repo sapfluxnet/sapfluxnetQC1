@@ -451,6 +451,56 @@ test_that('function throws an error when not creating the folders', {
 })
 
 ################################################################################
+context('J11. loading SfnData object')
+
+dir.create(file.path('Data', 'foo', 'Lvl_1'))
+dir.create(file.path('Data', 'bar', 'Lvl_1'))
+dir.create(file.path('Data', 'bar', 'Lvl_2'))
+dir.create(file.path('Data', 'baz', 'Lvl_1'))
+dir.create(file.path('Data', 'baz', 'Lvl_2'))
+
+df_lvl2_folder_structure('bar')
+df_lvl2_folder_structure('baz')
+
+foo <- SfnData()
+bar <- SfnData()
+
+save(foo, file = file.path('Data', 'foo', 'Lvl_1', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_warn', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_rem', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_unit_trans', 'foo.RData'))
+
+save(bar, file = file.path('Data', 'bar', 'Lvl_1', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_warn', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_rem', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_unit_trans', 'bar.RData'))
+
+test_that('objects are loaded fine or rise an error', {
+  expect_is(df_read_SfnData('foo', 'Lvl_1'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'Lvl_2'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'out_warn'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'out_rem'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'unit_trans'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'Lvl_1'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'Lvl_2'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'out_warn'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'out_rem'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'unit_trans'), 'SfnData')
+  expect_error(df_read_SfnData('baz', 'Lvl_1'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'Lvl_2'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'out_warn'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'out_rem'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'unit_trans'),
+               'does not exist.')
+})
+
+################################################################################
 # cleaning
 unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)

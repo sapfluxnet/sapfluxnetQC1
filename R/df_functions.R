@@ -1199,4 +1199,70 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
 }
 
 ################################################################################
-#' save SfnData from level 1 to level 2 out warn
+#' Load SfnData
+#'
+#' Accesory function to load an specified SfnData object
+#'
+#' Given a site code and a level description, \code{df_read_SfnData} will return
+#' the selected SfnData object.
+#'
+#' @family Data Flow
+#'
+#' @param si_code Site code as a character string
+#'
+#' @param level Level to read from as a character string
+#'
+#' @return Nothing, the desired site data is loaded.
+#'
+#' @export
+
+# START
+# Function declaration
+df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
+                                               "out_rem", "unit_trans"),
+                            parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checking (done by match.arg)
+    level <- match.arg(level)
+    level <- switch(level,
+                    Lvl_1 = 'Lvl_1',
+                    Lvl_2 = 'Lvl_2',
+                    out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
+                    out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
+                    unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
+
+    # STEP 1
+    # load the file
+    file_name <- file.path('Data', si_code, level,
+                           paste0(si_code, '.RData'))
+
+    if (!file.exists(file_name)) {
+      stop('SfnData for ', si_code, ' and ', level, ' does not exist.')
+    } else {
+      load(file = file_name)
+
+      # 1.1 Return the SfnData object
+      return(eval(as.name(si_code)))
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_load_SfnData',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_load_SfnData',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_load_SfnData',
+                                                        sep = '.'))})
+}
