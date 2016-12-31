@@ -4,7 +4,13 @@
 \alias{df_who_ready_to_lvl2}
 \title{Who is ready for level 2?}
 \usage{
-df_who_ready_to_lvl2(parent_logger = "test")
+df_who_ready_to_lvl2(filter = c("all", "ready", "freeze", "done"),
+  parent_logger = "test")
+}
+\arguments{
+\item{filter}{character vector indicating by which TO_LVL2 status results must
+been filtered. Accepted values are "all" (default), "ready", "freeze" or "done"
+(see details)}
 }
 \value{
 A list with length equal to the number of sites containing the
@@ -12,6 +18,17 @@ A list with length equal to the number of sites containing the
 }
 \description{
 Check the site status files to list who is ready to move to level 2
+}
+\details{
+\code{filter} parameter indicates if the results must be filtered by the
+  corresponding status:
+
+\itemize{
+    \item{\code{all} retrieves all the statuses}
+    \item{\code{ready} retrieves only those sites marked to pass to level 2}
+    \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
+    \item{\code{done} retrieves only those sites already passed to level 2}
+  }
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},

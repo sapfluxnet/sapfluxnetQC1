@@ -371,44 +371,63 @@ df_start_status('baz')
 df_set_status(
   'foo',
   QC = list(DONE = TRUE, DATE = Sys.Date()),
-  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = TRUE)
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'READY')
 )
 
 df_set_status(
   'bar',
   QC = list(DONE = TRUE, DATE = Sys.Date()),
-  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = FALSE)
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'FREEZE')
 )
 
 df_set_status(
   'baz',
   QC = list(DONE = TRUE, DATE = Sys.Date()),
-  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = NA)
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'DONE')
 )
 
 # testing if function works
 whos_ready <- df_who_ready_to_lvl2()
 
 test_that('results are as expected',{
-  expect_is(whos_ready, 'logical')
+  expect_is(whos_ready, 'list')
   expect_length(whos_ready, 3)
-  expect_true(whos_ready['foo'])
-  expect_false(whos_ready['bar'])
-  expect_true(is.na(whos_ready['baz']))
+  expect_identical(whos_ready[['foo']], 'READY')
+  expect_identical(whos_ready[['bar']], 'FREEZE' )
+  expect_identical(whos_ready[['baz']], 'DONE')
 })
+
+# testing filter argument
+whos_ready_true <- df_who_ready_to_lvl2(filter = 'ready')
+whos_ready_freeze <- df_who_ready_to_lvl2(filter = 'freeze')
+whos_ready_done <- df_who_ready_to_lvl2(filter = 'done')
+test_that('filtering is as expected',{
+  expect_is(whos_ready_true, 'list')
+  expect_length(whos_ready_true, 1)
+  expect_identical(whos_ready[['foo']], 'READY')
+  expect_is(whos_ready_freeze, 'list')
+  expect_length(whos_ready_freeze, 1)
+  expect_identical(whos_ready[['bar']], 'FREEZE' )
+  expect_is(whos_ready_done, 'list')
+  expect_length(whos_ready_done, 1)
+  expect_identical(whos_ready[['baz']], 'DONE')
+})
+
 
 # testing if empty
 unlink(file.path('Data', 'bar', 'bar_status.yaml'))
 
 whos_ready_2 <- suppressWarnings(df_who_ready_to_lvl2())
 
-test_that('if any is null there is an error', {
-  expect_is(whos_ready_2, 'logical')
+test_that('if not status NA is returned', {
+  expect_is(whos_ready_2, 'list')
   expect_length(whos_ready_2, 3)
-  expect_true(whos_ready_2['foo'])
+  expect_identical(whos_ready[['foo']], 'READY')
   expect_true(is.na(whos_ready_2['bar']))
-  expect_true(is.na(whos_ready_2['baz']))
+  expect_identical(whos_ready[['baz']], 'DONE')
 })
+
+
 
 ################################################################################
 context('J10. lvl2_folder_structure')

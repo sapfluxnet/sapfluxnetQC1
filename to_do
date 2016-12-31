@@ -37,7 +37,7 @@ df_lvl1_to_lvl2
        |
        |___ df_lvl2_folder_structure
        |
-       |___
+       |___ df_save_to_lvl_2
 
 
 función 1: proceso 1             -> df_who_ready_to_lvl2

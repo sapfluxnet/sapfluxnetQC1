@@ -1052,7 +1052,21 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
 #'
 #' Check the site status files to list who is ready to move to level 2
 #'
+#' \code{filter} parameter indicates if the results must be filtered by the
+#'   corresponding status:
+#'
+#'   \itemize{
+#'     \item{\code{all} retrieves all the statuses}
+#'     \item{\code{ready} retrieves only those sites marked to pass to level 2}
+#'     \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
+#'     \item{\code{done} retrieves only those sites already passed to level 2}
+#'   }
+#'
 #' @family Data Flow
+#'
+#' @param filter character vector indicating by which TO_LVL2 status results must
+#'   been filtered. Accepted values are "all" (default), "ready", "freeze" or "done"
+#'   (see details)
 #'
 #' @return A list with length equal to the number of sites containing the
 #'   TO_LVL2 flag of the status files.
@@ -1061,10 +1075,20 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
 
 # START
 # Function declaration
-df_who_ready_to_lvl2 <- function(parent_logger = 'test') {
+df_who_ready_to_lvl2 <- function(filter = c('all', 'ready', 'freeze', 'done'),
+                                 parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
+
+    # STEP 0
+    # Checking arguments (match.arg throws an error if not matching)
+    filter <- match.arg(filter)
+    filter <- switch(filter,
+                     all = 'all',
+                     ready = 'READY',
+                     freeze = 'FREEZE',
+                     done = 'DONE')
 
     # STEP 1
     # Getting the site codes to pass to df_get_status
@@ -1077,12 +1101,16 @@ df_who_ready_to_lvl2 <- function(parent_logger = 'test') {
       purrr::map(df_get_status, parent_logger = parent_logger) %>%
       # STEP 3
       # Get the TO_LVL2 flag
-      purrr::at_depth(1, c('LVL1', 'TO_LVL2'), .null = NA) %>%
-      purrr::flatten_lgl()
+      purrr::at_depth(1, c('LVL1', 'TO_LVL2'), .null = NA)
 
     # STEP 3
-    # Name the list elements
+    # Prepare the results
+    # 3.1 Name the list elements
     names(whos_ready) <- site_folders
+    # 3.2 filter the results
+    if (filter != 'all') {
+      whos_ready <- whos_ready[whos_ready == filter]
+    }
 
     # STEP 4
     # Return the list
@@ -1169,3 +1197,6 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
                                                         'df_lvl2_folder_structure',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' save SfnData from level 1 to level 2 out warn
