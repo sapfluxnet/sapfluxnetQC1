@@ -1322,6 +1322,19 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
     # Write the object
     save(SfnData, file = file_name)
 
+    # STEP 3
+    # Check for file and set status file
+    # 3.1 Check if file exists
+    if (!file.exists(file_name)) {
+      stop('File has not been written, please revise manually')
+    } else {
+
+      # 3.2 Update status
+      df_set_status(code,
+                    LVL1 = list(TO_LVL2 = 'DONE'),
+                    LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date())))
+    }
+
     # END FUNCTION
   },
 

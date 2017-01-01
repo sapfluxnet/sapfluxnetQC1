@@ -14,6 +14,7 @@
          los archivos. ademas con safely podemos hacerlo mejor en ese aspecto.
          Añadir opcion debug que haga que guarde todos los objetos así seria perfect.
      2.3 df_start_status para evitar usar NULL y usar en cambio NA
+     2.4 df_set_status para permitir establecer campos de nivel individuales
 # 3. templates:
 #    3.1 report level2
 #    3.2 script outliers (template para cada sitio a ajustar interactivamente)
