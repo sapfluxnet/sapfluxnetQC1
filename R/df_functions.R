@@ -390,15 +390,21 @@ df_set_status <- function(si_code,
 
       # 2.2 modify original with new no NULL elements
       if (!is.null(QC)) {
-        original_yaml$QC <- QC
+        purrr::walk(names(QC), function(x) {
+          original_yaml[["QC"]][[x]] <<- QC[[x]]
+        })
       }
 
       if (!is.null(LVL1)) {
-        original_yaml$LVL1 <- LVL1
+        purrr::walk(names(LVL1), function(x) {
+          original_yaml[["LVL1"]][[x]] <<- LVL1[[x]]
+        })
       }
 
       if (!is.null(LVL2)) {
-        original_yaml$LVL2 <- LVL2
+        purrr::walk(names(LVL2), function(x) {
+          original_yaml[["LVL2"]][[x]] <<- LVL2[[x]]
+        })
       }
 
       # STEP 3
