@@ -21,4 +21,7 @@ saved in the \code{Data/si_code/Lvl_2/visual_check} folder. This script
 performs the data flagging needed and serves as a reproducible tool in case
 of reconstruction of the complete process undergo by the site data.
 }
+\seealso{
+Other apps: \code{\link{df_flag_to_lvl2_app}}
+}
 

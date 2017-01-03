@@ -6,6 +6,7 @@
 #    1.2 process
 #    1.3 status
 #    1.4 rangos
+#    1.5 mark to level 2 shiny app
 # 2. alterar funciones:
 #    2.1 out_remove para comprobar el timestep y ajustar k al efecto
 #    2.2 Refactor QC_report y qc_main (start_process) para sacar del report el
@@ -14,23 +15,11 @@
          los archivos. ademas con safely podemos hacerlo mejor en ese aspecto.
          Añadir opcion debug que haga que guarde todos los objetos así seria perfect.
      2.3 df_start_status para evitar usar NULL y usar en cambio NA
-     2.4 df_set_status para permitir establecer campos de nivel individuales
+     2.4 df_set_status para permitir establecer campos de nivel individuales DONE
 # 3. templates:
 #    3.1 report level2
 #    3.2 script outliers (template para cada sitio a ajustar interactivamente)
 
-
-1.1 folders
-
-idea:
-
-proceso 1 -> función que mira en el status y genera una lista con aquellos que
-han sido seleccionados para pasar a level 2
-
-proceso 2 -> función que recoge la lista del proceso 1 y crea la estructura
-necesaria en la carpeta del level 2
-
-proceso 3 -> función que mueve los archivos
 
 df_lvl1_to_lvl2
 |
@@ -38,9 +27,9 @@ df_lvl1_to_lvl2
        |
        |___ df_lvl2_folder_structure
        |
-       |___ df_save_to_lvl_2
-
-
-función 1: proceso 1             -> df_who_ready_to_lvl2
-función 2: proceso 2, proceso3   -> df_lvl1_to_lvl2
-
+       |___ df_load_sfn
+       |
+       |___ out_remove
+       |
+       |___ save_sfn
+             |__set_status

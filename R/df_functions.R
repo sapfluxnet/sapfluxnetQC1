@@ -1338,7 +1338,8 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
       # 3.2 Update status
       df_set_status(code,
                     LVL1 = list(TO_LVL2 = 'DONE'),
-                    LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date())))
+                    LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date())),
+                    parent_logger = parent_logger)
     }
 
     # END FUNCTION
@@ -1356,5 +1357,177 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
                                                         'df_write_SfnData',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Interactively select the data sets ready to move to level 2
+#'
+#' Shiny app to flag data sets as ready to move to level 2
+#'
+#' @family apps
+#'
+#' @return An interactive app to flag datasets as ready to move to level 2
+#'
+#' @export
+#'
+#' @import shiny
+
+# START
+# Function declaration
+df_flag_to_lvl2_app <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Defining the app
+    shinyApp(
+
+      # 1.1 UI
+      ui = fluidPage(
+        # app title
+        titlePanel('Flag to level 2 app'),
+
+        # main panel
+        mainPanel(
+          width  = 12,
+
+          fluidRow(
+            # input column (DT with the freeze)
+            column(
+              width = 4,
+              DT::dataTableOutput('freeze')
+            ),
+
+            # action column (selected and action button)
+            column(
+              width = 4,
+              br(),
+              br(),
+              br(),
+              verbatimTextOutput('selected'),
+              actionButton('flaggit', 'Flag it!',
+                           icon = icon('flag'))
+            ),
+
+            # viewer column (DT with ready and done)
+            column(
+              width = 4,
+              DT::dataTableOutput('ready')
+            )
+          )
+        )
+      ),
+
+      # 1.2 server
+      server = function(input, output) {
+
+        # reactive expressions
+        ## populate the tables
+        pop_tables <- reactive({
+          dummy <- input$flaggit
+          freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                               parent_logger = parent_logger)
+          ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+                                              parent_logger = parent_logger)
+          done_list <- df_who_ready_to_lvl2(filter = 'done',
+                                             parent_logger = parent_logger)
+
+          res <- list(freeze = freeze_list,
+                      ready = ready_list,
+                      done = done_list)
+
+          res
+        })
+
+        ## get the names
+        get_names <- reactive({
+          selected <- input$freeze_rows_selected
+          freeze_list <- pop_tables()[['freeze']]
+          freeze_names <- names(freeze_list)[selected]
+          freeze_names
+        })
+
+        # freeze input table
+        output$freeze <- DT::renderDataTable({
+          freeze_list <- pop_tables()[['freeze']]
+          freeze_table <- data.frame(
+            Site = names(freeze_list),
+            Status = purrr::flatten_chr(freeze_list),
+            stringsAsFactors = FALSE
+          )
+          # row.names(freeze_table) <- freeze_table[['Site']]
+
+          DT::datatable(
+            freeze_table,
+            # colnames = c('Status'),
+            extensions = 'Scroller',
+            options = list(
+              dom = 'ti',
+              scrollY = 400,
+              scrollX = '100%',
+              scroller = TRUE,
+              scrollCollapse = TRUE
+            ),
+            selection = list(target = 'row')
+          )
+        })
+
+        # sites selected text box
+        output$selected <- renderPrint({
+          cat(get_names(), sep = "\n")
+        })
+
+        # ready input table
+        output$ready <- DT::renderDataTable({
+          ready_list <- pop_tables()[['ready']]
+          ready_table <- data.frame(
+            Site = names(ready_list),
+            Status = purrr::flatten_chr(ready_list),
+            stringsAsFactors = FALSE
+          )
+          # row.names(ready_table) <- ready_table[['Site']]
+
+          DT::datatable(
+            ready_table,
+            # colnames = c('Status'),
+            extensions = 'Scroller',
+            options = list(
+              dom = 'ti',
+              scrollY = 400,
+              scrollX = '100%',
+              scroller = TRUE,
+              scrollCollapse = TRUE
+            ),
+            selection = list(target = 'row')
+          )
+        })
+
+        # observe button event to set READY status
+        observeEvent(
+          eventExpr = input$flaggit,
+          handlerExpr = {
+            purrr::walk(get_names(), ~ df_set_status(
+              .x, LVL1 = list(TO_LVL2 = 'READY')
+            ))
+          }
+        )
+      }
+    )
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_flag_to_lvl2_app',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_flag_to_lvl2_app',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_flag_to_lvl2_app',
                                                         sep = '.'))})
 }
