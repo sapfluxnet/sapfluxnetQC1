@@ -1391,7 +1391,7 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
 
         # main panel
         mainPanel(
-          width  = 12,
+          width  = 10,
 
           fluidRow(
             # input column (DT with the freeze)
@@ -1402,13 +1402,17 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
 
             # action column (selected and action button)
             column(
-              width = 4,
+              width = 3,
               br(),
               br(),
               br(),
               verbatimTextOutput('selected'),
               actionButton('flaggit', 'Flag it!',
-                           icon = icon('flag'))
+                           icon = icon('flag')),
+              br(),
+              br(),
+              'Select the rows of the desired sites on the left table and click',
+              ' the button to set the status of the TO_LVL2 flag to "READY"'
             ),
 
             # viewer column (DT with ready and done)
@@ -1425,21 +1429,49 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
 
         # reactive expressions
         ## populate the tables
-        pop_tables <- reactive({
-          dummy <- input$flaggit
-          freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+        pop_tables <- eventReactive(
+          ignoreNULL = FALSE,
+          eventExpr = input$flaggit,
+          valueExpr = {
+            clicked <- input$flaggit
+
+            if (clicked == 0) {
+              freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                                  parent_logger = parent_logger)
+              ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+                                                 parent_logger = parent_logger)
+              done_list <- df_who_ready_to_lvl2(filter = 'done',
+                                                parent_logger = parent_logger)
+
+              res <- list(freeze = freeze_list,
+                          ready = ready_list,
+                          done = done_list)
+
+              res
+            }
+
+            selected <- input$freeze_rows_selected
+            freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                                parent_logger = parent_logger)
+            freeze_names <- names(freeze_list)[selected]
+            purrr::walk(freeze_names, ~ df_set_status(
+              .x, LVL1 = list(TO_LVL2 = 'READY')
+            ))
+
+            freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                                parent_logger = parent_logger)
+            ready_list <- df_who_ready_to_lvl2(filter = 'ready',
                                                parent_logger = parent_logger)
-          ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+            done_list <- df_who_ready_to_lvl2(filter = 'done',
                                               parent_logger = parent_logger)
-          done_list <- df_who_ready_to_lvl2(filter = 'done',
-                                             parent_logger = parent_logger)
 
-          res <- list(freeze = freeze_list,
-                      ready = ready_list,
-                      done = done_list)
+            res <- list(freeze = freeze_list,
+                        ready = ready_list,
+                        done = done_list)
 
-          res
-        })
+            res
+          }
+        )
 
         ## get the names
         get_names <- reactive({
@@ -1457,11 +1489,10 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
             Status = purrr::flatten_chr(freeze_list),
             stringsAsFactors = FALSE
           )
-          # row.names(freeze_table) <- freeze_table[['Site']]
 
           DT::datatable(
             freeze_table,
-            # colnames = c('Status'),
+            colnames = c('Site', 'Status "TO_LVL2"'),
             extensions = 'Scroller',
             options = list(
               dom = 'ti',
@@ -1476,6 +1507,7 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
 
         # sites selected text box
         output$selected <- renderPrint({
+          cat("Selected sites ready for level  2:\n\n")
           cat(get_names(), sep = "\n")
         })
 
@@ -1487,11 +1519,10 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
             Status = purrr::flatten_chr(ready_list),
             stringsAsFactors = FALSE
           )
-          # row.names(ready_table) <- ready_table[['Site']]
 
           DT::datatable(
             ready_table,
-            # colnames = c('Status'),
+            colnames = c('Site', 'Status "TO_LVL2"'),
             extensions = 'Scroller',
             options = list(
               dom = 'ti',
@@ -1503,16 +1534,6 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
             selection = list(target = 'row')
           )
         })
-
-        # observe button event to set READY status
-        observeEvent(
-          eventExpr = input$flaggit,
-          handlerExpr = {
-            purrr::walk(get_names(), ~ df_set_status(
-              .x, LVL1 = list(TO_LVL2 = 'READY')
-            ))
-          }
-        )
       }
     )
   },
