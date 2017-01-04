@@ -1333,9 +1333,11 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
     # 3.1 Check if file exists
     if (!file.exists(file_name)) {
       stop('File has not been written, please revise manually')
-    } else {
+    }
 
-      # 3.2 Update status
+    # 3.2 Check if status must be changed
+    if (level == file.path('Lvl_2', 'lvl_2_out_warn')) {
+      # Update status
       df_set_status(code,
                     LVL1 = list(TO_LVL2 = 'DONE'),
                     LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date())),
@@ -1568,5 +1570,59 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
                                                         'df_flag_to_lvl2_app',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Function to pass from level 1 to level 2
+#'
+#' LVL1 to LVL2 transfer
+#'
+#' This function is in charge of check for sites ready to pass to Level 2, create
+#' the needed folder structure, flag for outliers warnings and saving the final
+#' SfnData objects in the corresponding folder.
+#'
+#' @family Data Flow
+#'
+#' @return Nothing, all the process is internal
+#'
+#' @export
+
+# START
+# Function declaration
+df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Get the ready sites list
+    ready <- df_who_ready_to_lvl2(filter = "ready", parent_logger = parent_logger)
+
+    # STEP 2
+    # Move the data
+    ready %>%
+      # 2.1 For each site, create the level 2 folder struture
+      purrr::walk(~ df_lvl2_folder_structure(.x, parent_logger = parent_logger)) %>%
+      # 2.2 read the sfnData objects
+      purrr::map(~ df_read_SfnData(.x, level = 'Lvl_1', parent_logger = parent_logger)) %>%
+      # 2.3 check for outliers
+      purrr::map(~ out_remove(.x, parent_logger = parent_logger)) %>%
+      # 2.4 write the results
+      purrr::walk(~ df_write_SfnData(.x, level = 'out_warn', parent_logger = parent_logger))
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl1_to_lvl2',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_lvl1_to_lvl2',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl1_to_lvl2',
                                                         sep = '.'))})
 }

@@ -520,6 +520,7 @@ test_that('objects are written to RData files fine', {
                                     'lvl_2_out_rem', 'baz.RData')))
   expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
                                     'lvl_2_unit_trans', 'baz.RData')))
+  expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'DONE')
 })
 
 test_that('error rise if file already exists', {
@@ -554,6 +555,9 @@ test_that('error rise if file already exists', {
   expect_error(df_write_SfnData(foo, 'unit_trans'),
                'object already exists')
 })
+
+################################################################################
+context('J13. df_lvl1_to_lvl2 data flow')
 
 
 ################################################################################
