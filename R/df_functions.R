@@ -1524,7 +1524,7 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
 
         # sites selected text box
         output$selected <- renderPrint({
-          cat("Selected sites ready for level  2:\n\n")
+          cat("Selected sites ready for level 2:\n\n")
           cat(get_names(), sep = "\n")
           cat("\nSelected sites for undo:\n\n")
           cat(get_names_undo(), sep = "\n")
