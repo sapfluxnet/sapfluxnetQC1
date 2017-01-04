@@ -1411,8 +1411,11 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
                            icon = icon('flag')),
               br(),
               br(),
-              'Select the rows of the desired sites on the left table and click',
-              ' the button to set the status of the TO_LVL2 flag to "READY"'
+              'Select the desired rows in the left table to pass from "FREEZE"',
+              ' to "READY" when "Flag it!" button is clicked.',
+              br(),
+              'Select the desired rows in the right table to undo the "READY"',
+              ' status to "FREEZE" again when "Flag it!" button is clicked'
             ),
 
             # viewer column (DT with ready and done)
@@ -1458,6 +1461,14 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
               .x, LVL1 = list(TO_LVL2 = 'READY')
             ))
 
+            undo_sel <- input$ready_rows_selected
+            ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+                                               parent_logger = parent_logger)
+            ready_names <- names(ready_list)[undo_sel]
+            purrr::walk(ready_names, ~ df_set_status(
+              .x, LVL1 = list(TO_LVL2 = 'FREEZE')
+            ))
+
             freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
                                                 parent_logger = parent_logger)
             ready_list <- df_who_ready_to_lvl2(filter = 'ready',
@@ -1479,6 +1490,13 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
           freeze_list <- pop_tables()[['freeze']]
           freeze_names <- names(freeze_list)[selected]
           freeze_names
+        })
+
+        get_names_undo <- reactive({
+          undo_sel <- input$ready_rows_selected
+          ready_list <- pop_tables()[['ready']]
+          ready_names <- names(ready_list)[undo_sel]
+          ready_names
         })
 
         # freeze input table
@@ -1508,6 +1526,8 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
         output$selected <- renderPrint({
           cat("Selected sites ready for level  2:\n\n")
           cat(get_names(), sep = "\n")
+          cat("\nSelected sites for undo:\n\n")
+          cat(get_names_undo(), sep = "\n")
         })
 
         # ready input table
