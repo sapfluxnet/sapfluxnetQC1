@@ -1498,8 +1498,7 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
               dom = 'ti',
               scrollY = 400,
               scrollX = '100%',
-              scroller = TRUE,
-              scrollCollapse = TRUE
+              scroller = TRUE
             ),
             selection = list(target = 'row')
           )
@@ -1528,8 +1527,7 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
               dom = 'ti',
               scrollY = 400,
               scrollX = '100%',
-              scroller = TRUE,
-              scrollCollapse = TRUE
+              scroller = TRUE
             ),
             selection = list(target = 'row')
           )
