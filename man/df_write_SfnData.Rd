@@ -10,7 +10,7 @@ df_write_SfnData(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn", "out_rem",
 \arguments{
 \item{SfnData}{SfnData object}
 
-\item{level}{Level to read from as a character string}
+\item{level}{Level to write to as a character string}
 }
 \value{
 Nothing, the desired site data is saved.

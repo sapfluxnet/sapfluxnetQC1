@@ -1285,7 +1285,7 @@ df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
 #'
 #' @param SfnData SfnData object
 #'
-#' @param level Level to read from as a character string
+#' @param level Level to write to as a character string
 #'
 #' @return Nothing, the desired site data is saved.
 #'
@@ -1316,7 +1316,8 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
 
     # STEP 1
     # file name
-    code <- deparse(substitute(SfnData))
+    # code <- deparse(substitute(SfnData))
+    code <- unique(get_si_code(SfnData))
     file_name <- file.path('Data', code, level, paste0(code, '.RData'))
 
     # 1.1 Check if file exists
@@ -1601,7 +1602,7 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
 
     # STEP 2
     # Move the data
-    ready %>%
+    names(ready) %>%
       # 2.1 For each site, create the level 2 folder struture
       purrr::walk(~ df_lvl2_folder_structure(.x, parent_logger = parent_logger)) %>%
       # 2.2 read the sfnData objects
