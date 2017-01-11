@@ -118,13 +118,19 @@ qc_species_names_info <- function(species, conservatism = 0.9,
                            suggestion.distance = conservatism)
     species_tpl <- tpl_df$name
 
+    # 2.1 Checking for concordance taking into account that species_tpl maybe
+    #     is NA
+    concordance <- species == species_tpl
+    concordance[is.na(concordance)] <- FALSE
+
+
     # STEP 3
     # Create the results data frame
     res <- data.frame(
       data_names = species,
       tpl_names = species_tpl,
       IsNA = is.na(species_tpl),
-      Concordance = species == species_tpl,
+      Concordance = concordance,
       stringsAsFactors = FALSE
     )
 
