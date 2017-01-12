@@ -109,7 +109,7 @@ out_app <- function(parent_logger = 'test') {
         # load the site SfnData object
         sfndataInput <- reactive({
           name <- paste0(input$site_sel, '.RData')
-          load(file.path('Data', input$site_sel, 'Lvl_2', 'out_warn', name))
+          load(file.path('Data', input$site_sel, 'Lvl_2', 'lvl_2_out_warn', name))
           eval(as.name(input$site_sel))
         })
 

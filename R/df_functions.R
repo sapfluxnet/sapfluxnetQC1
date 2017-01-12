@@ -1327,7 +1327,11 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
 
     # STEP 2
     # Write the object
-    save(SfnData, file = file_name)
+    # 2.1 assign the code name to the object name
+    assign(code, SfnData)
+
+    # 2.2 write
+    save(list = code, file = file_name)
 
     # STEP 3
     # Check for file and set status file
