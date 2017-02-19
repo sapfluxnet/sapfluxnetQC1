@@ -51,4 +51,3 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

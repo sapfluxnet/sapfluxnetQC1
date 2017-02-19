@@ -29,9 +29,9 @@ use in the checks.
 The factor variables in stand_md are \code{st_growth_condition},
 \code{st_aspect}, \code{st_terrain} and \code{st_soil_texture}.
 }
+
 \seealso{
 Other Dictionaries: \code{\link{qc_env_dics}},
   \code{\link{qc_plant_dics}}, \code{\link{qc_site_dics}},
   \code{\link{qc_species_dics}}
 }
-

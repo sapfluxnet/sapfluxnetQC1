@@ -36,6 +36,7 @@ The Apparent Solar Time is calculated as:
 The Equation of Time is calculated for each day, whereas the Mean Solar Time
 is calculated for each step of the TIMESTAMP.
 }
+
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
@@ -67,4 +68,3 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

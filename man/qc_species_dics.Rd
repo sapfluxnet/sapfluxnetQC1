@@ -28,9 +28,9 @@ use in the checks.
 
 The factor variables in species_md are \code{sp_leaf_habit}.
 }
+
 \seealso{
 Other Dictionaries: \code{\link{qc_env_dics}},
   \code{\link{qc_plant_dics}}, \code{\link{qc_site_dics}},
   \code{\link{qc_stand_dics}}
 }
-

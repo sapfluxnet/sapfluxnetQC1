@@ -41,4 +41,3 @@ by the selected method, using the \code{\link{out_hampel_filter}} function.
 Other outliers: \code{\link{out_hampel_filter}},
   \code{\link{outlier_subs}}
 }
-

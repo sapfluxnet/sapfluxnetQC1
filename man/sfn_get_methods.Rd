@@ -2,18 +2,18 @@
 % Please edit documentation in R/SfnData_methods.R
 \docType{methods}
 \name{sfn_get_methods}
-\alias{get_env,SfnData-method}
-\alias{get_env_flags,SfnData-method}
-\alias{get_env_md,SfnData-method}
-\alias{get_plant_md,SfnData-method}
+\alias{sfn_get_methods}
 \alias{get_sapf,SfnData-method}
+\alias{get_env,SfnData-method}
 \alias{get_sapf_flags,SfnData-method}
+\alias{get_env_flags,SfnData-method}
+\alias{get_timestamp,SfnData-method}
 \alias{get_si_code,SfnData-method}
 \alias{get_site_md,SfnData-method}
-\alias{get_species_md,SfnData-method}
 \alias{get_stand_md,SfnData-method}
-\alias{get_timestamp,SfnData-method}
-\alias{sfn_get_methods}
+\alias{get_species_md,SfnData-method}
+\alias{get_plant_md,SfnData-method}
+\alias{get_env_md,SfnData-method}
 \title{SfnData get methods}
 \usage{
 \S4method{get_sapf}{SfnData}(object)
@@ -60,4 +60,3 @@ containing the site code.
 \code{get_plant_md} and \code{get_env_md} methods retrieve the corresponding
 metadata.
 }
-

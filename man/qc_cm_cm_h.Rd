@@ -2,18 +2,18 @@
 % Please edit documentation in R/qc_unit_transformations.R
 \name{qc_cm_cm_h}
 \alias{qc_cm_cm_h}
-\alias{qc_cm_h}
 \alias{qc_cm_m_s}
-\alias{qc_cm_s}
 \alias{qc_dm_dm_h}
 \alias{qc_dm_dm_s}
-\alias{qc_dm_h}
-\alias{qc_g_h}
+\alias{qc_mm_mm_s}
 \alias{qc_g_m_s}
-\alias{qc_kg_h}
 \alias{qc_kg_m_h}
 \alias{qc_kg_m_s}
-\alias{qc_mm_mm_s}
+\alias{qc_cm_h}
+\alias{qc_dm_h}
+\alias{qc_cm_s}
+\alias{qc_g_h}
+\alias{qc_kg_h}
 \title{Unit conversion}
 \usage{
 qc_cm_cm_h(x, sapw_area, leaf_area, output_units, parent_logger = "test")
@@ -85,8 +85,8 @@ Conversion of sap flow units to sapwood level
 
 \item \code{qc_kg_h}: Conversion of sap flow units from kg·h⁻¹
 }}
+
 \seealso{
 Other Unit conversion: \code{\link{qc_transf_list}},
   \code{\link{qc_transformation_vars}}
 }
-

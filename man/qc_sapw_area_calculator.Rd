@@ -31,6 +31,7 @@ The area of a ring is \eqn{\pi(R² - r²)}, where \code{R} is the radius
   \eqn{R = (dbh / 2) - bark_thickness} and
   \eqn{r = (dbh / 2) - bark_thickness - sapwood_depth}.
 }
+
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
@@ -62,4 +63,3 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

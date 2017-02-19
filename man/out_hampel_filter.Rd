@@ -44,4 +44,3 @@ median (classic Hampel, default), tukeyline or quantile regression estimations.
 Other outliers: \code{\link{out_remove}},
   \code{\link{outlier_subs}}
 }
-

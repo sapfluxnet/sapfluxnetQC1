@@ -34,6 +34,7 @@ against plant metadata.
   same species, but the number of trees are no the same; finally,
   \code{NA} indicates that the species are not the same in both metadata.
 }
+
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
@@ -65,4 +66,3 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

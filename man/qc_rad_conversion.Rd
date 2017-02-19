@@ -35,6 +35,7 @@ Direct transformation is made from \emph{shortwave incoming radiation}.
 
 Direct transformation is made from \emph{incoming photosynthetic photon flux density}.
 }
+
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
@@ -66,4 +67,3 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

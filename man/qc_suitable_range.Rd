@@ -36,4 +36,3 @@ Other Quality Check Functions: \code{\link{qc_check_coordinates}},
   \code{\link{qc_download_maps}},
   \code{\link{qc_fix_latlong_errors}}
 }
-

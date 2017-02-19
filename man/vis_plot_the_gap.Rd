@@ -33,4 +33,3 @@ Other Visualization Functions: \code{\link{vis_biome}},
   \code{\link{vis_gap_lines}},
   \code{\link{vis_location_biome}}
 }
-

@@ -52,4 +52,3 @@ Other Data Flow: \code{\link{df_copy_templates}},
   \code{\link{df_write_SfnData}},
   \code{\link{sfn_data_constructor}}
 }
-

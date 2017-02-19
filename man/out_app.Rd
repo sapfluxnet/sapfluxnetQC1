@@ -24,4 +24,3 @@ of reconstruction of the complete process undergo by the site data.
 \seealso{
 Other apps: \code{\link{df_flag_to_lvl2_app}}
 }
-

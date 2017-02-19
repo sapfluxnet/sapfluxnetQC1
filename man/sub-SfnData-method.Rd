@@ -19,4 +19,3 @@
 \description{
 Sub-setting operation
 }
-

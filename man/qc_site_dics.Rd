@@ -29,10 +29,10 @@ use in the checks.
 The factor variables in site_md are \code{si_country}, \code{si_dist_mgmt}
 and \code{si_igbp}.
 }
+
 \seealso{
 Other Dictionaries: \code{\link{qc_env_dics}},
   \code{\link{qc_plant_dics}},
   \code{\link{qc_species_dics}},
   \code{\link{qc_stand_dics}}
 }
-

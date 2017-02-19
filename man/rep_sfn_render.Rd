@@ -24,4 +24,3 @@ Nothing, report is generated in the Report folder (default) or the
 \description{
 Wrap around rmarkdown::render function to generate the automatic reports
 }
-

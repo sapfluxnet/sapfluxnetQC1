@@ -2,8 +2,8 @@
 % Please edit documentation in R/SfnData_class.R
 \docType{class}
 \name{SfnData-class}
-\alias{SfnData}
 \alias{SfnData-class}
+\alias{SfnData}
 \title{An S4 class for sapfluxnet data}
 \description{
 An S4 class for sapfluxnet data
