@@ -79,16 +79,26 @@ out_app <- function(parent_logger = 'test') {
 
                     # out table column
                     column(
-                      width = 6,
+                      width = 5,
                       shiny::br(),
+                      shiny::h3('Possible outliers'),
                       DT::dataTableOutput("out_table")
                     ),
 
                     # selectors column
                     column(
-                      width = 6,
+                      width = 5,
                       shiny::br(),
-                      verbatimTextOutput("sel_rows")
+                      shiny::h3('Selected outliers to remove'),
+                      shiny::tableOutput("sel_rows")
+                    ),
+
+                    # button column
+                    column(
+                      width = 2,
+                      shiny::br(),
+                      shiny::h3('Write table'),
+                      shiny::actionButton("write_but", "Write it!", icon = icon('pencil'))
                     )
                   )
                 )
@@ -96,7 +106,7 @@ out_app <- function(parent_logger = 'test') {
 
               # script tab
               tabPanel(
-                "Script obtained"
+                "Outliers table"
               )
             )
           )
@@ -193,30 +203,44 @@ out_app <- function(parent_logger = 'test') {
             DT::datatable(extensions = 'Scroller',
                           options = list(dom = 't',
                                          deferRender = TRUE,
-                                         scrollY = 350,
+                                         scrollY = 300,
                                          scroller = TRUE))
         })
 
         # selected rows
-        output$sel_rows <- renderPrint({
+        output$sel_rows <- renderTable({
           selected <- input$out_table_rows_selected
+          variable <- input$tree_env
           sfndata <- sfndataInput()
           indexes <- get_sapf_flags(sfndata) %>%
             dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
             dplyr::mutate(index = rownames(.)) %>%
-            dplyr::select_('index', 'TIMESTAMP', input$tree_env) %>%
+            dplyr::select_('index', 'TIMESTAMP', variable) %>%
             dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
-                                            x = as.name(input$tree_env))) %>%
+                                            x = as.name(variable))) %>%
             dplyr::select_('index') %>%
             unlist()
 
-          rows_selected <- indexes[selected]
+          if (length(selected)) {
+            rows_selected <- indexes[selected]
 
-          if (length(rows_selected)) {
-            cat("Rows selected for outlier remove:\n\n")
-            cat(rows_selected, sep = ', ')
+            out_remove_table <- data.frame(variable = variable,
+                                           index = rows_selected,
+                                           stringsAsFactors = FALSE)
+            out_remove_table
+          } else {
+            data.frame(variable = character(0),
+                       index = numeric(0))
           }
         })
+
+        # write table when button is pressed
+        observeEvent(
+          eventExpr = input$write_but,
+          handlerExpr = {
+            # TO DO!!
+          }
+        )
 
       }
     )
