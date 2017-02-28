@@ -106,7 +106,8 @@ out_app <- function(parent_logger = 'test') {
 
               # script tab
               tabPanel(
-                "Outliers table"
+                "Outliers to remove",
+                shiny::tableOutput("saved_out_table")
               )
             )
           )
@@ -121,6 +122,39 @@ out_app <- function(parent_logger = 'test') {
           name <- paste0(input$site_sel, '.RData')
           load(file.path('Data', input$site_sel, 'Lvl_2', 'lvl_2_out_warn', name))
           eval(as.name(input$site_sel))
+        })
+
+        # generate the outliers table
+        out_table_gen <- reactive({
+          sfndata <- sfndataInput()
+          variable <- input$tree_env
+          outliers_tab <- get_sapf_flags(sfndata) %>%
+            dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
+            dplyr::mutate(index = rownames(.)) %>%
+            dplyr::select_('index', 'TIMESTAMP', variable) %>%
+            dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
+                                            x = as.name(variable)))
+          outliers_tab
+        })
+
+        # generate the selected outliers table
+        selected_rows_gen <- reactive({
+          selected <- input$out_table_rows_selected
+          variable <- input$tree_env
+          indexes <- out_table_gen() %>%
+            dplyr::select_('index') %>%
+            unlist()
+
+          if (length(selected)) {
+            rows_selected <- indexes[selected]
+            indexes_out_rem <- data.frame(index = rows_selected,
+                                          variable = variable,
+                                          stringsAsFactors = FALSE)
+            indexes_out_rem
+          } else {
+            data.frame(index = numeric(0),
+                       variable = character(0))
+          }
         })
 
         # tree and env input
@@ -192,13 +226,7 @@ out_app <- function(parent_logger = 'test') {
         #     dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP))
         # }, rownames = TRUE, striped = TRUE, spacing = "s", align = 'lcc')
         output$out_table <- DT::renderDataTable({
-          sfndata <- sfndataInput()
-          get_sapf_flags(sfndata) %>%
-            dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
-            dplyr::mutate(index = rownames(.)) %>%
-            dplyr::select_('index', 'TIMESTAMP', input$tree_env) %>%
-            dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
-                                            x = as.name(input$tree_env))) %>%
+          out_table_gen() %>%
             dplyr::mutate(TIMESTAMP = as.character(TIMESTAMP)) %>%
             DT::datatable(extensions = 'Scroller',
                           options = list(dom = 't',
@@ -209,39 +237,32 @@ out_app <- function(parent_logger = 'test') {
 
         # selected rows
         output$sel_rows <- renderTable({
-          selected <- input$out_table_rows_selected
-          variable <- input$tree_env
-          sfndata <- sfndataInput()
-          indexes <- get_sapf_flags(sfndata) %>%
-            dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
-            dplyr::mutate(index = rownames(.)) %>%
-            dplyr::select_('index', 'TIMESTAMP', variable) %>%
-            dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
-                                            x = as.name(variable))) %>%
-            dplyr::select_('index') %>%
-            unlist()
-
-          if (length(selected)) {
-            rows_selected <- indexes[selected]
-
-            out_remove_table <- data.frame(variable = variable,
-                                           index = rows_selected,
-                                           stringsAsFactors = FALSE)
-            out_remove_table
-          } else {
-            data.frame(variable = character(0),
-                       index = numeric(0))
-          }
+          selected_rows_gen()
         })
 
         # write table when button is pressed
         observeEvent(
           eventExpr = input$write_but,
           handlerExpr = {
-            # TO DO!!
+            table_to_write <- selected_rows_gen()
+            # writecsv not working TODO
+            write.table(table_to_write,
+                      file = file.path('Data', input$site_sel,
+                                       'Lvl_2', 'lvl_2_out_warn',
+                                       paste0(input$site_sel, '_out_to_remove.txt')),
+                      append = TRUE, row.names = FALSE, col.names = FALSE)
           }
         )
 
+        # Outliers to remove table
+        output$saved_out_table <- shiny::renderTable({
+          file_name_out <- file.path('Data', input$site_sel,
+                                     'Lvl_2', 'lvl_2_out_warn',
+                                     paste0(input$site_sel, '_out_to_remove.txt'))
+          if (file.exists(file_name_out)) {
+            read.table(file_name_out)
+          }
+        })
       }
     )
   },
