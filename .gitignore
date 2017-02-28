@@ -5,4 +5,5 @@
 inst/doc
 sapfluxnetr.Rproj
 tests/testthat/test.log
+tests/testthat/main_test.log
 inst/diagrams_docs

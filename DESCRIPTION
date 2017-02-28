@@ -22,6 +22,7 @@ Imports:
     dplyr,
     tidyr,
     stringr,
+    lazyeval,
     lubridate,
     data.table,
     tools,
@@ -31,6 +32,7 @@ Imports:
     yaml,
     cowplot,
     mapproj,
+    purrr,
     RFc,
     soiltexture,
     solaR,
@@ -47,6 +49,7 @@ Collate:
     'df_functions.R'
     'dl_data_loading_functions.R'
     'log_functions.R'
+    'out_outliers_app.R'
     'qc_coordinates_functions.R'
     'qc_data_general_checks.R'
     'qc_gaps_functions.R'

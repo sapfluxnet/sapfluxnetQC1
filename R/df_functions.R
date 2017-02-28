@@ -390,15 +390,21 @@ df_set_status <- function(si_code,
 
       # 2.2 modify original with new no NULL elements
       if (!is.null(QC)) {
-        original_yaml$QC <- QC
+        purrr::walk(names(QC), function(x) {
+          original_yaml[["QC"]][[x]] <<- QC[[x]]
+        })
       }
 
       if (!is.null(LVL1)) {
-        original_yaml$LVL1 <- LVL1
+        purrr::walk(names(LVL1), function(x) {
+          original_yaml[["LVL1"]][[x]] <<- LVL1[[x]]
+        })
       }
 
       if (!is.null(LVL2)) {
-        original_yaml$LVL2 <- LVL2
+        purrr::walk(names(LVL2), function(x) {
+          original_yaml[["LVL2"]][[x]] <<- LVL2[[x]]
+        })
       }
 
       # STEP 3
@@ -1044,5 +1050,584 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
                                                         'sfn_data_constructor',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Who is ready for level 2?
+#'
+#' Check the site status files to list who is ready to move to level 2
+#'
+#' \code{filter} parameter indicates if the results must be filtered by the
+#'   corresponding status:
+#'
+#'   \itemize{
+#'     \item{\code{all} retrieves all the statuses}
+#'     \item{\code{ready} retrieves only those sites marked to pass to level 2}
+#'     \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
+#'     \item{\code{done} retrieves only those sites already passed to level 2}
+#'   }
+#'
+#' @family Data Flow
+#'
+#' @param filter character vector indicating by which TO_LVL2 status results must
+#'   been filtered. Accepted values are "all" (default), "ready", "freeze" or "done"
+#'   (see details)
+#'
+#' @return A list with length equal to the number of sites containing the
+#'   TO_LVL2 flag of the status files.
+#'
+#' @export
+
+# START
+# Function declaration
+df_who_ready_to_lvl2 <- function(filter = c('all', 'ready', 'freeze', 'done'),
+                                 parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Checking arguments (match.arg throws an error if not matching)
+    filter <- match.arg(filter)
+    filter <- switch(filter,
+                     all = 'all',
+                     ready = 'READY',
+                     freeze = 'FREEZE',
+                     done = 'DONE')
+
+    # STEP 1
+    # Getting the site codes to pass to df_get_status
+    site_folders <- df_get_data_folders(parent_logger = parent_logger) %>%
+      stringr::str_sub(6, -1)
+
+    # STEP 2
+    # Get the statuses
+    whos_ready <- site_folders %>%
+      purrr::map(df_get_status, parent_logger = parent_logger) %>%
+      # STEP 3
+      # Get the TO_LVL2 flag
+      purrr::at_depth(1, c('LVL1', 'TO_LVL2'), .null = NA)
+
+    # STEP 3
+    # Prepare the results
+    # 3.1 Name the list elements
+    names(whos_ready) <- site_folders
+    # 3.2 filter the results
+    if (filter != 'all') {
+      whos_ready <- whos_ready[whos_ready == filter]
+    }
+
+    # STEP 4
+    # Return the list
+    return(whos_ready)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_who_ready_to_lvl2',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_who_ready_to_lvl2',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_who_ready_to_lvl2',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Build the folder structure of level 2
+#'
+#' Take a site code and build the level 2 tree folder
+#'
+#' @family Data Flow
+#'
+#' @param si_code Site code as character
+#'
+#' @return Nothing, if dir is created ok silent exit, if not it throws an error
+#'
+#' @export
+
+# START
+# Function declaration
+df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Parameters check
+    # is si_code a character
+    if (!is.character(si_code)) {
+      stop('si_code provided is not a character')
+    }
+
+    # STEP 1
+    # Dir creation
+    # 1.1 folder name
+    lvl_root_name <- file.path('Data', si_code, 'Lvl_2')
+
+    # 1.3 heck if dirs already exists and if not, create it (all with dir.create)
+    dir.create(file.path(lvl_root_name, 'lvl_2_out_warn'), showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_out_rem'), showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_unit_trans'), showWarnings = TRUE)
+
+    # STEP 2
+    # Check if creation went well
+    if (all(dir.exists(file.path(lvl_root_name, c('lvl_2_out_warn',
+                                                  'lvl_2_out_rem',
+                                                  'lvl_2_unit_trans'))))) {
+      return()
+    } else {
+      stop("One or more folders can not be created in level 2. ",
+           "Please revise manually")
+    }
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl2_folder_structure',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_lvl2_folder_structure',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl2_folder_structure',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Load SfnData
+#'
+#' Accesory function to load an specified SfnData object
+#'
+#' Given a site code and a level description, \code{df_read_SfnData} will return
+#' the selected SfnData object from the selected location
+#'
+#' @family Data Flow
+#'
+#' @param si_code Site code as a character string
+#'
+#' @param level Level to read from as a character string
+#'
+#' @return A SfnData object.
+#'
+#' @export
+
+# START
+# Function declaration
+df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
+                                               "out_rem", "unit_trans"),
+                            parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checking (done by match.arg)
+    level <- match.arg(level)
+    level <- switch(level,
+                    Lvl_1 = 'Lvl_1',
+                    Lvl_2 = 'Lvl_2',
+                    out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
+                    out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
+                    unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
+
+    # STEP 1
+    # load the file
+    file_name <- file.path('Data', si_code, level,
+                           paste0(si_code, '.RData'))
+
+    if (!file.exists(file_name)) {
+      stop('SfnData for ', si_code, ' and ', level, ' does not exist.')
+    } else {
+      load(file = file_name)
+
+      # 1.1 Return the SfnData object
+      return(eval(as.name(si_code)))
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_load_SfnData',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_load_SfnData',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_load_SfnData',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Write SfnData
+#'
+#' Accesory function to write an SfnData object to a fixed location
+#'
+#' Given a site code and a level description, \code{df_write_SfnData} will save
+#' the selected SfnData object in the selected location
+#'
+#' @family Data Flow
+#'
+#' @param SfnData SfnData object
+#'
+#' @param level Level to write to as a character string
+#'
+#' @return Nothing, the desired site data is saved.
+#'
+#' @export
+
+# START
+# Function declaration
+df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
+                                                "out_rem", "unit_trans"),
+                             parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checking (done by match.arg)
+    level <- match.arg(level)
+    level <- switch(level,
+                    Lvl_1 = 'Lvl_1',
+                    Lvl_2 = 'Lvl_2',
+                    out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
+                    out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
+                    unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
+    # SfnData
+    if (class(SfnData) != 'SfnData') {
+      stop('object provided is not an SfnData object')
+    }
+
+    # STEP 1
+    # file name
+    # code <- deparse(substitute(SfnData))
+    code <- unique(get_si_code(SfnData))
+    file_name <- file.path('Data', code, level, paste0(code, '.RData'))
+
+    # 1.1 Check if file exists
+    if (file.exists(file_name)) {
+      stop(code, ' object already exists in ', level)
+    }
+
+    # STEP 2
+    # Write the object
+    # 2.1 assign the code name to the object name
+    assign(code, SfnData)
+
+    # 2.2 write
+    save(list = code, file = file_name)
+
+    # STEP 3
+    # Check for file and set status file
+    # 3.1 Check if file exists
+    if (!file.exists(file_name)) {
+      stop('File has not been written, please revise manually')
+    }
+
+    # 3.2 Check if status must be changed
+    if (level == file.path('Lvl_2', 'lvl_2_out_warn')) {
+      # Update status
+      df_set_status(code,
+                    LVL1 = list(TO_LVL2 = 'DONE'),
+                    LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date())),
+                    parent_logger = parent_logger)
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_write_SfnData',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_write_SfnData',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_write_SfnData',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Interactively select the data sets ready to move to level 2
+#'
+#' Shiny app to flag data sets as ready to move to level 2
+#'
+#' @family apps
+#'
+#' @return An interactive app to flag datasets as ready to move to level 2
+#'
+#' @export
+#'
+#' @import shiny
+
+# START
+# Function declaration
+df_flag_to_lvl2_app <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Defining the app
+    shinyApp(
+
+      # 1.1 UI
+      ui = fluidPage(
+        # app title
+        titlePanel('Flag to level 2 app'),
+
+        # main panel
+        mainPanel(
+          width  = 10,
+
+          fluidRow(
+            # input column (DT with the freeze)
+            column(
+              width = 4,
+              DT::dataTableOutput('freeze')
+            ),
+
+            # action column (selected and action button)
+            column(
+              width = 3,
+              br(),
+              br(),
+              br(),
+              verbatimTextOutput('selected'),
+              actionButton('flaggit', 'Flag it!',
+                           icon = icon('flag')),
+              br(),
+              br(),
+              'Select the desired rows in the left table to pass from "FREEZE"',
+              ' to "READY" when "Flag it!" button is clicked.',
+              br(),
+              'Select the desired rows in the right table to undo the "READY"',
+              ' status to "FREEZE" again when "Flag it!" button is clicked'
+            ),
+
+            # viewer column (DT with ready and done)
+            column(
+              width = 4,
+              DT::dataTableOutput('ready')
+            )
+          )
+        )
+      ),
+
+      # 1.2 server
+      server = function(input, output) {
+
+        # reactive expressions
+        ## populate the tables
+        pop_tables <- eventReactive(
+          ignoreNULL = FALSE,
+          eventExpr = input$flaggit,
+          valueExpr = {
+            clicked <- input$flaggit
+
+            if (clicked == 0) {
+              freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                                  parent_logger = parent_logger)
+              ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+                                                 parent_logger = parent_logger)
+              done_list <- df_who_ready_to_lvl2(filter = 'done',
+                                                parent_logger = parent_logger)
+
+              res <- list(freeze = freeze_list,
+                          ready = ready_list,
+                          done = done_list)
+
+              res
+            }
+
+            selected <- input$freeze_rows_selected
+            freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                                parent_logger = parent_logger)
+            freeze_names <- names(freeze_list)[selected]
+            purrr::walk(freeze_names, ~ df_set_status(
+              .x, LVL1 = list(TO_LVL2 = 'READY')
+            ))
+
+            undo_sel <- input$ready_rows_selected
+            ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+                                               parent_logger = parent_logger)
+            ready_names <- names(ready_list)[undo_sel]
+            purrr::walk(ready_names, ~ df_set_status(
+              .x, LVL1 = list(TO_LVL2 = 'FREEZE')
+            ))
+
+            freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
+                                                parent_logger = parent_logger)
+            ready_list <- df_who_ready_to_lvl2(filter = 'ready',
+                                               parent_logger = parent_logger)
+            done_list <- df_who_ready_to_lvl2(filter = 'done',
+                                              parent_logger = parent_logger)
+
+            res <- list(freeze = freeze_list,
+                        ready = ready_list,
+                        done = done_list)
+
+            res
+          }
+        )
+
+        ## get the names
+        get_names <- reactive({
+          selected <- input$freeze_rows_selected
+          freeze_list <- pop_tables()[['freeze']]
+          freeze_names <- names(freeze_list)[selected]
+          freeze_names
+        })
+
+        get_names_undo <- reactive({
+          undo_sel <- input$ready_rows_selected
+          ready_list <- pop_tables()[['ready']]
+          ready_names <- names(ready_list)[undo_sel]
+          ready_names
+        })
+
+        # freeze input table
+        output$freeze <- DT::renderDataTable({
+          freeze_list <- pop_tables()[['freeze']]
+          freeze_table <- data.frame(
+            Site = names(freeze_list),
+            Status = purrr::flatten_chr(freeze_list),
+            stringsAsFactors = FALSE
+          )
+
+          DT::datatable(
+            freeze_table,
+            colnames = c('Site', 'Status "TO_LVL2"'),
+            extensions = 'Scroller',
+            options = list(
+              dom = 'ti',
+              scrollY = 400,
+              scrollX = '100%',
+              scroller = TRUE
+            ),
+            selection = list(target = 'row')
+          )
+        })
+
+        # sites selected text box
+        output$selected <- renderPrint({
+          cat("Selected sites ready for level 2:\n\n")
+          cat(get_names(), sep = "\n")
+          cat("\nSelected sites for undo:\n\n")
+          cat(get_names_undo(), sep = "\n")
+        })
+
+        # ready input table
+        output$ready <- DT::renderDataTable({
+          ready_list <- pop_tables()[['ready']]
+          ready_table <- data.frame(
+            Site = names(ready_list),
+            Status = purrr::flatten_chr(ready_list),
+            stringsAsFactors = FALSE
+          )
+
+          DT::datatable(
+            ready_table,
+            colnames = c('Site', 'Status "TO_LVL2"'),
+            extensions = 'Scroller',
+            options = list(
+              dom = 'ti',
+              scrollY = 400,
+              scrollX = '100%',
+              scroller = TRUE
+            ),
+            selection = list(target = 'row')
+          )
+        })
+      }
+    )
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_flag_to_lvl2_app',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_flag_to_lvl2_app',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_flag_to_lvl2_app',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Function to pass from level 1 to level 2
+#'
+#' LVL1 to LVL2 transfer
+#'
+#' This function is in charge of check for sites ready to pass to Level 2, create
+#' the needed folder structure, flag for outliers warnings and saving the final
+#' SfnData objects in the corresponding folder.
+#'
+#' @family Data Flow
+#'
+#' @return Nothing, all the process is internal
+#'
+#' @export
+
+# START
+# Function declaration
+df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Get the ready sites list
+    ready <- df_who_ready_to_lvl2(filter = "ready", parent_logger = parent_logger)
+
+    # STEP 2
+    # Move the data
+    names(ready) %>%
+      # 2.1 For each site, create the level 2 folder struture
+      purrr::walk(~ df_lvl2_folder_structure(.x, parent_logger = parent_logger)) %>%
+      # 2.2 read the sfnData objects
+      purrr::map(~ df_read_SfnData(.x, level = 'Lvl_1', parent_logger = parent_logger)) %>%
+      # 2.3 check for outliers
+      purrr::map(~ out_remove(.x, parent_logger = parent_logger)) %>%
+      # 2.4 write the results
+      purrr::walk(~ df_write_SfnData(.x, level = 'out_warn', parent_logger = parent_logger))
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl1_to_lvl2',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_lvl1_to_lvl2',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_lvl1_to_lvl2',
                                                         sep = '.'))})
 }

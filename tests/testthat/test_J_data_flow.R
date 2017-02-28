@@ -332,6 +332,7 @@ test_that('files had been renamed correctly', {
   expect_match(old_files, "(.csv|.RData|.xlsx)")
 })
 
+################################################################################
 context('J8. Saving templates and running scripts to folders')
 
 unlink('Templates', recursive = TRUE)
@@ -351,6 +352,257 @@ test_that('function works', {
 })
 
 ################################################################################
+context('J9. who is ready to level 2?')
+
+# preparing the data folder
+unlink('Data', recursive = TRUE)
+
+dir.create(file.path('Data'))
+dir.create(file.path('Data', 'foo'))
+dir.create(file.path('Data', 'bar'))
+dir.create(file.path('Data', 'baz'))
+
+# creating empty statuses
+df_start_status('foo')
+df_start_status('bar')
+df_start_status('baz')
+
+# populate the statuses
+df_set_status(
+  'foo',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'READY')
+)
+
+df_set_status(
+  'bar',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'FREEZE')
+)
+
+df_set_status(
+  'baz',
+  QC = list(DONE = TRUE, DATE = Sys.Date()),
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'DONE')
+)
+
+# testing if function works
+whos_ready <- df_who_ready_to_lvl2()
+
+test_that('results are as expected',{
+  expect_is(whos_ready, 'list')
+  expect_length(whos_ready, 3)
+  expect_identical(whos_ready[['foo']], 'READY')
+  expect_identical(whos_ready[['bar']], 'FREEZE' )
+  expect_identical(whos_ready[['baz']], 'DONE')
+})
+
+# testing filter argument
+whos_ready_true <- df_who_ready_to_lvl2(filter = 'ready')
+whos_ready_freeze <- df_who_ready_to_lvl2(filter = 'freeze')
+whos_ready_done <- df_who_ready_to_lvl2(filter = 'done')
+test_that('filtering is as expected',{
+  expect_is(whos_ready_true, 'list')
+  expect_length(whos_ready_true, 1)
+  expect_identical(whos_ready[['foo']], 'READY')
+  expect_is(whos_ready_freeze, 'list')
+  expect_length(whos_ready_freeze, 1)
+  expect_identical(whos_ready[['bar']], 'FREEZE' )
+  expect_is(whos_ready_done, 'list')
+  expect_length(whos_ready_done, 1)
+  expect_identical(whos_ready[['baz']], 'DONE')
+})
+
+
+# testing if empty
+unlink(file.path('Data', 'bar', 'bar_status.yaml'))
+
+whos_ready_2 <- suppressWarnings(df_who_ready_to_lvl2())
+
+test_that('if not status NA is returned', {
+  expect_is(whos_ready_2, 'list')
+  expect_length(whos_ready_2, 3)
+  expect_identical(whos_ready[['foo']], 'READY')
+  expect_true(is.na(whos_ready_2['bar']))
+  expect_identical(whos_ready[['baz']], 'DONE')
+})
+
+
+
+################################################################################
+context('J10. lvl2_folder_structure')
+
+dir.create(file.path('Data', 'foo', 'Lvl_2'))
+
+df_lvl2_folder_structure('foo')
+
+test_that('folders are created ok', {
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_out_warn')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_out_rem')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_unit_trans')))
+})
+
+test_that('function throws an error when not creating the folders', {
+  expect_error(suppressWarnings(df_lvl2_folder_structure('xyz')),
+               'One or more folders can not be created in level 2')
+})
+
+################################################################################
+context('J11. loading SfnData object')
+
+dir.create(file.path('Data', 'foo', 'Lvl_1'))
+dir.create(file.path('Data', 'bar', 'Lvl_1'))
+dir.create(file.path('Data', 'bar', 'Lvl_2'))
+dir.create(file.path('Data', 'baz', 'Lvl_1'))
+dir.create(file.path('Data', 'baz', 'Lvl_2'))
+
+df_lvl2_folder_structure('bar')
+df_lvl2_folder_structure('baz')
+
+load('FOO.RData')
+foo <- FOO
+get_si_code(foo) <- rep('foo', length(get_si_code(foo)))
+bar <- FOO
+get_si_code(bar) <- rep('bar', length(get_si_code(bar)))
+
+save(foo, file = file.path('Data', 'foo', 'Lvl_1', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_warn', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_rem', 'foo.RData'))
+save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_unit_trans', 'foo.RData'))
+
+save(bar, file = file.path('Data', 'bar', 'Lvl_1', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_warn', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_rem', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_unit_trans', 'bar.RData'))
+
+test_that('objects are loaded fine or rise an error', {
+  expect_is(df_read_SfnData('foo', 'Lvl_1'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'Lvl_2'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'out_warn'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'out_rem'), 'SfnData')
+  expect_is(df_read_SfnData('foo', 'unit_trans'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'Lvl_1'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'Lvl_2'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'out_warn'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'out_rem'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'unit_trans'), 'SfnData')
+  expect_error(df_read_SfnData('baz', 'Lvl_1'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'Lvl_2'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'out_warn'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'out_rem'),
+               'does not exist.')
+  expect_error(df_read_SfnData('baz', 'unit_trans'),
+               'does not exist.')
+})
+
+################################################################################
+context('J12. Write SfnData to location')
+
+baz <- FOO
+get_si_code(baz) <- rep('baz', length(get_si_code(baz)))
+df_write_SfnData(baz, 'Lvl_1')
+df_write_SfnData(baz, 'Lvl_2')
+df_write_SfnData(baz, 'out_warn')
+df_write_SfnData(baz, 'out_rem')
+df_write_SfnData(baz, 'unit_trans')
+
+test_that('objects are written to RData files fine', {
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+                                    'lvl_2_out_warn', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+                                    'lvl_2_out_rem', 'baz.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+                                    'lvl_2_unit_trans', 'baz.RData')))
+  expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'DONE')
+})
+
+test_that('error rise if file already exists', {
+  expect_error(df_write_SfnData(baz, 'Lvl_1'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'Lvl_2'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'out_warn'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'out_rem'),
+               'object already exists')
+  expect_error(df_write_SfnData(baz, 'unit_trans'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'Lvl_1'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'Lvl_2'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'out_warn'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'out_rem'),
+               'object already exists')
+  expect_error(df_write_SfnData(bar, 'unit_trans'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'Lvl_1'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'Lvl_2'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'out_warn'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'out_rem'),
+               'object already exists')
+  expect_error(df_write_SfnData(foo, 'unit_trans'),
+               'object already exists')
+})
+
+################################################################################
+context('J13. df_lvl1_to_lvl2 data flow')
+
+unlink(file.path('Data', 'foo', 'Lvl_2'), recursive = TRUE)
+unlink(file.path('Data', 'bar', 'Lvl_2'), recursive = TRUE)
+unlink(file.path('Data', 'baz', 'Lvl_2'), recursive = TRUE)
+
+save(baz, file = file.path('Data', 'baz', 'Lvl_1', 'baz.RData'))
+df_start_status('bar')
+
+dir.create(file.path('Data', 'foo', 'Lvl_2'))
+dir.create(file.path('Data', 'bar', 'Lvl_2'))
+dir.create(file.path('Data', 'baz', 'Lvl_2'))
+
+df_set_status('foo', LVL1 = list(TO_LVL2 = 'READY'))
+df_set_status('bar', LVL1 = list(TO_LVL2 = 'READY'))
+df_set_status('baz', LVL1 = list(TO_LVL2 = 'FREEZE'))
+
+df_lvl1_to_lvl2()
+
+test_that('files are moved fine', {
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_warn', 'foo.RData')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_warn', 'bar.RData')))
+  expect_false(file.exists(file.path('Data', 'baz', 'Lvl_2', 'lvl_2_out_warn', 'baz.RData')))
+  expect_equal(df_get_status('foo')$LVL1$TO_LVL2, 'DONE')
+  expect_equal(df_get_status('bar')$LVL1$TO_LVL2, 'DONE')
+  expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'FREEZE')
+})
+
+df_set_status('baz', LVL1 = list(TO_LVL2 = 'READY'))
+df_lvl1_to_lvl2()
+
+test_that('DONE sites are respected', {
+  expect_true(file.exists(file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_warn', 'foo.RData')))
+  expect_true(file.exists(file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_warn', 'bar.RData')))
+  expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2', 'lvl_2_out_warn', 'baz.RData')))
+  expect_equal(df_get_status('foo')$LVL1$TO_LVL2, 'DONE')
+  expect_equal(df_get_status('bar')$LVL1$TO_LVL2, 'DONE')
+  expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'DONE')
+})
+
+
+
+################################################################################
 # cleaning
 unlink('received_data', recursive = TRUE)
 unlink('Data', recursive = TRUE)
@@ -358,6 +610,3 @@ unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)
 unlink('Templates', recursive = TRUE)
 unlink(c('sfn_monitor.Rmd','main_script.R','debug_script.R'))
-
-
-
