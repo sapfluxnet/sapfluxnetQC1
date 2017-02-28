@@ -1723,3 +1723,26 @@ output$env_ts_vs <- renderDygraph({
     dyRangeSelector()
 })
 ```
+
+Ready to Level 2 {data-icon="ion-ios-analytics" data-navmenu="Apps"}
+================================================================================
+
+### Ready to Level 2 App
+
+Select the sites ready for Level 2 QC
+
+```{r ready_to_lvl2_app}
+df_flag_to_lvl2_app()
+```
+
+Outliers App {data-icon="ion-ios-analytics" data-navmenu="Apps"}
+================================================================================
+
+### Outliers flagging
+
+Select the sites ready for Level 2 QC
+
+```{r out_app}
+out_app()
+```
+
