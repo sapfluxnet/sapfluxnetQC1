@@ -201,13 +201,13 @@ qc_range_dic <- function(parent_logger = 'test') {
     # Range values c(min,max)
 
     # env vars
-    ta_range <- c(-30, 50) # not strict values, only as indicators,
+    ta_range <- c(-30, 50) # no strict values, only as indicators,
                            # slighty based on Cerveny et al. 2007
-    rh_range <- c(0, 100)
+    rh_range <- c(0, 100) # common sense criteria
     vpd_range <- c(0, 40)
     sw_in_range <- c(0, 1362) # based in the solar constant
     ppdf_in_range <- c(0, 2400) # based in Rafa's comment
-    netrad_range <- c(, )
+    netrad_range <- c(-280, 280) # based on Nasa maps
     ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
     precip_range <- c(0, 250) # based on Cerveny et al. 2007
 
