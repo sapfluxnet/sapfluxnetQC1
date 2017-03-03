@@ -4,7 +4,7 @@
 #' \code{qc_suitable_range} is used to determine if a variable has strange
 #' values out of natural or biological expected range.
 #'
-#' Checks are made in function of the variable and acceptable ranges provided.
+#' Checks are made based on the variable and acceptable ranges provided.
 #' \code{variables} and \code{ranges} must be of the same length, as the first
 #' variable is compared with the first range provided, and so on. If both
 #' objects are not of the same length, an informative error appears and function
@@ -211,9 +211,9 @@ qc_range_dic <- function(parent_logger = 'test') {
     ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
     precip_range <- c(0, 250) # based on Cerveny et al. 2007
 
-    # sapf (we put lianas as a maximum value, as in Vandegehuchte & Steppe 2013)
+    # sapf (we select maximum value as found in Manzoni 2013)
     # also we look for negative fluxes
-    sapf_range <- c(0, 45) # units are cm3cm-2h-1
+    sapf_range <- c(0, 190) # units are cm3cm-2h-1
 
     # STEP 2
     # Create the res object
