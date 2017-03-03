@@ -211,9 +211,27 @@ qc_range_dic <- function(parent_logger = 'test') {
     ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
     precip_range <- c(0, 250) # based on Cerveny et al. 2007
 
-    # sapf
-    sapf_range <- c(, )
-    # TODO
+    # sapf (we put lianas as a maximum value, as in Vandegehuchte & Steppe 2013)
+    # also we look for negative fluxes
+    sapf_range <- c(0, 45) # units are cm3cm-2h-1
+
+    # STEP 2
+    # Create the res object
+    res_ranges <- list(
+      ta = ta_range,
+      rh = rh_range,
+      vpd = vpd_range,
+      sw_in = sw_in_range,
+      ppdf_in = ppdf_in_range,
+      netrad = netrad_range,
+      ws = ws_range,
+      precip = precip_range,
+      sapf = sapf_range
+    )
+
+    # STEP 3
+    # Return the object
+    return(res_ranges)
   },
 
   # handlers
