@@ -87,11 +87,14 @@ qc_suitable_range <- function(data, variables, ranges,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'qc_suitable_range', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'qc_suitable_range', sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'qc_suitable_range', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'qc_suitable_range', sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'qc_suitable_range', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'qc_suitable_range', sep = '.'))})
 
 }
 
@@ -196,8 +199,20 @@ qc_range_dic <- function(parent_logger = 'test') {
 
     # STEP 1
     # Range values c(min,max)
-    ta_range <- c(-20, 50)
+
+    # env vars
+    ta_range <- c(-30, 50) # not strict values, only as indicators,
+                           # slighty based on Cerveny et al. 2007
     rh_range <- c(0, 100)
+    vpd_range <- c(0, 40)
+    sw_in_range <- c(0, 1362) # based in the solar constant
+    ppdf_in_range <- c(0, 2400) # based in Rafa's comment
+    netrad_range <- c(, )
+    ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
+    precip_range <- c(0, 250) # based on Cerveny et al. 2007
+
+    # sapf
+    sapf_range <- c(, )
     # TODO
   },
 
