@@ -169,3 +169,49 @@ qc_sapf_range_check <- function(data, parent_logger = 'test') {
                                          logger = paste(parent_logger,
                                                         'qc_sapf_range_check', sep = '.'))})
 }
+
+################################################################################
+#' Ranges dictionary
+#'
+#' Values for all ranges checked as a list
+#'
+#' To be abale to check for values out of ranges, first these ranges must be
+#' described. This function generates a range dictionary for that mission. In
+#' this way if ranges must be changed they only have to be changed in this
+#' function.
+#'
+#' @family Quality Checks Functions
+#'
+#' @return A list containing the variable name as the element label and the
+#'   range value as the element value.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_range_dic <- function(parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 1
+    # Range values c(min,max)
+    ta_range <- c(-20, 50)
+    rh_range <- c(0, 100)
+    # TODO
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_range_dic',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_range_dic',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_range_dic',
+                                                        sep = '.'))})
+}
