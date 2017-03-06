@@ -39,7 +39,6 @@ site and a logical variable indicating if coordinates are correct.
 \seealso{
 Other Quality Check Functions: \code{\link{qc_coord_sign_test}},
   \code{\link{qc_download_maps}},
-  \code{\link{qc_fix_latlong_errors}},
-  \code{\link{qc_suitable_range}}
+  \code{\link{qc_fix_latlong_errors}}
 }
 

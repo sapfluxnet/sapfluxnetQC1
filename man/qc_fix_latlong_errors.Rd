@@ -61,7 +61,6 @@ as the correct option can not be assured.
 \seealso{
 Other Quality Check Functions: \code{\link{qc_check_coordinates}},
   \code{\link{qc_coord_sign_test}},
-  \code{\link{qc_download_maps}},
-  \code{\link{qc_suitable_range}}
+  \code{\link{qc_download_maps}}
 }
 
