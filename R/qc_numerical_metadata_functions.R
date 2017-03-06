@@ -250,3 +250,64 @@ qc_range_dic <- function(parent_logger = 'test') {
                                                         'qc_range_dic',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Check ranges for sapflow
+#'
+#' Check ranges for sapflow
+#'
+#' Sapflow ranges are checked in sapwood or tree level, depending on the units
+#' of the variable
+#'
+#' @family Quality Checks Functions
+#'
+#' @param sapf_data Sapflow data, as obtained from \code{\link{get_sapf}}
+#'
+#' @param plant_md Plant metadata, as obtained from \code{\link{get_plant_md}}
+#'
+#' @param sapf_flags Sapflow flags, as obtained from \code{\link{get_sapf_flags}}
+#'
+#' @return A data frame containing the new flags in case any value is out of
+#'   range.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_sapf_ranges <- function(sapf_data, plant_md,
+                           sapf_flags, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Check arguments
+    if(!all(is.data.frame(sapf_data),
+            is.data.frame(plant_md),
+            is.data.frame(sapf_flags))) {
+      stop('Data, metadata and/or flags objects provided are not data frames')
+    }
+
+    # STEP 1
+    # 1.1 Get the dic
+    ranges_dic <- qc_ranges_dic(parent_logger = parent_logger)
+
+    # 1.2 Get the units
+    sapf_units <- plant_md[,'pl_sap_units']
+    # TODO
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_sapf_ranges',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_sapf_ranges',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_sapf_ranges',
+                                                        sep = '.'))})
+}
