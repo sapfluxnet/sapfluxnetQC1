@@ -213,7 +213,8 @@ qc_range_dic <- function(parent_logger = 'test') {
 
     # sapf (we select maximum value as found in Manzoni 2013)
     # also we look for negative fluxes
-    sapf_range <- c(0, 190) # units are cm3cm-2h-1
+    sapf_sapw_range <- c(0, 190) # units are cm3cm-2h-1
+    sapf_tree_range <- c(0, 48000) # untis are cm3h-1
 
     # STEP 2
     # Create the res object
