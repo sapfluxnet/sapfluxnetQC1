@@ -2,6 +2,12 @@ library(sapfluxnetQC1)
 
 context('L1. Ranges')
 
+load('FOO.RData')
+foo_sapf <- get_sapf(FOO)
+foo_flags <- get_sapf_flags(FOO)
+foo_plant_md <- get_plant_md(FOO)
+
+
 test_that('ranges dictionary is created ok', {
   expect_is(qc_range_dic(), 'list')
   expect_length(qc_range_dic(), 10)
@@ -19,3 +25,5 @@ test_that('ranges dictionary is created ok', {
   expect_length(qc_range_dic()[[9]], 2)
   expect_length(qc_range_dic()[[10]], 2)
 })
+
+

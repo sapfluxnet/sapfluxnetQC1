@@ -290,11 +290,11 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
 
     # STEP 1
     # 1.1 Get the dic
-    ranges_dic <- qc_ranges_dic(parent_logger = parent_logger)
+    ranges_dic <- qc_range_dic(parent_logger = parent_logger)
 
     # 1.2 Get the units
-    sapf_units <- plant_md[,'pl_sap_units']
-    names(sapf_units) <- plant_md[,'pl_code']
+    sapf_units <- purrr::flatten_chr(plant_md[,'pl_sap_units'])
+    names(sapf_units) <- purrr::flatten_chr(plant_md[,'pl_code'])
 
     # 1.3 Tranformation functions list
     funs_list <- list(
@@ -327,7 +327,7 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
           range,
           funs_list[[sapf_units[[name]]]],
           numeric(1),
-          sapw_area = NA, leaf_area = NA, output_units = 'sapwood',
+          sapw_area = 0, leaf_area = 0, output_units = 'sapwood',
           parent_logger = parent_logger
         )
       } else {
@@ -350,7 +350,7 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
 
       # 2.5 inner loop
       for (i in 1:length(res_logical)) {
-        if (res_logical[i]) {
+        if (!is.na(res_logical[i]) & res_logical[i]) {
           flags_vec[i] <- paste0(flags_vec[i], '; RANGE_WARN')
         }
       }
