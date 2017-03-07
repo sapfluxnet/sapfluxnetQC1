@@ -294,7 +294,74 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
 
     # 1.2 Get the units
     sapf_units <- plant_md[,'pl_sap_units']
-    # TODO
+    names(sapf_units) <- plant_md[,'pl_code']
+
+    # 1.3 Tranformation functions list
+    funs_list <- list(
+      '“cm3 cm-2 h-1”' = sapfluxnetQC1::qc_cm_cm_h,
+      '“cm3 m-2 s-1”' = sapfluxnetQC1::qc_cm_m_s,
+      '“dm3 dm-2 h-1”' = sapfluxnetQC1::qc_dm_dm_h,
+      '“dm3 dm-2 s-1”' = sapfluxnetQC1::qc_dm_dm_s,
+      '“mm3 mm-2 s-1”' = sapfluxnetQC1::qc_mm_mm_s,
+      '“g m-2 s-1”' = sapfluxnetQC1::qc_g_m_s,
+      '“kg m-2 h-1”' = sapfluxnetQC1::qc_kg_m_h,
+      '“kg m-2 s-1”' = sapfluxnetQC1::qc_kg_m_s,
+      '“cm3 s-1”' = sapfluxnetQC1::qc_cm_s,
+      '“cm3 h-1”' = sapfluxnetQC1::qc_cm_h,
+      '“dm3 h-1”' = sapfluxnetQC1::qc_dm_h,
+      '“g h-1”' = sapfluxnetQC1::qc_g_h,
+      '“kg h-1”' = sapfluxnetQC1::qc_kg_h
+    )
+
+    # STEP 2
+    # Get the out of range values
+
+    # 2.1 start loop
+    for (name in names(sapf_data[,-1])) {
+
+      # 2.2 check if tree or sapwood level
+      if (sapf_units[name] %in% names(funs_list)[1:8]) {
+        # 2.2.1 sapwood
+        range <- ranges_dic[['sapf_sapw']]
+        range_transf <- vapply(
+          range,
+          funs_list[[sapf_units[[name]]]],
+          numeric(1),
+          sapw_area = NA, leaf_area = NA, output_units = 'sapwood',
+          parent_logger = parent_logger
+        )
+      } else {
+        # 2.2.2 tree
+        range <- ranges_dic[['sapf_tree']]
+        range_transf <- vapply(
+          range,
+          funs_list[[sapf_units[[name]]]],
+          numeric(1),
+          sapw_area = NA, leaf_area = NA, output_units = 'plant',
+          parent_logger = parent_logger
+        )
+      }
+
+      # 2.3 logical vector indicating if the value is out of range
+      res_logical <- sapf_data[,name] < range_transf[1] | sapf_data[,name] > range_transf[2]
+
+      # 2.4 vector with flags
+      flags_vec <- sapf_flags[,name]
+
+      # 2.5 inner loop
+      for (i in 1:length(res_logical)) {
+        if (res_logical[i]) {
+          flags_vec[i] <- paste0(flags_vec[i], '; RANGE_WARN')
+        }
+      }
+
+      # 2.6 flags vector back to flags
+      sapf_flags[,name] <- flags_vec
+    }
+
+    # STEP 3
+    # Return the flag object
+    return(sapf_flags)
   },
 
   # handlers
