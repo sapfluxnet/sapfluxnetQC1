@@ -22,6 +22,7 @@ and mean annual precipitation (MAP) (MAT in degree Celsius and MAP in mm).
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
   \code{\link{qc_data_results_table}},
+  \code{\link{qc_env_ranges}},
   \code{\link{qc_env_vars_presence}},
   \code{\link{qc_ext_radiation}},
   \code{\link{qc_factor_values}},

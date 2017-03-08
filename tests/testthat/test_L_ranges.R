@@ -12,7 +12,7 @@ test_that('ranges dictionary is created ok', {
   expect_is(qc_range_dic(), 'list')
   expect_length(qc_range_dic(), 10)
   expect_identical(names(qc_range_dic()),
-                   c('ta', 'rh', 'vpd', 'sw_in', 'ppdf_in', 'netrad',
+                   c('ta', 'rh', 'vpd', 'sw_in', 'ppfd_in', 'netrad',
                      'ws', 'precip', 'sapf_sapw', 'sapf_tree'))
   expect_length(qc_range_dic()[[1]], 2)
   expect_length(qc_range_dic()[[2]], 2)

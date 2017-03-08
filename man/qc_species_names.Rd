@@ -25,6 +25,7 @@ Wrapper for \code{\link{qc_species_names_info}} and \code{\link{qc_species_names
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
   \code{\link{qc_data_results_table}},
+  \code{\link{qc_env_ranges}},
   \code{\link{qc_env_vars_presence}},
   \code{\link{qc_ext_radiation}},
   \code{\link{qc_factor_values}},

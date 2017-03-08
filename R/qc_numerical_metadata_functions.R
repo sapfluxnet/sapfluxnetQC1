@@ -206,7 +206,7 @@ qc_range_dic <- function(parent_logger = 'test') {
     rh_range <- c(0, 100) # common sense criteria
     vpd_range <- c(0, 40)
     sw_in_range <- c(0, 1362) # based in the solar constant
-    ppdf_in_range <- c(0, 2400) # based in Rafa's comment
+    ppfd_in_range <- c(0, 2400) # based in Rafa's comment
     netrad_range <- c(-280, 280) # based on Nasa maps
     ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
     precip_range <- c(0, 250) # based on Cerveny et al. 2007
@@ -223,7 +223,7 @@ qc_range_dic <- function(parent_logger = 'test') {
       rh = rh_range,
       vpd = vpd_range,
       sw_in = sw_in_range,
-      ppdf_in = ppdf_in_range,
+      ppfd_in = ppfd_in_range,
       netrad = netrad_range,
       ws = ws_range,
       precip = precip_range,
@@ -351,7 +351,9 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
       # 2.5 inner loop
       for (i in 1:length(res_logical)) {
         if (!is.na(res_logical[i]) & res_logical[i]) {
-          flags_vec[i] <- paste0(flags_vec[i], '; RANGE_WARN')
+          if (flags_vec[i] == '') {
+            flags_vec[i] <- 'RANGE_WARN'
+          } else {flags_vec[i] <- paste0(flags_vec[i], '; RANGE_WARN')}
         }
       }
 
@@ -362,6 +364,8 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
     # STEP 3
     # Return the flag object
     return(sapf_flags)
+
+    # END FUNCTION
   },
 
   # handlers
@@ -378,3 +382,88 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
                                                         'qc_sapf_ranges',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Check ranges for environmental variables
+#'
+#' Check ranges for environmental variables
+#'
+#' Environmental values are checked against known general ranges
+#'
+#' @family Quality Checks Functions
+#'
+#' @param env_data Environmental data, as obtained from \code{\link{get_env}}
+#'
+#' @param env_flags Environmental flags, as obtained from \code{\link{get_env_flags}}
+#'
+#' @return A data frame containing the new flags in case any value is out of
+#'   range.
+#'
+#' @export
+
+# START
+# Function declaration
+qc_env_ranges <- function(env_data, env_flags, parent_logger = 'test') {
+
+  # Using calling handler to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if(!all(is.data.frame(env_data),
+            is.data.frame(env_flags))) {
+      stop('Data, and/or flags objects provided are not data frames')
+    }
+
+    # STEP 1
+    # Ranges dic
+    ranges_dic <- qc_range_dic(parent_logger = parent_logger)
+
+    # STEP 2
+    # Loop for each variable
+    for (name in names(env_data[,-1])) {
+
+      # 2.1 get the range for the variable
+      range_var <- ranges_dic[[name]]
+
+      # 2.2 logical vector indicating if the value is out of range
+      res_logical <- env_data[, name] < range_var[1] | env_data[, name] > range_var[2]
+
+      # 2.3 vector with flags
+      flags_vec <- env_flags[,name]
+
+      # 2.4 inner loop
+      for (i in 1:length(res_logical)) {
+        if (!is.na(res_logical[i]) & res_logical[i]) {
+          if (flags_vec[i] == '') {
+            flags_vec[i] <- 'RANGE_WARN'
+          } else {flags_vec[i] <- paste0(flags_vec[i], '; RANGE_WARN')}
+        }
+      }
+
+      # 2.5 flags vector back to flags
+      env_flags[,name] <- flags_vec
+    }
+
+    # STEP 3
+    # Return the env flags data frame
+    return(env_flags)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_env_ranges',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_env_ranges',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_env_ranges',
+                                                        sep = '.'))})
+}
+
