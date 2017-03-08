@@ -467,3 +467,70 @@ qc_env_ranges <- function(env_data, env_flags, parent_logger = 'test') {
                                                         sep = '.'))})
 }
 
+################################################################################
+#' Checking for out of ranges values and flagging them
+#'
+#' This function checks for out of range values in sapflow and env data,
+#' updating the flag slots in the SfnData object.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param SfnData SfnData object to check for out of range values
+#'
+#' @return A SfnData object with the flags updated
+#'
+#' @export
+
+# START
+# Funtion declaration
+qc_out_of_range <- function(SfnData, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (class(SfnData) != 'SfnData') {
+      stop('Object provided is not a valid SfnData class object')
+    }
+
+    # STEP 1
+    # Obtaining the needed data from the SfnData object
+    sapf_data <- get_sapf(SfnData)
+    env_data <- get_env(SfnData)
+    sapf_flags <- get_sapf_flags(SfnData)
+    env_flags <- get_env_flags(SfnData)
+    plant_md <- get_plant_md(SfnData)
+
+    # STEP 2
+    # Get the new flags
+    new_sapf_flags <- qc_sapf_ranges(sapf_data, plant_md, sapf_flags,
+                                     parent_logger = parent_logger)
+
+    new_env_flags <- qc_env_ranges(env_data, env_flags,
+                                   parent_logger = parent_logger)
+
+    # STEP 3
+    # Update the SfnData object
+    get_sapf_flags(SfnData) <- new_sapf_flags[,-1]
+    get_env_flags(SfnData) <- new_env_flags[,-1]
+
+    # STEP 4
+    # Return the updated SfnData object
+    return(SfnData)
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_out_of_range',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_out_of_range',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_out_of_range',
+                                                        sep = '.'))})
+}
