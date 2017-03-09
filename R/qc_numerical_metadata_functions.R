@@ -306,11 +306,11 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
       '“g m-2 s-1”' = function(x) {x/0.36},
       '“kg m-2 h-1”' = function(x) {x/0.1},
       '“kg m-2 s-1”' = function(x) {x/360},
-      '“cm3 s-1”' = sapfluxnetQC1::qc_cm_s,
-      '“cm3 h-1”' = sapfluxnetQC1::qc_cm_h,
-      '“dm3 h-1”' = sapfluxnetQC1::qc_dm_h,
-      '“g h-1”' = sapfluxnetQC1::qc_g_h,
-      '“kg h-1”' = sapfluxnetQC1::qc_kg_h
+      '“cm3 s-1”' = function(x) {x/3600},
+      '“cm3 h-1”' = function(x) {x},
+      '“dm3 h-1”' = function(x) {x/1000},
+      '“g h-1”' = function(x) {x},
+      '“kg h-1”' = function(x) {x/1000}
     )
 
     # STEP 2
@@ -334,9 +334,7 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
         range_transf <- vapply(
           range,
           funs_list[[sapf_units[[name]]]],
-          numeric(1),
-          sapw_area = NA, leaf_area = NA, output_units = 'plant',
-          parent_logger = parent_logger
+          numeric(1)
         )
       }
 
