@@ -104,6 +104,46 @@ bar_kg1m2s1[,4] <- bar_kg1m2s1[,4]/360
 bar_md_kg1m2s1 <- bar_plant_md
 bar_md_kg1m2s1$pl_sap_units <- '“kg m-2 s-1”'
 
+# cm3h1
+bar_cm3h1 <- bar_sapf
+bar_cm3h1[,2] <- bar_cm3h1[,2] * bar_plant_md$pl_sapw_area[1]
+bar_cm3h1[,3] <- bar_cm3h1[,3] * bar_plant_md$pl_sapw_area[2]
+bar_cm3h1[,4] <- bar_cm3h1[,4] * bar_plant_md$pl_sapw_area[3]
+bar_md_cm3h1 <- bar_plant_md
+bar_md_cm3h1$pl_sap_units <- '“cm3 h-1”'
+
+# cm3s1
+bar_cm3s1 <- bar_sapf
+bar_cm3s1[,2] <- bar_cm3s1[,2] * bar_plant_md$pl_sapw_area[1]/3600
+bar_cm3s1[,3] <- bar_cm3s1[,3] * bar_plant_md$pl_sapw_area[2]/3600
+bar_cm3s1[,4] <- bar_cm3s1[,4] * bar_plant_md$pl_sapw_area[3]/3600
+bar_md_cm3s1 <- bar_plant_md
+bar_md_cm3s1$pl_sap_units <- '“cm3 s-1”'
+
+# dm3h1
+bar_dm3h1 <- bar_sapf
+bar_dm3h1[,2] <- bar_dm3h1[,2] * bar_plant_md$pl_sapw_area[1]/1000
+bar_dm3h1[,3] <- bar_dm3h1[,3] * bar_plant_md$pl_sapw_area[2]/1000
+bar_dm3h1[,4] <- bar_dm3h1[,4] * bar_plant_md$pl_sapw_area[3]/1000
+bar_md_dm3h1 <- bar_plant_md
+bar_md_dm3h1$pl_sap_units <- '“dm3 h-1”'
+
+# gh1
+bar_gh1 <- bar_sapf
+bar_gh1[,2] <- bar_gh1[,2] * bar_plant_md$pl_sapw_area[1]
+bar_gh1[,3] <- bar_gh1[,3] * bar_plant_md$pl_sapw_area[2]
+bar_gh1[,4] <- bar_gh1[,4] * bar_plant_md$pl_sapw_area[3]
+bar_md_gh1 <- bar_plant_md
+bar_md_gh1$pl_sap_units <- '“g h-1”'
+
+# kgh1
+bar_kgh1 <- bar_sapf
+bar_kgh1[,2] <- bar_kgh1[,2] * bar_plant_md$pl_sapw_area[1]/1000
+bar_kgh1[,3] <- bar_kgh1[,3] * bar_plant_md$pl_sapw_area[2]/1000
+bar_kgh1[,4] <- bar_kgh1[,4] * bar_plant_md$pl_sapw_area[3]/1000
+bar_md_kgh1 <- bar_plant_md
+bar_md_kgh1$pl_sap_units <- '“kg h-1”'
+
 ################################################################################
 test_that('ranges dictionary is created ok', {
   expect_is(qc_range_dic(), 'list')
@@ -193,4 +233,41 @@ test_that('sapf ranges are checked correctly (sapwood level)', {
   expect_equal(sum(as.matrix(bar_kg1m2s1_test[,2]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(bar_kg1m2s1_test[,3]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(bar_kg1m2s1_test[,4]) == 'RANGE_WARN'), 10)
+})
+
+test_that('sapf ranges are checked correctly (tree level)', {
+  bar_cm3h1_test <- qc_sapf_ranges(bar_cm3h1, bar_md_cm3h1, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_cm3h1_test) == 'RANGE_WARN'), 22)
+  expect_equal(sum(as.matrix(bar_cm3h1_test[,2]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_cm3h1_test[,3]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_cm3h1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_cm3s1_test <- qc_sapf_ranges(bar_cm3s1, bar_md_cm3s1, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_cm3s1_test) == 'RANGE_WARN'), 22)
+  expect_equal(sum(as.matrix(bar_cm3s1_test[,2]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_cm3s1_test[,3]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_cm3s1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_dm3h1_test <- qc_sapf_ranges(bar_dm3h1, bar_md_dm3h1, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_dm3h1_test) == 'RANGE_WARN'), 22)
+  expect_equal(sum(as.matrix(bar_dm3h1_test[,2]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_dm3h1_test[,3]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_dm3h1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_gh1_test <- qc_sapf_ranges(bar_gh1, bar_md_gh1, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_gh1_test) == 'RANGE_WARN'), 22)
+  expect_equal(sum(as.matrix(bar_gh1_test[,2]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_gh1_test[,3]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_gh1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_kgh1_test <- qc_sapf_ranges(bar_kgh1, bar_md_kgh1, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_kgh1_test) == 'RANGE_WARN'), 22)
+  expect_equal(sum(as.matrix(bar_kgh1_test[,2]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_kgh1_test[,3]) == 'RANGE_WARN'), 6)
+  expect_equal(sum(as.matrix(bar_kgh1_test[,4]) == 'RANGE_WARN'), 10)
 })
