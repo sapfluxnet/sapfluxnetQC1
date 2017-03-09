@@ -271,3 +271,9 @@ test_that('sapf ranges are checked correctly (tree level)', {
   expect_equal(sum(as.matrix(bar_kgh1_test[,3]) == 'RANGE_WARN'), 6)
   expect_equal(sum(as.matrix(bar_kgh1_test[,4]) == 'RANGE_WARN'), 10)
 })
+
+test_that('qc_out_of_range wrapper function works', {
+  BAZ <- qc_out_of_range(BAR)
+
+  expect_is(BAZ, 'SfnData')
+})
