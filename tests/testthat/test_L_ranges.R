@@ -4,9 +4,6 @@ context('L1. Ranges')
 
 # needed data
 load('FOO.RData')
-foo_sapf <- get_sapf(FOO)
-foo_sapf_flags <- get_sapf_flags(FOO)
-foo_plant_md <- get_plant_md(FOO)
 foo_env <- get_env(FOO)
 foo_env_flags <- get_env_flags(FOO)
 
@@ -36,6 +33,78 @@ foo_env$netrad <- c(-281, -285, -340, -456, -600,
 foo_env_flags$sw_in <- ''
 foo_env_flags$netrad <- ''
 
+# sapf_data modifications (we trim the data to lift up computation)
+BAR <- FOO[1:5000, , ]
+bar_sapf <- get_sapf(BAR)
+bar_sapf_flags <- get_sapf_flags(BAR)
+bar_sapf_flags[1:10, -1] <- ''
+bar_plant_md <- get_plant_md(BAR)
+
+# cm3cm-2h-1
+bar_sapf[1:10, 2] <- c(-0.01, -5, -10, -125, -1000,
+                       190.001, 215, 1546, 318, 250)
+bar_sapf[1:10, 3] <- c(-0.01, -5, -10, -125, -1000,
+                       190.001, 215, 1546, 318, 250)
+bar_sapf[1:10, 4] <- c(-0.01, -5, -10, -125, -1000,
+                       190.001, 215, 1546, 318, 250)
+
+# cm3m-2s-1
+bar_cm3cm2s1 <- bar_sapf
+bar_cm3cm2s1[,2] <- bar_cm3cm2s1[,2]/0.36
+bar_cm3cm2s1[,3] <- bar_cm3cm2s1[,3]/0.36
+bar_cm3cm2s1[,4] <- bar_cm3cm2s1[,4]/0.36
+bar_md_cm3cm2s1 <- bar_plant_md
+bar_md_cm3cm2s1$pl_sap_units <- '“cm3 cm-2 s-1”'
+
+# dm3dm2h1
+bar_dm3dm2h1 <- bar_sapf
+bar_dm3dm2h1[,2] <- bar_dm3dm2h1[,2]/10
+bar_dm3dm2h1[,3] <- bar_dm3dm2h1[,3]/10
+bar_dm3dm2h1[,4] <- bar_dm3dm2h1[,4]/10
+bar_md_dm3dm2h1 <- bar_plant_md
+bar_md_dm3dm2h1$pl_sap_units <- '“dm3 dm-2 h-1”'
+
+# dm3dm2s1
+bar_dm3dm2s1 <- bar_sapf
+bar_dm3dm2s1[,2] <- bar_dm3dm2s1[,2]/36000
+bar_dm3dm2s1[,3] <- bar_dm3dm2s1[,3]/36000
+bar_dm3dm2s1[,4] <- bar_dm3dm2s1[,4]/36000
+bar_md_dm3dm2s1 <- bar_plant_md
+bar_md_dm3dm2s1$pl_sap_units <- '“dm3 dm-2 s-1”'
+
+# mm3mm2s1
+bar_mm3mm2s1 <- bar_sapf
+bar_mm3mm2s1[,2] <- bar_mm3mm2s1[,2]/360
+bar_mm3mm2s1[,3] <- bar_mm3mm2s1[,3]/360
+bar_mm3mm2s1[,4] <- bar_mm3mm2s1[,4]/360
+bar_md_mm3mm2s1 <- bar_plant_md
+bar_md_mm3mm2s1$pl_sap_units <- '“mm3 mm-2 s-1”'
+
+# g1m2s1
+bar_g1m2s1 <- bar_sapf
+bar_g1m2s1[,2] <- bar_g1m2s1[,2]/0.36
+bar_g1m2s1[,3] <- bar_g1m2s1[,3]/0.36
+bar_g1m2s1[,4] <- bar_g1m2s1[,4]/0.36
+bar_md_g1m2s1 <- bar_plant_md
+bar_md_g1m2s1$pl_sap_units <- '“g m-2 s-1”'
+
+# kg1m2h1
+bar_kg1m2h1 <- bar_sapf
+bar_kg1m2h1[,2] <- bar_kg1m2h1[,2]/0.1
+bar_kg1m2h1[,3] <- bar_kg1m2h1[,3]/0.1
+bar_kg1m2h1[,4] <- bar_kg1m2h1[,4]/0.1
+bar_md_kg1m2h1 <- bar_plant_md
+bar_md_kg1m2h1$pl_sap_units <- '“kg m-2 h-1”'
+
+# kg1m2s1
+bar_kg1m2s1 <- bar_sapf
+bar_kg1m2s1[,2] <- bar_kg1m2s1[,2]/360
+bar_kg1m2s1[,3] <- bar_kg1m2s1[,3]/360
+bar_kg1m2s1[,4] <- bar_kg1m2s1[,4]/360
+bar_md_kg1m2s1 <- bar_plant_md
+bar_md_kg1m2s1$pl_sap_units <- '“kg m-2 s-1”'
+
+################################################################################
 test_that('ranges dictionary is created ok', {
   expect_is(qc_range_dic(), 'list')
   expect_length(qc_range_dic(), 10)
@@ -66,4 +135,62 @@ test_that('env ranges are checked correctly', {
   expect_equal(sum(as.matrix(foo_env_test[,7]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(foo_env_test[,8]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(foo_env_test[,9]) == 'RANGE_WARN'), 10)
+})
+
+test_that('sapf ranges are checked correctly (sapwood level)', {
+  bar_sapf_test <- qc_sapf_ranges(bar_sapf, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_sapf_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_sapf_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_sapf_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_sapf_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_cm3cm2s1_test <- qc_sapf_ranges(bar_cm3cm2s1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_cm3cm2s1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_cm3cm2s1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_cm3cm2s1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_cm3cm2s1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_dm3dm2h1_test <- qc_sapf_ranges(bar_dm3dm2h1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_dm3dm2h1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_dm3dm2h1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_dm3dm2h1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_dm3dm2h1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_dm3dm2s1_test <- qc_sapf_ranges(bar_dm3dm2s1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_dm3dm2s1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_dm3dm2s1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_dm3dm2s1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_dm3dm2s1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_mm3mm2s1_test <- qc_sapf_ranges(bar_mm3mm2s1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_mm3mm2s1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_mm3mm2s1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_mm3mm2s1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_mm3mm2s1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_g1m2s1_test <- qc_sapf_ranges(bar_g1m2s1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_g1m2s1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_g1m2s1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_g1m2s1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_g1m2s1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_kg1m2h1_test <- qc_sapf_ranges(bar_kg1m2h1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_kg1m2h1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_kg1m2h1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_kg1m2h1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_kg1m2h1_test[,4]) == 'RANGE_WARN'), 10)
+
+  bar_kg1m2s1_test <- qc_sapf_ranges(bar_kg1m2s1, bar_plant_md, bar_sapf_flags)
+
+  expect_equal(sum(as.matrix(bar_kg1m2s1_test) == 'RANGE_WARN'), 30)
+  expect_equal(sum(as.matrix(bar_kg1m2s1_test[,2]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_kg1m2s1_test[,3]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(bar_kg1m2s1_test[,4]) == 'RANGE_WARN'), 10)
 })
