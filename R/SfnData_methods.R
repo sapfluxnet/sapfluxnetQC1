@@ -175,18 +175,22 @@ setMethod(
 
     # sapf_flags
     sapf_flags <- unique(unlist(stringr::str_split(unlist(lapply(slot(object, "sapf_flags"), unique)), '; ')))
-    sapf_flags_table <- vapply(sapf_flags, function(flag){sum(str_count(as.matrix(slot(object, "sapf_flags")), flag))}, numeric(1))
+    sapf_flags_table <- vapply(sapf_flags, function(flag){sum(stringr::str_count(as.matrix(slot(object, "sapf_flags")), flag))}, numeric(1))
     sapf_flags_table <- sapf_flags_table[names(sapf_flags_table) != '']
     cat("Sapflow data flags:\n")
-    print(sort(sapf_flags_table))
+    if (length(sapf_flags_table)) {
+      print(sort(sapf_flags_table))
+    } else {cat("No flags present")}
     cat("\n")
 
     # env_flags
     env_flags <- unique(unlist(stringr::str_split(unlist(lapply(slot(object, "env_flags"), unique)), '; ')))
-    env_flags_table <- vapply(env_flags, function(flag){sum(str_count(as.matrix(slot(object, "env_flags")), flag))}, numeric(1))
+    env_flags_table <- vapply(env_flags, function(flag){sum(stringr::str_count(as.matrix(slot(object, "env_flags")), flag))}, numeric(1))
     env_flags_table <- env_flags_table[names(env_flags_table) != '']
     cat("Environmental data flags:\n")
-    print(sort(env_flags_table))
+    if (length(env_flags_table)) {
+      print(sort(env_flags_table))
+    } else {cat("No flags present")}
     cat("\n")
 
   }
