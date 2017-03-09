@@ -298,14 +298,14 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
 
     # 1.3 Tranformation functions list
     funs_list <- list(
-      '“cm3 cm-2 h-1”' = sapfluxnetQC1::qc_cm_cm_h,
-      '“cm3 m-2 s-1”' = sapfluxnetQC1::qc_cm_m_s,
-      '“dm3 dm-2 h-1”' = sapfluxnetQC1::qc_dm_dm_h,
-      '“dm3 dm-2 s-1”' = sapfluxnetQC1::qc_dm_dm_s,
-      '“mm3 mm-2 s-1”' = sapfluxnetQC1::qc_mm_mm_s,
-      '“g m-2 s-1”' = sapfluxnetQC1::qc_g_m_s,
-      '“kg m-2 h-1”' = sapfluxnetQC1::qc_kg_m_h,
-      '“kg m-2 s-1”' = sapfluxnetQC1::qc_kg_m_s,
+      '“cm3 cm-2 h-1”' = function(x) {x},
+      '“cm3 m-2 s-1”' = function(x) {x/0.36},
+      '“dm3 dm-2 h-1”' = function(x) {x/10},
+      '“dm3 dm-2 s-1”' = function(x) {x/36000},
+      '“mm3 mm-2 s-1”' = function(x) {x/360},
+      '“g m-2 s-1”' = function(x) {x/0.36},
+      '“kg m-2 h-1”' = function(x) {x/0.1},
+      '“kg m-2 s-1”' = function(x) {x/360},
       '“cm3 s-1”' = sapfluxnetQC1::qc_cm_s,
       '“cm3 h-1”' = sapfluxnetQC1::qc_cm_h,
       '“dm3 h-1”' = sapfluxnetQC1::qc_dm_h,
@@ -326,9 +326,7 @@ qc_sapf_ranges <- function(sapf_data, plant_md,
         range_transf <- vapply(
           range,
           funs_list[[sapf_units[[name]]]],
-          numeric(1),
-          sapw_area = 0, leaf_area = 0, output_units = 'sapwood',
-          parent_logger = parent_logger
+          numeric(1)
         )
       } else {
         # 2.2.2 tree
