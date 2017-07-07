@@ -121,6 +121,12 @@ qc_get_timezone <- function(tz, parent_logger = 'test') {
   # Using calling handlers to manage errors
   withCallingHandlers({
 
+    # STEP 0
+    # Argument checking
+    if (is.na(tz) | is.null(tz)) {
+      stop('Timezone not provided in environmental metadata')
+    }
+
     # STEP 1
     # Create the list with the codes
     timezones <- list(

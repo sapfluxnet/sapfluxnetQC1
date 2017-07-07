@@ -112,6 +112,13 @@ test_that('all NA TIMESTAMPs raise an error', {
   expect_error(suppressWarnings(qc_as_timestamp(c(NA,NA,NA,NA), foo_md)))
 })
 
+test_that('NA or NULL timezones raise an error', {
+  foo_md$env_time_zone <- NA
+
+  expect_error(suppressWarnings(qc_as_timestamp(good_data, foo_md)),
+               'Timezone not provided in environmental metadata')
+})
+
 ################################################################################
 context('H3. TIMESTAMP errors')
 
