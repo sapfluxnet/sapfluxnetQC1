@@ -4,8 +4,8 @@
 \alias{out_remove}
 \title{Outliers QC}
 \usage{
-out_remove(sfn_data, k = 5L, t0 = 3L, method = "hampel", reverse = TRUE,
-  substitute = FALSE, parent_logger = "test")
+out_remove(sfn_data, k = 25L, t0 = 10L, method = "hampel",
+  reverse = TRUE, substitute = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{sfn_data}{SfnData object with the site data and metadata}

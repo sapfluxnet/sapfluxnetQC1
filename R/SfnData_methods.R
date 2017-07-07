@@ -162,23 +162,37 @@ setMethod(
     # object class
     cat(class(object), " object\n", sep = "")
     # site code
-    cat("Data from ", unique(get_si_code(object)), " site/s\n", sep = "")
+    cat("Data from ", unique(get_si_code(object)), " site/s\n\n", sep = "")
     # number of trees
     cat("Sapflow data:", nrow(slot(object, "sapf_data")), "observations of",
-        length(names(slot(object, "sapf_data"))), "trees/plants\n")
+        length(names(slot(object, "sapf_data"))), "trees/plants\n\n")
     # env_vars
     cat("Environmental data:", nrow(slot(object, "env_data")), "observations.\n",
-        "Env vars:", paste(names(slot(object, "env_data"))), "\n")
+        "Env vars:", paste(names(slot(object, "env_data"))), "\n\n")
     # timestamp span
     cat("TIMESTAMP span, from", as.character(head(get_timestamp(object), 1)),
-        "to", as.character(tail(get_timestamp(object), 1)), "\n")
-    # flags info
-    unique_flags <- unique(c(unique(unlist(lapply(slot(object, "sapf_flags"),
-                                                  unique))),
-                             unique(unlist(lapply(slot(object, "env_flags"),
-                                                  unique)))))
+        "to", as.character(tail(get_timestamp(object), 1)), "\n\n")
 
-    cat("Present FLAGS in data:", unique_flags, "\n")
+    # sapf_flags
+    sapf_flags <- unique(unlist(stringr::str_split(unlist(lapply(slot(object, "sapf_flags"), unique)), '; ')))
+    sapf_flags_table <- vapply(sapf_flags, function(flag){sum(stringr::str_count(as.matrix(slot(object, "sapf_flags")), flag))}, numeric(1))
+    sapf_flags_table <- sapf_flags_table[names(sapf_flags_table) != '']
+    cat("Sapflow data flags:\n")
+    if (length(sapf_flags_table)) {
+      print(sort(sapf_flags_table))
+    } else {cat("No flags present")}
+    cat("\n")
+
+    # env_flags
+    env_flags <- unique(unlist(stringr::str_split(unlist(lapply(slot(object, "env_flags"), unique)), '; ')))
+    env_flags_table <- vapply(env_flags, function(flag){sum(stringr::str_count(as.matrix(slot(object, "env_flags")), flag))}, numeric(1))
+    env_flags_table <- env_flags_table[names(env_flags_table) != '']
+    cat("Environmental data flags:\n")
+    if (length(env_flags_table)) {
+      print(sort(env_flags_table))
+    } else {cat("No flags present")}
+    cat("\n")
+
   }
 )
 

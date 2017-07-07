@@ -1459,7 +1459,9 @@ fillRow(height = '100%', flex = 1,
 
 output$sapf_dt <- DT::renderDataTable({
   
-  sapf_data_table <- get_sapf(load_sfn_data())
+  sapf_data_table <- get_sapf(load_sfn_data()) %>%
+    mutate(TIMESTAMP = as.character(TIMESTAMP))
+  
   DT::datatable(sapf_data_table,
                 extensions = c('Scroller', 'FixedColumns'),
                 filter = 'none',
@@ -1493,7 +1495,8 @@ fillRow(height = '100%', flex = 1,
 
 output$env_dt <- DT::renderDataTable({
   
-  env_data_table <- get_env(load_sfn_data())
+  env_data_table <- get_env(load_sfn_data()) %>%
+    mutate(TIMESTAMP = as.character(TIMESTAMP))
   
   DT::datatable(env_data_table,
                 extensions = c('Scroller', 'FixedColumns'),
