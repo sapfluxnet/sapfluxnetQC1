@@ -31,4 +31,3 @@ data transformations/conversions.
 Other Unit conversion: \code{\link{qc_cm_cm_h}},
   \code{\link{qc_transf_list}}
 }
-

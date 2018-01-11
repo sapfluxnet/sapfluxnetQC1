@@ -58,4 +58,3 @@ Other Quality Checks Functions: \code{\link{qc_coordinates}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

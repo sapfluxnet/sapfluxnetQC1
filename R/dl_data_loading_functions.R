@@ -96,7 +96,9 @@ dl_na_char_generator <- function(parent_logger = 'test') {
       # Excel errors (english)
       '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!',
       # Excel errors (generic and rare characters)
-      '#�DIV/0!'
+      '#�DIV/0!',
+      # strange, really strange things
+      's'
     )
     )
 
@@ -521,13 +523,14 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
       # 2.1 sapflow data
       if (sheet_name == 'sapflow_hd') {
         res <- suppressWarnings(readxl::read_excel(file_name, sheet_name,
-                                                   na = na, skip = 4)) %>%
+                                                   na = na, skip = 4,
+                                                   guess_max = n)) %>%
           # 2.1.2 Check and remove duplicate columns
           remove_dupcols() %>%
           # 2.1.3 Remove any extra column that could be created in the read_excel step.
-          #       This is achieved with a regular expression indicating that we select
-          #       those variables that have TIME or end with a number
-          dplyr::select(dplyr::matches("(TIME|^.+?\\d$)"))
+          #       This is achieved with a regular expression that select for TIME
+          #       and plant code-like text:
+          dplyr::select(dplyr::matches('(TIME|^[A-Z]{3}_[A-Z]{3}_.+$)'))
 
         # 2.1.4 Check and fix if any character is in the data
         res <- dl_data_col_classes(res, parent_logger = parent_logger)
@@ -548,7 +551,8 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
       } else {
         # 2.2 environmental data
         res <- suppressWarnings(readxl::read_excel(file_name, sheet_name,
-                                                   na = na, skip = 3)) %>%
+                                                   na = na, skip = 3,
+                                                   guess_max = n)) %>%
           # 2.2.2 check and remove duplicate columns
           remove_dupcols() %>%
           # 2.2.3 Remove any extra column that could be created in the read_excel step.
@@ -590,7 +594,7 @@ dl_data <- function(file_name, sheet_name, long = FALSE, n = 1000, na = '',
           dec = dl_dec_char_detect(file_name, n)
         ) %>%
           remove_dupcols() %>%
-          dplyr::select(dplyr::matches('(TIME|^.+?\\d$)'))
+          dplyr::select(dplyr::matches('(TIME|^[A-Z]{3}_[A-Z]{3}_.+$)'))
 
         # 4.1.0 Check and fix if any character is in the data
         res <- dl_data_col_classes(res, parent_logger = parent_logger)

@@ -6,4 +6,3 @@
 \description{
 Validity method for SfnData class
 }
-

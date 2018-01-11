@@ -31,10 +31,10 @@ The factor variables in environmental_md are \code{env_time_zone},
 \code{env_ppfd_in}, \code{env_netrad}, \code{env_ws}, \code{env_precip},
 \code{env_plant_watpot} and \code{env_leafarea_seasonal}.
 }
+
 \seealso{
 Other Dictionaries: \code{\link{qc_plant_dics}},
   \code{\link{qc_site_dics}},
   \code{\link{qc_species_dics}},
   \code{\link{qc_stand_dics}}
 }
-

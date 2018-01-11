@@ -41,4 +41,3 @@ Other Data Loading Functions: \code{\link{dl_data_col_classes}},
   \code{\link{qc_as_timestamp}},
   \code{\link{remove_dupcols}}
 }
-

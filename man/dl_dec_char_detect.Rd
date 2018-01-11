@@ -40,6 +40,7 @@ The process to determine the decimal character is as follows:
   is selected as decimal character.
 }
 }
+
 \seealso{
 Other Data Loading Functions: \code{\link{dl_data_col_classes}},
   \code{\link{dl_data}}, \code{\link{dl_get_si_code}},
@@ -48,4 +49,3 @@ Other Data Loading Functions: \code{\link{dl_data_col_classes}},
   \code{\link{qc_as_timestamp}},
   \code{\link{remove_dupcols}}
 }
-

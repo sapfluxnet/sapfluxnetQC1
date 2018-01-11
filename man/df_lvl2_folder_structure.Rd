@@ -32,4 +32,3 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_write_SfnData}},
   \code{\link{sfn_data_constructor}}
 }
-

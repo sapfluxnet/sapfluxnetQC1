@@ -2,18 +2,18 @@
 % Please edit documentation in R/SfnData_methods.R
 \docType{methods}
 \name{sfn_replacement}
-\alias{get_env<-,SfnData-method}
-\alias{get_env_flags<-,SfnData-method}
-\alias{get_env_md<-,SfnData-method}
-\alias{get_plant_md<-,SfnData-method}
+\alias{sfn_replacement}
 \alias{get_sapf<-,SfnData-method}
+\alias{get_env<-,SfnData-method}
 \alias{get_sapf_flags<-,SfnData-method}
+\alias{get_env_flags<-,SfnData-method}
+\alias{get_timestamp<-,SfnData-method}
 \alias{get_si_code<-,SfnData-method}
 \alias{get_site_md<-,SfnData-method}
-\alias{get_species_md<-,SfnData-method}
 \alias{get_stand_md<-,SfnData-method}
-\alias{get_timestamp<-,SfnData-method}
-\alias{sfn_replacement}
+\alias{get_species_md<-,SfnData-method}
+\alias{get_plant_md<-,SfnData-method}
+\alias{get_env_md<-,SfnData-method}
 \title{Replacement methods}
 \usage{
 \S4method{get_sapf}{SfnData}(object) <- value
@@ -52,4 +52,3 @@ data slot a data frame with the same dimensions and without TIMESTAMP variable
 is needed. A validity check is done before returning the replaced SfnData
 object and an error is returned if this check fails.
 }
-

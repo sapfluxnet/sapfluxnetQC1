@@ -46,9 +46,9 @@ case that can not be covered by this approach: when changing sign of one of
 the coordinates \bold{AND} changing both coordinates seem to fix the issue,
 as the correct option can not be assured.
 }
+
 \seealso{
 Other Quality Check Functions: \code{\link{qc_check_coordinates}},
   \code{\link{qc_download_maps}},
   \code{\link{qc_fix_latlong_errors}}
 }
-

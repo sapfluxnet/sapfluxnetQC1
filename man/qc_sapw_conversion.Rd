@@ -66,6 +66,7 @@ If \code{pl_sapw_area} is not available but \code{pl_sapw_depth} and
 \code{\link{qc_sapw_area_calculator}} function previous to the use of this
 function.
 }
+
 \seealso{
 Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_coordinates}},
@@ -99,4 +100,3 @@ Other Quality Checks Functions: \code{\link{create_dic}},
   \code{\link{qc_timestamp_errors}},
   \code{\link{qc_timestamp_nas}}
 }
-

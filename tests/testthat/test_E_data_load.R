@@ -28,11 +28,12 @@ csv_name <- 'foo.csv'
 csv_name_2 <- 'foo_env.csv'
 
 sapflow_data <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
-                                         long = FALSE))
+                                         long = FALSE, n = 50000))
 # sapflow_data_long <- suppressMessages(dl_data(xlsx_name,
 #                                               'sapflow_hd',
 #                                               long = TRUE))
-env_data <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = FALSE))
+env_data <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = FALSE,
+                                     n = 50000))
 # env_data_long <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
 #                                           long = TRUE))
 
@@ -55,12 +56,13 @@ csv_name_2 <- 'foo_nan_env.csv'
 
 sapflow_data_nan <- suppressWarnings(
   suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
-                           na = 'NaN', long = FALSE))
+                           na = 'NaN', long = FALSE, n = 50000))
 )
 # sapflow_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
 #                                                   na = 'NaN', long = TRUE))
 env_data_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
-                                         na = 'NaN', long = FALSE))
+                                         na = 'NaN', long = FALSE,
+                                         n = 50000))
 # env_data_long_nan <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
 #                                               na = 'NaN', long = TRUE))
 
@@ -102,17 +104,17 @@ test_that('number of variables is correct', {
   # expect_equal(length(names(sapflow_data_long)), 3)
   expect_equal(length(names(env_data)), 7)
   # expect_equal(length(names(env_data_long)), 3)
-  expect_equal(length(names(sapflow_data)), 14)
+  expect_equal(length(names(sapf_csv_data)), 14)
   # expect_equal(length(names(sapflow_data_long)), 3)
-  expect_equal(length(names(env_data)), 7)
+  expect_equal(length(names(env_csv_data)), 7)
   # expect_equal(length(names(env_data_long)), 3)
   expect_equal(length(names(sapflow_data_nan)), 14)
   # expect_equal(length(names(sapflow_data_long_nan)), 3)
   expect_equal(length(names(env_data_nan)), 7)
   # expect_equal(length(names(env_data_long_nan)), 3)
-  expect_equal(length(names(sapflow_data_nan)), 14)
+  expect_equal(length(names(sapf_csv_data_nan)), 14)
   # expect_equal(length(names(sapflow_data_long_nan)), 3)
-  expect_equal(length(names(env_data_nan)), 7)
+  expect_equal(length(names(env_csv_data_nan)), 7)
   # expect_equal(length(names(env_data_long_nan)), 3)
 })
 
@@ -121,17 +123,17 @@ test_that('number of rows is as expected', {
   # expect_equal(nrow(sapflow_data_long), 1024608)
   expect_equal(nrow(env_data), 78816)
   # expect_equal(nrow(env_data_long), 472896)
-  expect_equal(nrow(sapflow_data), 78816)
+  expect_equal(nrow(sapf_csv_data), 78816)
   # expect_equal(nrow(sapflow_data_long), 1024608)
-  expect_equal(nrow(env_data), 78816)
+  expect_equal(nrow(env_csv_data), 78816)
   # expect_equal(nrow(env_data_long), 472896)
   expect_equal(nrow(sapflow_data_nan), 78816)
   # expect_equal(nrow(sapflow_data_long_nan), 1024608)
   expect_equal(nrow(env_data_nan), 78816)
   # expect_equal(nrow(env_data_long_nan), 472896)
-  expect_equal(nrow(sapflow_data_nan), 78816)
+  expect_equal(nrow(sapf_csv_data_nan), 78816)
   # expect_equal(nrow(sapflow_data_long_nan), 1024608)
-  expect_equal(nrow(env_data_nan), 78816)
+  expect_equal(nrow(env_csv_data_nan), 78816)
   # expect_equal(nrow(env_data_long_nan), 472896)
 })
 

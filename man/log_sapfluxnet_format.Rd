@@ -19,4 +19,3 @@ Custom log formatter for SAPFLUXNET Project
 Other Logging Functions: \code{\link{log_sapfluxnet_action}},
   \code{\link{log_sapfluxnet_setup}}
 }
-

@@ -9,4 +9,3 @@ theme_sfn(base_size = 10, base_family = "Lato")
 \description{
 Custom ggplot2 theme for uniformization of plot visuals
 }
-

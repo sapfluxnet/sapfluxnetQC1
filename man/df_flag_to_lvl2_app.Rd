@@ -15,4 +15,3 @@ Shiny app to flag data sets as ready to move to level 2
 \seealso{
 Other apps: \code{\link{out_app}}
 }
-

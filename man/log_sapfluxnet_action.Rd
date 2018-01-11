@@ -18,4 +18,3 @@ Custom logging handler action for SAPFLUXNET Project
 Other Logging Functions: \code{\link{log_sapfluxnet_format}},
   \code{\link{log_sapfluxnet_setup}}
 }
-

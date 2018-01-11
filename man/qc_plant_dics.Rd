@@ -30,10 +30,10 @@ The factor variables in plant_md are \code{pl_social}, \code{pl_sens_meth},
 \code{pl_sens_man}, \code{pl_sens_cor_grad}, \code{pl_sens_cor_zero},
 \code{pl_sap_units}, \code{pl_radial_int} and \code{pl_azimut_int}.
 }
+
 \seealso{
 Other Dictionaries: \code{\link{qc_env_dics}},
   \code{\link{qc_site_dics}},
   \code{\link{qc_species_dics}},
   \code{\link{qc_stand_dics}}
 }
-
