@@ -337,11 +337,8 @@ qc_as_timestamp <- function(data, env_md, parent_logger = 'test') {
         # 1.2 If not in format, try to fix it using the known bad formats
         res <- lubridate::parse_date_time(
           timestamp,
-          c(# csv without seconds, in european and usa formats
-            "%d%m%y %H:%M", "%y%m%d %H:%M",
-            # csv with seconds, but / present, in european and usa formats
-            "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
-          ),
+          # orders, now we dont need to indicate no seconds, we can use truncate
+          c('dmY HMS', 'Ymd HMS'), truncated = 1,
           tz = timezone
         )
       }
@@ -378,11 +375,8 @@ qc_as_timestamp <- function(data, env_md, parent_logger = 'test') {
         # 2.3 If not in format, try to fix it using the known bad formats
         res <- lubridate::parse_date_time(
           data,
-          c(# csv without seconds, in european and usa formats
-            "%d%m%y %H:%M", "%y%m%d %H:%M",
-            # csv with seconds, but / present, in european and usa formats
-            "%d%m%y %H:%M:%S", "%y%m%d %H:%M:%S"
-          ),
+          # orders, now we dont need to indicate no seconds, we can use truncate
+          c('dmY HMS', 'Ymd HMS'), truncated = 1,
           tz = timezone
         )
       }
