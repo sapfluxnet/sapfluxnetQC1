@@ -1107,7 +1107,7 @@ df_who_ready_to_lvl2 <- function(filter = c('all', 'ready', 'freeze', 'done'),
       purrr::map(df_get_status, parent_logger = parent_logger) %>%
       # STEP 3
       # Get the TO_LVL2 flag
-      purrr::at_depth(1, c('LVL1', 'TO_LVL2'), .null = NA)
+      purrr::modify_depth(1, c('LVL1', 'TO_LVL2'), .null = NA)
 
     # STEP 3
     # Prepare the results
