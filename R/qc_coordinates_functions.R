@@ -1020,27 +1020,35 @@ qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test') {
     }
 
     # STEP 1
-    # Obtain MAT and MAP values
-    suppressMessages(
-      t_site <- as.vector(RFc::fcTimeSeriesYearly('airt', data$si_lat, data$si_long,
-                                                  firstYear = 1990, lastYear = 1990, firstDay = 1,
-                                                  lastDay = 365, startHour = 0, stopHour = 23,
-                                                  dataSets = 'WorldClim 1.4')$values)
-    )
-
-    suppressMessages(
-      p_site <- 12*as.vector(RFc::fcTimeSeriesYearly('prate', data$si_lat, data$si_long,
-                                                     firstYear = 1990,lastYear = 1990, firstDay = 1,
-                                                     lastDay = 365, startHour = 0, stopHour = 23,
-                                                     dataSets = 'WorldClim 1.4')$values)
-    )
+    # Get the nearest stations from the site coordinates. We look at 50 km radius,
+    # if not stations are found, rise the radius to 100 km
+    sts <- purrr::map2(data$si_lat, data$si_long,
+                       function (x, y) {
+                         st_tmp <- GSODR::nearest_stations(x, y, distance = 50)
+                         if (length(st_tmp) < 1) {
+                           st_tmp <- GSODR::nearest_stations(x, y, distance = 50)
+                         }
+                         st_tmp
+                       })
 
     # STEP 2
+    # Calculate MAT and MAP values
+    data("WorldClim_Bio", package = 'GSODRdata')
+    t_site <- purrr::map_dbl(
+      sts, ~ round(mean(WorldClim_Bio[WorldClim_Bio$STNID %in% .x, c('bio1')]), 1)
+    )
+    t_site <- t_site/10
+
+    p_site <- purrr::map_dbl(
+      sts, ~ round(mean(WorldClim_Bio[WorldClim_Bio$STNID %in% .x, c('bio12')]), 1)
+    )
+
+    # STEP 3
     # Obtain biome
     clim_point <- sp::SpatialPoints(data.frame(x = p_site, y = t_site))
     biome <- sp::over(clim_point, qc_get_biomes_spdf(merge_deserts = merge_deserts))[[1]]
 
-    # STEP 3
+    # STEP 4
     # Append new variables and return the data frame
     # 3.1 Append MAT, MAP and biome to data
     data$si_mat <- t_site

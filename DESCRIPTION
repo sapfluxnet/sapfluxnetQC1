@@ -33,7 +33,8 @@ Imports:
     cowplot,
     mapproj,
     purrr,
-    RFc,
+    GSODR,
+    GSODRdata,
     soiltexture,
     solaR,
     zoo

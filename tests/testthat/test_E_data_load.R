@@ -32,8 +32,10 @@ sapflow_data <- suppressMessages(dl_data(xlsx_name, 'sapflow_hd',
 # sapflow_data_long <- suppressMessages(dl_data(xlsx_name,
 #                                               'sapflow_hd',
 #                                               long = TRUE))
-env_data <- suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = FALSE,
+env_data <- suppressWarnings(
+  suppressMessages(dl_data(xlsx_name, 'environmental_hd', long = FALSE,
                                      n = 50000))
+)
 # env_data_long <- suppressMessages(dl_data(xlsx_name, 'environmental_hd',
 #                                           long = TRUE))
 

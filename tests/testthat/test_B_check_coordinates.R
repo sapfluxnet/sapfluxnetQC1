@@ -89,15 +89,15 @@ foo_data <- data.frame(
 )
 
 results_foo_data <- cbind(foo_data, data.frame(
-  si_mat = c(11.85414, -1.46320, 15.73861, 11.16112),
-  si_map = c(1137.5661, 424.9901, 626.0845, 332.1532),
-  si_biome = c('Temperate forest', 'Boreal forest', 'Mediterranean', 'Temperate grassland desert')
+  si_mat = c(12.50, -0.98, 14.16, 12.38),
+  si_map = c(955.5, 407.4, 708.2, 264.5),
+  si_biome = c('Mediterranean', 'Boreal forest', 'Mediterranean', 'Temperate grassland desert')
 ))
 
 results_foo_data_md <- cbind(foo_data, data.frame(
-  si_mat = c(11.85414, -1.46320, 15.73861, 11.16112),
-  si_map = c(1137.5661, 424.9901, 626.0845, 332.1532),
-  si_biome = c('Temperate forest', 'Boreal forest', 'Mediterranean', 'Desert')
+  si_mat = c(12.50, -0.98, 14.16, 12.38),
+  si_map = c(955.5, 407.4, 708.2, 264.5),
+  si_biome = c('Mediterranean', 'Boreal forest', 'Mediterranean', 'Desert')
 ))
 
 test_that('argument checks work', {
