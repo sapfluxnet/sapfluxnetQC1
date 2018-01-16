@@ -54,20 +54,40 @@ report_list <- eventReactive(
 ## number of sites stored in LVL1 (QC passed)
 qc_ran_n <- reactive({
   qc_ran <- 0
-  for (si in sites()) {
-    status <- sapfluxnetQC1::df_get_status(si, parent_logger = NULL)
-    if (status$LVL1$STORED) {qc_ran <- qc_ran + 1}
+  
+  statuses <- purrr::map(sites(), ~ sapfluxnetQC1::df_get_status(.x, NULL))
+  
+  for (status in statuses) {
+    if (!is.logical(status)) {
+      if (status[['LVL1']][['STORED']]) {qc_ran <- qc_ran + 1}
+    }
   }
+  
+  # for (si in sites()) {
+  #   status <- sapfluxnetQC1::df_get_status(si, parent_logger = NULL)
+  #   if (status$LVL1$STORED) {qc_ran <- qc_ran + 1}
+  # }
+  
   qc_ran
 })
 
 ## number of sites stored in LVL2 (QC ok)
 qc_ok_n <- reactive({
   qc_ok <- 0
-  for (si in sites()) {
-    status <- sapfluxnetQC1::df_get_status(si, parent_logger = NULL)
-    if (status$LVL2$STORED) {qc_ok <- qc_ok + 1}
+  
+  statuses <- purrr::map(sites(), ~ sapfluxnetQC1::df_get_status(.x, NULL))
+  
+  for (status in statuses) {
+    if (!is.logical(status)) {
+      if (status[['LVL2']][['STORED']]) {qc_ok <- qc_ok + 1}
+    }
   }
+  
+  # for (si in sites()) {
+  #   status <- sapfluxnetQC1::df_get_status(si, parent_logger = NULL)
+  #   if (status$LVL2$STORED) {qc_ok <- qc_ok + 1}
+  # }
+  
   qc_ok
 })
 
