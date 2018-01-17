@@ -114,16 +114,19 @@ load_sfn_data_vs <- reactive({
 ################################################################################
 ## Helper functions
 # dyCrosshair plugin
-dyCrosshair <- function(dygraph, 
-                        direction = c("both", "horizontal", "vertical")) {
-  dyPlugin(
-    dygraph = dygraph,
-    name = "Crosshair",
-    path = system.file("examples/plugins/crosshair.js", 
-                       package = "dygraphs"),
-    options = list(direction = match.arg(direction))
-  )
-}
+
+# NOT NEEDED ANYMORE AS DYGRAPHS HAS NOW ITS OWN METHOD FOR CROSSHAIRS!!!!!
+
+# dyCrosshair <- function(dygraph, 
+#                         direction = c("both", "horizontal", "vertical")) {
+#   dyPlugin(
+#     dygraph = dygraph,
+#     name = "Crosshair",
+#     path = system.file("examples/plugins/crosshair.js", 
+#                        package = "dygraphs"),
+#     options = list(direction = match.arg(direction))
+#   )
+# }
 
 # load and bind
 load_and_bind <- function(metadata) {
