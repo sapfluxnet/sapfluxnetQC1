@@ -1613,7 +1613,9 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
       purrr::map(~ df_read_SfnData(.x, level = 'Lvl_1', parent_logger = parent_logger)) %>%
       # 2.3 check for outliers
       purrr::map(~ out_remove(.x, parent_logger = parent_logger)) %>%
-      # 2.4 write the results
+      # 2.4 ranges
+
+      # 2.5 write the results
       purrr::walk(~ df_write_SfnData(.x, level = 'out_warn', parent_logger = parent_logger))
   },
 
