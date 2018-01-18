@@ -33,8 +33,8 @@ out_app <- function(parent_logger = 'test') {
     # STEP 0
     # Needed misc
 
-    # 0.1 site codes list
-    site_list <- list.dirs('Data', full.names = FALSE, recursive = FALSE)
+    # 0.1 site codes list (only those passed already to LVL2)
+    site_list <- sapfluxnetQC1::df_who_ready_to_lvl2('done', parent_logger = parent_logger)
 
     # 0.2 libraries
     # require(sapfluxnetQC1)
