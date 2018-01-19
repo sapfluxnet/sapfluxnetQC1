@@ -879,7 +879,8 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
 
     # 1.1 status lists
     QC = list(DONE = FALSE, DATE = NULL)
-    LVL1 = list(STORED = FALSE, DATE = NULL)
+    LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE')
+    LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL)
 
     # 1.2 set status
     df_set_status(si_code, QC = QC, LVL1 = LVL1, parent_logger = parent_logger)

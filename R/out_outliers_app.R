@@ -34,7 +34,9 @@ out_app <- function(parent_logger = 'test') {
     # Needed misc
 
     # 0.1 site codes list (only those passed already to LVL2)
-    site_list <- sapfluxnetQC1::df_who_ready_to_lvl2('done', parent_logger = parent_logger)
+    site_list <- names(
+      sapfluxnetQC1::df_who_ready_to_lvl2('done', parent_logger = parent_logger)
+    )
 
     # 0.2 libraries
     # require(sapfluxnetQC1)
@@ -132,7 +134,7 @@ out_app <- function(parent_logger = 'test') {
             dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
             dplyr::mutate(index = rownames(.)) %>%
             dplyr::select_('index', 'TIMESTAMP', variable) %>%
-            dplyr::filter_(lazyeval::interp(quote(x == "OUT_WARN"),
+            dplyr::filter_(lazyeval::interp(quote(stringr::str_detect(x, 'OUT_WARN') | stringr::str_detect(x, 'RANGE_WARN')),
                                             x = as.name(variable)))
           outliers_tab
         })
@@ -177,34 +179,43 @@ out_app <- function(parent_logger = 'test') {
           env_flags <- get_env_flags(sfndata)
           sapf_data_out <- sapf_data
           env_data_out <- env_data
+          sapf_data_range <- sapf_data
+          env_data_range <- env_data
 
-          # subsets with/without outliers
+          # subsets with/without outliers and out of range values
           for (i in 1:ncol(sapf_data)) {
             sapf_data[stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
+            sapf_data[stringr::str_detect(sapf_flags[,i], 'RANGE_WARN'), i] <- NA
             sapf_data_out[!stringr::str_detect(sapf_flags[,i], 'OUT_WARN'), i] <- NA
+            sapf_data_range[!stringr::str_detect(sapf_flags[,i], 'RANGE_WARN'), i] <- NA
           }
 
           for (i in 1:ncol(env_data)) {
             env_data[stringr::str_detect(env_flags[,i], 'OUT_WARN'), i] <- NA
+            env_data[stringr::str_detect(env_flags[,i], 'RANGE_WARN'), i] <- NA
             env_data_out[!stringr::str_detect(env_flags[,i], 'OUT_WARN'), i] <- NA
+            env_data_range[!stringr::str_detect(env_flags[,i], 'RANGE_WARN'), i] <- NA
           }
 
           names(sapf_data_out) <- paste0(names(sapf_data_out), '_out')
           names(env_data_out) <- paste0(names(env_data_out), '_out')
+          names(sapf_data_range) <- paste0(names(sapf_data_range), '_range')
+          names(env_data_range) <- paste0(names(env_data_range), '_range')
 
           # data joined
-          data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out[,-1],
-                                      env_data[,-1], env_data_out[,-1])
+          data_dg <- dplyr::bind_cols(sapf_data, sapf_data_out[,-1], sapf_data_range[,-1],
+                                      env_data[,-1], env_data_out[,-1], env_data_range[,-1])
 
           # clean a little
-          rm(sapf_data, env_data, sapf_data_out,
-             env_data_out, sapf_flags, env_flags)
+          rm(sapf_data, env_data, sapf_data_out, env_data_out,
+             sapf_data_range, env_data_range, sapf_flags, env_flags)
 
           # dygraph
           var_names <- c(input$tree_env,
-                         paste0(input$tree_env, '_out'))
+                         paste0(input$tree_env, '_out'),
+                         paste0(input$tree_env, '_range'))
           data_dg %>%
-            dplyr::select_(var_names[1], var_names[2]) %>%
+            dplyr::select_(var_names[1], var_names[2], var_names[3]) %>%
             xts::xts(order.by = data_dg$TIMESTAMP,
                      tz = attr(data_dg$TIMESTAMP, 'tzone')) %>%
             dygraphs::dygraph('time_series') %>%
@@ -212,6 +223,8 @@ out_app <- function(parent_logger = 'test') {
                                label = 'no_out', color = 'green') %>%
             dygraphs::dySeries(var_names[2],
                                label = 'out', color = 'red') %>%
+            dygraphs::dySeries(var_names[3],
+                               label = 'range', color = 'orange') %>%
             dygraphs::dyRangeSelector() %>%
             dygraphs::dyOptions(useDataTimezone = TRUE)
         })

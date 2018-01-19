@@ -29,9 +29,19 @@ foo_env$netrad <- c(-281, -285, -340, -456, -600,
                     280.001, 295, 1367, 1478, 6101,
                     rnorm(47606, 0, 10))
 
+foo_env$swc_shallow <- c(-0.1, -1, -10, -100, -5,
+                         1.1, 11, 111, 59, 65,
+                         rnorm(47606, 0.5, 0.01))
+
+foo_env$swc_deep <- c(-0.1, -1, -10, -100, -5,
+                         1.1, 11, 111, 59, 65,
+                         rnorm(47606, 0.5, 0.01))
+
 # env_flags modified to add the variables not listed at first
 foo_env_flags$sw_in <- ''
 foo_env_flags$netrad <- ''
+foo_env_flags$swc_shallow <- ''
+foo_env_flags$swc_deep <- ''
 
 # sapf_data modifications (we trim the data to lift up computation)
 BAR <- FOO[1:5000, , ]
@@ -147,10 +157,10 @@ bar_md_kgh1$pl_sap_units <- '“kg h-1”'
 ################################################################################
 test_that('ranges dictionary is created ok', {
   expect_is(qc_range_dic(), 'list')
-  expect_length(qc_range_dic(), 10)
+  expect_length(qc_range_dic(), 12)
   expect_identical(names(qc_range_dic()),
                    c('ta', 'rh', 'vpd', 'sw_in', 'ppfd_in', 'netrad',
-                     'ws', 'precip', 'sapf_sapw', 'sapf_tree'))
+                     'ws', 'precip', 'swc_shallow', 'swc_deep', 'sapf_sapw', 'sapf_tree'))
   expect_length(qc_range_dic()[[1]], 2)
   expect_length(qc_range_dic()[[2]], 2)
   expect_length(qc_range_dic()[[3]], 2)
@@ -161,12 +171,14 @@ test_that('ranges dictionary is created ok', {
   expect_length(qc_range_dic()[[8]], 2)
   expect_length(qc_range_dic()[[9]], 2)
   expect_length(qc_range_dic()[[10]], 2)
+  expect_length(qc_range_dic()[[11]], 2)
+  expect_length(qc_range_dic()[[12]], 2)
 })
 
 test_that('env ranges are checked correctly', {
   foo_env_test <- qc_env_ranges(foo_env, foo_env_flags)
 
-  expect_equal(sum(as.matrix(foo_env_test) == 'RANGE_WARN'), 80)
+  expect_equal(sum(as.matrix(foo_env_test) == 'RANGE_WARN'), 100)
   expect_equal(sum(as.matrix(foo_env_test[,2]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(foo_env_test[,3]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(foo_env_test[,4]) == 'RANGE_WARN'), 10)
@@ -175,6 +187,8 @@ test_that('env ranges are checked correctly', {
   expect_equal(sum(as.matrix(foo_env_test[,7]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(foo_env_test[,8]) == 'RANGE_WARN'), 10)
   expect_equal(sum(as.matrix(foo_env_test[,9]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(foo_env_test[,10]) == 'RANGE_WARN'), 10)
+  expect_equal(sum(as.matrix(foo_env_test[,11]) == 'RANGE_WARN'), 10)
 })
 
 test_that('sapf ranges are checked correctly (sapwood level)', {

@@ -35,6 +35,8 @@ qc_range_dic <- function(parent_logger = 'test') {
     netrad_range <- c(-280, 280) # based on Nasa maps
     ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
     precip_range <- c(0, 250) # based on Cerveny et al. 2007
+    swc_shallow_range <- c(0, 1) # cm3/cm3, max only can be 1
+    swc_deep_range <- c(0, 1) # cm3/cm3, max only can be 1
 
     # sapf (we select maximum value as found in Manzoni 2013)
     # also we look for negative fluxes
@@ -52,6 +54,8 @@ qc_range_dic <- function(parent_logger = 'test') {
       netrad = netrad_range,
       ws = ws_range,
       precip = precip_range,
+      swc_shallow = swc_shallow_range,
+      swc_deep = swc_deep_range,
       sapf_sapw = sapf_sapw_range,
       sapf_tree = sapf_tree_range
     )
