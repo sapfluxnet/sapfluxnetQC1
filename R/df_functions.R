@@ -1618,6 +1618,8 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
       purrr::map(~ qc_out_of_range(.x, parent_logger = parent_logger)) %>%
       # 2.5 write the results
       purrr::walk(~ df_write_SfnData(.x, level = 'out_warn', parent_logger = parent_logger))
+    # 2.6 update the status
+    purrr::walk(names(ready), ~ df_set_status(.x, LVL2 = list(STEP = "WARN")))
   },
 
   # handlers

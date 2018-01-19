@@ -588,6 +588,12 @@ test_that('files are moved fine', {
   expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'FREEZE')
 })
 
+test_that('status slot LVL2$STEP is updated', {
+  expect_equal(df_get_status('foo')$LVL2$STEP, 'WARN')
+  expect_equal(df_get_status('bar')$LVL2$STEP, 'WARN')
+  expect_null(df_get_status('baz')$LVL2$STEP)
+})
+
 df_set_status('baz', LVL1 = list(TO_LVL2 = 'READY'))
 df_lvl1_to_lvl2()
 
