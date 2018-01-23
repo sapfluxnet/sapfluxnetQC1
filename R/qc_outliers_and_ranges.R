@@ -267,9 +267,9 @@ qc_out_hampel_filter <- function(y, k = 25L, t0 = 10L,
     }
 
     z0 <- switch(method,
-                 hampel = out_median(z, k, parent_logger),
-                 tukey = out_tukeyline(z, k, parent_logger),
-                 quantile = out_medianreg(z, k, parent_logger))
+                 hampel = qc_out_median(z, k, parent_logger),
+                 tukey = qc_out_tukeyline(z, k, parent_logger),
+                 quantile = qc_out_medianreg(z, k, parent_logger))
     z0.na <- !is.na(z0)
     z.na <- !is.na(z)
     ind <- NULL
@@ -385,9 +385,9 @@ qc_out_remove <- function(sfn_data, k = 25L, t0 = 10L,
 
     # STEP 2
     # Apply selected outlier filter
-    sapf_out <- lapply(sapf_data, out_hampel_filter,
+    sapf_out <- lapply(sapf_data, qc_out_hampel_filter,
                        k = k, t0 = t0, method = method, reverse = reverse)
-    env_out <- lapply(env_data, out_hampel_filter,
+    env_out <- lapply(env_data, qc_out_hampel_filter,
                       k = k, t0 = t0, method = method, reverse = reverse)
 
     # STEP 3

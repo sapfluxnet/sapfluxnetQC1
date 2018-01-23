@@ -1613,7 +1613,7 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
       # 2.2 read the sfnData objects
       purrr::map(~ df_read_SfnData(.x, level = 'Lvl_1', parent_logger = parent_logger)) %>%
       # 2.3 check for outliers
-      purrr::map(~ out_remove(.x, parent_logger = parent_logger)) %>%
+      purrr::map(~ qc_out_remove(.x, parent_logger = parent_logger)) %>%
       # 2.4 check for out of ranges values and flag them
       purrr::map(~ qc_out_of_range(.x, parent_logger = parent_logger)) %>%
       # 2.5 write the results
