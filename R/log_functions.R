@@ -22,7 +22,7 @@ log_sapfluxnet_format <- function(record) {
   # STEP 1
   # Formatting with sprintf
   sprintf(
-    'time="%s" level="%s" description="sapfluxnetLog:%s" message="%s"',
+    '"time=%s" "level=%s" "description=sapfluxnetLog:%s" "message=%s"',
     record$timestamp, record$levelname, record$logger, record$msg
   )
 
