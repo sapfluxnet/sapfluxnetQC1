@@ -108,6 +108,8 @@ test_that('status file functions work', {
   expect_null(foo_yaml$LVL1$DATE)
   expect_null(foo_yaml$LVL2$DATE)
   expect_null(foo_yaml$LVL2$STEP)
+  expect_equal(foo_yaml$LVL2$TO_REM, 'FREEZE')
+  expect_equal(foo_yaml$LVL2$TO_UNITS, 'FREEZE')
 
   expect_true(df_set_status('foo', QC = list(DONE = TRUE,
                                              DATE = as.character(Sys.Date()))))
@@ -122,6 +124,8 @@ test_that('status file functions work', {
   expect_null(foo_yaml$LVL1$DATE)
   expect_null(foo_yaml$LVL2$DATE)
   expect_null(foo_yaml$LVL2$STEP)
+  expect_equal(foo_yaml$LVL2$TO_REM, 'FREEZE')
+  expect_equal(foo_yaml$LVL2$TO_UNITS, 'FREEZE')
 
 })
 
