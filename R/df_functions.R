@@ -852,11 +852,21 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
 #' changed data.
 #'
 #' A fast way of reset any site data folder when needed, usually after manual
-#' changes of the files
+#' changes of the files.
+#'
+#' @section levels
+#'
+#' \code{level} parameter allows for selecting to which level the status must
+#'   be resetted. "LVL1" indicates that only LVL1 data and status will be
+#'   resetted. "LVL2" resets only LVL2 (warn, rem, units) data and status and
+#'   "all" resets all data and status to the initial state for the site.
 #'
 #' @family Data Flow
 #'
 #' @param si_code Character vector indicating the site code to reset
+#'
+#' @param level Character string indicating which level must be resetted. Valid
+#'   values are "LVL1", "LVL2" and "all"
 #'
 #' @return Nothing
 #'
@@ -864,7 +874,7 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
 
 # START
 # Function declaration
-df_reset_data_status <- function(si_code, parent_logger = 'test') {
+df_reset_data_status <- function(si_code, level = 'all', parent_logger = 'test') {
 
   # using calling handlers to manage errors
   withCallingHandlers({
@@ -881,19 +891,57 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
     # 1.1 status lists
     QC = list(DONE = FALSE, DATE = NULL)
     LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE')
-    LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL)
+    LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL,
+                TO_REM = 'FREEZE', TO_UNITS = 'FREEZE')
 
-    # 1.2 set status
-    df_set_status(si_code, QC = QC, LVL1 = LVL1, parent_logger = parent_logger)
+    # 1.2 set status depending on the level argument
+    if (level == 'all') {
+      df_set_status(si_code, QC = QC, LVL1 = LVL1, LVL2 = LVL2,
+                    parent_logger = parent_logger)
 
-    # STEP 2
-    # Renaming data
+      # STEP 2
+      # Renaming data
 
-    # 2.1 file names, old and new
-    old_files <- c(
-      list.files(file.path('Data', si_code, 'Accepted'), full.names = TRUE),
-      list.files(file.path('Data', si_code, 'Lvl_1'), full.names = TRUE)
-    )
+      # 2.1 file names, old and new
+      old_files <- c(
+        list.files(file.path('Data', si_code, 'Accepted'), full.names = TRUE),
+        list.files(file.path('Data', si_code, 'Lvl_1'), full.names = TRUE),
+        list.files(file.path('Data', si_code, 'Lvl_2'),
+                   full.names = TRUE, recursive = TRUE)
+      )
+    }
+
+    if (level == 'LVL2') {
+      df_set_status(
+        si_code,
+        # don't forget to indicate that site is not ready yet to go to LVL2
+        # as we just reset level 2 for a reason
+        LVL1 = list(TO_LVL2 = 'FREEZE'),
+        LVL2 = LVL2,
+        parent_logger = parent_logger
+      )
+
+      # STEP 2
+      # Renaming data
+
+      # 2.1 file names, old and new
+      old_files <- c(
+        list.files(file.path('Data', si_code, 'Lvl_2'),
+                   full.names = TRUE, recursive = TRUE)
+      )
+    }
+
+    if (level == 'LVL1') {
+      df_set_status(si_code, LVL1 = LVL1, parent_logger = parent_logger)
+
+      # STEP 2
+      # Renaming data
+
+      # 2.1 file names, old and new
+      old_files <- c(
+        list.files(file.path('Data', si_code, 'Lvl_1'), full.names = TRUE)
+      )
+    }
 
     # 2.1.1 new names, substituting extension for _time.bak
     new_files <- stringr::str_replace_all(

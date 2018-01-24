@@ -312,15 +312,43 @@ context('J7. Reset data and status')
 
 code <- 'legen_wait_for_it'
 
+file.create('Data/legen_wait_for_it/Accepted/dary.xlsx')
 old_yaml <- df_get_status(code)
-old_files <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE),
-               list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+old_files_lvl1 <- c(list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+old_files_acc <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE))
 
-df_reset_data_status(code)
+df_reset_data_status(code, level = 'LVL1')
 
 new_yaml <- df_get_status(code)
-new_files <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE),
-               list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+new_files_lvl1 <- c(list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+new_files_acc <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE))
+
+test_that('status file has been updated', {
+  expect_true(old_yaml$QC$DONE)
+  expect_true(new_yaml$QC$DONE)
+  expect_equal(old_yaml$QC$DATE, as.character(Sys.Date()))
+  expect_equal(new_yaml$QC$DATE, as.character(Sys.Date()))
+  expect_true(old_yaml$LVL1$STORED)
+  expect_false(new_yaml$LVL1$STORED)
+  expect_equal(old_yaml$LVL1$DATE, as.character(Sys.Date()))
+  expect_null(new_yaml$LVL1$DATE)
+})
+
+test_that('files had been renamed correctly', {
+  expect_false(all(old_files_lvl1 == new_files_lvl1))
+  expect_true(length(old_files_lvl1) == length(new_files_lvl1))
+  expect_match(new_files_lvl1, "(.bak)$")
+  expect_match(old_files_lvl1, "(.csv|.RData|.xlsx)$")
+  expect_true(all(old_files_acc == new_files_acc))
+  expect_match(new_files_acc, "(.csv|.RData|.xlsx)$")
+  expect_match(old_files_acc, "(.csv|.RData|.xlsx)$")
+})
+
+df_reset_data_status(code, level = 'all')
+
+new_yaml <- df_get_status(code)
+new_files_lvl1 <- c(list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+new_files_acc <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE))
 
 test_that('status file has been updated', {
   expect_true(old_yaml$QC$DONE)
@@ -334,10 +362,13 @@ test_that('status file has been updated', {
 })
 
 test_that('files had been renamed correctly', {
-  expect_false(all(old_files == new_files))
-  expect_true(length(old_files) == length(new_files))
-  expect_match(new_files, "(.bak)")
-  expect_match(old_files, "(.csv|.RData|.xlsx)")
+  expect_false(all(old_files_lvl1 == new_files_lvl1))
+  expect_true(length(old_files_lvl1) == length(new_files_lvl1))
+  expect_match(new_files_lvl1, "(.bak)$")
+  expect_match(old_files_lvl1, "(.csv|.RData|.xlsx)$")
+  expect_false(all(old_files_acc == new_files_acc))
+  expect_match(new_files_acc, "(.bak)$")
+  expect_match(old_files_acc, "(.csv|.RData|.xlsx)$")
 })
 
 ################################################################################
@@ -434,8 +465,6 @@ test_that('if not status NA is returned', {
   expect_true(is.na(whos_ready_2['bar']))
   expect_identical(whos_ready[['baz']], 'DONE')
 })
-
-
 
 ################################################################################
 context('J10. lvl2_folder_structure')
@@ -565,6 +594,71 @@ test_that('error rise if file already exists', {
                'object already exists')
   expect_error(df_write_SfnData(foo, 'unit_trans'),
                'object already exists')
+})
+
+################################################################################
+context('J7b. Reset data and status (level 2)')
+
+code <- 'foo'
+
+dir.create(file.path('Data', 'foo', 'Accepted'))
+file.create('Data/foo/Accepted/foo.xlsx')
+
+df_set_status(
+  'foo',
+  QC = list(STORED = TRUE, DATE = as.character(Sys.Date())),
+  LVL1 = list(STORED = TRUE, DATE = as.character(Sys.Date()), TO_LVL2 = 'DONE'),
+  LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date()),
+              TO_REM = 'DONE', TO_UNITS = 'DONE')
+)
+
+old_yaml <- df_get_status(code)
+old_files_lvl2 <- c(list.files(file.path('Data', code, 'Lvl_2'),
+                               full.names = TRUE, recursive = TRUE))
+old_files_lvl1 <- c(list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+old_files_acc <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE))
+
+df_reset_data_status(code, level = 'LVL2')
+
+new_yaml <- df_get_status(code)
+new_files_lvl2 <- c(list.files(file.path('Data', code, 'Lvl_2'),
+                               full.names = TRUE, recursive = TRUE))
+new_files_lvl1 <- c(list.files(file.path('Data', code, 'Lvl_1'), full.names = TRUE))
+new_files_acc <- c(list.files(file.path('Data', code, 'Accepted'), full.names = TRUE))
+
+test_that('status file has been updated', {
+  expect_true(old_yaml$QC$DONE)
+  expect_true(new_yaml$QC$DONE)
+  expect_equal(old_yaml$QC$DATE, as.character(Sys.Date()))
+  expect_equal(new_yaml$QC$DATE, as.character(Sys.Date()))
+  expect_true(old_yaml$LVL1$STORED)
+  expect_true(new_yaml$LVL1$STORED)
+  expect_equal(old_yaml$LVL1$DATE, as.character(Sys.Date()))
+  expect_equal(new_yaml$LVL1$DATE, as.character(Sys.Date()))
+  expect_equal(old_yaml$LVL1$TO_LVL2, 'DONE')
+  expect_equal(new_yaml$LVL1$TO_LVL2, 'FREEZE')
+  expect_true(old_yaml$LVL2$STORED)
+  expect_false(new_yaml$LVL2$STORED)
+  expect_equal(old_yaml$LVL2$DATE, as.character(Sys.Date()))
+  expect_null(new_yaml$LVL2$DATE)
+  expect_equal(old_yaml$LVL2$TO_REM, 'DONE')
+  expect_equal(old_yaml$LVL2$TO_UNITS, 'DONE')
+  expect_equal(new_yaml$LVL2$TO_REM, 'FREEZE')
+  expect_equal(new_yaml$LVL2$TO_UNITS, 'FREEZE')
+})
+
+test_that('files had been renamed correctly', {
+  expect_true(all(old_files_lvl1 == new_files_lvl1))
+  expect_true(length(old_files_lvl1) == length(new_files_lvl1))
+  expect_match(new_files_lvl1, "(.csv|.RData|.xlsx)$")
+  expect_match(old_files_lvl1, "(.csv|.RData|.xlsx)$")
+  expect_true(all(old_files_acc == new_files_acc))
+  expect_match(new_files_acc, "(.csv|.RData|.xlsx)$")
+  expect_match(old_files_acc, "(.csv|.RData|.xlsx)$")
+  expect_false(all(old_files_lvl2 == new_files_lvl2))
+  expect_true(length(old_files_lvl2) == length(new_files_lvl2))
+  expect_match(new_files_lvl2, "(.bak)$")
+  expect_match(old_files_lvl2, "(.csv|.RData|.xlsx)$")
 })
 
 ################################################################################

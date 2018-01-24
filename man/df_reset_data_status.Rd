@@ -4,10 +4,13 @@
 \alias{df_reset_data_status}
 \title{Reset the data folder and status file for the si_code given.}
 \usage{
-df_reset_data_status(si_code, parent_logger = "test")
+df_reset_data_status(si_code, level = "all", parent_logger = "test")
 }
 \arguments{
 \item{si_code}{Character vector indicating the site code to reset}
+
+\item{level}{Character string indicating which level must be resetted. Valid
+values are "LVL1", "LVL2" and "all"}
 }
 \value{
 Nothing
@@ -19,7 +22,7 @@ changed data.
 }
 \details{
 A fast way of reset any site data folder when needed, usually after manual
-changes of the files
+changes of the files.
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
