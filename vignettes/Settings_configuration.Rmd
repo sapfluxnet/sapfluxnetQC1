@@ -47,16 +47,26 @@ QC
     + DATE: character indicating the date in which QC was done
 
 LVL1
-  : Field indicating if data is stored in the `Level_1` data folder. Two sub-fields:
+  : Field indicating if data is stored in the `Level_1` data folder. Several sub-fields:
   
     + STORED: logical indicating if Lvl1 data was stored
     + DATE: character indicating the date in which storage was done
+    + TO_LVL2: character indicating if the site is ready to go to LVL2. Valid
+      values are:
+        - "FREEZE": Don't move to LVL2, there is work to do yet in LVL1
+        - "READY": Ready to move to LVL2, but not moved yet
+        - "DONE": Already in LVL2
 
 LVL2
-  : Field indicating if data is stored in the `Level_2` data folder. Two sub-fields:
+  : Field indicating if data is stored in the `Level_2` data folder. Several sub-fields:
   
     + STORED: logical indicating if Lvl2 data was stored
     + DATE: character indicating the date in which storage was done
+    + STEP: character indicating the Lvl2 step in which the site is at the moment.
+      Posible values are:
+        - "WARN": Data as in Lvl1, only with the outliers and ranges flags
+        - "REM": Preprocessed data, with outliers and ranges values substituted
+        - "UNITS": Processed data, with all the unit conversion steps performed
 
 ### Example
 
@@ -71,9 +81,11 @@ QC:
 LVL1:
   STORED: yes
   DATE: '2016-05-30'
+  TO_LVL2: "FREEZE"
 LVL2:
   STORED: no
   DATE: ~
+  STEP: ~
 ```
 
 ## Getting and setting statuses

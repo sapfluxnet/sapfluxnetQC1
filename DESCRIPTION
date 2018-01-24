@@ -43,7 +43,7 @@ Suggests:
     testthat,
     rmarkdown
 VignetteBuilder: knitr
-Collate:
+Collate: 
     'SfnData_class.R'
     'SfnData_generics.R'
     'SfnData_methods.R'
@@ -57,8 +57,7 @@ Collate:
     'qc_gaps_functions_eff.R'
     'qc_main.R'
     'qc_md_general_checks.R'
-    'qc_numerical_metadata_functions.R'
-    'qc_outliers.R'
+    'qc_outliers_and_ranges.R'
     'qc_plant_functions.R'
     'qc_sitemd_checks.R'
     'qc_species_functions.R'

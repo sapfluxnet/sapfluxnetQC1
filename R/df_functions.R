@@ -239,8 +239,8 @@ df_start_status <- function(si_code, parent_logger = 'test') {
       # 2.1 create the content
       content <- list(
         QC = list(DONE = FALSE, DATE = NULL),
-        LVL1 = list(STORED = FALSE, DATE = NULL),
-        LVL2 = list(STORED = FALSE, DATE = NULL)
+        LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE'),
+        LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL)
       )
 
       # 2.2 create the yaml object
@@ -879,7 +879,8 @@ df_reset_data_status <- function(si_code, parent_logger = 'test') {
 
     # 1.1 status lists
     QC = list(DONE = FALSE, DATE = NULL)
-    LVL1 = list(STORED = FALSE, DATE = NULL)
+    LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE')
+    LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL)
 
     # 1.2 set status
     df_set_status(si_code, QC = QC, LVL1 = LVL1, parent_logger = parent_logger)
@@ -1612,11 +1613,13 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
       # 2.2 read the sfnData objects
       purrr::map(~ df_read_SfnData(.x, level = 'Lvl_1', parent_logger = parent_logger)) %>%
       # 2.3 check for outliers
-      purrr::map(~ out_remove(.x, parent_logger = parent_logger)) %>%
-      # 2.4 ranges
-
+      purrr::map(~ qc_out_remove(.x, parent_logger = parent_logger)) %>%
+      # 2.4 check for out of ranges values and flag them
+      purrr::map(~ qc_out_of_range(.x, parent_logger = parent_logger)) %>%
       # 2.5 write the results
       purrr::walk(~ df_write_SfnData(.x, level = 'out_warn', parent_logger = parent_logger))
+    # 2.6 update the status
+    purrr::walk(names(ready), ~ df_set_status(.x, LVL2 = list(STEP = "WARN")))
   },
 
   # handlers

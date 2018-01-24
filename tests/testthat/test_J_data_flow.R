@@ -103,9 +103,11 @@ test_that('status file functions work', {
   expect_false(foo_yaml$QC$DONE)
   expect_false(foo_yaml$LVL1$STORED)
   expect_false(foo_yaml$LVL2$STORED)
-  expect_true(is.null(foo_yaml$QC$DATE))
-  expect_true(is.null(foo_yaml$LVL1$DATE))
-  expect_true(is.null(foo_yaml$LVL2$DATE))
+  expect_equal(foo_yaml$LVL1$TO_LVL2, 'FREEZE')
+  expect_null(foo_yaml$QC$DATE)
+  expect_null(foo_yaml$LVL1$DATE)
+  expect_null(foo_yaml$LVL2$DATE)
+  expect_null(foo_yaml$LVL2$STEP)
 
   expect_true(df_set_status('foo', QC = list(DONE = TRUE,
                                              DATE = as.character(Sys.Date()))))
@@ -116,8 +118,10 @@ test_that('status file functions work', {
   expect_is(foo_yaml$QC$DATE, 'character')
   expect_false(foo_yaml$LVL1$STORED)
   expect_false(foo_yaml$LVL2$STORED)
-  expect_true(is.null(foo_yaml$LVL1$DATE))
-  expect_true(is.null(foo_yaml$LVL2$DATE))
+  expect_equal(foo_yaml$LVL1$TO_LVL2, 'FREEZE')
+  expect_null(foo_yaml$LVL1$DATE)
+  expect_null(foo_yaml$LVL2$DATE)
+  expect_null(foo_yaml$LVL2$STEP)
 
 })
 
@@ -586,6 +590,12 @@ test_that('files are moved fine', {
   expect_equal(df_get_status('foo')$LVL1$TO_LVL2, 'DONE')
   expect_equal(df_get_status('bar')$LVL1$TO_LVL2, 'DONE')
   expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'FREEZE')
+})
+
+test_that('status slot LVL2$STEP is updated', {
+  expect_equal(df_get_status('foo')$LVL2$STEP, 'WARN')
+  expect_equal(df_get_status('bar')$LVL2$STEP, 'WARN')
+  expect_null(df_get_status('baz')$LVL2$STEP)
 })
 
 df_set_status('baz', LVL1 = list(TO_LVL2 = 'READY'))
