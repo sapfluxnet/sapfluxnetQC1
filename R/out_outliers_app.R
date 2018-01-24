@@ -116,7 +116,7 @@ out_app <- function(parent_logger = 'test') {
 
                 fluidRow(
                   column(
-                    6,
+                    4,
                     shiny::h3("Outliers table"),
                     shiny::br(),
                     DT::dataTableOutput("saved_out_table"),
@@ -126,13 +126,21 @@ out_app <- function(parent_logger = 'test') {
                   ),
 
                   column(
-                    6,
+                    4,
                     shiny::h3("Ranges table"),
                     shiny::br(),
                     DT::dataTableOutput("saved_range_table"),
                     shiny::br(),
                     shiny::actionButton("reset_range", "Reset table",
                                         icon = icon('eraser'))
+                  ),
+
+                  column(
+                    4,
+                    shiny::h3("Set status"),
+                    shiny::br(),
+                    shiny::actionButton("set_status", "Statutize!",
+                                        icon = icon('gavel'))
                   )
                 )
               )
@@ -383,6 +391,14 @@ out_app <- function(parent_logger = 'test') {
                                        paste0(input$site_sel, '_ranges_to_remove.txt'))
 
             unlink(file_name_out)
+          }
+        )
+
+        # Write status button
+        observeEvent(
+          eventExpr = input$set_status,
+          handlerExpr = {
+            df_set_status(input$site_sel, LVL2 = list(TO_REM = 'READY'))
           }
         )
       }
