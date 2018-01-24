@@ -99,8 +99,12 @@ out_app <- function(parent_logger = 'test') {
                     column(
                       width = 2,
                       shiny::br(),
-                      shiny::h3('Write table'),
-                      shiny::actionButton("write_but", "Write it!", icon = icon('pencil'))
+                      shiny::h3('Write tables'),
+                      shiny::actionButton("write_out", "Write outliers",
+                                          icon = icon('pencil')),
+                      shiny::br(),
+                      shiny::actionButton("write_range", "Write out of range",
+                                          icon = icon('pencil'))
                     )
                   )
                 )
@@ -108,8 +112,29 @@ out_app <- function(parent_logger = 'test') {
 
               # script tab
               tabPanel(
-                "Outliers to remove",
-                shiny::tableOutput("saved_out_table")
+                "Outliers & Ranges to remove",
+
+                fluidRow(
+                  column(
+                    6,
+                    shiny::h3("Outliers table"),
+                    shiny::br(),
+                    DT::dataTableOutput("saved_out_table"),
+                    shiny::br(),
+                    shiny::actionButton("reset_out", "Reset table",
+                                        icon = icon('eraser'))
+                  ),
+
+                  column(
+                    6,
+                    shiny::h3("Ranges table"),
+                    shiny::br(),
+                    DT::dataTableOutput("saved_range_table"),
+                    shiny::br(),
+                    shiny::actionButton("reset_range", "Reset table",
+                                        icon = icon('eraser'))
+                  )
+                )
               )
             )
           )
@@ -253,29 +278,113 @@ out_app <- function(parent_logger = 'test') {
           selected_rows_gen()
         })
 
-        # write table when button is pressed
+        # write outliers table when button is pressed
         observeEvent(
-          eventExpr = input$write_but,
+          eventExpr = input$write_out,
           handlerExpr = {
             table_to_write <- selected_rows_gen()
-            # writecsv not working TODO
-            write.table(table_to_write,
-                      file = file.path('Data', input$site_sel,
-                                       'Lvl_2', 'lvl_2_out_warn',
-                                       paste0(input$site_sel, '_out_to_remove.txt')),
-                      append = TRUE, row.names = FALSE, col.names = FALSE)
+            file_name_out <- file.path(
+              'Data', input$site_sel,
+              'Lvl_2', 'lvl_2_out_warn',
+              paste0(input$site_sel, '_out_to_remove.txt')
+            )
+
+            # if file is new add column names
+            if (file.exists(file_name_out)) {
+              write.table(table_to_write,
+                          file = file_name_out,
+                          append = TRUE, row.names = FALSE, col.names = FALSE)
+            } else {
+              write.table(table_to_write,
+                          file = file_name_out,
+                          append = TRUE, row.names = FALSE, col.names = TRUE)
+            }
+          }
+        )
+
+        # write ranges table when button is pressed
+        observeEvent(
+          eventExpr = input$write_range,
+          handlerExpr = {
+            table_to_write <- selected_rows_gen()
+            file_name_out <- file.path(
+              'Data', input$site_sel,
+              'Lvl_2', 'lvl_2_out_warn',
+              paste0(input$site_sel, '_ranges_to_remove.txt')
+            )
+
+            # if file is new add column names
+            if (file.exists(file_name_out)) {
+              write.table(table_to_write,
+                          file = file_name_out,
+                          append = TRUE, row.names = FALSE, col.names = FALSE)
+            } else {
+              write.table(table_to_write,
+                          file = file_name_out,
+                          append = TRUE, row.names = FALSE, col.names = TRUE)
+            }
           }
         )
 
         # Outliers to remove table
-        output$saved_out_table <- shiny::renderTable({
+        saved_out_table <- reactive({
+
           file_name_out <- file.path('Data', input$site_sel,
                                      'Lvl_2', 'lvl_2_out_warn',
                                      paste0(input$site_sel, '_out_to_remove.txt'))
+
           if (file.exists(file_name_out)) {
-            read.table(file_name_out)
+            read.table(file_name_out, header = TRUE) %>%
+              DT::datatable(extensions = 'Scroller',
+                            options = list(dom = 't',
+                                           deferRender = TRUE,
+                                           scrollY = 300,
+                                           scroller = TRUE))
           }
         })
+
+        output$saved_out_table <- DT::renderDataTable({
+          saved_out_table()
+        })
+
+        # reset
+        observeEvent(
+          eventExpr = input$reset_out,
+          handlerExpr = {
+            file_name_out <- file.path('Data', input$site_sel,
+                                       'Lvl_2', 'lvl_2_out_warn',
+                                       paste0(input$site_sel, '_out_to_remove.txt'))
+
+            unlink(file_name_out)
+          }
+        )
+
+        # Outliers to remove table
+        output$saved_range_table <- DT::renderDataTable({
+          file_name_out <- file.path('Data', input$site_sel,
+                                     'Lvl_2', 'lvl_2_out_warn',
+                                     paste0(input$site_sel, '_ranges_to_remove.txt'))
+          if (file.exists(file_name_out)) {
+            read.table(file_name_out, header = TRUE) %>%
+              DT::datatable(extensions = 'Scroller',
+                            options = list(dom = 't',
+                                           deferRender = TRUE,
+                                           scrollY = 300,
+                                           scroller = TRUE))
+          }
+        })
+
+        # reset
+        observeEvent(
+          eventExpr = input$reset_range,
+          handlerExpr = {
+            file_name_out <- file.path('Data', input$site_sel,
+                                       'Lvl_2', 'lvl_2_out_warn',
+                                       paste0(input$site_sel, '_ranges_to_remove.txt'))
+
+            unlink(file_name_out)
+          }
+        )
       }
     )
   },
