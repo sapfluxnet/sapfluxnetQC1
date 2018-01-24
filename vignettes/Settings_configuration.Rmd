@@ -67,6 +67,16 @@ LVL2
         - "WARN": Data as in Lvl1, only with the outliers and ranges flags
         - "REM": Preprocessed data, with outliers and ranges values substituted
         - "UNITS": Processed data, with all the unit conversion steps performed
+    + TO_REM: character indicating if the site is ready to go to REM. Valid
+      values are:
+        - "FREEZE": Don't move to REM, there is work to do yeT
+        - "READY": Ready to move to REM, but not moved yet
+        - "DONE": Already in REM
+    + TO_UNITS: character indicating if the site is ready to go to UNITS. Valid
+      values are:
+        - "FREEZE": Don't move to UNITS, there is work to do yeT
+        - "READY": Ready to move to UNITS, but not moved yet
+        - "DONE": Already in UNITS
 
 ### Example
 

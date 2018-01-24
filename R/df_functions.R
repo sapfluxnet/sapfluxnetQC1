@@ -240,7 +240,8 @@ df_start_status <- function(si_code, parent_logger = 'test') {
       content <- list(
         QC = list(DONE = FALSE, DATE = NULL),
         LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE'),
-        LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL)
+        LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL,
+                    TO_REM = 'FREEZE', TO_UNITS = 'FREEZE')
       )
 
       # 2.2 create the yaml object
