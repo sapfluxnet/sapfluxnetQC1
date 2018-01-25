@@ -1126,93 +1126,6 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
 }
 
 ################################################################################
-#' Who is ready for level 2?
-#'
-#' Check the site status files to list who is ready to move to level 2
-#'
-#' \code{filter} parameter indicates if the results must be filtered by the
-#'   corresponding status:
-#'
-#'   \itemize{
-#'     \item{\code{all} retrieves all the statuses}
-#'     \item{\code{ready} retrieves only those sites marked to pass to level 2}
-#'     \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
-#'     \item{\code{done} retrieves only those sites already passed to level 2}
-#'   }
-#'
-#' @family Data Flow
-#'
-#' @param filter character vector indicating by which TO_LVL2 status results must
-#'   been filtered. Accepted values are "all" (default), "ready", "freeze" or "done"
-#'   (see details)
-#'
-#' @return A list with length equal to the number of sites containing the
-#'   TO_LVL2 flag of the status files.
-#'
-#' @export
-
-# START
-# Function declaration
-df_who_ready_to_lvl2 <- function(filter = c('all', 'ready', 'freeze', 'done'),
-                                 parent_logger = 'test') {
-
-  # Using calling handlers to manage errors
-  withCallingHandlers({
-
-    # STEP 0
-    # Checking arguments (match.arg throws an error if not matching)
-    filter <- match.arg(filter)
-    filter <- switch(filter,
-                     all = 'all',
-                     ready = 'READY',
-                     freeze = 'FREEZE',
-                     done = 'DONE')
-
-    # STEP 1
-    # Getting the site codes to pass to df_get_status
-    site_folders <- df_get_data_folders(parent_logger = parent_logger) %>%
-      stringr::str_sub(6, -1)
-
-    # STEP 2
-    # Get the statuses
-    whos_ready <- site_folders %>%
-      purrr::map(df_get_status, parent_logger = parent_logger) %>%
-      # STEP 3
-      # Get the TO_LVL2 flag
-      purrr::modify_depth(1, c('LVL1', 'TO_LVL2'), .null = NA)
-
-    # STEP 3
-    # Prepare the results
-    # 3.1 Name the list elements
-    names(whos_ready) <- site_folders
-    # 3.2 filter the results
-    if (filter != 'all') {
-      whos_ready <- whos_ready[whos_ready == filter]
-    }
-
-    # STEP 4
-    # Return the list
-    return(whos_ready)
-
-    # END FUNCTION
-  },
-
-  # handlers
-  warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger,
-                                                        'df_who_ready_to_lvl2',
-                                                        sep = '.'))},
-  error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger,
-                                                       'df_who_ready_to_lvl2',
-                                                       sep = '.'))},
-  message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger,
-                                                        'df_who_ready_to_lvl2',
-                                                        sep = '.'))})
-}
-
-################################################################################
 #' Who is ready the desired level?
 #'
 #' Check the site status files to list who is ready to move to target
@@ -1298,15 +1211,15 @@ df_whos_ready_to <- function(level = c('lvl2', 'rem', 'units'),
   # handlers
   warning = function(w){logging::logwarn(w$message,
                                          logger = paste(parent_logger,
-                                                        'df_who_ready_to_lvl2',
+                                                        'df_whos_ready_to',
                                                         sep = '.'))},
   error = function(e){logging::logerror(e$message,
                                         logger = paste(parent_logger,
-                                                       'df_who_ready_to_lvl2',
+                                                       'df_whos_ready_to',
                                                        sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
-                                                        'df_who_ready_to_lvl2',
+                                                        'df_whos_ready_to',
                                                         sep = '.'))})
 }
 
@@ -1616,12 +1529,12 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
             clicked <- input$flaggit
 
             if (clicked == 0) {
-              freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
-                                                  parent_logger = parent_logger)
-              ready_list <- df_who_ready_to_lvl2(filter = 'ready',
-                                                 parent_logger = parent_logger)
-              done_list <- df_who_ready_to_lvl2(filter = 'done',
-                                                parent_logger = parent_logger)
+              freeze_list <- df_whos_ready_to('lvl2', filter = 'freeze',
+                                              parent_logger = parent_logger)
+              ready_list <- df_whos_ready_to('lvl2', filter = 'ready',
+                                             parent_logger = parent_logger)
+              done_list <- df_whos_ready_to('lvl2', filter = 'done',
+                                            parent_logger = parent_logger)
 
               res <- list(freeze = freeze_list,
                           ready = ready_list,
@@ -1631,27 +1544,27 @@ df_flag_to_lvl2_app <- function(parent_logger = 'test') {
             }
 
             selected <- input$freeze_rows_selected
-            freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
-                                                parent_logger = parent_logger)
+            freeze_list <- df_whos_ready_to('lvl2', filter = 'freeze',
+                                            parent_logger = parent_logger)
             freeze_names <- names(freeze_list)[selected]
             purrr::walk(freeze_names, ~ df_set_status(
               .x, LVL1 = list(TO_LVL2 = 'READY')
             ))
 
             undo_sel <- input$ready_rows_selected
-            ready_list <- df_who_ready_to_lvl2(filter = 'ready',
-                                               parent_logger = parent_logger)
+            ready_list <- df_whos_ready_to('lvl2', filter = 'ready',
+                                           parent_logger = parent_logger)
             ready_names <- names(ready_list)[undo_sel]
             purrr::walk(ready_names, ~ df_set_status(
               .x, LVL1 = list(TO_LVL2 = 'FREEZE')
             ))
 
-            freeze_list <- df_who_ready_to_lvl2(filter = 'freeze',
-                                                parent_logger = parent_logger)
-            ready_list <- df_who_ready_to_lvl2(filter = 'ready',
-                                               parent_logger = parent_logger)
-            done_list <- df_who_ready_to_lvl2(filter = 'done',
-                                              parent_logger = parent_logger)
+            freeze_list <- df_whos_ready_to('lvl2', filter = 'freeze',
+                                            parent_logger = parent_logger)
+            ready_list <- df_whos_ready_to('lvl2', filter = 'ready',
+                                           parent_logger = parent_logger)
+            done_list <- df_whos_ready_to('lvl2', filter = 'done',
+                                          parent_logger = parent_logger)
 
             res <- list(freeze = freeze_list,
                         ready = ready_list,
@@ -1772,7 +1685,8 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
 
     # STEP 1
     # Get the ready sites list
-    ready <- df_who_ready_to_lvl2(filter = "ready", parent_logger = parent_logger)
+    ready <- df_whos_ready_to('lvl2', filter = "ready",
+                              parent_logger = parent_logger)
 
     # STEP 2
     # Move the data
