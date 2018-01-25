@@ -23,6 +23,10 @@ changed data.
 \details{
 A fast way of reset any site data folder when needed, usually after manual
 changes of the files.
+\code{level} parameter allows for selecting to which level the status must
+be resetted. "LVL1" indicates that only LVL1 data and status will be
+resetted. "LVL2" resets only LVL2 (warn, rem, units) data and status and
+"all" resets all data and status to the initial state for the site.
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
@@ -38,6 +42,7 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}},
   \code{\link{df_who_ready_to_lvl2}},
+  \code{\link{df_whos_ready_to}},
   \code{\link{df_write_SfnData}},
   \code{\link{sfn_data_constructor}}
 }

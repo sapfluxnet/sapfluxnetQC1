@@ -53,5 +53,6 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_set_status}},
   \code{\link{df_start_status}},
   \code{\link{df_who_ready_to_lvl2}},
+  \code{\link{df_whos_ready_to}},
   \code{\link{df_write_SfnData}}
 }

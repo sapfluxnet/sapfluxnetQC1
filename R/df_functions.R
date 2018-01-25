@@ -52,11 +52,17 @@ df_folder_structure <- function(parent_dir = '.', parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'df_folder_structure', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'df_folder_structure',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'df_folder_structure', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'df_folder_structure',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'df_folder_structure', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'df_folder_structure',
+                                                        sep = '.'))})
 }
 
 ################################################################################
@@ -93,7 +99,8 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
 
     # STEP 1
     # Obtaining the file names in the received folder.
-    files <- list.files('received_data', pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
+    files <- list.files('received_data',
+                        pattern = "(_env_data|_sapflow_data)\\.csv$|_metadata\\.xls(x)?$")
 
     # STEP 2
     # Extract site code from file names
@@ -182,11 +189,17 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'df_received_to_accepted', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'df_received_to_accepted',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'df_received_to_accepted', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'df_received_to_accepted',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'df_received_to_accepted', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'df_received_to_accepted',
+                                                        sep = '.'))})
 }
 
 ################################################################################
@@ -260,11 +273,17 @@ df_start_status <- function(si_code, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'df_status_start', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'df_status_start',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'df_status_start', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'df_status_start',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'df_status_start', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'df_status_start',
+                                                        sep = '.'))})
 
 }
 
@@ -321,11 +340,17 @@ df_get_status <- function(si_code, parent_logger = 'test') {
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'df_get_status', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'df_get_status',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'df_get_status', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'df_get_status',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'df_get_status', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'df_get_status',
+                                                        sep = '.'))})
 }
 
 ################################################################################
@@ -853,13 +878,10 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
 #'
 #' A fast way of reset any site data folder when needed, usually after manual
 #' changes of the files.
-#'
-#' @section levels
-#'
 #' \code{level} parameter allows for selecting to which level the status must
-#'   be resetted. "LVL1" indicates that only LVL1 data and status will be
-#'   resetted. "LVL2" resets only LVL2 (warn, rem, units) data and status and
-#'   "all" resets all data and status to the initial state for the site.
+#' be resetted. "LVL1" indicates that only LVL1 data and status will be
+#' resetted. "LVL2" resets only LVL2 (warn, rem, units) data and status and
+#' "all" resets all data and status to the initial state for the site.
 #'
 #' @family Data Flow
 #'
@@ -1158,6 +1180,104 @@ df_who_ready_to_lvl2 <- function(filter = c('all', 'ready', 'freeze', 'done'),
       # STEP 3
       # Get the TO_LVL2 flag
       purrr::modify_depth(1, c('LVL1', 'TO_LVL2'), .null = NA)
+
+    # STEP 3
+    # Prepare the results
+    # 3.1 Name the list elements
+    names(whos_ready) <- site_folders
+    # 3.2 filter the results
+    if (filter != 'all') {
+      whos_ready <- whos_ready[whos_ready == filter]
+    }
+
+    # STEP 4
+    # Return the list
+    return(whos_ready)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_who_ready_to_lvl2',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_who_ready_to_lvl2',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_who_ready_to_lvl2',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Who is ready the desired level?
+#'
+#' Check the site status files to list who is ready to move to target
+#'
+#' This function check the status files of all sites and list the status
+#' for the desired level.
+#' \code{filter} parameter can be used to filter the results by any status:
+#'
+#'   \itemize{
+#'     \item{\code{all} retrieves all the statuses}
+#'     \item{\code{ready} retrieves only those sites marked to pass to level 2}
+#'     \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
+#'     \item{\code{done} retrieves only those sites already passed to level 2}
+#'   }
+#'
+#' @family Data Flow
+#'
+#' @param level string indicating the level to check. Accepted values are
+#'   "lvl2", "rem" and "units".
+#'
+#' @param filter character vector indicating by which status results must
+#'   been filtered. Accepted values are "all" (default), "ready", "freeze" or "done"
+#'   (see details)
+#'
+#' @return A list with length equal to the number of sites containing the
+#'   \code{TO_[level]} flag of the status files.
+#'
+#' @export
+
+# START
+# Function declaration
+df_whos_ready_to <- function(level = c('lvl2', 'rem', 'units'),
+                             filter = c('all', 'ready', 'freeze', 'done'),
+                             parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Checking arguments (match.arg throws an error if not matching)
+    level <- match.arg(level)
+    level <- switch(level,
+                    lvl2 = c('LVL1', 'TO_LVL2'),
+                    rem = c('LVL2', 'TO_REM'),
+                    units = c('LVL2', 'TO_UNITS'))
+
+    filter <- match.arg(filter)
+    filter <- switch(filter,
+                     all = 'all',
+                     ready = 'READY',
+                     freeze = 'FREEZE',
+                     done = 'DONE')
+
+    # STEP 1
+    # Getting the site codes to pass to df_get_status
+    site_folders <- df_get_data_folders(parent_logger = parent_logger) %>%
+      stringr::str_sub(6, -1)
+
+    # STEP 2
+    # Get the statuses
+    whos_ready <- site_folders %>%
+      purrr::map(df_get_status, parent_logger = parent_logger) %>%
+      # STEP 3
+      # Get the TO_LVL2 flag
+      purrr::modify_depth(1, level, .null = NA)
 
     # STEP 3
     # Prepare the results

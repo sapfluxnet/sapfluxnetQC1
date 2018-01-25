@@ -21,7 +21,7 @@ load(file = file.path('Data', 'Lvl_2', 'lvl2_out_warn', paste0(code, '.RData')))
 sfn_data <- eval(as.name(code))
 
 # 2. process outliers (first step, complete)
-sfn_data_out_rem <- out_remove(sfn_data, substitute = TRUE,
+sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
                                parent_logger = 'Outliers_remove')
 
 # 3. get the stored values and the original values

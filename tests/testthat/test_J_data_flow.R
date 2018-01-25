@@ -391,7 +391,7 @@ test_that('function works', {
 })
 
 ################################################################################
-context('J9. who is ready to level 2?')
+context('J9. who is ready to any level?')
 
 # preparing the data folder
 unlink('Data', recursive = TRUE)
@@ -422,48 +422,91 @@ df_set_status(
 df_set_status(
   'baz',
   QC = list(DONE = TRUE, DATE = Sys.Date()),
-  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'DONE')
+  LVL1 = list(STORED = TRUE, DATE = Sys.Date(), TO_LVL2 = 'DONE'),
+  LVL2 = list(STORED = TRUE, DATE = Sys.Date(), STEP = 'UNITS',
+              TO_REM = 'DONE', TO_UNITS = 'DONE')
 )
 
 # testing if function works
-whos_ready <- df_who_ready_to_lvl2()
+whos_ready_lvl2 <- df_whos_ready_to(level = 'lvl2', filter = 'all')
+whos_ready_rem <- df_whos_ready_to(level = 'rem', filter = 'all')
+whos_ready_units <- df_whos_ready_to(level = 'units', filter = 'all')
 
 test_that('results are as expected',{
-  expect_is(whos_ready, 'list')
-  expect_length(whos_ready, 3)
-  expect_identical(whos_ready[['foo']], 'READY')
-  expect_identical(whos_ready[['bar']], 'FREEZE' )
-  expect_identical(whos_ready[['baz']], 'DONE')
+  expect_is(whos_ready_lvl2, 'list')
+  expect_is(whos_ready_rem, 'list')
+  expect_is(whos_ready_units, 'list')
+  expect_length(whos_ready_lvl2, 3)
+  expect_length(whos_ready_rem, 3)
+  expect_length(whos_ready_units, 3)
+  expect_identical(whos_ready_lvl2[['foo']], 'READY')
+  expect_identical(whos_ready_lvl2[['bar']], 'FREEZE' )
+  expect_identical(whos_ready_lvl2[['baz']], 'DONE')
+  expect_identical(whos_ready_rem[['foo']], 'FREEZE')
+  expect_identical(whos_ready_rem[['bar']], 'FREEZE' )
+  expect_identical(whos_ready_rem[['baz']], 'DONE')
+  expect_identical(whos_ready_units[['foo']], 'FREEZE')
+  expect_identical(whos_ready_units[['bar']], 'FREEZE' )
+  expect_identical(whos_ready_units[['baz']], 'DONE')
 })
 
 # testing filter argument
-whos_ready_true <- df_who_ready_to_lvl2(filter = 'ready')
-whos_ready_freeze <- df_who_ready_to_lvl2(filter = 'freeze')
-whos_ready_done <- df_who_ready_to_lvl2(filter = 'done')
+whos_ready_true_lvl2 <- df_whos_ready_to('lvl2', filter = 'ready')
+whos_ready_freeze_lvl2 <- df_whos_ready_to('lvl2', filter = 'freeze')
+whos_ready_done_lvl2 <- df_whos_ready_to('lvl2', filter = 'done')
+
+whos_ready_true_rem <- df_whos_ready_to('rem', filter = 'ready')
+whos_ready_freeze_rem <- df_whos_ready_to('rem', filter = 'freeze')
+whos_ready_done_rem <- df_whos_ready_to('rem', filter = 'done')
+
+whos_ready_true_units <- df_whos_ready_to('units', filter = 'ready')
+whos_ready_freeze_units <- df_whos_ready_to('units', filter = 'freeze')
+whos_ready_done_units <- df_whos_ready_to('units', filter = 'done')
+
 test_that('filtering is as expected',{
-  expect_is(whos_ready_true, 'list')
-  expect_length(whos_ready_true, 1)
-  expect_identical(whos_ready[['foo']], 'READY')
-  expect_is(whos_ready_freeze, 'list')
-  expect_length(whos_ready_freeze, 1)
-  expect_identical(whos_ready[['bar']], 'FREEZE' )
-  expect_is(whos_ready_done, 'list')
-  expect_length(whos_ready_done, 1)
-  expect_identical(whos_ready[['baz']], 'DONE')
+  expect_is(whos_ready_true_lvl2, 'list')
+  expect_length(whos_ready_true_lvl2, 1)
+  expect_identical(whos_ready_true_lvl2[['foo']], 'READY')
+  expect_is(whos_ready_freeze_lvl2, 'list')
+  expect_length(whos_ready_freeze_lvl2, 1)
+  expect_identical(whos_ready_freeze_lvl2[['bar']], 'FREEZE' )
+  expect_is(whos_ready_done_lvl2, 'list')
+  expect_length(whos_ready_done_lvl2, 1)
+  expect_identical(whos_ready_done_lvl2[['baz']], 'DONE')
+
+  expect_is(whos_ready_true_rem, 'list')
+  expect_length(whos_ready_true_rem, 0)
+  expect_is(whos_ready_freeze_rem, 'list')
+  expect_length(whos_ready_freeze_rem, 2)
+  expect_identical(whos_ready_freeze_rem[['foo']], 'FREEZE' )
+  expect_identical(whos_ready_freeze_rem[['bar']], 'FREEZE' )
+  expect_is(whos_ready_done_rem, 'list')
+  expect_length(whos_ready_done_rem, 1)
+  expect_identical(whos_ready_done_rem[['baz']], 'DONE')
+
+  expect_is(whos_ready_true_units, 'list')
+  expect_length(whos_ready_true_units, 0)
+  expect_is(whos_ready_freeze_units, 'list')
+  expect_length(whos_ready_freeze_units, 2)
+  expect_identical(whos_ready_freeze_units[['foo']], 'FREEZE' )
+  expect_identical(whos_ready_freeze_units[['bar']], 'FREEZE' )
+  expect_is(whos_ready_done_units, 'list')
+  expect_length(whos_ready_done_units, 1)
+  expect_identical(whos_ready_done_units[['baz']], 'DONE')
 })
 
 
 # testing if empty
 unlink(file.path('Data', 'bar', 'bar_status.yaml'))
 
-whos_ready_2 <- suppressWarnings(df_who_ready_to_lvl2())
+whos_ready_2 <- suppressWarnings(df_whos_ready_to('lvl2', filter = 'all'))
 
 test_that('if not status NA is returned', {
   expect_is(whos_ready_2, 'list')
   expect_length(whos_ready_2, 3)
-  expect_identical(whos_ready[['foo']], 'READY')
+  expect_identical(whos_ready_2[['foo']], 'READY')
   expect_true(is.na(whos_ready_2['bar']))
-  expect_identical(whos_ready[['baz']], 'DONE')
+  expect_identical(whos_ready_2[['baz']], 'DONE')
 })
 
 ################################################################################
@@ -674,6 +717,8 @@ df_start_status('bar')
 dir.create(file.path('Data', 'foo', 'Lvl_2'))
 dir.create(file.path('Data', 'bar', 'Lvl_2'))
 dir.create(file.path('Data', 'baz', 'Lvl_2'))
+
+df_reset_data_status('baz', 'LVL2') # because what we did in J9
 
 df_set_status('foo', LVL1 = list(TO_LVL2 = 'READY'))
 df_set_status('bar', LVL1 = list(TO_LVL2 = 'READY'))
