@@ -1775,3 +1775,52 @@ df_warn_to_rem <- function(parent_logger = 'test') {
                                                         'df_warn_to_rem',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Function to pass from out_rem to out_units
+#'
+#' REM to UNITS transfer
+#'
+#' This function is in charge of check for sites ready to pass to out_units,
+#' perform the available transformations for that site and write the resulting
+#' SfnData in the destination folder (out_units)
+#'
+#' @family Data Flow
+#'
+#' @return Nothing, all the process is internal
+#'
+#' @export
+
+df_rem_to_units <- function(parent_logger = 'test') {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Get the sites ready to tranform!
+    sites_list <- df_whos_ready_to('units', 'ready', parent_logger = parent_logger)
+
+    # STEP 1
+    # Start the transformations
+    sites_list %>%
+      # read the SfnDatas
+      purrr::map(
+        ~ df_read_SfnData(.x, 'out_rem', parent_logger = parent_logger)
+      ) #%>%
+      # 1.1 unit 1
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_rem_to_units',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_rem_to_units',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_rem_to_units',
+                                                        sep = '.'))})
+}
