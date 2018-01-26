@@ -845,3 +845,143 @@ qc_out_of_range <- function(SfnData, parent_logger = 'test') {
                                                         'qc_out_of_range',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Outliers process
+#'
+#' This function substitute the outliers based on the *_to_remove files found
+#' in the out_warn folder for any site.
+#'
+#' @family Quality Checks Functions
+#'
+#' @param site character indicating the site to process
+#'
+#' @return an SfnData with the outliers and ranges substituted
+#'
+#' @export
+
+qc_outliers_process <- function(site) {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (!is.character(site)) {
+      stop('site provided is not a character')
+    }
+
+    # STEP 1
+    # Prepare the stuff
+    # 1.1 Load the *_to_remove files
+    out_to_remove <- readr::read_delim(
+      file.path('Data', site, 'Lvl_2', 'lvl2_out_warn',
+                paste0(site, '_out_to_remove.txt')),
+      delim = ' '
+    )
+
+    ranges_to_remove <- readr::read_delim(
+      file.path('Data', site, 'Lvl_2', 'lvl2_out_warn',
+                paste0(site, '_ranges_to_remove.txt')),
+      delim = ' '
+    )
+
+    # 1.2 load the SfnData
+    sfn_data <- df_read_SfnData(site, 'out_warn', parent_logger = parent_logger)
+
+    # 1.3 get the outliers substitution values (TIME CONSUMING STEP!!!!)
+    sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
+                                      parent_logger = parent_logger)
+
+    # STEP 2
+    # Substitutes Time!!!
+    # 2.1 get the sapf and env data and their flags
+    sapf_data <- get_sapf(sfn_data)
+    sapf_flags <- get_sapf_flags(sfn_data)
+    sapf_data_out_rem <- get_sapf(sfn_data_out_rem)
+    sapf_flags_out_rem <- get_sapf_flags(sfn_data_out_rem)
+    env_data <- get_env(sfn_data)
+    env_flags <- get_env_flags(sfn_data)
+    env_data_out_rem <- get_env(sfn_data_out_rem)
+    env_flags_out_rem <- get_env_flags(sfn_data_out_rem)
+
+    # 2.2 substitute them!
+    # 2.2.1 outliers
+    for (i in 1:nrow(out_to_remove)) {
+
+      index <- out_to_remove[['index']][i]
+      variable <- out_to_remove[['variable']][i]
+
+      if (variable %in% names(sapf_data)) {
+        sapf_data[index, variable] <- sapf_data_out_rem[index, variable]
+
+        # 2.2.1.1 update flags also
+        sapf_flags[index, variable] <- sapf_flags_out_rem[index, variable]
+      }
+
+      if (variable %in% names(env_data)) {
+        env_data[index, variable] <- env_data_out_rem[index, variable]
+
+        # 2.2.1.1 update flags also
+        env_flags[index, variable] <- env_flags_out_rem[index, variable]
+      }
+    }
+
+    # 2.2.2 ranges (convert to NA because we can inpute them later)
+    for (i in 1:nrow(ranges_to_remove)) {
+
+      index <- ranges_to_remove[['index']][i]
+      variable <- ranges_to_remove[['variable']][i]
+
+      if (variable %in% names(sapf_data)) {
+        sapf_data[index, variable] <- NA
+
+        # 2.2.2.1 update flags also
+        if (sapf_flags[index, variable] == '') {
+          sapf_flags[index, variable] <- 'RANGE_REMOVE'
+        } else {
+          sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
+                                               '; RANGE_REMOVE')
+        }
+      }
+
+      if (variable %in% names(env_data)) {
+        env_data[index, variable] <- NA
+
+        # 2.2.2.1 update flags also
+        if (env_flags[index, variable] == '') {
+          env_flags[index, variable] <- 'RANGE_REMOVE'
+        } else {
+          env_flags[index, variable] <- paste(env_flags[index, variable],
+                                               '; RANGE_REMOVE')
+        }
+      }
+    }
+
+    # STEP 3
+    # 3.1 Build the results
+    get_sapf(sfn_data) <- sapf_data[,-1]
+    get_sapf_flags(sfn_data) <- sapf_flags[,-1]
+    get_env(sfn_data) <- env_data[,-1]
+    get_env_flags(sfn_data) <- env_flags[,-1]
+
+    # 3.2 return them!
+    return(sfn_data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_outliers_process',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_outliers_process',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_outliers_process',
+                                                        sep = '.'))})
+}

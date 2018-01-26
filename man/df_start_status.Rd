@@ -33,6 +33,7 @@ Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_report_folder_creation}},
   \code{\link{df_reset_data_status}},
   \code{\link{df_set_status}},
+  \code{\link{df_warn_to_rem}},
   \code{\link{df_whos_ready_to}},
   \code{\link{df_write_SfnData}},
   \code{\link{sfn_data_constructor}}

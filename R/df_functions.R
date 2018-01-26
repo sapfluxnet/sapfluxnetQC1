@@ -1719,3 +1719,46 @@ df_lvl1_to_lvl2 <- function(parent_logger = 'test') {
                                                         'df_lvl1_to_lvl2',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Function to pass from out_warn to out_rem
+#'
+#' WARN to REM transfer
+#'
+#' This function is in charge of check for sites ready to pass to out_rem,
+#' remove the outliers indicated in the accesory files and saving the final
+#' SfnData objects in the corresponding folder (out_rem).
+#'
+#' @family Data Flow
+#'
+#' @return Nothing, all the process is internal
+#'
+#' @export
+
+df_warn_to_rem <- function(parent_logger = 'test') {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Identify the sites to move
+    sites_list <- df_whos_ready_to('rem', 'ready', parent_logger = parent_logger)
+
+
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'df_warn_to_rem',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'df_warn_to_rem',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'df_warn_to_rem',
+                                                        sep = '.'))})
+}
