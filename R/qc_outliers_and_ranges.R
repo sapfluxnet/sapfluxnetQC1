@@ -860,7 +860,7 @@ qc_out_of_range <- function(SfnData, parent_logger = 'test') {
 #'
 #' @export
 
-qc_outliers_process <- function(site) {
+qc_outliers_process <- function(site, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({

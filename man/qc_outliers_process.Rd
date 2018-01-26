@@ -4,7 +4,7 @@
 \alias{qc_outliers_process}
 \title{Outliers process}
 \usage{
-qc_outliers_process(site)
+qc_outliers_process(site, parent_logger = "test")
 }
 \arguments{
 \item{site}{character indicating the site to process}

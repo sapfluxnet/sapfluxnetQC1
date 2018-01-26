@@ -1744,7 +1744,20 @@ df_warn_to_rem <- function(parent_logger = 'test') {
     # Identify the sites to move
     sites_list <- df_whos_ready_to('rem', 'ready', parent_logger = parent_logger)
 
-
+    # STEP 1
+    # Substitute outliers, remove out of range values
+    sites_list %>%
+      purrr::map(qc_outliers_process, parent_logger = parent_logger) %>%
+      # 1.1 write the SfnData objects to the corresponding folders
+      purrr::walk(
+        df_write_SfnData, level = 'out_rem',
+        parent_logger = parent_logger
+      )
+    # 1.2 update the status of the site
+    sites_list %>%
+      purrr::walk(
+        ~ df_set_status(.x, LVL2 = list(STEP = "REM", TO_REM = 'DONE'))
+      )
 
   },
 
