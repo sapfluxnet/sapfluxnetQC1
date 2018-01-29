@@ -1571,6 +1571,84 @@ qc_ext_radiation <- function(data, site_md, add_solar_ts = FALSE,
 }
 
 ################################################################################
+#' Calculation of VPD from rh and ta
+#'
+#' Calculate the VPD if needed from other environmental variables
+#'
+#' The calculations for this function were obtained from the REddyProc R package
+#' (https://cran.r-project.org/package=REddyProc) by the MPI-BGC in Jena
+#' licensed under GPL > 2
+#'
+#' @family Unit conversion
+#'
+#' @param data Data frame containing the environmental data
+#'
+#' @return a Data frame of the environmental data with the new VPD variable
+#'   calculated
+#'
+#' @export
+
+# START
+# Function declaration
+qc_vpd <- function(data, parent_logger = 'test') {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Check arguments
+    # data frame
+    if (!is.data.frame(data)) {
+      stop("data object is not a data frame")
+    }
+
+    # check variables
+    if (any(is.null(data[['rh']], is.null(data[['ta']])))) {
+      stop("data not contains rh and/or ta variables")
+    }
+
+    # check if vpd already exists
+    if (!is.null(data[['vpd']])) {
+      stop("data already has a vpd variable. Please revise if there",
+           " is really necessary to recalculate vpd")
+    }
+
+    # STEP 1
+    # Get the values of ta and rh
+    ta <- data[['ta']]
+    rh <- data[['rh']]
+
+    # STEP 2
+    # Calculate the VPD
+    vpd <- 6.1078 * (1 - rh / 100) * exp(17.08085 * ta / (234.175 + ta))
+
+    # STEP 3
+    # Build the data res object
+    data[['vpd']] <- vpd
+
+    # STEP 4
+    # Return the data
+    return(data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_vpd',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_vpd',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_vpd',
+                                                        sep = '.'))})
+}
+
+################################################################################
 #' Presence of variables needed for transformations summary
 #'
 #' Summary table for variables needed for unit and any other kind of conversions

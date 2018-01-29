@@ -1809,10 +1809,10 @@ df_rem_to_units <- function(parent_logger = 'test') {
       purrr::map(
         ~ df_read_SfnData(.x, 'out_rem', parent_logger = parent_logger)
       ) #%>%
-      # 1.1 unit 1
-      # 1.2 unit 2
-      # 1.3 unit 3
-      # 1.4 unit 4
+      # 1.1 unit 1 sapflow measurements
+      # 1.2 unit 2 vpd
+      # 1.3 unit 3 incoming radiation
+      # 1.4 unit 4 extraterrestrial radiation
   },
 
   # handlers
