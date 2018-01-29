@@ -1742,7 +1742,9 @@ df_warn_to_rem <- function(parent_logger = 'test') {
 
     # STEP 0
     # Identify the sites to move
-    sites_list <- df_whos_ready_to('rem', 'ready', parent_logger = parent_logger)
+    sites_list <- names(
+      df_whos_ready_to('rem', 'ready', parent_logger = parent_logger)
+    )
 
     # STEP 1
     # Substitute outliers, remove out of range values

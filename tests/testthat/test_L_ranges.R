@@ -1,6 +1,146 @@
 library(sapfluxnetQC1)
 
-context('L1. Ranges')
+context('L1. Outliers')
+
+# needed data
+load('FOO.RData')
+sapf_data <- get_sapf(FOO)
+env_data <- get_env(FOO)
+sapf_flags <- get_sapf_flags(FOO)
+env_flags <- get_env_flags(FOO)
+
+# data structure & *_to_remove files
+df_folder_structure()
+dir.create(file.path('Data', 'FOO', 'Lvl_2'), recursive = TRUE)
+df_lvl2_folder_structure('FOO')
+# file.copy(from = c('FOO.RData'),
+#           to = file.path('Data', 'FOO', 'Lvl_2', 'lvl_2_out_warn', 'FOO.RData'))
+df_start_status('FOO')
+df_set_status(
+  'FOO',
+  QC = list(DATE = as.character(Sys.Date()), DONE = "TRUE"),
+  LVL1 = list(DATE = as.character(Sys.Date()), STORED = "TRUE", TO_LVL2 = 'DONE'),
+  LVL2 = list(DATE = as.character(Sys.Date()), STORED = "TRUE", STEP = "WARN",
+              TO_REM = "READY", TO_UNITS = "FREEZE")
+)
+
+out_to_remove <- data.frame(
+  stringsAsFactors = FALSE,
+  variable = c(rep(c("AUS_ELL_HB_Edi_Js_1", "AUS_ELL_HB_Era_Js_2", "AUS_ELL_HB_Edi_Js_3"), each = 5),
+               rep(c('ta', 'rh', 'vpd', 'ppfd_in', 'ws', 'precip'), each = 5)),
+  index = rep(20001:20005, 9)
+)
+
+suppressWarnings(write.table(
+  out_to_remove,
+  file = file.path('Data', 'FOO', 'Lvl_2', 'lvl_2_out_warn', 'FOO_out_to_remove.txt'),
+  append = TRUE, row.names = FALSE, col.names = TRUE
+))
+
+ranges_to_remove <- data.frame(
+  stringsAsFactors = FALSE,
+  variable = c(rep(c("AUS_ELL_HB_Edi_Js_1", "AUS_ELL_HB_Era_Js_2", "AUS_ELL_HB_Edi_Js_3"), each = 5),
+               rep(c('ta', 'rh', 'vpd', 'ppfd_in', 'ws', 'precip'), each = 5)),
+  index = rep(20006:20010, 9)
+)
+
+suppressWarnings(write.table(
+  ranges_to_remove,
+  file = file.path('Data', 'FOO', 'Lvl_2', 'lvl_2_out_warn', 'FOO_ranges_to_remove.txt'),
+  append = TRUE, row.names = FALSE, col.names = TRUE
+))
+
+# create fake flags
+sapf_flags[20001:20010, -1] <- rep(c('OUT_WARN', 'OUT_RANGE'), each = 5)
+env_flags[20001:20010, -1] <- rep(c('OUT_WARN', 'OUT_RANGE'), each = 5)
+
+# create fake data for out_remove
+sapf_data[20001:20005, -1] <- 100000
+env_data[20001:20005, -1] <- 100000
+
+get_env_flags(FOO) <- env_flags[,-1]
+get_sapf_flags(FOO) <- sapf_flags[,-1]
+get_si_code(FOO) <- rep('FOO', nrow(env_flags))
+get_env(FOO) <- env_data[,-1]
+get_sapf(FOO) <- sapf_data[,-1]
+
+df_write_SfnData(FOO, 'out_warn')
+
+# remove the outs (TIME CONSUMING!!)
+res <- qc_outliers_process('FOO')
+
+# actual tests
+test_that('result is an SfnData object', {
+  expect_is(res, 'SfnData')
+})
+
+test_that('fake flags values have changed correctly', {
+  env_flags_res <- get_env_flags(res)
+  sapf_flags_res <- get_sapf_flags(res)
+
+  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REPLACED')))
+  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REPLACED')))
+  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
+  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+})
+
+test_that('values are substituted', {
+  env_data_res <- get_env(res)
+  sapf_data_res <- get_sapf(res)
+
+  expect_true(all(is.na(env_data_res[20006:20010, -1])))
+  expect_true(all(is.na(sapf_data_res[20006:20010, -1])))
+  expect_false(any(env_data_res[20001:20005, -1] == env_data[20001:20005, -1]))
+  expect_false(any(sapf_data_res[20001:20005, -1] == sapf_data[20001:20005, -1]))
+})
+
+################################################################################
+context('L2. Data flow inside level 2')
+
+df_warn_to_rem()
+
+test_that('files are written correctly', {
+  expect_true(
+    file.exists(file.path('Data', 'FOO', 'Lvl_2', 'lvl_2_out_rem', 'FOO.RData'))
+  )
+
+  env_data_pre <- get_env(df_read_SfnData('FOO', 'out_warn'))[20001:20010, -1]
+  env_data_post <- get_env(df_read_SfnData('FOO', 'out_rem'))[20001:20010, -1]
+  sapf_data_pre <- get_sapf(df_read_SfnData('FOO', 'out_warn'))[20001:20010, -1]
+  sapf_data_post <- get_sapf(df_read_SfnData('FOO', 'out_rem'))[20001:20010, -1]
+
+  expect_true(all(is.na(env_data_post[6:10,])))
+  expect_true(all(is.na(sapf_data_post[6:10,])))
+  expect_false(all(is.na(env_data_pre[6:10,])))
+  expect_false(all(is.na(sapf_data_pre[6:10,])))
+  expect_false(any(env_data_pre[1:5,] == env_data_post[1:5,]))
+  expect_false(any(sapf_data_pre[1:5,] == sapf_data_post[1:5,]))
+})
+
+test_that('status file is updated', {
+  status_foo <- df_get_status('FOO')
+
+  expect_identical(status_foo$LVL2$TO_REM, 'DONE')
+  expect_identical(status_foo$LVL2$TO_UNITS, 'FREEZE')
+  expect_identical(status_foo$LVL2$STEP, 'REM')
+})
+
+
+
+
+################################################################################
+# clean
+unlink('Data', recursive = TRUE)
+unlink('Logs', recursive = TRUE)
+unlink('Reports', recursive = TRUE)
+unlink('Templates', recursive = TRUE)
+
+################################################################################
+context('L3. Ranges')
 
 # needed data
 load('FOO.RData')

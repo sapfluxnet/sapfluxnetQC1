@@ -875,13 +875,13 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
     # Prepare the stuff
     # 1.1 Load the *_to_remove files
     out_to_remove <- readr::read_delim(
-      file.path('Data', site, 'Lvl_2', 'lvl2_out_warn',
+      file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
                 paste0(site, '_out_to_remove.txt')),
       delim = ' '
     )
 
     ranges_to_remove <- readr::read_delim(
-      file.path('Data', site, 'Lvl_2', 'lvl2_out_warn',
+      file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
                 paste0(site, '_ranges_to_remove.txt')),
       delim = ' '
     )
