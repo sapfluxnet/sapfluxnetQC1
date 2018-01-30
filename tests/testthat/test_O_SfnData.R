@@ -14,7 +14,8 @@ foo_sfndata <- sfn_data_constructor(
   stand_md = stand_md,
   species_md = species_md_spnames,
   plant_md = plant_md_spnames,
-  env_md = env_md
+  env_md = env_md,
+  solar_timestamp = NULL
 )
 
 rows_joined <- length(
@@ -118,6 +119,7 @@ test_that('subset method works', {
   expect_equal(nrow(get_sapf(foo_subset)), 2000)
   expect_equal(nrow(get_env(foo_subset)), 2000)
   expect_equal(length(get_timestamp(foo_subset)), 2000)
+  expect_equal(length(get_solar_timestamp(foo_subset)), 2000)
   expect_equal(length(get_si_code(foo_subset)), 2000)
   expect_equal(nrow(get_sapf_flags(foo_subset)), 2000)
   expect_equal(nrow(get_env_flags(foo_subset)), 2000)
@@ -147,6 +149,7 @@ test_that('get methods work', {
   expect_equal(nrow(get_env_flags(foo_sfndata)), rows_joined)
   expect_equal(length(get_si_code(foo_sfndata)), rows_joined)
   expect_equal(length(get_timestamp(foo_sfndata)), rows_joined)
+  expect_equal(length(get_solar_timestamp(foo_sfndata)), rows_joined)
   expect_is(get_site_md(foo_sfndata), 'data.frame')
   expect_is(get_stand_md(foo_sfndata), 'data.frame')
   expect_is(get_species_md(foo_sfndata), 'data.frame')
@@ -195,5 +198,11 @@ test_that('assignation method works', {
   expect_error((get_timestamp(foo_sfndata) <- 1),
                'assignment of an object of class “numeric” is not valid')
   expect_error((get_timestamp(foo_sfndata) <- as.POSIXct('2011-06-23 21:59:59 -03')),
+               'dimensions are incorrect')
+  expect_error((get_solar_timestamp(foo_sfndata) <- '2011-06-23 21:59:59 -03'),
+               'assignment of an object of class “character” is not valid')
+  expect_error((get_solar_timestamp(foo_sfndata) <- 1),
+               'assignment of an object of class “numeric” is not valid')
+  expect_error((get_solar_timestamp(foo_sfndata) <- as.POSIXct('2011-06-23 21:59:59 -03')),
                'dimensions are incorrect')
 })
