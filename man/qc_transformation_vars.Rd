@@ -29,5 +29,6 @@ data transformations/conversions.
 }
 \seealso{
 Other Unit conversion: \code{\link{qc_cm_cm_h}},
-  \code{\link{qc_transf_list}}, \code{\link{qc_vpd}}
+  \code{\link{qc_transf_list}},
+  \code{\link{qc_units_process}}, \code{\link{qc_vpd}}
 }

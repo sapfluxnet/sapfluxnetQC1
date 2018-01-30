@@ -1890,3 +1890,136 @@ qc_transf_list <- function(transf_info, parent_logger = 'test') {
                                                         'qc_transf_list',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' Units process
+#'
+#' This function checks for available transformations and perform them if needed
+#'
+#' List of available transformations are obtained from \code{\link{qc_transf_list}}
+#'
+#' @family Unit conversion
+#'
+#' @param sfndata SfnData object to perform the conversions
+#'
+#' @return An SfnData object with the newly calculated variables included
+#'
+#' @export
+
+# START FUNCTION
+# Function declaration
+qc_units_process <- function(sfndata, parent_logger = 'test') {
+
+  # STEP 0
+  # Argument checks
+  if (!is(sfndata, "SfnData")) {
+    stop('Data provided is not a SfnData object')
+  }
+
+  # STEP 1
+  # Get the transformation list
+  transf_list <- qc_transf_list(
+    qc_transformation_vars(sfndata, parent_logger = parent_logger),
+    parent_logger = parent_logger
+  )
+
+  rownames(transf_list) <- transf_list[['Transformation']]
+
+  # STEP 2
+  # Radiation conversion
+  if (transf_list['radiation_conversion', 'Available']) {
+    env_data <- get_env(sfndata, parent_logger = parent_logger)
+    env_modf <- qc_rad_conversion(env_data, parent_logger = parent_logger)
+    get_env(sfndata) <- env_modf[,-1]
+  }
+
+  # STEP 3
+  # VPD
+  if (transf_list['VPD_calculation', 'Available']) {
+    env_data <- get_env(sfndata, parent_logger = parent_logger)
+    env_modf <- qc_vpd(env_data, parent_logger = parent_logger)
+    # 3.1 modify the env_data from the sfndata
+    get_env(sfndata) <- env_modf[,-1]
+  }
+
+  # STEP 4
+  # Solar Time
+  if (transf_list['solar_time', 'Available']) {
+    env_data <- get_env(sfndata, parent_logger = parent_logger)
+    site_md <- get_site_md(sfndata, parent_logger = parent_logger)
+    env_modf <- qc_ext_radiation(
+      env_data, site_md, add_solar_ts = TRUE,
+      parent_logger = parent_logger
+    )
+
+    # 4.1 add the solar timestamp to the SfnData
+    # get_solar_timestamp(sfndata) <- env_modf[['solarTIMESTAMP']]
+
+    # 4.2 modify the env_data from the sfndata
+    get_env(sfndata) <- env_modf %>%
+      dplyr::select(-TIMESTAMP, -solarTIMESTAMP) %>%
+      as.data.frame(stringsAsFactors = FALSE)
+  }
+
+  # STEP 5
+  # sapf_units
+  # 5.1 get the sapwood metadata
+  sapw_md <- get_plant_md(sfndata, parent_logger = parent_logger) %>%
+    qc_get_sapw_md(parent_logger = parent_logger) %>%
+    qc_sapw_area_calculator(parent_logger = parent_logger)
+
+  # 5.2 to plant
+  if (transf_list['sapf_units_to_plant', 'Available']) {
+    # 5.2.1 get the sapf_modif
+    sapf_modf <- get_sapf(sfndata, parent_logger = parent_logger) %>%
+      qc_sapw_conversion(
+        sapw_md, output_units = 'plant', parent_logger = parent_logger
+      )
+
+    # 5.2.2 modify the sapf data from the sfndata
+    sfndata_plant <- sfndata
+    get_sapf(sfndata_plant) <- sapf_modf %>%
+      dplyr::select(-TIMESTAMP) %>%
+      as.data.frame(stringsAsFactors = FALSE)
+
+    # 5.2.3 write the plant SfnData object
+    # df_write_SfnData(sfndata_plant, 'units_trans', parent_logger = parent_logger)
+  }
+
+  # 5.3 to sapwood
+  if (transf_list['sapf_units_to_sapwood', 'Available']) {
+    # 5.3.1 get the sapf_modif
+    sapf_modf <- get_sapf(sfndata, parent_logger = parent_logger) %>%
+      qc_sapw_conversion(
+        sapw_md, output_units = 'sapwood', parent_logger = parent_logger
+      )
+
+    # 5.3.2 modify the sapf data from the sfndata
+    sfndata_sapwood <- sfndata
+    get_sapf(sfndata_sapwood) <- sapf_modf %>%
+      dplyr::select(-TIMESTAMP) %>%
+      as.data.frame(stringsAsFactors = FALSE)
+
+    # 5.3.3 write the plant SfnData object
+    # df_write_SfnData(sfndata_sapwood, 'units_trans', parent_logger = parent_logger)
+  }
+
+  # 5.4 to leaf
+  if (transf_list['sapf_units_to_leaf', 'Available']) {
+    # 5.4.1 get the sapf_modif
+    sapf_modf <- get_sapf(sfndata, parent_logger = parent_logger) %>%
+      qc_sapw_conversion(
+        sapw_md, output_units = 'leaf', parent_logger = parent_logger
+      )
+
+    # 5.4.2 modify the sapf data from the sfndata
+    sfndata_leaf <- sfndata
+    get_sapf(sfndata_leaf) <- sapf_modf %>%
+      dplyr::select(-TIMESTAMP) %>%
+      as.data.frame(stringsAsFactors = FALSE)
+
+    # 5.4.3 write the plant SfnData object
+    # df_write_SfnData(sfndata_leaf, 'units_trans', parent_logger = parent_logger)
+  }
+
+}

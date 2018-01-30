@@ -89,5 +89,5 @@ Conversion of sap flow units to sapwood level
 \seealso{
 Other Unit conversion: \code{\link{qc_transf_list}},
   \code{\link{qc_transformation_vars}},
-  \code{\link{qc_vpd}}
+  \code{\link{qc_units_process}}, \code{\link{qc_vpd}}
 }
