@@ -1603,7 +1603,7 @@ qc_vpd <- function(data, parent_logger = 'test') {
     }
 
     # check variables
-    if (any(is.null(data[['rh']], is.null(data[['ta']])))) {
+    if (any(is.null(data[['rh']]), is.null(data[['ta']]))) {
       stop("data not contains rh and/or ta variables")
     }
 

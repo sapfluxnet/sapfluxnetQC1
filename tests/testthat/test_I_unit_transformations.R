@@ -21,6 +21,7 @@ test_that('result is a data frame with the correct variables', {
   ))))
 })
 
+################################################################################
 context('I2. qc_sapw_area_calculator')
 
 pl_data_bad_2 <- pl_data
@@ -63,6 +64,7 @@ test_that('function works', {
   expect_equal(sum(is.na(qc_sapw_area_calculator(pl_data_bad_6)$pl_sapw_area_est)), 5)
 })
 
+################################################################################
 context('I3. Sapflow unit conversion')
 
 test_that('argument checks works', {
@@ -199,6 +201,7 @@ test_that('conversion fails when there is NAs in leaf area or sapwood', {
                'sapwood area values are missing')
 })
 
+################################################################################
 context('I4. Radiation unit conversion')
 
 env_hd <- suppressWarnings(suppressMessages(dl_data('foo_env.csv','environmental_hd')))
@@ -215,7 +218,7 @@ test_that('function works', {
     'Radiation in both sw_in and ppfd_in units already exists.'
   )
   expect_warning(
-    qc_rad_conversion(subset(env_hd, select=-sw_in),'ppfd_in'),
+    qc_rad_conversion(subset(env_hd, select = -sw_in),'ppfd_in'),
     'Both sw_in and ppfd_in are missing.'
   )
 })
@@ -249,7 +252,34 @@ test_that('the new variable is added to the table and is numeric', {
 })
 
 ################################################################################
-context('I5. Soil texture classification')
+context('I5. VPD calculation')
+
+load('FOO.RData')
+foo_env <- get_env(FOO)
+orig_vpd <- foo_env[['vpd']]
+foo_no_ta <- foo_env[,c('TIMESTAMP', 'rh', 'vpd')]
+foo_no_rh <- foo_env[,c('TIMESTAMP', 'ta', 'vpd')]
+foo_no_vpd <- foo_env[,c('TIMESTAMP', 'rh', 'ta')]
+
+test_that('argument checks work', {
+  expect_error(qc_vpd('tururu'), 'data object is not a data frame')
+  expect_error(qc_vpd(foo_no_ta), 'data not contains rh and/or ta variables')
+  expect_error(qc_vpd(foo_no_rh), 'data not contains rh and/or ta variables')
+  expect_error(qc_vpd(foo_env), 'data already has a vpd variable')
+})
+
+test_that('function returns values correctly', {
+  res <- qc_vpd(foo_no_vpd)
+
+  expect_is(res, 'data.frame')
+  expect_false(is.null(res[['vpd']]))
+  # original data is wrong, with a less order of magnitude
+  expect_equal(res[['vpd']], orig_vpd*10, tolerance = 0.05)
+})
+
+
+################################################################################
+context('I6. Soil texture classification')
 
 test_data <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
                         st_silt_perc = 54, st_sand_perc = 34)
@@ -451,8 +481,7 @@ test_that('st_USDA_soil_texture is correctly generated when several classes', {
 })
 
 ################################################################################
-
-context('I6. qc_transformation_vars')
+context('I7. qc_transformation_vars')
 
 test_that('results are ok', {
   load('FOO.RData')
@@ -484,8 +513,7 @@ test_that('results are ok', {
 })
 
 ################################################################################
-
-context('I7. qc_transf_list')
+context('I8. qc_transf_list')
 
 load('FOO.RData')
 transf_vars_info <- qc_transformation_vars(FOO)
