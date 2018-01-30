@@ -1718,12 +1718,23 @@ qc_transformation_vars <- function(sfndata, parent_logger = 'test') {
       !all(is.na(get_plant_md(sfndata)$pl_leaf_area))
     )
 
+    # STEP 4
+    # VPD calculation
+    vpd_vars <- c('rh', 'ta', 'vpd')
+    vpd_loc <- rep('env_data', length(vpd_vars))
+    vpd_transf <- rep('vpd_calc', length(vpd_vars))
+    vpd_presence <- c(
+      !is.null(get_env(sfndata)$rh),
+      !is.null(get_env(sfndata)$ta),
+      !is.null(get_env(sfndata)$vpd)
+    )
+
     # STEP n
     # combining vector for each transformation in a data frame
-    vars <- c(rad_vars, exr_vars, sfu_vars)
-    loc <- c(rad_loc, exr_loc, sfu_loc)
-    transf <- c(rad_transf, exr_transf, sfu_transf)
-    presence <- c(rad_presence, exr_presence, sfu_presence)
+    vars <- c(rad_vars, exr_vars, vpd_vars, sfu_vars)
+    loc <- c(rad_loc, exr_loc, vpd_loc, sfu_loc)
+    transf <- c(rad_transf, exr_transf, vpd_transf, sfu_transf)
+    presence <- c(rad_presence, exr_presence, vpd_presence, sfu_presence)
 
     # n.1 data frame
     res <- data.frame(
@@ -1831,11 +1842,27 @@ qc_transf_list <- function(transf_info, parent_logger = 'test') {
     sfu_leaf_transf <- 'sapf_units_to_leaf_area'
     sfu_leaf_avail <- all(sfu_info_leaf$Presence)
 
+    # STEP 4
+    # VPD calculation
+    vpd_info <- transf_info %>%
+      dplyr::filter(Transformation == 'vpd_calc')
+    vpd_transf <- 'VPD_calculation'
+
+    if (vpd_info[3, 'Presence']) {
+      vpd_avail <- FALSE
+    } else {
+      if (!vpd_info[1, 'Presence'] | !vpd_info[2, 'Presence']) {
+        vpd_avail <- FALSE
+      } else {
+        vpd_avail <- TRUE
+      }
+    }
+
     # STEP n
     # build res data frame and return it
-    transf <- c(rad_transf, exr_trasnf, sfu_plant_trasnf,
+    transf <- c(rad_transf, exr_trasnf, vpd_transf, sfu_plant_trasnf,
                 sfu_sapw_trasnf, sfu_leaf_transf)
-    avail <- c(rad_avail, exr_avail, sfu_plant_avail,
+    avail <- c(rad_avail, exr_avail, vpd_avail, sfu_plant_avail,
                sfu_sapw_avail, sfu_leaf_avail)
 
     res <- data.frame(

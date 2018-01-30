@@ -489,27 +489,32 @@ test_that('results are ok', {
 
   expect_is(transf_vars_info, 'data.frame')
   expect_false(transf_vars_info$Presence[1])
-  expect_false(transf_vars_info$Presence[8])
-  expect_equal(sum(transf_vars_info$Presence == TRUE), 6)
+  expect_false(transf_vars_info$Presence[11])
+  expect_equal(sum(transf_vars_info$Presence), 9)
 
   get_plant_md(FOO)$pl_sap_units <- NA
   transf_vars_info <- qc_transformation_vars(FOO)
 
   expect_is(transf_vars_info, 'data.frame')
   expect_false(transf_vars_info$Presence[1])
-  expect_false(transf_vars_info$Presence[8])
-  expect_false(transf_vars_info$Presence[6])
-  expect_equal(sum(transf_vars_info$Presence == TRUE), 5)
+  expect_false(transf_vars_info$Presence[9])
+  expect_false(transf_vars_info$Presence[11])
+  expect_equal(sum(transf_vars_info$Presence), 8)
 
   get_plant_md(FOO)$pl_sapw_area <- c(77.06, NA, 391.30)
   transf_vars_info <- qc_transformation_vars(FOO)
 
   expect_is(transf_vars_info, 'data.frame')
   expect_false(transf_vars_info$Presence[1])
-  expect_false(transf_vars_info$Presence[8])
-  expect_false(transf_vars_info$Presence[6])
-  expect_true(transf_vars_info$Presence[7])
-  expect_equal(sum(transf_vars_info$Presence == TRUE), 5)
+  expect_false(transf_vars_info$Presence[9])
+  expect_false(transf_vars_info$Presence[11])
+  expect_true(transf_vars_info$Presence[10])
+  expect_equal(sum(transf_vars_info$Presence), 8)
+
+  expect_true(all(
+    transf_vars_info$Transformation %in% c('radiation_conversion', 'solar_time',
+                                           'vpd_calc', 'sapf_units')
+  ))
 })
 
 ################################################################################
@@ -521,4 +526,14 @@ transf_list <- qc_transf_list(transf_vars_info)
 
 test_that('results are correct', {
   expect_is(transf_list, 'data.frame')
+  expect_false(transf_list$Available[3])
+  expect_false(transf_list$Available[6])
+  expect_equal(sum(transf_list$Available), 4)
+
+  expect_true(all(
+    transf_list$Transformation %in% c('radiation_conversion', 'solar_time',
+                                      'VPD_calculation', 'sapf_units_to_plant',
+                                      'sapf_units_to_sapwood',
+                                      'sapf_units_to_leaf_area')
+  ))
 })
