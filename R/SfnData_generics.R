@@ -54,6 +54,15 @@ setGeneric(
 #' @rdname sfn_get_generics
 #' @export
 setGeneric(
+  "get_solar_timestamp",
+  function(object, ...) {
+    standardGeneric("get_solar_timestamp")
+  }
+)
+
+#' @rdname sfn_get_generics
+#' @export
+setGeneric(
   "get_si_code",
   function(object, ...) {
     standardGeneric("get_si_code")
@@ -154,6 +163,15 @@ setGeneric(
   "get_timestamp<-",
   function(object, value) {
     standardGeneric("get_timestamp<-")
+  }
+)
+
+#' @rdname sfn_replacement_generics
+#' @export
+setGeneric(
+  "get_solar_timestamp<-",
+  function(object, value) {
+    standardGeneric("get_solar_timestamp<-")
   }
 )
 

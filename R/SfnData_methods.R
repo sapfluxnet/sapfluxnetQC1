@@ -19,6 +19,9 @@
 #'
 #' @param object Object of class SfnData from which data is retrieved
 #'
+#' @param solar Logical indicating if the timestamp to return in the get_sapf,
+#'   get_env, get_sapf_flags and get_env_flags methods
+#'
 #' @name sfn_get_methods
 #' @include SfnData_class.R SfnData_generics.R
 NULL
@@ -27,10 +30,16 @@ NULL
 #' @export
 setMethod(
   "get_sapf", "SfnData",
-  function(object) {
-    # data and timestamp
+  function(object, solar = FALSE) {
+    # data
     .sapf <- slot(object, "sapf_data")
-    TIMESTAMP <- slot(object, "timestamp")
+
+    # timestamp
+    if (solar) {
+      TIMESTAMP <- slot(object, "solar_timestamp")
+    } else {
+      TIMESTAMP <- slot(object, "timestamp")
+    }
 
     # combining both
     res <- cbind(TIMESTAMP, .sapf)
@@ -44,10 +53,16 @@ setMethod(
 #' @export
 setMethod(
   "get_env", "SfnData",
-  function(object) {
-    # data and timestamp
+  function(object, solar = FALSE) {
+    # data
     .env <- slot(object, "env_data")
-    TIMESTAMP <- slot(object, "timestamp")
+
+    # timestamp
+    if (solar) {
+      TIMESTAMP <- slot(object, "solar_timestamp")
+    } else {
+      TIMESTAMP <- slot(object, "timestamp")
+    }
 
     # combining both
     res <- cbind(TIMESTAMP, .env)
@@ -61,9 +76,15 @@ setMethod(
 #' @export
 setMethod(
   "get_sapf_flags", "SfnData",
-  function(object) {
+  function(object, solar = FALSE) {
     .sapf_flags <- slot(object, "sapf_flags")
-    TIMESTAMP <- slot(object, "timestamp")
+
+    # timestamp
+    if (solar) {
+      TIMESTAMP <- slot(object, "solar_timestamp")
+    } else {
+      TIMESTAMP <- slot(object, "timestamp")
+    }
 
     # combining both
     res <- cbind(TIMESTAMP, .sapf_flags)
@@ -77,9 +98,15 @@ setMethod(
 #' @export
 setMethod(
   "get_env_flags", "SfnData",
-  function(object) {
+  function(object, solar = FALSE) {
     .env_flags <- slot(object, "env_flags")
-    TIMESTAMP <- slot(object, "timestamp")
+
+    # timestamp
+    if (solar) {
+      TIMESTAMP <- slot(object, "solar_timestamp")
+    } else {
+      TIMESTAMP <- slot(object, "timestamp")
+    }
 
     # combining both
     res <- cbind(TIMESTAMP, .env_flags)
@@ -95,6 +122,15 @@ setMethod(
   "get_timestamp", "SfnData",
   function(object) {
     slot(object, "timestamp")
+  }
+)
+
+#' @rdname sfn_get_methods
+#' @export
+setMethod(
+  "get_solar_timestamp", "SfnData",
+  function(object) {
+    slot(object, "solar_timestamp")
   }
 )
 
@@ -164,14 +200,18 @@ setMethod(
     # site code
     cat("Data from ", unique(get_si_code(object)), " site/s\n\n", sep = "")
     # number of trees
-    cat("Sapflow data:", nrow(slot(object, "sapf_data")), "observations of",
-        length(names(slot(object, "sapf_data"))), "trees/plants\n\n")
+    cat("Sapflow data: ", nrow(slot(object, "sapf_data")), " observations of ",
+        length(names(slot(object, "sapf_data"))), " trees/plants\n\n")
     # env_vars
-    cat("Environmental data:", nrow(slot(object, "env_data")), "observations.\n",
-        "Env vars:", paste(names(slot(object, "env_data"))), "\n\n")
+    cat("Environmental data: ", nrow(slot(object, "env_data")), " observations.\n",
+        "Env vars: ", paste(names(slot(object, "env_data"))), "\n\n")
     # timestamp span
-    cat("TIMESTAMP span, from", as.character(head(get_timestamp(object), 1)),
-        "to", as.character(tail(get_timestamp(object), 1)), "\n\n")
+    cat("TIMESTAMP span, from ", as.character(head(get_timestamp(object), 1)),
+        "to ", as.character(tail(get_timestamp(object), 1)), "\n\n")
+
+    # solar_timestamp
+    cat("Solar TIMESTAMP available: ", !is.null(get_solar_timestamp(object)),
+        "\n\n")
 
     # sapf_flags
     sapf_flags <- unique(unlist(stringr::str_split(unlist(lapply(slot(object, "sapf_flags"), unique)), '; ')))
@@ -226,6 +266,7 @@ setMethod(
     }
 
     TIMESTAMP <- slot(x, "timestamp")[i]
+    .solar_timestamp <- slot(x, "solar_timestamp")[i]
     .si_code <- slot(x, "si_code")[i]
 
     # create the SfnData object, the metadata slots remain without modifications
@@ -236,6 +277,7 @@ setMethod(
       sapf_flags = .sapf_flags,
       env_flags = .env_flags,
       timestamp = TIMESTAMP,
+      solar_timestamp = .solar_timestamp,
       si_code = .si_code,
       site_md = slot(x, "site_md"),
       stand_md = slot(x, "stand_md"),
@@ -336,6 +378,23 @@ setReplaceMethod(
   "get_timestamp", "SfnData",
   function(object, value) {
     slot(object, "timestamp") <- value
+
+    # check validity before return the object, we don't want a messy object
+    validity <- try(validObject(object))
+    if (is(validity, "try-error")) {
+      stop('new data is not valid: ', validity[1])
+    }
+
+    return(object)
+  }
+)
+
+#' @export
+#' @rdname sfn_replacement
+setReplaceMethod(
+  "get_solar_timestamp", "SfnData",
+  function(object, value) {
+    slot(object, "solar_timestamp") <- value
 
     # check validity before return the object, we don't want a messy object
     validity <- try(validObject(object))
@@ -473,6 +532,7 @@ setValidity(
       nrow(slot(object, "sapf_data")) != length(slot(object, "si_code")),
       nrow(slot(object, "env_data")) != length(slot(object, "si_code")),
       length(slot(object, "timestamp")) != length(slot(object, "si_code")),
+      length(slot(object, "timestamp")) != length(slot(object, "solar_timestamp")),
       nrow(slot(object, "sapf_flags")) != nrow(slot(object, "sapf_data")),
       nrow(slot(object, "sapf_flags")) != nrow(slot(object, "env_data")),
       nrow(slot(object, "env_flags")) != nrow(slot(object, "sapf_data")),

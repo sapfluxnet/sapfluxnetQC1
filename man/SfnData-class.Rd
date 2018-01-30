@@ -27,6 +27,9 @@ the site code}
 \item{\code{timestamp}}{A POSIXct vector of length \code{nrow(sapf_data)} with the
 timestamp}
 
+\item{\code{solar_timestamp}}{A POSIXct vector of length \code{nrow(sapf_data)} with
+the solar timestamp}
+
 \item{\code{site_md}}{A data frame containing the site metadata}
 
 \item{\code{stand_md}}{A data frame containing the stand metadata}

@@ -7,6 +7,7 @@
 \alias{get_sapf_flags}
 \alias{get_env_flags}
 \alias{get_timestamp}
+\alias{get_solar_timestamp}
 \alias{get_si_code}
 \alias{get_site_md}
 \alias{get_stand_md}
@@ -24,6 +25,8 @@ get_sapf_flags(object, ...)
 get_env_flags(object, ...)
 
 get_timestamp(object, ...)
+
+get_solar_timestamp(object, ...)
 
 get_si_code(object, ...)
 

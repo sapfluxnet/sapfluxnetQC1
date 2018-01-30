@@ -8,13 +8,13 @@ load('foo_objects.RData')
 
 # build the SfnData object with foo_data
 foo_sfndata <- sfn_data_constructor(
-  sapf_data_fixed,
-  env_data_fixed,
-  site_md_coordfix,
-  stand_md,
-  species_md_spnames,
-  plant_md_spnames,
-  env_md
+  sapf_data = sapf_data_fixed,
+  env_data = env_data_fixed,
+  site_md = site_md_coordfix,
+  stand_md = stand_md,
+  species_md = species_md_spnames,
+  plant_md = plant_md_spnames,
+  env_md = env_md
 )
 
 rows_joined <- length(

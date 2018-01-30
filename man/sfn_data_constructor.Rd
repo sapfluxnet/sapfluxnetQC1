@@ -6,7 +6,7 @@
 \usage{
 sfn_data_constructor(sapf_data = NULL, env_data = NULL, site_md = NULL,
   stand_md = NULL, species_md = NULL, plant_md = NULL, env_md = NULL,
-  parent_logger = "test")
+  solar_timestamp = NULL, parent_logger = "test")
 }
 \arguments{
 \item{sapf_data}{Data frame with sapflow data after QC process}

@@ -8,6 +8,7 @@
 \alias{get_sapf_flags,SfnData-method}
 \alias{get_env_flags,SfnData-method}
 \alias{get_timestamp,SfnData-method}
+\alias{get_solar_timestamp,SfnData-method}
 \alias{get_si_code,SfnData-method}
 \alias{get_site_md,SfnData-method}
 \alias{get_stand_md,SfnData-method}
@@ -16,15 +17,17 @@
 \alias{get_env_md,SfnData-method}
 \title{SfnData get methods}
 \usage{
-\S4method{get_sapf}{SfnData}(object)
+\S4method{get_sapf}{SfnData}(object, solar = FALSE)
 
-\S4method{get_env}{SfnData}(object)
+\S4method{get_env}{SfnData}(object, solar = FALSE)
 
-\S4method{get_sapf_flags}{SfnData}(object)
+\S4method{get_sapf_flags}{SfnData}(object, solar = FALSE)
 
-\S4method{get_env_flags}{SfnData}(object)
+\S4method{get_env_flags}{SfnData}(object, solar = FALSE)
 
 \S4method{get_timestamp}{SfnData}(object)
+
+\S4method{get_solar_timestamp}{SfnData}(object)
 
 \S4method{get_si_code}{SfnData}(object)
 
@@ -40,6 +43,9 @@
 }
 \arguments{
 \item{object}{Object of class SfnData from which data is retrieved}
+
+\item{solar}{Logical indicating if the timestamp to return in the get_sapf,
+get_env, get_sapf_flags and get_env_flags methods}
 }
 \description{
 Methods to get the info from the SfnData class slots

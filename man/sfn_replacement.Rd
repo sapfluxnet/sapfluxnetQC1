@@ -8,6 +8,7 @@
 \alias{get_sapf_flags<-,SfnData-method}
 \alias{get_env_flags<-,SfnData-method}
 \alias{get_timestamp<-,SfnData-method}
+\alias{get_solar_timestamp<-,SfnData-method}
 \alias{get_si_code<-,SfnData-method}
 \alias{get_site_md<-,SfnData-method}
 \alias{get_stand_md<-,SfnData-method}
@@ -25,6 +26,8 @@
 \S4method{get_env_flags}{SfnData}(object) <- value
 
 \S4method{get_timestamp}{SfnData}(object) <- value
+
+\S4method{get_solar_timestamp}{SfnData}(object) <- value
 
 \S4method{get_si_code}{SfnData}(object) <- value
 

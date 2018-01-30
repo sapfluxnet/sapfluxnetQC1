@@ -16,6 +16,9 @@
 #' @slot timestamp A POSIXct vector of length \code{nrow(sapf_data)} with the
 #'   timestamp
 #'
+#' @slot solar_timestamp A POSIXct vector of length \code{nrow(sapf_data)} with
+#'   the solar timestamp
+#'
 #' @slot site_md A data frame containing the site metadata
 #'
 #' @slot stand_md A data frame containing the stand metadata
@@ -39,6 +42,7 @@ SfnData <- setClass(
     env_flags = "data.frame",
     si_code = "character",
     timestamp = "POSIXt",
+    solar_timestamp = "POSIXt",
     site_md = "data.frame",
     stand_md = "data.frame",
     species_md = "data.frame",
