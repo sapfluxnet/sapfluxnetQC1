@@ -83,20 +83,22 @@ test_that('argument checks works', {
   )
 })
 
-test_data <- data.frame(TIMESTAMP = c(1, 2, 3, 4, 5, 6),
-                        pl_cm_cm_h = c(1, 2, 5, 10, 100, 1000),
-                        pl_cm_m_s = c(2.7778, 5.5556, 13.8889, 27.7778, 277.7778, 2777.7778),
-                        pl_dm_dm_h = c(0.1, 0.2, 0.5, 1, 10, 100),
-                        pl_dm_dm_s = c(2.777778e-05, 5.555556e-05, 0.0001388889, 0.0002777778, 0.002777778, 0.02777778),
-                        pl_mm_mm_s = c(0.002777778, 0.005555556, 0.01388889, 0.02777778, 0.2777778, 2.777778),
-                        pl_g_m_s = c(2.7778, 5.5556, 13.8889, 27.7778, 277.7778, 2777.7778),
-                        pl_kg_m_h = c(10, 20, 50, 100, 1000, 10000),
-                        pl_kg_m_s = c(0.002777778, 0.005555556, 0.01388889, 0.02777778, 0.2777778, 2.777778),
-                        pl_cm_s = c(0.05555556, 0.1111111, 0.2777778, 0.5555556, 5.555556, 55.55556),
-                        pl_cm_h = c(200, 400, 1000, 2000, 20000, 200000),
-                        pl_dm_h = c(0.2, 0.4, 1, 2, 20, 200),
-                        pl_g_h = c(200, 400, 1000, 2000, 20000, 200000),
-                        pl_kg_h = c(0.2, 0.4, 1, 2, 20, 200))
+test_data <- data.frame(
+  TIMESTAMP = c(1, 2, 3, 4, 5, 6),
+  pl_cm_cm_h = c(1, 2, 5, 10, 100, 1000),
+  pl_cm_m_s = c(2.7778, 5.5556, 13.8889, 27.7778, 277.7778, 2777.7778),
+  pl_dm_dm_h = c(0.1, 0.2, 0.5, 1, 10, 100),
+  pl_dm_dm_s = c(2.777778e-05, 5.555556e-05, 0.0001388889, 0.0002777778, 0.002777778, 0.02777778),
+  pl_mm_mm_s = c(0.002777778, 0.005555556, 0.01388889, 0.02777778, 0.2777778, 2.777778),
+  pl_g_m_s = c(2.7778, 5.5556, 13.8889, 27.7778, 277.7778, 2777.7778),
+  pl_kg_m_h = c(10, 20, 50, 100, 1000, 10000),
+  pl_kg_m_s = c(0.002777778, 0.005555556, 0.01388889, 0.02777778, 0.2777778, 2.777778),
+  pl_cm_s = c(0.05555556, 0.1111111, 0.2777778, 0.5555556, 5.555556, 55.55556),
+  pl_cm_h = c(200, 400, 1000, 2000, 20000, 200000),
+  pl_dm_h = c(0.2, 0.4, 1, 2, 20, 200),
+  pl_g_h = c(200, 400, 1000, 2000, 20000, 200000),
+  pl_kg_h = c(0.2, 0.4, 1, 2, 20, 200)
+)
 
 test_sapw_md <- data.frame(pl_code = c('pl_cm_cm_h', 'pl_cm_m_s', 'pl_dm_dm_h',
                                        'pl_dm_dm_s', 'pl_mm_mm_s', 'pl_g_m_s',
@@ -252,7 +254,52 @@ test_that('the new variable is added to the table and is numeric', {
 })
 
 ################################################################################
-context('I5. VPD calculation')
+context('I5. Extraterrestrial radiation')
+
+load('FOO.RData')
+foo_env <- get_env(FOO)
+foo_env_nots <- foo_env[,-1]
+foo_site_md <- get_site_md(FOO)
+foo_site_md_nolat <- foo_site_md
+foo_site_md_nolat[['si_lat']] <- NULL
+foo_site_md_nolong <- foo_site_md
+foo_site_md_nolong[['si_long']] <- NULL
+
+test_that('argument checks work', {
+  expect_error(qc_ext_radiation('tururu', foo_site_md, FALSE),
+               'are not data frames')
+  expect_error(qc_ext_radiation(foo_env, 'tururu', FALSE),
+               'are not data frames')
+  expect_error(qc_ext_radiation(foo_env_nots, foo_site_md, FALSE),
+               'has not a TIMESTAMP variable')
+  expect_error(qc_ext_radiation(foo_env, foo_site_md_nolat, FALSE),
+               'site_md has not the needed variables')
+  expect_error(qc_ext_radiation(foo_env, foo_site_md_nolong, FALSE),
+               'site_md has not the needed variables')
+  expect_error(qc_ext_radiation(foo_env, foo_site_md, 'TRUE'),
+               'either TRUE or FALSE')
+})
+
+test_that('extraterrestrial radiation is added correctly', {
+  ext_res <- qc_ext_radiation(foo_env, foo_site_md, FALSE)
+  expect_false(is.null(ext_res[['ext_rad']]))
+})
+
+test_that('solar timestamp is added correctly', {
+  ext_res <- qc_ext_radiation(foo_env, foo_site_md, TRUE)
+  ext_res_no_sol <- qc_ext_radiation(foo_env, foo_site_md, FALSE)
+
+  expect_true(is.null(ext_res_no_sol[['solarTIMESTAMP']]))
+  expect_false(is.null(ext_res[['solarTIMESTAMP']]))
+
+  # expect_true(attr(ext_res[['solarTIMESTAMP']], 'tz') == 'UTC')
+})
+
+## TO DO
+## Add tests for the results, no idea how yet
+
+################################################################################
+context('I6. VPD calculation')
 
 load('FOO.RData')
 foo_env <- get_env(FOO)
@@ -265,7 +312,7 @@ test_that('argument checks work', {
   expect_error(qc_vpd('tururu'), 'data object is not a data frame')
   expect_error(qc_vpd(foo_no_ta), 'data not contains rh and/or ta variables')
   expect_error(qc_vpd(foo_no_rh), 'data not contains rh and/or ta variables')
-  expect_error(qc_vpd(foo_env), 'data already has a vpd variable')
+  expect_warning(qc_vpd(foo_env), 'data already has a vpd variable')
 })
 
 test_that('function returns values correctly', {
@@ -279,7 +326,7 @@ test_that('function returns values correctly', {
 
 
 ################################################################################
-context('I6. Soil texture classification')
+context('I7. Soil texture classification')
 
 test_data <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
                         st_silt_perc = 54, st_sand_perc = 34)
@@ -481,7 +528,7 @@ test_that('st_USDA_soil_texture is correctly generated when several classes', {
 })
 
 ################################################################################
-context('I7. qc_transformation_vars')
+context('I8. qc_transformation_vars')
 
 test_that('results are ok', {
   load('FOO.RData')
@@ -518,7 +565,7 @@ test_that('results are ok', {
 })
 
 ################################################################################
-context('I8. qc_transf_list')
+context('I9. qc_transf_list')
 
 load('FOO.RData')
 transf_vars_info <- qc_transformation_vars(FOO)
@@ -537,3 +584,61 @@ test_that('results are correct', {
                                       'sapf_units_to_leaf_area')
   ))
 })
+
+################################################################################
+context('I10. Units process')
+
+test_that('argument checks work', {
+  expect_error(qc_units_process('tururu'),
+               'Data provided is not a SfnData object')
+})
+
+load('FOO.RData')
+foo_env_vpd <- get_env(FOO)
+foo_env_vpd[['vpd']] <- NULL
+get_env(FOO) <- foo_env_vpd
+get_si_code(FOO) <- rep('FOO', nrow(foo_env_vpd))
+df_folder_structure()
+dir.create(file.path('Data', 'FOO', 'Lvl_2'), recursive = TRUE)
+df_lvl2_folder_structure('FOO')
+df_start_status('FOO')
+
+test_that('function works as intended', {
+
+  qc_units_process(FOO)
+
+  expect_true(file.exists(file.path(
+    'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'plant', 'FOO.RData'
+  )))
+  expect_true(file.exists(file.path(
+    'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'sapwood', 'FOO.RData'
+  )))
+
+  res_plant <- df_read_SfnData('FOO', 'unit_trans', 'plant')
+  env_plant <- get_env(res_plant)
+
+  expect_false(is.null(env_plant[['sw_in']]))
+  expect_false(is.null(env_plant[['vpd']]))
+  expect_false(is.null(get_solar_timestamp(res_plant)))
+
+  res_sapwood <- df_read_SfnData('FOO', 'unit_trans', 'plant')
+  env_sapwood <- get_env(res_sapwood)
+
+  expect_false(is.null(env_sapwood[['sw_in']]))
+  expect_false(is.null(env_sapwood[['vpd']]))
+  expect_false(is.null(get_solar_timestamp(res_sapwood)))
+
+  expect_false(
+    file.exists(file.path(
+      'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'leaf', 'FOO.RData'
+    ))
+  )
+
+})
+
+################################################################################
+# cleaning
+unlink('Data', recursive = TRUE)
+unlink('Templates', recursive = TRUE)
+unlink('Reports', recursive = TRUE)
+unlink('Logs', recursive = TRUE)

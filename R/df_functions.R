@@ -796,8 +796,8 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
 
     # Get the time of last modification for all the files previous to overwritting
     pre_time <- file.mtime(c(file.path('Templates','received_to_accepted.Rmd'),
-                 file.path('Templates','QC_report.Rmd'),'sfn_monitor.Rmd',
-                 'main_script.R','debug_script.R'))
+                             file.path('Templates','QC_report.Rmd'),'sfn_monitor.Rmd',
+                             'main_script.R','debug_script.R'))
 
     # Give an error if modification time of the files can not be obtained
     if(any(is.na(pre_time))){
@@ -841,8 +841,8 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
     # STEP 5
     # Check that all times of last modification have changed
     post_time <- file.mtime(c(file.path('Templates','received_to_accepted.Rmd'),
-                             file.path('Templates','QC_report.Rmd'),'sfn_monitor.Rmd',
-                             'main_script.R','debug_script.R'))
+                              file.path('Templates','QC_report.Rmd'),'sfn_monitor.Rmd',
+                              'main_script.R','debug_script.R'))
 
     if(all(post_time != pre_time)){
       return(invisible(TRUE))
@@ -1353,11 +1353,11 @@ df_read_SfnData <- function(
     # Argument checking (done by match.arg)
     level <- match.arg(level)
     level_folder <- switch(level,
-                    Lvl_1 = 'Lvl_1',
-                    Lvl_2 = 'Lvl_2',
-                    out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
-                    out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
-                    unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
+                           Lvl_1 = 'Lvl_1',
+                           Lvl_2 = 'Lvl_2',
+                           out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
+                           out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
+                           unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
 
     # STEP 1
     # check if level_2_unit_trans and if so, look for which units to read
@@ -1439,11 +1439,11 @@ df_write_SfnData <- function(
     # Argument checking (done by match.arg)
     level <- match.arg(level)
     level_folder <- switch(level,
-                    Lvl_1 = 'Lvl_1',
-                    Lvl_2 = 'Lvl_2',
-                    out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
-                    out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
-                    unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
+                           Lvl_1 = 'Lvl_1',
+                           Lvl_2 = 'Lvl_2',
+                           out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
+                           out_rem = file.path('Lvl_2', 'lvl_2_out_rem'),
+                           unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
     # SfnData
     if (class(SfnData) != 'SfnData') {
       stop('object provided is not an SfnData object')
@@ -1877,7 +1877,9 @@ df_rem_to_units <- function(parent_logger = 'test') {
 
     # STEP 0
     # Get the sites ready to tranform!
-    sites_list <- df_whos_ready_to('units', 'ready', parent_logger = parent_logger)
+    sites_list <- names(
+      df_whos_ready_to('units', 'ready', parent_logger = parent_logger)
+    )
 
     # STEP 1
     # Start the transformations
@@ -1885,11 +1887,18 @@ df_rem_to_units <- function(parent_logger = 'test') {
       # read the SfnDatas
       purrr::map(
         ~ df_read_SfnData(.x, 'out_rem', parent_logger = parent_logger)
-      ) #%>%
-      # 1.1 unit 1 sapflow measurements
-      # 1.2 unit 2 vpd
-      # 1.3 unit 3 incoming radiation
-      # 1.4 unit 4 extraterrestrial radiation
+      ) %>%
+      # 1.1 units_process
+      purrr::walk(
+        ~ qc_units_process(.x, parent_logger = parent_logger)
+      )
+
+    # STEP 2
+    # Update status
+    sites_list %>%
+      purrr::walk(
+        ~ df_set_status(.x, LVL2 = list(TO_UNITS = 'DONE'))
+      )
   },
 
   # handlers
