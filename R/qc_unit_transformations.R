@@ -1953,7 +1953,7 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     )
 
     # 4.1 add the solar timestamp to the SfnData
-    # get_solar_timestamp(sfndata) <- env_modf[['solarTIMESTAMP']]
+    get_solar_timestamp(sfndata) <- env_modf[['solarTIMESTAMP']]
 
     # 4.2 modify the env_data from the sfndata
     get_env(sfndata) <- env_modf %>%
@@ -1983,7 +1983,8 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
       as.data.frame(stringsAsFactors = FALSE)
 
     # 5.2.3 write the plant SfnData object
-    # df_write_SfnData(sfndata_plant, 'units_trans', parent_logger = parent_logger)
+    df_write_SfnData(sfndata_plant, 'units_trans', 'plant',
+                     parent_logger = parent_logger)
   }
 
   # 5.3 to sapwood
@@ -2001,7 +2002,8 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
       as.data.frame(stringsAsFactors = FALSE)
 
     # 5.3.3 write the plant SfnData object
-    # df_write_SfnData(sfndata_sapwood, 'units_trans', parent_logger = parent_logger)
+    df_write_SfnData(sfndata_sapwood, 'units_trans', 'sapwood',
+                     parent_logger = parent_logger)
   }
 
   # 5.4 to leaf
@@ -2019,7 +2021,8 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
       as.data.frame(stringsAsFactors = FALSE)
 
     # 5.4.3 write the plant SfnData object
-    # df_write_SfnData(sfndata_leaf, 'units_trans', parent_logger = parent_logger)
+    df_write_SfnData(sfndata_leaf, 'units_trans', 'leaf',
+                     parent_logger = parent_logger)
   }
 
 }

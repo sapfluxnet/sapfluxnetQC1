@@ -77,6 +77,7 @@ LVL2
         - "FREEZE": Don't move to UNITS, there is work to do yeT
         - "READY": Ready to move to UNITS, but not moved yet
         - "DONE": Already in UNITS
+    + AVAIL: character vector with the available sapflow units stored
 
 ### Example
 
@@ -96,6 +97,9 @@ LVL2:
   STORED: no
   DATE: ~
   STEP: ~
+  TO_REM: "FREEZE"
+  TO_UNITS: "FREEZE"
+  AVAIL: ~
 ```
 
 ## Getting and setting statuses

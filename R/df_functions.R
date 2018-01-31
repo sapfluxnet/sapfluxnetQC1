@@ -254,7 +254,7 @@ df_start_status <- function(si_code, parent_logger = 'test') {
         QC = list(DONE = FALSE, DATE = NULL),
         LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE'),
         LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL,
-                    TO_REM = 'FREEZE', TO_UNITS = 'FREEZE')
+                    TO_REM = 'FREEZE', TO_UNITS = 'FREEZE', AVAIL = NULL)
       )
 
       # 2.2 create the yaml object
@@ -914,7 +914,8 @@ df_reset_data_status <- function(si_code, level = 'all', parent_logger = 'test')
     QC = list(DONE = FALSE, DATE = NULL)
     LVL1 = list(STORED = FALSE, DATE = NULL, TO_LVL2 = 'FREEZE')
     LVL2 = list(STORED = FALSE, DATE = NULL, STEP = NULL,
-                TO_REM = 'FREEZE', TO_UNITS = 'FREEZE')
+                TO_REM = 'FREEZE', TO_UNITS = 'FREEZE',
+                AVAIL = NULL)
 
     # 1.2 set status depending on the level argument
     if (level == 'all') {
@@ -1264,16 +1265,35 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
     # 1.1 folder name
     lvl_root_name <- file.path('Data', si_code, 'Lvl_2')
 
-    # 1.3 heck if dirs already exists and if not, create it (all with dir.create)
+    # 1.3 check if dirs already exists and if not, create it (all with dir.create)
     dir.create(file.path(lvl_root_name, 'lvl_2_out_warn'), showWarnings = TRUE)
     dir.create(file.path(lvl_root_name, 'lvl_2_out_rem'), showWarnings = TRUE)
     dir.create(file.path(lvl_root_name, 'lvl_2_unit_trans'), showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_unit_trans', 'plant'),
+               showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_unit_trans', 'sapwood'),
+               showWarnings = TRUE)
+    dir.create(file.path(lvl_root_name, 'lvl_2_unit_trans', 'leaf'),
+               showWarnings = TRUE)
 
     # STEP 2
     # Check if creation went well
-    if (all(dir.exists(file.path(lvl_root_name, c('lvl_2_out_warn',
-                                                  'lvl_2_out_rem',
-                                                  'lvl_2_unit_trans'))))) {
+    if (
+      all(
+        dir.exists(
+          file.path(
+            lvl_root_name, c(
+              'lvl_2_out_warn',
+              'lvl_2_out_rem',
+              'lvl_2_unit_trans',
+              file.path('lvl_2_unit_trans', 'plant'),
+              file.path('lvl_2_unit_trans', 'sapwood'),
+              file.path('lvl_2_unit_trans', 'leaf')
+            )
+          )
+        )
+      )
+    ) {
       return()
     } else {
       stop("One or more folders can not be created in level 2. ",
@@ -1310,15 +1330,21 @@ df_lvl2_folder_structure <- function(si_code, parent_logger = 'test') {
 #'
 #' @param level Level to read from as a character string
 #'
+#' @param units Only used if \code{level = "unit_trans"}. Indicates which sapflow
+#'   units (plant, sapwood or leaf) must be read.
+#'
 #' @return A SfnData object.
 #'
 #' @export
 
 # START
 # Function declaration
-df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
-                                               "out_rem", "unit_trans"),
-                            parent_logger = 'test') {
+df_read_SfnData <- function(
+  si_code,
+  level = c("Lvl_1", "Lvl_2", "out_warn", "out_rem", "unit_trans"),
+  units = NULL,
+  parent_logger = 'test'
+) {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -1326,7 +1352,7 @@ df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
     # STEP 0
     # Argument checking (done by match.arg)
     level <- match.arg(level)
-    level <- switch(level,
+    level_folder <- switch(level,
                     Lvl_1 = 'Lvl_1',
                     Lvl_2 = 'Lvl_2',
                     out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
@@ -1334,12 +1360,23 @@ df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
                     unit_trans = file.path('Lvl_2', 'lvl_2_unit_trans'))
 
     # STEP 1
+    # check if level_2_unit_trans and if so, look for which units to read
+    if (level == 'unit_trans') {
+      if (!is.null(units)) {
+        level_folder <- file.path(level_folder, units)
+      } else {
+        stop('Selecting level = "unit_trans" requires units argument to be',
+             ' declared. Valid values are "plant", "sapwood" or "leaf"')
+      }
+    }
+
+    # STEP 2
     # load the file
-    file_name <- file.path('Data', si_code, level,
+    file_name <- file.path('Data', si_code, level_folder,
                            paste0(si_code, '.RData'))
 
     if (!file.exists(file_name)) {
-      stop('SfnData for ', si_code, ' and ', level, ' does not exist.')
+      stop('SfnData for ', si_code, ' and ', level_folder, ' does not exist.')
     } else {
       load(file = file_name)
 
@@ -1379,15 +1416,21 @@ df_read_SfnData <- function(si_code, level = c("Lvl_1", "Lvl_2", "out_warn",
 #'
 #' @param level Level to write to as a character string
 #'
+#' @param units Only used if \code{level = "unit_trans"}. Indicates which sapflow
+#'   units (plant, sapwood or leaf) must be written.
+#'
 #' @return Nothing, the desired site data is saved.
 #'
 #' @export
 
 # START
 # Function declaration
-df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
-                                                "out_rem", "unit_trans"),
-                             parent_logger = 'test') {
+df_write_SfnData <- function(
+  SfnData,
+  level = c("Lvl_1", "Lvl_2", "out_warn", "out_rem", "unit_trans"),
+  units = NULL,
+  parent_logger = 'test'
+) {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -1395,7 +1438,7 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
     # STEP 0
     # Argument checking (done by match.arg)
     level <- match.arg(level)
-    level <- switch(level,
+    level_folder <- switch(level,
                     Lvl_1 = 'Lvl_1',
                     Lvl_2 = 'Lvl_2',
                     out_warn = file.path('Lvl_2', 'lvl_2_out_warn'),
@@ -1407,14 +1450,24 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
     }
 
     # STEP 1
-    # file name
+    # 1.1 check if lvl2_unit_trans and if so, use units
+    if (level == 'unit_trans') {
+      if (!is.null(units)) {
+        level_folder <- file.path(level_folder, units)
+      } else {
+        stop('Selecting level = "unit_trans" requires units argument to be',
+             ' declared. Valid values are "plant", "sapwood" or "leaf"')
+      }
+    }
+
+    # 1.2 file name
     # code <- deparse(substitute(SfnData))
     code <- unique(get_si_code(SfnData))
-    file_name <- file.path('Data', code, level, paste0(code, '.RData'))
+    file_name <- file.path('Data', code, level_folder, paste0(code, '.RData'))
 
-    # 1.1 Check if file exists
+    # 1.3 Check if file exists
     if (file.exists(file_name)) {
-      stop(code, ' object already exists in ', level)
+      stop(code, ' object already exists in ', level_folder)
     }
 
     # STEP 2
@@ -1433,12 +1486,27 @@ df_write_SfnData <- function(SfnData, level = c("Lvl_1", "Lvl_2", "out_warn",
     }
 
     # 3.2 Check if status must be changed
-    if (level == file.path('Lvl_2', 'lvl_2_out_warn')) {
+    if (level == 'out_warn') {
       # Update status
       df_set_status(code,
                     LVL1 = list(TO_LVL2 = 'DONE'),
                     LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date())),
                     parent_logger = parent_logger)
+    }
+
+    if (level == 'unit_trans') {
+      # get LVL2$AVAIL
+      avail <- df_get_status(code, parent_logger = parent_logger)[['LVL2']][['AVAIL']]
+
+      # add the units
+      avail <- c(avail, units)
+
+      # set the status
+      df_set_status(
+        code,
+        LVL2 = list(AVAIL = avail),
+        parent_logger = parent_logger
+      )
     }
 
     # END FUNCTION

@@ -110,9 +110,11 @@ test_that('status file functions work', {
   expect_null(foo_yaml$LVL2$STEP)
   expect_equal(foo_yaml$LVL2$TO_REM, 'FREEZE')
   expect_equal(foo_yaml$LVL2$TO_UNITS, 'FREEZE')
+  expect_null(foo_yaml$LVL2$AVAIL)
 
   expect_true(df_set_status('foo', QC = list(DONE = TRUE,
-                                             DATE = as.character(Sys.Date()))))
+                                             DATE = as.character(Sys.Date())),
+                            LVL2 = list(AVAIL = c('plant', 'sapwood'))))
 
   foo_yaml <- df_get_status('foo')
 
@@ -126,6 +128,8 @@ test_that('status file functions work', {
   expect_null(foo_yaml$LVL2$STEP)
   expect_equal(foo_yaml$LVL2$TO_REM, 'FREEZE')
   expect_equal(foo_yaml$LVL2$TO_UNITS, 'FREEZE')
+  expect_is(foo_yaml$LVL2$AVAIL, 'character')
+  expect_length(foo_yaml$LVL2$AVAIL, 2)
 
 })
 
@@ -523,6 +527,15 @@ test_that('folders are created ok', {
                                    'Lvl_2', 'lvl_2_out_rem')))
   expect_true(dir.exists(file.path('Data', 'foo',
                                    'Lvl_2', 'lvl_2_unit_trans')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_unit_trans',
+                                   'plant')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_unit_trans',
+                                   'sapwood')))
+  expect_true(dir.exists(file.path('Data', 'foo',
+                                   'Lvl_2', 'lvl_2_unit_trans',
+                                   'leaf')))
 })
 
 test_that('function throws an error when not creating the folders', {
@@ -552,25 +565,31 @@ save(foo, file = file.path('Data', 'foo', 'Lvl_1', 'foo.RData'))
 save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'foo.RData'))
 save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_warn', 'foo.RData'))
 save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_out_rem', 'foo.RData'))
-save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_unit_trans', 'foo.RData'))
+# save(foo, file = file.path('Data', 'foo', 'Lvl_2', 'lvl_2_unit_trans', 'foo.RData'))
 
 save(bar, file = file.path('Data', 'bar', 'Lvl_1', 'bar.RData'))
 save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'bar.RData'))
 save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_warn', 'bar.RData'))
 save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_out_rem', 'bar.RData'))
-save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_unit_trans', 'bar.RData'))
+# save(bar, file = file.path('Data', 'bar', 'Lvl_2', 'lvl_2_unit_trans', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2',
+                           'lvl_2_unit_trans', 'plant', 'bar.RData'))
+save(bar, file = file.path('Data', 'bar', 'Lvl_2',
+                           'lvl_2_unit_trans', 'sapwood', 'bar.RData'))
 
 test_that('objects are loaded fine or rise an error', {
   expect_is(df_read_SfnData('foo', 'Lvl_1'), 'SfnData')
   expect_is(df_read_SfnData('foo', 'Lvl_2'), 'SfnData')
   expect_is(df_read_SfnData('foo', 'out_warn'), 'SfnData')
   expect_is(df_read_SfnData('foo', 'out_rem'), 'SfnData')
-  expect_is(df_read_SfnData('foo', 'unit_trans'), 'SfnData')
+  # expect_is(df_read_SfnData('foo', 'unit_trans'), 'SfnData')
   expect_is(df_read_SfnData('bar', 'Lvl_1'), 'SfnData')
   expect_is(df_read_SfnData('bar', 'Lvl_2'), 'SfnData')
   expect_is(df_read_SfnData('bar', 'out_warn'), 'SfnData')
   expect_is(df_read_SfnData('bar', 'out_rem'), 'SfnData')
-  expect_is(df_read_SfnData('bar', 'unit_trans'), 'SfnData')
+  # expect_is(df_read_SfnData('bar', 'unit_trans'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'unit_trans', 'plant'), 'SfnData')
+  expect_is(df_read_SfnData('bar', 'unit_trans', 'sapwood'), 'SfnData')
   expect_error(df_read_SfnData('baz', 'Lvl_1'),
                'does not exist.')
   expect_error(df_read_SfnData('baz', 'Lvl_2'),
@@ -579,8 +598,10 @@ test_that('objects are loaded fine or rise an error', {
                'does not exist.')
   expect_error(df_read_SfnData('baz', 'out_rem'),
                'does not exist.')
-  expect_error(df_read_SfnData('baz', 'unit_trans'),
-               'does not exist.')
+  # expect_error(df_read_SfnData('baz', 'unit_trans'),
+  #              'does not exist.')
+  expect_error(df_read_SfnData('bar', 'unit_trans', 'leaf'),
+               'does not exist')
 })
 
 ################################################################################
@@ -592,7 +613,8 @@ df_write_SfnData(baz, 'Lvl_1')
 df_write_SfnData(baz, 'Lvl_2')
 df_write_SfnData(baz, 'out_warn')
 df_write_SfnData(baz, 'out_rem')
-df_write_SfnData(baz, 'unit_trans')
+# df_write_SfnData(baz, 'unit_trans')
+df_write_SfnData(baz, 'unit_trans', 'leaf')
 
 test_that('objects are written to RData files fine', {
   expect_true(file.exists(file.path('Data', 'baz', 'Lvl_1', 'baz.RData')))
@@ -601,9 +623,12 @@ test_that('objects are written to RData files fine', {
                                     'lvl_2_out_warn', 'baz.RData')))
   expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
                                     'lvl_2_out_rem', 'baz.RData')))
+  # expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
+  #                                   'lvl_2_unit_trans', 'baz.RData')))
   expect_true(file.exists(file.path('Data', 'baz', 'Lvl_2',
-                                    'lvl_2_unit_trans', 'baz.RData')))
+                                    'lvl_2_unit_trans', 'leaf', 'baz.RData')))
   expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'DONE')
+  expect_equal(df_get_status('baz')$LVL2$AVAIL, c('leaf'))
 })
 
 test_that('error rise if file already exists', {
@@ -615,7 +640,9 @@ test_that('error rise if file already exists', {
                'object already exists')
   expect_error(df_write_SfnData(baz, 'out_rem'),
                'object already exists')
-  expect_error(df_write_SfnData(baz, 'unit_trans'),
+  # expect_error(df_write_SfnData(baz, 'unit_trans'),
+  #              'object already exists')
+  expect_error(df_write_SfnData(baz, 'unit_trans', 'leaf'),
                'object already exists')
   expect_error(df_write_SfnData(bar, 'Lvl_1'),
                'object already exists')
@@ -625,8 +652,8 @@ test_that('error rise if file already exists', {
                'object already exists')
   expect_error(df_write_SfnData(bar, 'out_rem'),
                'object already exists')
-  expect_error(df_write_SfnData(bar, 'unit_trans'),
-               'object already exists')
+  # expect_error(df_write_SfnData(bar, 'unit_trans'),
+  #              'object already exists')
   expect_error(df_write_SfnData(foo, 'Lvl_1'),
                'object already exists')
   expect_error(df_write_SfnData(foo, 'Lvl_2'),
@@ -635,8 +662,8 @@ test_that('error rise if file already exists', {
                'object already exists')
   expect_error(df_write_SfnData(foo, 'out_rem'),
                'object already exists')
-  expect_error(df_write_SfnData(foo, 'unit_trans'),
-               'object already exists')
+  # expect_error(df_write_SfnData(foo, 'unit_trans'),
+  #              'object already exists')
 })
 
 ################################################################################
@@ -646,13 +673,14 @@ code <- 'foo'
 
 dir.create(file.path('Data', 'foo', 'Accepted'))
 file.create('Data/foo/Accepted/foo.xlsx')
+df_write_SfnData(foo, 'unit_trans', 'plant')
 
 df_set_status(
   'foo',
   QC = list(STORED = TRUE, DATE = as.character(Sys.Date())),
   LVL1 = list(STORED = TRUE, DATE = as.character(Sys.Date()), TO_LVL2 = 'DONE'),
   LVL2 = list(STORED = TRUE, DATE = as.character(Sys.Date()),
-              TO_REM = 'DONE', TO_UNITS = 'DONE')
+              TO_REM = 'DONE', TO_UNITS = 'DONE', AVAIL = c('plant'))
 )
 
 old_yaml <- df_get_status(code)
@@ -688,6 +716,7 @@ test_that('status file has been updated', {
   expect_equal(old_yaml$LVL2$TO_UNITS, 'DONE')
   expect_equal(new_yaml$LVL2$TO_REM, 'FREEZE')
   expect_equal(new_yaml$LVL2$TO_UNITS, 'FREEZE')
+  expect_null(new_yaml$LVL2$AVAIL)
 })
 
 test_that('files had been renamed correctly', {
