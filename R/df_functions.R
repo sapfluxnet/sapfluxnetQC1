@@ -1897,7 +1897,7 @@ df_rem_to_units <- function(parent_logger = 'test') {
     # Update status
     sites_list %>%
       purrr::walk(
-        ~ df_set_status(.x, LVL2 = list(TO_UNITS = 'DONE'))
+        ~ df_set_status(.x, LVL2 = list(TO_UNITS = 'DONE', STEP = 'UNITS'))
       )
   },
 
