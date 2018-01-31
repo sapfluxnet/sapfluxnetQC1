@@ -1278,13 +1278,13 @@ qc_rad_conversion <- function(data, parent_logger = 'test') {
 
       message('Radiation in both sw_in and ppfd_in units already exists. No transformation made.')
 
-    # 1.2 If none of the measures appear in the data frame, no transformation is made,
-    # with a warning
+      # 1.2 If none of the measures appear in the data frame, no transformation is made,
+      # with a warning
     } else if (all(!(c('sw_in', 'ppfd_in') %in% names(data)))){
 
       warning('Both sw_in and ppfd_in are missing. No transformation is possible.')
 
-    # 1.3 If only sw_in appears in the data frame, transformation to ppfd_in is made
+      # 1.3 If only sw_in appears in the data frame, transformation to ppfd_in is made
     } else if ('sw_in' %in% names(data)){
 
       # ppfd_in <- LakeMetabolizer::sw.to.par.base(data$sw_in)
@@ -1292,7 +1292,7 @@ qc_rad_conversion <- function(data, parent_logger = 'test') {
       # coefficient from Britton and Dodd (1976)
       data$ppfd_in <- data$sw_in * 2.114
 
-    # 1.3 If only ppfd_in appears in the data frame, transformation to sw_in is made
+      # 1.3 If only ppfd_in appears in the data frame, transformation to sw_in is made
     } else if ('ppfd_in' %in% names(data)){
 
       # sw_in <- LakeMetabolizer::par.to.sw.base(data$ppfd_in)

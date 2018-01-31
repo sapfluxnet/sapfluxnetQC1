@@ -297,6 +297,59 @@ test_that('solar timestamp is added correctly', {
 
 ## TO DO
 ## Add tests for the results, no idea how yet
+intervals_data <- data.frame(TIMESTAMP = lubridate::parse_date_time(c(
+  "2010-04-29 22:30:00", "2010-04-29 23:00:00", "2010-04-30 00:00:00",
+  "2010-04-30 00:30:00", "2010-04-30 01:00:00", "2010-04-30 01:30:00",
+  "2010-04-30 02:00:00", "2010-04-30 02:30:00", "2010-04-30 03:00:00",
+  "2010-04-30 03:30:00", "2010-04-30 04:00:00", "2010-04-30 04:30:00",
+  "2010-04-30 05:00:00", "2010-04-30 05:30:00", "2010-04-30 06:00:00",
+  "2010-04-30 06:30:00", "2010-04-30 07:00:00", "2010-04-30 07:30:00",
+  "2010-04-30 08:00:00", "2010-04-30 08:30:00", "2010-04-30 09:00:00",
+  "2010-04-30 09:30:00", "2010-04-30 10:00:00", "2010-04-30 10:30:00"
+),
+orders = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT-1"
+),
+ta = 1:24,
+ppfd_in = c(NA, NA, NA, NA, 5:24),
+sw_in = c(1:23, NA),
+stringsAsFactors = FALSE)
+
+site_metadata <- data.frame(
+  si_code = 'ESP_TIL_MIX',
+  si_lat = 41.33262995,
+  si_long = 1.0144288
+)
+
+results_df <- data.frame(
+  solarTIMESTAMP = as.POSIXct(
+    c("2010-04-29 21:36:42 UTC", "2010-04-29 22:06:42 UTC", "2010-04-29 23:06:42 UTC",
+      "2010-04-29 23:36:42 UTC", "2010-04-30 00:06:48 UTC", "2010-04-30 00:36:48 UTC",
+      "2010-04-30 01:06:48 UTC", "2010-04-30 01:36:48 UTC", "2010-04-30 02:06:48 UTC",
+      "2010-04-30 02:36:48 UTC", "2010-04-30 03:06:48 UTC", "2010-04-30 03:36:48 UTC",
+      "2010-04-30 04:06:48 UTC", "2010-04-30 04:36:48 UTC", "2010-04-30 05:06:48 UTC",
+      "2010-04-30 05:36:48 UTC", "2010-04-30 06:06:48 UTC", "2010-04-30 06:36:48 UTC",
+      "2010-04-30 07:06:48 UTC", "2010-04-30 07:36:48 UTC", "2010-04-30 08:06:48 UTC",
+      "2010-04-30 08:36:48 UTC", "2010-04-30 09:06:48 UTC", "2010-04-30 09:36:48 UTC")),
+  ext_rad = c(0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000,
+              0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 14.04644, 140.38591,
+              268.21702, 395.35217, 519.61563, 638.88085, 751.10679, 854.37289, 946.91193,
+              1027.14026)
+)
+
+test_that('conversion is made correctly', {
+  expect_equal(
+    qc_ext_radiation(intervals_data, site_metadata, add_solar_ts = TRUE)$solarTIMESTAMP,
+    results_df$solarTIMESTAMP, tolerance = 1
+  )
+  expect_equal(
+    qc_ext_radiation(intervals_data, site_metadata)$ext_rad,
+    results_df$ext_rad, tolerance = 0.0001
+  )
+})
+
+test_that('output is a data frame', {
+  expect_is(qc_ext_radiation(intervals_data, site_metadata), 'data.frame')
+})
 
 ################################################################################
 context('I6. VPD calculation')
