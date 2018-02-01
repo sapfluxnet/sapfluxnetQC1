@@ -2007,7 +2007,7 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         )
 
       # 5.3.2 get the plant md
-      plant_md <- get_md_plant(sfndata)
+      plant_md <- get_plant_md(sfndata)
 
       # 5.3.3 modify the sapf data from the sfndata
       sfndata_sapwood <- sfndata

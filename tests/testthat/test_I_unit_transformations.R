@@ -669,17 +669,25 @@ test_that('function works as intended', {
 
   res_plant <- df_read_SfnData('FOO', 'unit_trans', 'plant')
   env_plant <- get_env(res_plant)
+  plant_md_plant <- get_plant_md(res_plant)
 
   expect_false(is.null(env_plant[['sw_in']]))
   expect_false(is.null(env_plant[['vpd']]))
   expect_false(is.null(get_solar_timestamp(res_plant)))
+  expect_false(is.null(plant_md_plant[['pl_sap_units_orig']]))
+  expect_true(all(plant_md_plant[['pl_sap_units']] == '“cm3 h-1”'))
+  expect_true(all(plant_md_plant[['pl_sap_units_orig']] == '“cm3 cm-2 h-1”'))
 
   res_sapwood <- df_read_SfnData('FOO', 'unit_trans', 'plant')
   env_sapwood <- get_env(res_sapwood)
+  plant_md_sapwood <- get_plant_md(res_sapwood)
 
   expect_false(is.null(env_sapwood[['sw_in']]))
   expect_false(is.null(env_sapwood[['vpd']]))
   expect_false(is.null(get_solar_timestamp(res_sapwood)))
+  expect_false(is.null(plant_md_sapwood[['pl_sap_units_orig']]))
+  expect_true(all(plant_md_sapwood[['pl_sap_units']] == '“cm3 h-1”'))
+  expect_true(all(plant_md_sapwood[['pl_sap_units_orig']] == '“cm3 cm-2 h-1”'))
 
   expect_false(
     file.exists(file.path(
