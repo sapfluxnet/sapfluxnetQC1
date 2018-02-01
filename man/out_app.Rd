@@ -16,11 +16,13 @@ data flaws.
 \details{
 This function launches a shiny app to visually manage flagging outliers,
 out_of_range values and visual data flaws. Data values selected after
-visual exploration of the data presented in the app are coded in a script
-saved in the \code{Data/si_code/Lvl_2/visual_check} folder. This script
-performs the data flagging needed and serves as a reproducible tool in case
-of reconstruction of the complete process undergo by the site data.
+visual exploration of the data presented in the app are coded in files
+saved in the \code{Data/si_code/Lvl_2/lvl_2_out_warn} folder. These files
+are used later to substitute outliers, remove out of range values and
+remove manual values in the \code{\link{df_warn_to_remove}} function.
 }
 \seealso{
-Other apps: \code{\link{df_flag_to_lvl2_app}}
+Other apps: \code{\link{df_flag_to_lvl2_app}},
+  \code{\link{df_flag_to_units_app}},
+  \code{\link{out_confirmation_app}}
 }
