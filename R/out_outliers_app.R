@@ -33,10 +33,16 @@ out_app <- function(parent_logger = 'test') {
     # STEP 0
     # Needed misc
 
-    # 0.1 site codes list (only those passed already to LVL2)
+    # 0.1 site codes list (only those passed already to LVL2 and not yet removed)
     site_list <- names(
       sapfluxnetQC1::df_whos_ready_to('lvl2', 'done', parent_logger = parent_logger)
     )
+
+    already_rem_done_list <- names(
+      sapfluxnetQC1::df_whos_ready_to('rem', 'done', parent_logger = parent_logger)
+    )
+
+    site_list <- site_list[!(site_list %in% already_rem_done_list)]
 
     # 0.2 libraries
     # require(sapfluxnetQC1)
@@ -91,7 +97,7 @@ out_app <- function(parent_logger = 'test') {
                     column(
                       width = 5,
                       shiny::br(),
-                      shiny::h3('Selected outliers to remove'),
+                      shiny::h3('Selected data to substitute/remove'),
                       shiny::tableOutput("sel_rows")
                     ),
 
