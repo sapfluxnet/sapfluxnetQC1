@@ -689,6 +689,9 @@ test_that('function works as intended', {
 
 })
 
+## NOTE:
+## df_rem_to_units tested in test_L_ranges.R file
+
 ################################################################################
 # cleaning
 unlink('Data', recursive = TRUE)

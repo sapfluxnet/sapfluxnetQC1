@@ -99,7 +99,7 @@ test_that('values are substituted', {
 })
 
 ################################################################################
-context('L2. Data flow inside level 2')
+context('L2. Warning to Remove')
 
 df_warn_to_rem()
 
@@ -129,7 +129,45 @@ test_that('status file is updated', {
   expect_identical(status_foo$LVL2$STEP, 'REM')
 })
 
+################################################################################
+context('L3. Remove to Units')
 
+df_set_status('FOO', LVL2 = list(TO_UNITS = 'READY'))
+df_rem_to_units()
+
+test_that('files are written correctly', {
+  expect_true(
+    file.exists(file.path(
+      'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'plant', 'FOO.RData'
+    ))
+  )
+  expect_true(
+    file.exists(file.path(
+      'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'sapwood', 'FOO.RData'
+    ))
+  )
+  expect_false(
+    file.exists(file.path(
+      'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'leaf', 'FOO.RData'
+    ))
+  )
+
+  env_plant <- get_env(df_read_SfnData('FOO', 'unit_trans', 'plant'))
+  env_sap <- get_env(df_read_SfnData('FOO', 'unit_trans', 'sapwood'))
+
+  expect_false(is.null(env_plant[['ext_rad']]))
+  expect_false(is.null(env_sap[['ext_rad']]))
+  expect_identical(env_plant, env_sap)
+})
+
+test_that('status file is correctly updated', {
+  status_foo <- df_get_status('FOO')
+
+  expect_identical(status_foo$LVL2$TO_REM, 'DONE')
+  expect_identical(status_foo$LVL2$TO_UNITS, 'DONE')
+  expect_identical(status_foo$LVL2$STEP, 'UNITS')
+  expect_identical(status_foo$LVL2$AVAIL, c('plant', 'sapwood'))
+})
 
 
 ################################################################################

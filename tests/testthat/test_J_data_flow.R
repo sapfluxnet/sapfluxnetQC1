@@ -783,8 +783,6 @@ test_that('DONE sites are respected', {
   expect_equal(df_get_status('baz')$LVL1$TO_LVL2, 'DONE')
 })
 
-
-
 ################################################################################
 # cleaning
 unlink('received_data', recursive = TRUE)
