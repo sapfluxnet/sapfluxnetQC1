@@ -607,11 +607,14 @@ out_confirmation_app <- function(parent_logger = 'test') {
   # handlers
   warning = function(w){logging::logwarn(w$message,
                                          logger = paste(parent_logger,
-                                                        'out_app', sep = '.'))},
+                                                        'out_confirmation_app',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
                                         logger = paste(parent_logger,
-                                                       'out_app', sep = '.'))},
+                                                       'out_confirmation_app',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
-                                                        'out_app', sep = '.'))})
+                                                        'out_confirmation_app',
+                                                        sep = '.'))})
 }
