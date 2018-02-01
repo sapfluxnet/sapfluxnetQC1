@@ -673,6 +673,7 @@ code <- 'foo'
 
 dir.create(file.path('Data', 'foo', 'Accepted'))
 file.create('Data/foo/Accepted/foo.xlsx')
+file.create('Data/foo/Lvl_2/lvl_2_out_warn/foo_out_to_remove.txt')
 df_write_SfnData(foo, 'unit_trans', 'plant')
 
 df_set_status(
@@ -730,7 +731,7 @@ test_that('files had been renamed correctly', {
   expect_false(all(old_files_lvl2 == new_files_lvl2))
   expect_true(length(old_files_lvl2) == length(new_files_lvl2))
   expect_match(new_files_lvl2, "(.bak)$")
-  expect_match(old_files_lvl2, "(.csv|.RData|.xlsx)$")
+  expect_match(old_files_lvl2, "(.csv|.RData|.xlsx|.txt)$")
 })
 
 ################################################################################

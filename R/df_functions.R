@@ -969,7 +969,7 @@ df_reset_data_status <- function(si_code, level = 'all', parent_logger = 'test')
     # 2.1.1 new names, substituting extension for _time.bak
     new_files <- stringr::str_replace_all(
       old_files,
-      pattern = "(.csv|.RData|.xlsx)",
+      pattern = "(.csv|.RData|.xlsx|.txt)",
       replace = paste0('_', format(Sys.time(), '%Y%m%d%H%M'), '.bak')
     )
 
