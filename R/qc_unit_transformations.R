@@ -1979,13 +1979,21 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
           sapw_md, output_units = 'plant', parent_logger = parent_logger
         )
 
-      # 5.2.2 modify the sapf data from the sfndata
+      # 5.2.2 get the plant_md
+      plant_md <- get_plant_md(sfndata)
+
+      # 5.2.3 modify the sapf data and the plant md to add the units
       sfndata_plant <- sfndata
+
       get_sapf(sfndata_plant) <- sapf_modf %>%
         dplyr::select(-TIMESTAMP) %>%
         as.data.frame(stringsAsFactors = FALSE)
 
-      # 5.2.3 write the plant SfnData object
+      get_plant_md(sfndata_plant) <- plant_md %>%
+        dplyr::mutate(pl_sap_units_orig = pl_sap_units,
+                      pl_sap_units = "“cm3 h-1”")
+
+      # 5.2.4 write the plant SfnData object
       df_write_SfnData(sfndata_plant, 'unit_trans', 'plant',
                        parent_logger = parent_logger)
     }
@@ -1998,13 +2006,21 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
           sapw_md, output_units = 'sapwood', parent_logger = parent_logger
         )
 
-      # 5.3.2 modify the sapf data from the sfndata
+      # 5.3.2 get the plant md
+      plant_md <- get_md_plant(sfndata)
+
+      # 5.3.3 modify the sapf data from the sfndata
       sfndata_sapwood <- sfndata
+
       get_sapf(sfndata_sapwood) <- sapf_modf %>%
         dplyr::select(-TIMESTAMP) %>%
         as.data.frame(stringsAsFactors = FALSE)
 
-      # 5.3.3 write the plant SfnData object
+      get_plant_md(sfndata_plant) <- plant_md %>%
+        dplyr::mutate(pl_sap_units_orig = pl_sap_units,
+                      pl_sap_units = "“cm3 cm-2 h-1”")
+
+      # 5.3.4 write the plant SfnData object
       df_write_SfnData(sfndata_sapwood, 'unit_trans', 'sapwood',
                        parent_logger = parent_logger)
     }
@@ -2017,11 +2033,19 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
           sapw_md, output_units = 'leaf', parent_logger = parent_logger
         )
 
+      # 5.4.2 get the plant md
+      plant_md <- get_plant_md(sfndata)
+
       # 5.4.2 modify the sapf data from the sfndata
       sfndata_leaf <- sfndata
+
       get_sapf(sfndata_leaf) <- sapf_modf %>%
         dplyr::select(-TIMESTAMP) %>%
         as.data.frame(stringsAsFactors = FALSE)
+
+      get_plant_md(sfndata_plant) <- plant_md %>%
+        dplyr::mutate(pl_sap_units_orig = pl_sap_units,
+                      pl_sap_units = "“cm3 cm-2 h-1”")
 
       # 5.4.3 write the plant SfnData object
       df_write_SfnData(sfndata_leaf, 'unit_trans', 'leaf',
