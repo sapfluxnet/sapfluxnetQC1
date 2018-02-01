@@ -169,7 +169,6 @@ test_that('status file is correctly updated', {
   expect_identical(status_foo$LVL2$AVAIL, c('plant', 'sapwood'))
 })
 
-
 ################################################################################
 # clean
 unlink('Data', recursive = TRUE)
@@ -178,7 +177,7 @@ unlink('Reports', recursive = TRUE)
 unlink('Templates', recursive = TRUE)
 
 ################################################################################
-context('L3. Ranges')
+context('L4. Ranges')
 
 # needed data
 load('FOO.RData')
