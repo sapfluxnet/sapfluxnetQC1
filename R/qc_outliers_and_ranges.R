@@ -874,23 +874,33 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
     # STEP 1
     # Prepare the stuff
     # 1.1 Load the *_to_remove files
-    out_to_remove <- readr::read_delim(
-      file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
-                paste0(site, '_out_to_remove.txt')),
-      delim = ' '
-    )
+    out_to_remove_path <- file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
+                                    paste0(site, '_out_to_remove.txt'))
 
-    ranges_to_remove <- readr::read_delim(
-      file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
-                paste0(site, '_ranges_to_remove.txt')),
-      delim = ' '
-    )
+    if (file.exists(out_to_remove_path)) {
+      out_to_remove <- readr::read_delim(out_to_remove_path, delim = ' ')
+    } else {
+      out_to_remove <- NULL
+    }
 
-    manual_to_remove <- readr::read_delim(
-      file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
-                paste0(site, '_manual_to_remove.txt')),
-      delim = ' '
-    )
+    ranges_to_remove_path <- file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
+                                       paste0(site, '_ranges_to_remove.txt'))
+
+    if (file.exists(ranges_to_remove_path)) {
+      ranges_to_remove <- readr::read_delim(ranges_to_remove_path, delim = ' ')
+    } else {
+      ranges_to_remove <- NULL
+    }
+
+    manual_to_remove_path <- file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
+                                       paste0(site, '_manual_to_remove.txt'))
+
+    if (file.exists(manual_to_remove_path)) {
+      manual_to_remove <- readr::read_delim(manual_to_remove_path, delim = ' ')
+    } else {
+      manual_to_remove <- NULL
+    }
+
 
     # 1.2 load the SfnData
     sfn_data <- df_read_SfnData(site, 'out_warn', parent_logger = parent_logger)
@@ -913,84 +923,92 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
 
     # 2.2 substitute them!
     # 2.2.1 outliers
-    for (i in 1:nrow(out_to_remove)) {
+    if (!is.null(out_to_remove)) {
+      for (i in 1:nrow(out_to_remove)) {
 
-      index <- out_to_remove[['index']][i]
-      variable <- out_to_remove[['variable']][i]
+        index <- out_to_remove[['index']][i]
+        variable <- out_to_remove[['variable']][i]
 
-      if (variable %in% names(sapf_data)) {
-        sapf_data[index, variable] <- sapf_data_out_rem[index, variable]
+        if (variable %in% names(sapf_data)) {
+          sapf_data[index, variable] <- sapf_data_out_rem[index, variable]
 
-        # 2.2.1.1 update flags also
-        sapf_flags[index, variable] <- sapf_flags_out_rem[index, variable]
-      }
+          # 2.2.1.1 update flags also
+          sapf_flags[index, variable] <- sapf_flags_out_rem[index, variable]
+        }
 
-      if (variable %in% names(env_data)) {
-        env_data[index, variable] <- env_data_out_rem[index, variable]
+        if (variable %in% names(env_data)) {
+          env_data[index, variable] <- env_data_out_rem[index, variable]
 
-        # 2.2.1.1 update flags also
-        env_flags[index, variable] <- env_flags_out_rem[index, variable]
+          # 2.2.1.1 update flags also
+          env_flags[index, variable] <- env_flags_out_rem[index, variable]
+        }
       }
     }
+
 
     # 2.2.2 ranges (convert to NA because we can inpute them later)
-    for (i in 1:nrow(ranges_to_remove)) {
+    if (!is.null(ranges_to_remove)) {
+      for (i in 1:nrow(ranges_to_remove)) {
 
-      index <- ranges_to_remove[['index']][i]
-      variable <- ranges_to_remove[['variable']][i]
+        index <- ranges_to_remove[['index']][i]
+        variable <- ranges_to_remove[['variable']][i]
 
-      if (variable %in% names(sapf_data)) {
-        sapf_data[index, variable] <- NA
+        if (variable %in% names(sapf_data)) {
+          sapf_data[index, variable] <- NA
 
-        # 2.2.2.1 update flags also
-        if (sapf_flags[index, variable] == '') {
-          sapf_flags[index, variable] <- 'RANGE_REMOVE'
-        } else {
-          sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
-                                               '; RANGE_REMOVE')
+          # 2.2.2.1 update flags also
+          if (sapf_flags[index, variable] == '') {
+            sapf_flags[index, variable] <- 'RANGE_REMOVE'
+          } else {
+            sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
+                                                 '; RANGE_REMOVE')
+          }
         }
-      }
 
-      if (variable %in% names(env_data)) {
-        env_data[index, variable] <- NA
+        if (variable %in% names(env_data)) {
+          env_data[index, variable] <- NA
 
-        # 2.2.2.1 update flags also
-        if (env_flags[index, variable] == '') {
-          env_flags[index, variable] <- 'RANGE_REMOVE'
-        } else {
-          env_flags[index, variable] <- paste(env_flags[index, variable],
-                                              '; RANGE_REMOVE')
+          # 2.2.2.1 update flags also
+          if (env_flags[index, variable] == '') {
+            env_flags[index, variable] <- 'RANGE_REMOVE'
+          } else {
+            env_flags[index, variable] <- paste(env_flags[index, variable],
+                                                '; RANGE_REMOVE')
+          }
         }
       }
     }
 
+
     # 2.2.3 manual (convert to NA and flag them as MANUAL_REMOVED)
-    for (i in 1:nrow(manual_to_remove)) {
+    if (!is.null(manual_to_remove)) {
+      for (i in 1:nrow(manual_to_remove)) {
 
-      index <- manual_to_remove[['index']][i]
-      variable <- manual_to_remove[['variable']][i]
+        index <- manual_to_remove[['index']][i]
+        variable <- manual_to_remove[['variable']][i]
 
-      if (variable %in% names(sapf_data)) {
-        sapf_data[index, variable] <- NA
+        if (variable %in% names(sapf_data)) {
+          sapf_data[index, variable] <- NA
 
-        # 2.2.3.1 update flags also
-        if (sapf_flags[index, variable] == '') {
-          sapf_flags[index, variable] <- 'MANUAL_REMOVED'
-        } else {
-          sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
-                                               '; MANUAL_REMOVED')
+          # 2.2.3.1 update flags also
+          if (sapf_flags[index, variable] == '') {
+            sapf_flags[index, variable] <- 'MANUAL_REMOVED'
+          } else {
+            sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
+                                                 '; MANUAL_REMOVED')
+          }
         }
-      }
 
-      if (variable %in% names(env_data)) {
-        env_data[index, variable] <- NA
+        if (variable %in% names(env_data)) {
+          env_data[index, variable] <- NA
 
-        # 2.2.2.1 update flags also
-        if (env_flags[index, variable] == '') {
-          env_flags[index, variable] <- 'MANUAL_REMOVED'
-        } else {
-          env_flags[index, variable] <- paste(env_flags[index, variable],
-                                              '; MANUAL_REMOVED')
+          # 2.2.2.1 update flags also
+          if (env_flags[index, variable] == '') {
+            env_flags[index, variable] <- 'MANUAL_REMOVED'
+          } else {
+            env_flags[index, variable] <- paste(env_flags[index, variable],
+                                                '; MANUAL_REMOVED')
+          }
         }
       }
     }
