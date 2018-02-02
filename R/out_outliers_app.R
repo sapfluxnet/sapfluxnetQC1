@@ -64,11 +64,12 @@ out_app <- function(parent_logger = 'test') {
           sidebarPanel(
             selectInput('site_sel', 'Select site', site_list, site_list[1]),
             uiOutput('tree_env'),
-            width = 3
+            width = 2
           ),
 
           # main panel, tabbed
           mainPanel(
+            width = 10,
             tabsetPanel(
 
               # inspector tab
@@ -78,40 +79,57 @@ out_app <- function(parent_logger = 'test') {
                 # row with dygraph for visualization
                 fluidRow(
                   column(
-                    width = 12,
-                    dygraphs::dygraphOutput("time_series", height = "250px")
+                    width = 10,
+                    dygraphs::dygraphOutput("time_series", height = "275px")
                   ),
 
-                  # row with table and selectors
-                  fluidRow(
+                  # button for selecting the displayed time frame
+                  column(
+                    width = 2,
+                    shiny::br(),
+                    shiny::p('Zoom to the desired time frame to remove and ',
+                             'click the right button'),
+                    shiny::br(),
+                    shiny::h4('Remove data from: '),
+                    shiny::textOutput('time_1'),
+                    shiny::h4('to: '),
+                    shiny::textOutput('time_2'),
+                    shiny::br(),
+                    shiny::actionButton('timeframe', 'Remove this time frame',
+                                        icon('crosshairs'))
+                  )
+                ),
 
-                    # out table column
-                    column(
-                      width = 5,
-                      shiny::br(),
-                      shiny::h3('Possible outliers'),
-                      DT::dataTableOutput("out_table")
-                    ),
+                # row with table and selectors
+                fluidRow(
 
-                    # selectors column
-                    column(
-                      width = 5,
-                      shiny::br(),
-                      shiny::h3('Selected data to substitute/remove'),
-                      shiny::tableOutput("sel_rows")
-                    ),
+                  # out table column
+                  column(
+                    width = 5,
+                    shiny::br(),
+                    shiny::h3('Possible outliers'),
+                    DT::dataTableOutput("out_table")
+                  ),
 
-                    # button column
-                    column(
-                      width = 2,
-                      shiny::br(),
-                      shiny::h3('Write tables'),
-                      shiny::actionButton("write_out", "Write outliers",
-                                          icon = icon('pencil')),
-                      shiny::br(),
-                      shiny::actionButton("write_range", "Write out of range",
-                                          icon = icon('pencil'))
-                    )
+                  # selectors column
+                  column(
+                    width = 5,
+                    shiny::br(),
+                    shiny::h3('Selected data to substitute/remove'),
+                    shiny::tableOutput("sel_rows")
+                  ),
+
+                  # button column
+                  column(
+                    width = 2,
+                    shiny::br(),
+                    shiny::h3('Write tables'),
+                    shiny::br(),
+                    shiny::actionButton("write_out", "Write outliers",
+                                        icon = icon('pencil')),
+                    shiny::br(),
+                    shiny::actionButton("write_range", "Write out of range",
+                                        icon = icon('pencil'))
                   )
                 )
               ),
@@ -122,7 +140,7 @@ out_app <- function(parent_logger = 'test') {
 
                 fluidRow(
                   column(
-                    4,
+                    3,
                     shiny::h3("Outliers table"),
                     shiny::br(),
                     DT::dataTableOutput("saved_out_table"),
@@ -132,7 +150,7 @@ out_app <- function(parent_logger = 'test') {
                   ),
 
                   column(
-                    4,
+                    3,
                     shiny::h3("Ranges table"),
                     shiny::br(),
                     DT::dataTableOutput("saved_range_table"),
@@ -142,7 +160,17 @@ out_app <- function(parent_logger = 'test') {
                   ),
 
                   column(
-                    4,
+                    3,
+                    shiny::h3("Manual table"),
+                    shiny::br(),
+                    DT::dataTableOutput("saved_manual_table"),
+                    shiny::br(),
+                    shiny::actionButton("reset_manual", "Reset table",
+                                        icon = icon('eraser'))
+                  ),
+
+                  column(
+                    2,
                     shiny::h3("Set status"),
                     shiny::br(),
                     shiny::actionButton("set_status", "Statutize!",
@@ -196,6 +224,45 @@ out_app <- function(parent_logger = 'test') {
             data.frame(index = numeric(0),
                        variable = character(0))
           }
+        })
+
+        # time frame table generator
+        timeframe_gen <- reactive({
+          sfndata <- sfndataInput()
+          variable <- input$tree_env
+          start_time <- lubridate::as_datetime(
+            input$time_series_date_window[[1]],
+            tz = attr(get_sapf_flags(sfndata)[['TIMESTAMP']], 'tz')
+          )
+          end_time <- lubridate::as_datetime(
+            input$time_series_date_window[[2]],
+            tz = attr(get_sapf_flags(sfndata)[['TIMESTAMP']], 'tz')
+          )
+
+          manual_tab <- get_sapf_flags(sfndata) %>%
+            dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
+            dplyr::mutate(index = rownames(.)) %>%
+            dplyr::filter(TIMESTAMP >= start_time & TIMESTAMP <= end_time) %>%
+            dplyr::select(index) %>%
+            dplyr::mutate(variable = variable)
+
+          manual_tab
+        })
+
+        output$time_1 <- renderPrint({
+          sfndata <- sfndataInput()
+          print(lubridate::as_datetime(
+            input$time_series_date_window[[1]],
+            tz = lubridate::tz(get_timestamp(sfndata))
+          ))
+        })
+
+        output$time_2 <- renderPrint({
+          sfndata <- sfndataInput()
+          print(lubridate::as_datetime(
+            input$time_series_date_window[[2]],
+            tz = lubridate::tz(get_timestamp(sfndata))
+          ))
         })
 
         # tree and env input
@@ -257,7 +324,7 @@ out_app <- function(parent_logger = 'test') {
             dplyr::select_(var_names[1], var_names[2], var_names[3]) %>%
             xts::xts(order.by = data_dg$TIMESTAMP,
                      tz = attr(data_dg$TIMESTAMP, 'tzone')) %>%
-            dygraphs::dygraph('time_series') %>%
+            dygraphs::dygraph('Time Series') %>%
             dygraphs::dySeries(var_names[1],
                                label = 'no_out', color = 'green') %>%
             dygraphs::dySeries(var_names[2],
@@ -316,6 +383,30 @@ out_app <- function(parent_logger = 'test') {
           }
         )
 
+        # write manual table when button is pressed
+        observeEvent(
+          eventExpr = input$timeframe,
+          handlerExpr = {
+            table_to_write <- timeframe_gen()
+            file_name_out <- file.path(
+              'Data', input$site_sel,
+              'Lvl_2', 'lvl_2_out_warn',
+              paste0(input$site_sel, '_manual_to_remove.txt')
+            )
+
+            # if file is new add column names
+            if (file.exists(file_name_out)) {
+              write.table(table_to_write,
+                          file = file_name_out,
+                          append = TRUE, row.names = FALSE, col.names = FALSE)
+            } else {
+              write.table(table_to_write,
+                          file = file_name_out,
+                          append = TRUE, row.names = FALSE, col.names = TRUE)
+            }
+          }
+        )
+
         # write ranges table when button is pressed
         observeEvent(
           eventExpr = input$write_range,
@@ -341,24 +432,31 @@ out_app <- function(parent_logger = 'test') {
         )
 
         # Outliers to remove table
-        saved_out_table <- reactive({
+        out_table_reader <- shiny::reactive({
+          file_name <- file.path('Data', input$site_sel,
+                                 'Lvl_2', 'lvl_2_out_warn',
+                                 paste0(input$site_sel, '_out_to_remove.txt'))
 
-          file_name_out <- file.path('Data', input$site_sel,
-                                     'Lvl_2', 'lvl_2_out_warn',
-                                     paste0(input$site_sel, '_out_to_remove.txt'))
+          # inputs, only for redrawing the table purposes
+          button_timeframe <- input$timeframe
+          button_write_out <- input$write_out
+          button_write_range <- input$write_range
+          button_reset_out <- input$reset_out
+          button_reset_range <- input$reset_range
+          button_reset_manual <- input$reset_manual
 
-          if (file.exists(file_name_out)) {
-            read.table(file_name_out, header = TRUE) %>%
-              DT::datatable(extensions = 'Scroller',
-                            options = list(dom = 't',
-                                           deferRender = TRUE,
-                                           scrollY = 300,
-                                           scroller = TRUE))
+          if (file.exists(file_name)) {
+            read.table(file_name, header = TRUE)
           }
         })
 
         output$saved_out_table <- DT::renderDataTable({
-          saved_out_table()
+          out_table_reader() %>%
+            DT::datatable(extensions = 'Scroller',
+                          options = list(dom = 't',
+                                         deferRender = TRUE,
+                                         scrollY = 300,
+                                         scroller = TRUE))
         })
 
         # reset
@@ -373,19 +471,32 @@ out_app <- function(parent_logger = 'test') {
           }
         )
 
-        # Outliers to remove table
-        output$saved_range_table <- DT::renderDataTable({
-          file_name_out <- file.path('Data', input$site_sel,
-                                     'Lvl_2', 'lvl_2_out_warn',
-                                     paste0(input$site_sel, '_ranges_to_remove.txt'))
-          if (file.exists(file_name_out)) {
-            read.table(file_name_out, header = TRUE) %>%
-              DT::datatable(extensions = 'Scroller',
-                            options = list(dom = 't',
-                                           deferRender = TRUE,
-                                           scrollY = 300,
-                                           scroller = TRUE))
+        # Ranges to remove table
+        range_table_reader <- shiny::reactive({
+          file_name <- file.path('Data', input$site_sel,
+                                 'Lvl_2', 'lvl_2_out_warn',
+                                 paste0(input$site_sel, '_ranges_to_remove.txt'))
+
+          # inputs, only for redrawing the table purposes
+          button_timeframe <- input$timeframe
+          button_write_out <- input$write_out
+          button_write_range <- input$write_range
+          button_reset_out <- input$reset_out
+          button_reset_range <- input$reset_range
+          button_reset_manual <- input$reset_manual
+
+          if (file.exists(file_name)) {
+            read.table(file_name, header = TRUE)
           }
+        })
+
+        output$saved_range_table <- DT::renderDataTable({
+          range_table_reader() %>%
+            DT::datatable(extensions = 'Scroller',
+                          options = list(dom = 't',
+                                         deferRender = TRUE,
+                                         scrollY = 300,
+                                         scroller = TRUE))
         })
 
         # reset
@@ -395,6 +506,46 @@ out_app <- function(parent_logger = 'test') {
             file_name_out <- file.path('Data', input$site_sel,
                                        'Lvl_2', 'lvl_2_out_warn',
                                        paste0(input$site_sel, '_ranges_to_remove.txt'))
+
+            unlink(file_name_out)
+          }
+        )
+
+        # manual to remove table
+        manual_table_reader <- shiny::reactive({
+          file_name <- file.path('Data', input$site_sel,
+                                'Lvl_2', 'lvl_2_out_warn',
+                                paste0(input$site_sel, '_manual_to_remove.txt'))
+
+          # inputs, only for redrawing the table purposes
+          button_timeframe <- input$timeframe
+          button_write_out <- input$write_out
+          button_write_range <- input$write_range
+          button_reset_out <- input$reset_out
+          button_reset_range <- input$reset_range
+          button_reset_manual <- input$reset_manual
+
+          if (file.exists(file_name)) {
+            read.table(file_name, header = TRUE)
+          }
+        })
+
+        output$saved_manual_table <- DT::renderDataTable({
+          manual_table_reader() %>%
+            DT::datatable(extensions = 'Scroller',
+                          options = list(dom = 't',
+                                         deferRender = TRUE,
+                                         scrollY = 300,
+                                         scroller = TRUE))
+        })
+
+        # reset
+        observeEvent(
+          eventExpr = input$reset_manual,
+          handlerExpr = {
+            file_name_out <- file.path('Data', input$site_sel,
+                                       'Lvl_2', 'lvl_2_out_warn',
+                                       paste0(input$site_sel, '_manual_to_remove.txt'))
 
             unlink(file_name_out)
           }
