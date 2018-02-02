@@ -50,6 +50,19 @@ suppressWarnings(write.table(
   append = TRUE, row.names = FALSE, col.names = TRUE
 ))
 
+manual_to_remove <- data.frame(
+  stringsAsFactors = FALSE,
+  variable = c(rep(c("AUS_ELL_HB_Edi_Js_1", "AUS_ELL_HB_Era_Js_2", "AUS_ELL_HB_Edi_Js_3"), each = 5),
+               rep(c('ta', 'rh', 'vpd', 'ppfd_in', 'ws', 'precip'), each = 5)),
+  index = rep(20011:20015, 9)
+)
+
+suppressWarnings(write.table(
+  manual_to_remove,
+  file = file.path('Data', 'FOO', 'Lvl_2', 'lvl_2_out_warn', 'FOO_manual_to_remove.txt'),
+  append = TRUE, row.names = FALSE, col.names = TRUE
+))
+
 # create fake flags
 sapf_flags[20001:20010, -1] <- rep(c('OUT_WARN', 'OUT_RANGE'), each = 5)
 env_flags[20001:20010, -1] <- rep(c('OUT_WARN', 'OUT_RANGE'), each = 5)
@@ -84,16 +97,18 @@ test_that('fake flags values have changed correctly', {
   expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
   expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
   expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
   expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
   expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
 })
 
 test_that('values are substituted', {
   env_data_res <- get_env(res)
   sapf_data_res <- get_sapf(res)
 
-  expect_true(all(is.na(env_data_res[20006:20010, -1])))
-  expect_true(all(is.na(sapf_data_res[20006:20010, -1])))
+  expect_true(all(is.na(env_data_res[20006:20015, -1])))
+  expect_true(all(is.na(sapf_data_res[20006:20015, -1])))
   expect_false(any(env_data_res[20001:20005, -1] == env_data[20001:20005, -1]))
   expect_false(any(sapf_data_res[20001:20005, -1] == sapf_data[20001:20005, -1]))
 })

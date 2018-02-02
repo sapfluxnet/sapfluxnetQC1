@@ -229,8 +229,8 @@ qc_out_median <- function(y, k = 25L, parent_logger = 'test') {
 # START
 # Function declaration
 qc_out_hampel_filter <- function(y, k = 25L, t0 = 10L,
-                              method = 'hampel', reverse = TRUE,
-                              parent_logger = 'test') {
+                                 method = 'hampel', reverse = TRUE,
+                                 parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -351,8 +351,8 @@ qc_out_hampel_filter <- function(y, k = 25L, t0 = 10L,
 # START
 # Function declaration
 qc_out_remove <- function(sfn_data, k = 25L, t0 = 10L,
-                       method = 'hampel', reverse = TRUE,
-                       substitute = FALSE, parent_logger = 'test') {
+                          method = 'hampel', reverse = TRUE,
+                          substitute = FALSE, parent_logger = 'test') {
 
   # Using calling handlers to manage errors
   withCallingHandlers({
@@ -886,6 +886,12 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
       delim = ' '
     )
 
+    manual_to_remove <- readr::read_delim(
+      file.path('Data', site, 'Lvl_2', 'lvl_2_out_warn',
+                paste0(site, '_manual_to_remove.txt')),
+      delim = ' '
+    )
+
     # 1.2 load the SfnData
     sfn_data <- df_read_SfnData(site, 'out_warn', parent_logger = parent_logger)
 
@@ -953,7 +959,38 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
           env_flags[index, variable] <- 'RANGE_REMOVE'
         } else {
           env_flags[index, variable] <- paste(env_flags[index, variable],
-                                               '; RANGE_REMOVE')
+                                              '; RANGE_REMOVE')
+        }
+      }
+    }
+
+    # 2.2.3 manual (convert to NA and flag them as MANUAL_REMOVED)
+    for (i in 1:nrow(manual_to_remove)) {
+
+      index <- manual_to_remove[['index']][i]
+      variable <- manual_to_remove[['variable']][i]
+
+      if (variable %in% names(sapf_data)) {
+        sapf_data[index, variable] <- NA
+
+        # 2.2.3.1 update flags also
+        if (sapf_flags[index, variable] == '') {
+          sapf_flags[index, variable] <- 'MANUAL_REMOVED'
+        } else {
+          sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
+                                               '; MANUAL_REMOVED')
+        }
+      }
+
+      if (variable %in% names(env_data)) {
+        env_data[index, variable] <- NA
+
+        # 2.2.2.1 update flags also
+        if (env_flags[index, variable] == '') {
+          env_flags[index, variable] <- 'MANUAL_REMOVED'
+        } else {
+          env_flags[index, variable] <- paste(env_flags[index, variable],
+                                              '; MANUAL_REMOVED')
         }
       }
     }
