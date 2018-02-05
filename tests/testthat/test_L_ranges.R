@@ -236,7 +236,23 @@ test_that('files are written correctly', {
 
   expect_false(is.null(env_plant[['ext_rad']]))
   expect_false(is.null(env_sap[['ext_rad']]))
+  expect_false(is.null(env_plant[['sw_in']]))
+  expect_false(is.null(env_sap[['sw_in']]))
   expect_identical(env_plant, env_sap)
+
+  env_plant_flags <- get_env_flags(df_read_SfnData('FOO', 'unit_trans', 'plant'))
+  env_sap_flags <- get_env_flags(df_read_SfnData('FOO', 'unit_trans', 'sapwood'))
+
+  expect_false(is.null(env_plant_flags[['ext_rad']]))
+  expect_false(is.null(env_sap_flags[['ext_rad']]))
+  expect_false(is.null(env_plant_flags[['sw_in']]))
+  expect_false(is.null(env_sap_flags[['sw_in']]))
+  expect_identical(env_plant_flags, env_sap_flags)
+  expect_true(all(env_plant_flags[['ext_rad']] == 'CALCULATED'))
+  expect_true(all(env_plant_flags[['sw_in']] == 'CALCULATED'))
+  expect_true(all(env_sap_flags[['ext_rad']] == 'CALCULATED'))
+  expect_true(all(env_sap_flags[['sw_in']] == 'CALCULATED'))
+
 })
 
 test_that('status file is correctly updated', {

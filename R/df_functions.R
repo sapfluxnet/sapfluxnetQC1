@@ -823,6 +823,11 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
                   package = 'sapfluxnetQC1'),
       file.path('Templates'), overwrite = TRUE
     )
+    file.copy(
+      system.file('Rmd_templates', 'LVL2_out_report.Rmd',
+                  package = 'sapfluxnetQC1'),
+      file.path('Templates'), overwrite = TRUE
+    )
 
     # Copy template for shiny web app to parent directory
     file.copy(
@@ -1849,7 +1854,9 @@ df_warn_to_rem <- function(parent_logger = 'test') {
           output_file = paste(format(Sys.time(), '%Y%m%d%H%M'),
                               .x,
                               'LVL2_outliers_report.html', sep = '_'),
-          output_dir = file.path('Reports', .x)
+          output_dir = file.path('Reports', .x),
+          parent_logger = parent_logger,
+          code = .x
         )
       )
 

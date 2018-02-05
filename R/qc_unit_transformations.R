@@ -1933,7 +1933,16 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     if (transf_list['radiation_conversion', 'Available']) {
       env_data <- get_env(sfndata)
       env_modf <- qc_rad_conversion(env_data, parent_logger = parent_logger)
+      env_flags <- get_env_flags(sfndata)
+      vars_names <- names(env_modf)[!(names(env_modf) %in% names(env_flags))]
+      vars_to_create <- as.list(rep('CALCULATED', length(vars_names)))
+      names(vars_to_create) <- vars_names
+      env_flags_modf <- env_flags %>%
+        dplyr::mutate(!!! vars_to_create) %>%
+        dplyr::select(names(env_modf))
+
       get_env(sfndata) <- env_modf[,-1]
+      get_env_flags(sfndata) <- env_flags_modf[,-1]
     }
 
     # STEP 3
@@ -1941,8 +1950,17 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     if (transf_list['VPD_calculation', 'Available']) {
       env_data <- get_env(sfndata)
       env_modf <- qc_vpd(env_data, parent_logger = parent_logger)
+      env_flags <- get_env_flags(sfndata)
+      vars_names <- names(env_modf)[!(names(env_modf) %in% names(env_flags))]
+      vars_to_create <- as.list(rep('CALCULATED', length(vars_names)))
+      names(vars_to_create) <- vars_names
+      env_flags_modf <- env_flags %>%
+        dplyr::mutate(!!! vars_to_create) %>%
+        dplyr::select(names(env_modf))
+
       # 3.1 modify the env_data from the sfndata
       get_env(sfndata) <- env_modf[,-1]
+      get_env_flags(sfndata) <- env_flags_modf[,-1]
     }
 
     # STEP 4
@@ -1955,6 +1973,10 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         parent_logger = parent_logger
       )
 
+      env_flags <- get_env_flags(sfndata)
+      env_flags_modf <- env_flags %>%
+        dplyr::mutate(ext_rad = 'CALCULATED')
+
       # 4.1 add the solar timestamp to the SfnData
       get_solar_timestamp(sfndata) <- env_modf[['solarTIMESTAMP']]
 
@@ -1962,6 +1984,9 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
       get_env(sfndata) <- env_modf %>%
         dplyr::select(-TIMESTAMP, -solarTIMESTAMP) %>%
         as.data.frame(stringsAsFactors = FALSE)
+
+      get_env_flags(sfndata) <- env_flags_modf %>%
+        dplyr::select(-TIMESTAMP)
     }
 
     # STEP 5

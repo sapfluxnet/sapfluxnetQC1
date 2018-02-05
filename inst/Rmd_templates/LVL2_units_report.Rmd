@@ -1,5 +1,5 @@
 ---
-title: "Level II Outliers report for `r params$code`"
+title: "Level II Units report for `r params$code`"
 author: "SAPFLUXNET Project"
 date: "`r Sys.time()`"
 params:
@@ -17,7 +17,7 @@ knitr::opts_knit$set(root.dir = params$wd)
 knitr::opts_chunk$set(error = TRUE, echo = FALSE)
 
 # log setup
-logger_name <- paste('LVL2', params$code, 'qc_outliers_process',
+logger_name <- paste('LVL2', params$code, 'qc_units_process',
                      'rep_sfn_render', sep = '.')
 
 log_sapfluxnet_setup('Logs/sapfluxnet.log',
@@ -31,7 +31,7 @@ SITE: `r params$code`
 
 ***
 
-```{r ouliers, message=FALSE, warning=FALSE}
+```{r units, message=FALSE, warning=FALSE}
 # libraries
 library(sapfluxnetQC1)
 library(dplyr)
@@ -40,7 +40,7 @@ library(DT)
 # data
 sfndata <- df_read_SfnData(
   params$code,
-  level = 'out_rem', units = NULL,
+  level = 'unit_trans', units = NULL,
   parent_logger = logger_name
 )
 
@@ -172,14 +172,14 @@ sapf_flags_summary <- data.frame(
   Flag = c('OUT_REPLACED', 'RANGE_REMOVE', 'MANUAL_REMOVED'),
   TO_REM = c(sapf_out_removed, sapf_ranges_removed, sapf_manual_removed)
 ) %>%
-  dplyr::full_join(sapf_flags_table, by = 'Flag')
+  dplyr::full_join(sapf_flags_table, by = Flag)
 
 env_flags_summary <- data.frame(
   stringsAsFactors = FALSE,
   Flag = c('OUT_REPLACED', 'RANGE_REMOVE', 'MANUAL_REMOVED'),
   TO_REM = c(env_out_removed, env_ranges_removed, env_manual_removed)
 ) %>%
-  dplyr::full_join(env_flags_table, by = 'Flag')
+  dplyr::full_join(env_flags_table, by = Flag)
 ```
 
 # Outliers, ranges and flaws in the data
@@ -189,7 +189,6 @@ env_flags_summary <- data.frame(
 ```{r sapflow_flags_table}
 sapf_flags_summary %>%
   dplyr::mutate(
-    ACTUAL = case_when(is.na(ACTUAL) ~ 0),
     Equivalence = TO_REM == ACTUAL
   ) %>%
   DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
@@ -213,7 +212,6 @@ sapf_flags_summary %>%
 ```{r environmental_flags_table}
 env_flags_summary %>%
   dplyr::mutate(
-    ACTUAL = case_when(is.na(ACTUAL) ~ 0),
     Equivalence = TO_REM == ACTUAL
   ) %>%
   DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
@@ -243,7 +241,7 @@ out_to_remove %>%
                 options = list(dom = 'ti',
                                columnDefs = list(list(className = 'dt-center',
                                                       width = '10%',
-                                                      targets = c(0:1))),
+                                                      targets = c(0:2))),
                                scroller = TRUE, scrollY = 450,
                                scrollCollapse = TRUE))
 ```
@@ -256,7 +254,7 @@ ranges_to_remove %>%
                 options = list(dom = 'ti',
                                columnDefs = list(list(className = 'dt-center',
                                                       width = '10%',
-                                                      targets = c(0:1))),
+                                                      targets = c(0:2))),
                                scroller = TRUE, scrollY = 450,
                                scrollCollapse = TRUE))
 ```
@@ -269,7 +267,7 @@ manual_to_remove %>%
                 options = list(dom = 'ti',
                                columnDefs = list(list(className = 'dt-center',
                                                       width = '10%',
-                                                      targets = c(0:1))),
+                                                      targets = c(0:2))),
                                scroller = TRUE, scrollY = 450,
                                scrollCollapse = TRUE))
 ```
