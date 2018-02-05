@@ -44,3 +44,20 @@ lapply(data_folders, function(folder) {
   qc_start_process(file.path(folder, 'Accepted'), rdata = FALSE,
                    parent_logger = paste('QC', code, sep = '.'))
 })
+
+################################################################################
+# LEVEL 2
+
+log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = 'LEVEL2', level = "DEBUG")
+
+df_lvl1_to_lvl2(parent_logger = 'LEVEL2')
+
+########
+
+# out_app()
+
+df_warn_to_rem()
+
+# out_confirmation_app()
+
+df_rem_to_units()
