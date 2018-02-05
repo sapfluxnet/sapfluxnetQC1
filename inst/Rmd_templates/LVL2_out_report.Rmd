@@ -1,0 +1,273 @@
+---
+title: "Level II report for `r params$code`"
+author: "SAPFLUXNET Project"
+date: "`r Sys.time()`"
+params:
+  wd: ../
+  code: ''
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
+---
+
+```{r, include=FALSE}
+# root folder
+knitr::opts_knit$set(root.dir = params$wd)
+knitr::opts_chunk$set(error = TRUE, echo = FALSE)
+
+# log setup
+logger_name <- paste('LVL2', params$code, 'qc_lvl2_process',
+                     'rep_sfn_render', sep = '.')
+
+log_sapfluxnet_setup('Logs/sapfluxnet.log',
+                     logger = logger_name,
+                     level = 'DEBUG')
+```
+
+***
+
+SITE: `r params$code`
+
+***
+
+```{r lvl2, message=FALSE, warning=FALSE}
+# libraries
+library(sapfluxnetQC1)
+library(dplyr)
+library(DT)
+
+# data
+sfndata <- df_read_SfnData(
+  params$code,
+  level = 'out_rem', units = NULL,
+  parent_logger = logger_name
+)
+
+# flags
+sapf_flags <- get_sapf_flags(sfndata)
+env_flags <- get_env_flags(sfndata)
+
+# sapf_flags
+sapf_flags_names <- unique(
+  unlist(
+    stringr::str_split(
+      unlist(lapply(sapf_flags, unique)),
+      '; '
+    )
+  )
+)
+
+sapf_flags_count <- vapply(
+  sapf_flags_names,
+  function(flag){sum(stringr::str_count(as.matrix(sapf_flags), flag))},
+  numeric(1)
+)
+
+sapf_flags_table <- data.frame(
+  stringsAsFactors = FALSE,
+  Flag = sapf_flags_names,
+  ACTUAL = sapf_flags_count
+) %>%
+  dplyr::filter(Flag %in% c('OUT_REPLACED', 'RANGE_REMOVE', 'MANUAL_REMOVED'))
+
+# env_flags
+env_flags_names <- unique(
+  unlist(
+    stringr::str_split(
+      unlist(lapply(env_flags, unique)),
+      '; '
+    )
+  )
+)
+
+env_flags_count <- vapply(
+  env_flags_names,
+  function(flag){sum(stringr::str_count(as.matrix(env_flags), flag))},
+  numeric(1)
+)
+
+env_flags_table <- data.frame(
+  stringsAsFactors = FALSE,
+  Flag = env_flags_names,
+  ACTUAL = env_flags_count
+) %>%
+  dplyr::filter(Flag %in% c('OUT_REPLACED', 'RANGE_REMOVE', 'MANUAL_REMOVED'))
+
+# *_to_remove files
+out_to_remove_path <- file.path('Data', params$code, 'Lvl_2', 'lvl_2_out_warn',
+                                paste0(params$code, 'out_to_remove.txt'))
+
+if (file.exists(out_to_remove_path)) {
+  out_to_remove <- readr::read_delim(out_to_remove_path, delim = ' ')
+} else {
+  out_to_remove <- NULL
+}
+
+ranges_to_remove_path <- file.path('Data', params$code, 'Lvl_2', 'lvl_2_out_warn',
+                                paste0(params$code, 'ranges_to_remove.txt'))
+
+if (file.exists(ranges_to_remove_path)) {
+  ranges_to_remove <- readr::read_delim(ranges_to_remove_path, delim = ' ')
+} else {
+  ranges_to_remove <- NULL
+}
+
+manual_to_remove_path <- file.path('Data', params$code, 'Lvl_2', 'lvl_2_out_warn',
+                                paste0(params$code, 'manual_to_remove.txt'))
+
+if (file.exists(manual_to_remove_path)) {
+  manual_to_remove <- readr::read_delim(manual_to_remove_path, delim = ' ')
+} else {
+  manual_to_remove <- NULL
+}
+
+if (!is.null(out_to_remove)) {
+  sapf_out_removed <- out_to_remove %>%
+    dplyr::filter(variable %in% names(sapf_flags)) %>%
+    dplyr::pull(variable) %>%
+    length()
+  
+  env_out_removed <- out_to_remove %>%
+    dplyr::filter(variable %in% names(env_flags)) %>%
+    dplyr::pull(variable) %>%
+    length()
+} else {
+  sapf_out_removed <- 0
+  env_out_removed <- 0
+}
+
+if (!is.null(ranges_to_remove)) {
+  sapf_ranges_removed <- ranges_to_remove %>%
+    dplyr::filter(variable %in% names(sapf_flags)) %>%
+    dplyr::pull(variable) %>%
+    length()
+  
+  env_ranges_removed <- ranges_to_remove %>%
+    dplyr::filter(variable %in% names(env_flags)) %>%
+    dplyr::pull(variable) %>%
+    length()
+} else {
+  sapf_ranges_removed <- 0
+  env_ranges_removed <- 0
+}
+
+if (!is.null(manual_to_remove)) {
+  sapf_manual_removed <- manual_to_remove %>%
+    dplyr::filter(variable %in% names(sapf_flags)) %>%
+    dplyr::pull(variable) %>%
+    length()
+  
+  env_manual_removed <- manual_to_remove %>%
+    dplyr::filter(variable %in% names(env_flags)) %>%
+    dplyr::pull(variable) %>%
+    length()
+} else {
+  sapf_manual_removed <- 0
+  env_manual_removed <- 0
+}
+
+sapf_flags_summary <- data.frame(
+  stringsAsFactors = FALSE,
+  Flags = c('OUT_REPLACED', 'RANGE_REMOVE', 'MANUAL_REMOVED'),
+  TO_REM = c(sapf_out_removed, sapf_ranges_removed, sapf_manual_removed)
+) %>%
+  dplyr::full_join(sapf_flags_table, by = Flags)
+
+env_flags_summary <- data.frame(
+  stringsAsFactors = FALSE,
+  Flags = c('OUT_REPLACED', 'RANGE_REMOVE', 'MANUAL_REMOVED'),
+  TO_REM = c(env_out_removed, env_ranges_removed, env_manual_removed)
+) %>%
+  dplyr::full_join(env_flags_table, by = Flags)
+```
+
+# Outliers, ranges and flaws in the data
+
+## Sapflow data
+
+```{r sapflow_flags_table}
+sapf_flags_summary %>%
+  dplyr::mutate(
+    Equivalence = TO_REM == ACTUAL
+  ) %>%
+  DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
+                extensions = c('Scroller'),
+                caption = 'Sapflow flaws table',
+                options = list(dom = 'ti',
+                               columnDefs = list(list(className = 'dt-center',
+                                                      width = '10%',
+                                                      targets = c(1:3)),
+                                                 list(className = 'dt-right',
+                                                      targets = 0)),
+                               scroller = TRUE, scrollY = 450,
+                               scrollCollapse = TRUE)) %>%
+  DT::formatStyle('Equivalence',
+                  backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                               c('#d91e18', 'transparent')))
+```
+
+## Environmental data
+
+```{r environmental_flags_table}
+env_flags_summary %>%
+  dplyr::mutate(
+    Equivalence = TO_REM == ACTUAL
+  ) %>%
+  DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
+                extensions = c('Scroller'),
+                caption = 'Environmental flaws table',
+                options = list(dom = 'ti',
+                               columnDefs = list(list(className = 'dt-center',
+                                                      width = '10%',
+                                                      targets = c(1:3)),
+                                                 list(className = 'dt-right',
+                                                      targets = 0)),
+                               scroller = TRUE, scrollY = 450,
+                               scrollCollapse = TRUE)) %>%
+  DT::formatStyle('Equivalence',
+                  backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                               c('#d91e18', 'transparent')))
+```
+
+
+## Summary of removed/substituted values
+
+```{r out_table}
+out_to_remove %>%
+  DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
+                extensions = c('Scroller'),
+                caption = 'Outliers table',
+                options = list(dom = 'ti',
+                               columnDefs = list(list(className = 'dt-center',
+                                                      width = '10%',
+                                                      targets = c(0:2))),
+                               scroller = TRUE, scrollY = 450,
+                               scrollCollapse = TRUE))
+```
+
+```{r ranges_table}
+ranges_to_remove %>%
+  DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
+                extensions = c('Scroller'),
+                caption = 'Ranges table',
+                options = list(dom = 'ti',
+                               columnDefs = list(list(className = 'dt-center',
+                                                      width = '10%',
+                                                      targets = c(0:2))),
+                               scroller = TRUE, scrollY = 450,
+                               scrollCollapse = TRUE))
+```
+
+```{r manual_table}
+manual_to_remove %>%
+  DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
+                extensions = c('Scroller'),
+                caption = 'Manual table',
+                options = list(dom = 'ti',
+                               columnDefs = list(list(className = 'dt-center',
+                                                      width = '10%',
+                                                      targets = c(0:2))),
+                               scroller = TRUE, scrollY = 450,
+                               scrollCollapse = TRUE))
+```

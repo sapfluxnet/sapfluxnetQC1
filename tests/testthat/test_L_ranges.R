@@ -175,11 +175,16 @@ test_that('values are substituted', {
 ################################################################################
 context('L2. Warning to Remove')
 
+df_copy_templates(first = TRUE)
 df_warn_to_rem()
 
 test_that('files are written correctly', {
   expect_true(
     file.exists(file.path('Data', 'FOO', 'Lvl_2', 'lvl_2_out_rem', 'FOO.RData'))
+  )
+  expect_length(
+    list.files(path = file.path('Reports', 'FOO'), 'outliers_report.html'),
+    1
   )
 
   env_data_pre <- get_env(df_read_SfnData('FOO', 'out_warn'))[20001:20010, -1]
@@ -249,6 +254,7 @@ unlink('Data', recursive = TRUE)
 unlink('Logs', recursive = TRUE)
 unlink('Reports', recursive = TRUE)
 unlink('Templates', recursive = TRUE)
+unlink(c('main_script.R', 'debug_script.R', 'sfn_monitor.Rmd'))
 
 ################################################################################
 context('L4. Ranges')
