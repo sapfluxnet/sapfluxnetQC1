@@ -191,7 +191,8 @@ env_flags_summary <- data.frame(
 ```{r sapflow_flags_table}
 sapf_flags_summary %>%
   dplyr::mutate(
-    ACTUAL = case_when(is.na(ACTUAL) ~ 0),
+    ACTUAL = case_when(is.na(ACTUAL) ~ 0,
+                       !is.na(ACTUAL) ~ ACTUAL),
     Equivalence = TO_REM == ACTUAL
   ) %>%
   DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
@@ -215,7 +216,8 @@ sapf_flags_summary %>%
 ```{r environmental_flags_table}
 env_flags_summary %>%
   dplyr::mutate(
-    ACTUAL = case_when(is.na(ACTUAL) ~ 0),
+    ACTUAL = case_when(is.na(ACTUAL) ~ 0,
+                       !is.na(ACTUAL) ~ ACTUAL),
     Equivalence = TO_REM == ACTUAL
   ) %>%
   DT::datatable(class = 'display compact', rownames = FALSE, filter = 'none',
