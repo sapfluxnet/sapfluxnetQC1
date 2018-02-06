@@ -389,7 +389,8 @@ dir.create('Templates')
 test_that('function works', {
   expect_error(df_copy_templates(),'Check whether templates and running scripts already exist.')
   expect_true(df_copy_templates(first = TRUE))
-  expect_equal(dir('Templates'),c('LVL2_out_report.Rmd', 'QC_report.Rmd','received_to_accepted.Rmd'))
+  expect_equal(dir('Templates'),c('LVL2_out_report.Rmd','LVL2_units_report.Rmd',
+                                  'QC_report.Rmd','received_to_accepted.Rmd'))
   expect_true(all(c('sfn_monitor.Rmd','main_script.R','debug_script.R') %in% dir('.')))
   expect_true(df_copy_templates())
 })

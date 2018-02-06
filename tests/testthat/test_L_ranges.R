@@ -230,6 +230,10 @@ test_that('files are written correctly', {
       'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'leaf', 'FOO.RData'
     ))
   )
+  expect_length(
+    list.files(path = file.path('Reports', 'FOO'), 'units_report.html'),
+    1
+  )
 
   env_plant <- get_env(df_read_SfnData('FOO', 'unit_trans', 'plant'))
   env_sap <- get_env(df_read_SfnData('FOO', 'unit_trans', 'sapwood'))
@@ -266,11 +270,11 @@ test_that('status file is correctly updated', {
 
 ################################################################################
 # clean
-unlink('Data', recursive = TRUE)
-unlink('Logs', recursive = TRUE)
-unlink('Reports', recursive = TRUE)
-unlink('Templates', recursive = TRUE)
-unlink(c('main_script.R', 'debug_script.R', 'sfn_monitor.Rmd'))
+# unlink('Data', recursive = TRUE)
+# unlink('Logs', recursive = TRUE)
+# unlink('Reports', recursive = TRUE)
+# unlink('Templates', recursive = TRUE)
+# unlink(c('main_script.R', 'debug_script.R', 'sfn_monitor.Rmd'))
 
 ################################################################################
 context('L4. Ranges')

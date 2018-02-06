@@ -773,6 +773,11 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
                     package = 'sapfluxnetQC1'),
         file.path('Templates'), overwrite = TRUE
       )
+      file.copy(
+        system.file('Rmd_templates', 'LVL2_units_report.Rmd',
+                    package = 'sapfluxnetQC1'),
+        file.path('Templates'), overwrite = TRUE
+      )
 
       # Copy template for shiny web app to parent directory
       file.copy(
@@ -825,6 +830,11 @@ df_copy_templates <- function(first = FALSE, parent_logger = 'test') {
     )
     file.copy(
       system.file('Rmd_templates', 'LVL2_out_report.Rmd',
+                  package = 'sapfluxnetQC1'),
+      file.path('Templates'), overwrite = TRUE
+    )
+    file.copy(
+      system.file('Rmd_templates', 'LVL2_units_report.Rmd',
                   package = 'sapfluxnetQC1'),
       file.path('Templates'), overwrite = TRUE
     )
@@ -1920,6 +1930,18 @@ df_rem_to_units <- function(parent_logger = 'test') {
     sites_list %>%
       purrr::walk(
         ~ df_set_status(.x, LVL2 = list(TO_UNITS = 'DONE', STEP = 'UNITS'))
+      ) %>%
+      # 1.3 report
+      purrr::walk(
+        ~ rep_sfn_render(
+          'LVL2_units_report.Rmd',
+          output_file = paste(format(Sys.time(), '%Y%m%d%H%M'),
+                              .x,
+                              'LVL2_units_report.html', sep = '_'),
+          output_dir = file.path('Reports', .x),
+          parent_logger = parent_logger,
+          code = .x
+        )
       )
   },
 

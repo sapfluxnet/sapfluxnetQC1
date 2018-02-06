@@ -20,9 +20,11 @@ knitr::opts_chunk$set(error = TRUE, echo = FALSE)
 logger_name <- paste('LVL2', params$code, 'qc_outliers_process',
                      'rep_sfn_render', sep = '.')
 
-log_sapfluxnet_setup('Logs/sapfluxnet.log',
-                     logger = logger_name,
-                     level = 'DEBUG')
+sapfluxnetQC1::log_sapfluxnet_setup(
+  'Logs/sapfluxnet.log',
+  logger = logger_name,
+  level = 'DEBUG'
+)
 ```
 
 ***
