@@ -1763,9 +1763,20 @@ Outliers App {data-icon="ion-ios-analytics" data-navmenu="Apps"}
 
 ### Outliers flagging
 
-Select the sites ready for Level 2 QC
+Process the desired outliers
 
 ```{r out_app}
 out_app()
+```
+
+Outliers Confirmation App {data-icon="ion-ios-analytics" data-navmenu="Apps"}
+================================================================================
+
+### Outliers confirmation
+
+Confirm outliers removing
+
+```{r out_confirmation_app}
+out_confirmation_app()
 ```
 
