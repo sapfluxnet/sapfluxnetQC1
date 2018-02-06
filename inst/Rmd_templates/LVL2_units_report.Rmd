@@ -127,6 +127,17 @@ if (!is.null(sfndata_plant)) {
     )
   }
   
+  if (transf_list['rh_calculation', 'Available']) {
+    rh <- data.frame(
+      new_rh = get_env(sfndata_plant)[['rh']]
+    )
+  } else {
+    rh <- data.frame(
+      old_rh = get_env(sfndata_rem)[['rh']],
+      new_rh = get_env(sfndata_plant)[['rh']]
+    )
+  }
+  
   if (transf_list['solar_time', 'Available']) {
     timestamp <- data.frame(
       TIMTESTAMP = get_timestamp(sfndata_plant),
@@ -170,6 +181,17 @@ if (!is.null(sfndata_plant)) {
       vpd <- data.frame(
         old_vpd = get_env(sfndata_rem)[['vpd']],
         new_vpd = get_env(sfndata_sapwood)[['vpd']]
+      )
+    }
+    
+    if (transf_list['rh_calculation', 'Available']) {
+      rh <- data.frame(
+        new_rh = get_env(sfndata_sapwood)[['rh']]
+      )
+    } else {
+      rh <- data.frame(
+        old_rh = get_env(sfndata_rem)[['rh']],
+        new_rh = get_env(sfndata_sapwood)[['rh']]
       )
     }
     
@@ -219,6 +241,17 @@ if (!is.null(sfndata_plant)) {
         )
       }
       
+      if (transf_list['rh_calculation', 'Available']) {
+        rh <- data.frame(
+          new_rh = get_env(sfndata_leaf)[['rh']]
+        )
+      } else {
+        rh <- data.frame(
+          old_rh = get_env(sfndata_rem)[['rh']],
+          new_rh = get_env(sfndata_leaf)[['rh']]
+        )
+      }
+      
       if (transf_list['solar_time', 'Available']) {
         timestamp <- data.frame(
           TIMTESTAMP = get_timestamp(sfndata_leaf),
@@ -235,7 +268,7 @@ if (!is.null(sfndata_plant)) {
 }
 
 summary_table <- dplyr::bind_cols(
-  timestamp, radiation, vpd
+  timestamp, radiation, vpd, rh
 )
 ```
 

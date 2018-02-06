@@ -1813,10 +1813,10 @@ qc_transformation_vars <- function(sfndata, parent_logger = 'test') {
     )
 
     # STEP 4
-    # VPD calculation
+    # VPD & rh calculation
     vpd_vars <- c('rh', 'ta', 'vpd')
     vpd_loc <- rep('env_data', length(vpd_vars))
-    vpd_transf <- rep('vpd_calc', length(vpd_vars))
+    vpd_transf <- rep('vpd_and_rh_calc', length(vpd_vars))
     vpd_presence <- c(
       !is.null(get_env(sfndata)$rh),
       !is.null(get_env(sfndata)$ta),
@@ -1939,7 +1939,7 @@ qc_transf_list <- function(transf_info, parent_logger = 'test') {
     # STEP 4
     # VPD calculation
     vpd_info <- transf_info %>%
-      dplyr::filter(Transformation == 'vpd_calc')
+      dplyr::filter(Transformation == 'vpd_and_rh_calc')
     vpd_transf <- 'VPD_calculation'
 
     if (vpd_info[3, 'Presence']) {
@@ -1952,11 +1952,26 @@ qc_transf_list <- function(transf_info, parent_logger = 'test') {
       }
     }
 
+    # STEP 5
+    # rh calculation
+    rh_info <- vpd_info
+    rh_transf <- 'rh_calculation'
+
+    if (rh_info[1, 'Presence']) {
+      rh_avail <- FALSE
+    } else {
+      if (!rh_info[2, 'Presence'] | !rh_info[3, 'Presence']) {
+        rh_avail <- FALSE
+      } else {
+        rh_avail <- TRUE
+      }
+    }
+
     # STEP n
     # build res data frame and return it
-    transf <- c(rad_transf, exr_trasnf, vpd_transf, sfu_plant_trasnf,
+    transf <- c(rad_transf, exr_trasnf, vpd_transf, rh_transf, sfu_plant_trasnf,
                 sfu_sapw_trasnf, sfu_leaf_transf)
-    avail <- c(rad_avail, exr_avail, vpd_avail, sfu_plant_avail,
+    avail <- c(rad_avail, exr_avail, vpd_avail, rh_avail, sfu_plant_avail,
                sfu_sapw_avail, sfu_leaf_avail)
 
     res <- data.frame(
@@ -2057,6 +2072,24 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     }
 
     # STEP 4
+    # rh
+    if (transf_list['rh_calculation', 'Available']) {
+      env_data <- get_env(sfndata)
+      env_modf <- qc_rh(env_data, parent_logger = parent_logger)
+      env_flags <- get_env_flags(sfndata)
+      vars_names <- names(env_modf)[!(names(env_modf) %in% names(env_flags))]
+      vars_to_create <- as.list(rep('CALCULATED', length(vars_names)))
+      names(vars_to_create) <- vars_names
+      env_flags_modf <- env_flags %>%
+        dplyr::mutate(!!! vars_to_create) %>%
+        dplyr::select(names(env_modf))
+
+      # 4.1 modify the env_data from the sfndata
+      get_env(sfndata) <- env_modf[,-1]
+      get_env_flags(sfndata) <- env_flags_modf[,-1]
+    }
+
+    # STEP 5
     # Solar Time
     if (transf_list['solar_time', 'Available']) {
       env_data <- get_env(sfndata)
@@ -2070,10 +2103,10 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
       env_flags_modf <- env_flags %>%
         dplyr::mutate(ext_rad = 'CALCULATED')
 
-      # 4.1 add the solar timestamp to the SfnData
+      # 5.1 add the solar timestamp to the SfnData
       get_solar_timestamp(sfndata) <- env_modf[['solarTIMESTAMP']]
 
-      # 4.2 modify the env_data from the sfndata
+      # 5.2 modify the env_data from the sfndata
       get_env(sfndata) <- env_modf %>%
         dplyr::select(-TIMESTAMP, -solarTIMESTAMP) %>%
         as.data.frame(stringsAsFactors = FALSE)
@@ -2082,25 +2115,25 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         dplyr::select(-TIMESTAMP)
     }
 
-    # STEP 5
+    # STEP 6
     # sapf_units
-    # 5.1 get the sapwood metadata
+    # 6.1 get the sapwood metadata
     sapw_md <- get_plant_md(sfndata) %>%
       qc_get_sapw_md(parent_logger = parent_logger) %>%
       qc_sapw_area_calculator(parent_logger = parent_logger)
 
-    # 5.2 to plant
+    # 6.2 to plant
     if (transf_list['sapf_units_to_plant', 'Available']) {
-      # 5.2.1 get the sapf_modif
+      # 6.2.1 get the sapf_modif
       sapf_modf <- get_sapf(sfndata) %>%
         qc_sapw_conversion(
           sapw_md, output_units = 'plant', parent_logger = parent_logger
         )
 
-      # 5.2.2 get the plant_md
+      # 6.2.2 get the plant_md
       plant_md <- get_plant_md(sfndata)
 
-      # 5.2.3 modify the sapf data and the plant md to add the units
+      # 6.2.3 modify the sapf data and the plant md to add the units
       sfndata_plant <- sfndata
 
       get_sapf(sfndata_plant) <- sapf_modf %>%
@@ -2111,23 +2144,23 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         dplyr::mutate(pl_sap_units_orig = pl_sap_units,
                       pl_sap_units = "“cm3 h-1”")
 
-      # 5.2.4 write the plant SfnData object
+      # 6.2.4 write the plant SfnData object
       df_write_SfnData(sfndata_plant, 'unit_trans', 'plant',
                        parent_logger = parent_logger)
     }
 
-    # 5.3 to sapwood
+    # 6.3 to sapwood
     if (transf_list['sapf_units_to_sapwood', 'Available']) {
-      # 5.3.1 get the sapf_modif
+      # 6.3.1 get the sapf_modif
       sapf_modf <- get_sapf(sfndata) %>%
         qc_sapw_conversion(
           sapw_md, output_units = 'sapwood', parent_logger = parent_logger
         )
 
-      # 5.3.2 get the plant md
+      # 6.3.2 get the plant md
       plant_md <- get_plant_md(sfndata)
 
-      # 5.3.3 modify the sapf data from the sfndata
+      # 6.3.3 modify the sapf data from the sfndata
       sfndata_sapwood <- sfndata
 
       get_sapf(sfndata_sapwood) <- sapf_modf %>%
@@ -2138,23 +2171,23 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         dplyr::mutate(pl_sap_units_orig = pl_sap_units,
                       pl_sap_units = "“cm3 cm-2 h-1”")
 
-      # 5.3.4 write the plant SfnData object
+      # 6.3.4 write the plant SfnData object
       df_write_SfnData(sfndata_sapwood, 'unit_trans', 'sapwood',
                        parent_logger = parent_logger)
     }
 
-    # 5.4 to leaf
+    # 6.4 to leaf
     if (transf_list['sapf_units_to_leaf', 'Available']) {
-      # 5.4.1 get the sapf_modif
+      # 6.4.1 get the sapf_modif
       sapf_modf <- get_sapf(sfndata) %>%
         qc_sapw_conversion(
           sapw_md, output_units = 'leaf', parent_logger = parent_logger
         )
 
-      # 5.4.2 get the plant md
+      # 6.4.2 get the plant md
       plant_md <- get_plant_md(sfndata)
 
-      # 5.4.2 modify the sapf data from the sfndata
+      # 6.4.2 modify the sapf data from the sfndata
       sfndata_leaf <- sfndata
 
       get_sapf(sfndata_leaf) <- sapf_modf %>%
@@ -2165,7 +2198,7 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         dplyr::mutate(pl_sap_units_orig = pl_sap_units,
                       pl_sap_units = "“cm3 cm-2 h-1”")
 
-      # 5.4.3 write the plant SfnData object
+      # 6.4.3 write the plant SfnData object
       df_write_SfnData(sfndata_leaf, 'unit_trans', 'leaf',
                        parent_logger = parent_logger)
     }

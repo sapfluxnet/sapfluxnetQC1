@@ -662,7 +662,7 @@ test_that('results are ok', {
 
   expect_true(all(
     transf_vars_info$Transformation %in% c('radiation_conversion', 'solar_time',
-                                           'vpd_calc', 'sapf_units')
+                                           'vpd_and_rh_calc', 'sapf_units')
   ))
 })
 
@@ -676,12 +676,14 @@ transf_list <- qc_transf_list(transf_vars_info)
 test_that('results are correct', {
   expect_is(transf_list, 'data.frame')
   expect_false(transf_list$Available[3])
-  expect_false(transf_list$Available[6])
+  expect_false(transf_list$Available[4])
+  expect_false(transf_list$Available[7])
   expect_equal(sum(transf_list$Available), 4)
 
   expect_true(all(
     transf_list$Transformation %in% c('radiation_conversion', 'solar_time',
-                                      'VPD_calculation', 'sapf_units_to_plant',
+                                      'VPD_calculation', 'rh_calculation',
+                                      'sapf_units_to_plant',
                                       'sapf_units_to_sapwood',
                                       'sapf_units_to_leaf_area')
   ))
@@ -696,6 +698,7 @@ test_that('argument checks work', {
 })
 
 load('FOO.RData')
+BAR <- FOO
 foo_env_vpd <- get_env(FOO)
 foo_env_vpd[['vpd']] <- NULL
 get_env(FOO) <- foo_env_vpd
@@ -730,6 +733,7 @@ test_that('function works as intended', {
   expect_true(all(env_flags_plant[['ext_rad']] == 'CALCULATED'))
   expect_true(all(env_flags_plant[['sw_in']] == 'CALCULATED'))
   expect_true(all(env_flags_plant[['vpd']] == 'CALCULATED'))
+  expect_false(any(env_flags_plant[['rh']] == 'CALCULATED'))
   expect_false(is.null(get_solar_timestamp(res_plant)))
   expect_false(is.null(plant_md_plant[['pl_sap_units_orig']]))
   expect_true(all(plant_md_plant[['pl_sap_units']] == '“cm3 h-1”'))
@@ -749,6 +753,7 @@ test_that('function works as intended', {
   expect_true(all(sapwood_flags[['ext_rad']] == 'CALCULATED'))
   expect_true(all(sapwood_flags[['sw_in']] == 'CALCULATED'))
   expect_true(all(sapwood_flags[['vpd']] == 'CALCULATED'))
+  expect_false(any(sapwood_flags[['rh']] == 'CALCULATED'))
   expect_false(is.null(get_solar_timestamp(res_sapwood)))
   expect_false(is.null(plant_md_sapwood[['pl_sap_units_orig']]))
   expect_true(all(plant_md_sapwood[['pl_sap_units']] == '“cm3 h-1”'))
@@ -757,6 +762,74 @@ test_that('function works as intended', {
   expect_false(
     file.exists(file.path(
       'Data', 'FOO', 'Lvl_2', 'lvl_2_unit_trans', 'leaf', 'FOO.RData'
+    ))
+  )
+
+})
+
+# rh
+BAR_env_rh <- get_env(BAR)
+BAR_env_rh[['rh']] <- NULL
+get_env(BAR) <- BAR_env_rh
+get_si_code(BAR) <- rep('BAR', nrow(BAR_env_rh))
+dir.create(file.path('Data', 'BAR', 'Lvl_2'), recursive = TRUE)
+df_lvl2_folder_structure('BAR')
+df_start_status('BAR')
+
+test_that('function works as intended with rh', {
+
+  qc_units_process(BAR)
+
+  expect_true(file.exists(file.path(
+    'Data', 'BAR', 'Lvl_2', 'lvl_2_unit_trans', 'plant', 'BAR.RData'
+  )))
+  expect_true(file.exists(file.path(
+    'Data', 'BAR', 'Lvl_2', 'lvl_2_unit_trans', 'sapwood', 'BAR.RData'
+  )))
+
+  res_plant <- df_read_SfnData('BAR', 'unit_trans', 'plant')
+  env_plant <- get_env(res_plant)
+  plant_md_plant <- get_plant_md(res_plant)
+  env_flags_plant <- get_env_flags(res_plant)
+
+  expect_false(is.null(env_plant[['sw_in']]))
+  expect_false(is.null(env_plant[['rh']]))
+  expect_false(is.null(env_plant[['ext_rad']]))
+  expect_false(is.null(env_flags_plant[['sw_in']]))
+  expect_false(is.null(env_flags_plant[['rh']]))
+  expect_false(is.null(env_flags_plant[['ext_rad']]))
+  expect_true(all(env_flags_plant[['ext_rad']] == 'CALCULATED'))
+  expect_true(all(env_flags_plant[['sw_in']] == 'CALCULATED'))
+  expect_true(all(env_flags_plant[['rh']] == 'CALCULATED'))
+  expect_false(any(env_flags_plant[['vpd']] == 'CALCULATED'))
+  expect_false(is.null(get_solar_timestamp(res_plant)))
+  expect_false(is.null(plant_md_plant[['pl_sap_units_orig']]))
+  expect_true(all(plant_md_plant[['pl_sap_units']] == '“cm3 h-1”'))
+  expect_true(all(plant_md_plant[['pl_sap_units_orig']] == '“cm3 cm-2 h-1”'))
+
+  res_sapwood <- df_read_SfnData('BAR', 'unit_trans', 'plant')
+  env_sapwood <- get_env(res_sapwood)
+  plant_md_sapwood <- get_plant_md(res_sapwood)
+  sapwood_flags <- get_env_flags(res_sapwood)
+
+  expect_false(is.null(env_sapwood[['sw_in']]))
+  expect_false(is.null(env_sapwood[['vpd']]))
+  expect_false(is.null(env_sapwood[['ext_rad']]))
+  expect_false(is.null(sapwood_flags[['sw_in']]))
+  expect_false(is.null(sapwood_flags[['rh']]))
+  expect_false(is.null(sapwood_flags[['ext_rad']]))
+  expect_true(all(sapwood_flags[['ext_rad']] == 'CALCULATED'))
+  expect_true(all(sapwood_flags[['sw_in']] == 'CALCULATED'))
+  expect_true(all(sapwood_flags[['rh']] == 'CALCULATED'))
+  expect_false(any(sapwood_flags[['vpd']] == 'CALCULATED'))
+  expect_false(is.null(get_solar_timestamp(res_sapwood)))
+  expect_false(is.null(plant_md_sapwood[['pl_sap_units_orig']]))
+  expect_true(all(plant_md_sapwood[['pl_sap_units']] == '“cm3 h-1”'))
+  expect_true(all(plant_md_sapwood[['pl_sap_units_orig']] == '“cm3 cm-2 h-1”'))
+
+  expect_false(
+    file.exists(file.path(
+      'Data', 'BAR', 'Lvl_2', 'lvl_2_unit_trans', 'leaf', 'BAR.RData'
     ))
   )
 
