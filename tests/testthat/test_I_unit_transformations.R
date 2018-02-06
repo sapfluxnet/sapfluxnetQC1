@@ -374,12 +374,61 @@ test_that('function returns values correctly', {
   expect_is(res, 'data.frame')
   expect_false(is.null(res[['vpd']]))
   # original data is wrong, with a less order of magnitude
-  expect_equal(res[['vpd']], orig_vpd*10, tolerance = 0.05)
+  expect_equal(res[['vpd']], orig_vpd, tolerance = 0.01)
 })
 
+test_that('calculated values are not negative in case of rh greater than 100', {
+  legen <- data.frame(
+    ta = c(25.267, 29.174, 32.662, 25.045),
+    rh = c(100, 91.527, 79.144, 100.315)
+  )
+
+  dary <- qc_vpd(legen)
+
+  expect_true(all(dary[['vpd']] >= 0))
+  expect_equal(dary[['vpd']], c(0, 0.343, 1.03, 0), tolerance = 0.001)
+})
 
 ################################################################################
-context('I7. Soil texture classification')
+context('I7. rh calculation')
+
+load('FOO.RData')
+foo_env <- get_env(FOO)
+orig_rh <- foo_env[['rh']]
+foo_no_ta <- foo_env[,c('TIMESTAMP', 'rh', 'vpd')]
+foo_no_rh <- foo_env[,c('TIMESTAMP', 'ta', 'vpd')]
+foo_no_vpd <- foo_env[,c('TIMESTAMP', 'rh', 'ta')]
+
+test_that('argument checks work', {
+  expect_error(qc_rh('tururu'), 'data object is not a data frame')
+  expect_error(qc_rh(foo_no_ta), 'data not contains vpd and/or ta variables')
+  expect_error(qc_rh(foo_no_vpd), 'data not contains vpd and/or ta variables')
+  expect_warning(qc_rh(foo_env), 'data already has a rh variable')
+})
+
+test_that('function returns values correctly', {
+  res <- qc_rh(foo_no_rh)
+
+  expect_is(res, 'data.frame')
+  expect_false(is.null(res[['rh']]))
+  # original data is wrong, with a less order of magnitude
+  expect_equal(res[['rh']], orig_rh, tolerance = 0.01)
+})
+
+test_that('calculated values are not above 100 in case of negative vpds', {
+  legen <- data.frame(
+    ta = c(25.267, 29.174, 32.662, 25.045),
+    vpd = c(0, 0.343, 1.03, -0.01)
+  )
+
+  dary <- qc_rh(legen)
+
+  expect_true(all(dary[['rh']] <= 100))
+  expect_equal(dary[['rh']], c(100, 91.527, 79.144, 100), tolerance = 0.001)
+})
+
+################################################################################
+context('I8. Soil texture classification')
 
 test_data <- data.frame(st_soil_texture = 'LOAM', st_clay_perc = 12,
                         st_silt_perc = 54, st_sand_perc = 34)
@@ -581,7 +630,7 @@ test_that('st_USDA_soil_texture is correctly generated when several classes', {
 })
 
 ################################################################################
-context('I8. qc_transformation_vars')
+context('I9. qc_transformation_vars')
 
 test_that('results are ok', {
   load('FOO.RData')
@@ -618,7 +667,7 @@ test_that('results are ok', {
 })
 
 ################################################################################
-context('I9. qc_transf_list')
+context('I10. qc_transf_list')
 
 load('FOO.RData')
 transf_vars_info <- qc_transformation_vars(FOO)
@@ -639,7 +688,7 @@ test_that('results are correct', {
 })
 
 ################################################################################
-context('I10. Units process')
+context('I11. Units process')
 
 test_that('argument checks work', {
   expect_error(qc_units_process('tururu'),

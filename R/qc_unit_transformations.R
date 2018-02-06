@@ -1621,11 +1621,17 @@ qc_vpd <- function(data, parent_logger = 'test') {
 
     # STEP 2
     # Calculate the VPD
-    vpd <- 6.1078 * (1 - rh / 100) * exp(17.08085 * ta / (234.175 + ta))
+    vpd <- 0.61078 * (1 - rh / 100) * exp(17.08085 * ta / (234.175 + ta))
+
+    # 2.1 check for sure that vpd is not negative, and if it is transform to 0
+    vpd_checked <- dplyr::case_when(
+      vpd < 0 ~ 0,
+      TRUE ~ vpd
+    )
 
     # STEP 3
     # Build the data res object
-    data[['vpd']] <- vpd
+    data[['vpd']] <- vpd_checked
 
     # STEP 4
     # Return the data
@@ -1646,6 +1652,93 @@ qc_vpd <- function(data, parent_logger = 'test') {
   message = function(m){logging::loginfo(m$message,
                                          logger = paste(parent_logger,
                                                         'qc_vpd',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Calculation of rh from vpd and ta
+#'
+#' Calculate the rh if needed from other environmental variables
+#'
+#' The calculations for this function were obtained from "Plants and Microclimate"
+#' by Hamlyn G. Jones (Cambridge University Press, 3rd Edition). The enhancement
+#' factor that corrects for the slight departure of the behaviour of water in
+#' air from that of a pure gas is NOT implemented
+#'
+#' @family Unit conversion
+#'
+#' @param data Data frame containing the environmental data
+#'
+#' @return a Data frame of the environmental data with the new rh variable
+#'   calculated
+#'
+#' @export
+
+# START
+# Function declaration
+qc_rh <- function(data, parent_logger = 'test') {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Check arguments
+    # data frame
+    if (!is.data.frame(data)) {
+      stop("data object is not a data frame")
+    }
+
+    # check variables
+    if (any(is.null(data[['vpd']]), is.null(data[['ta']]))) {
+      stop("data not contains vpd and/or ta variables")
+    }
+
+    # check if vpd already exists
+    if (!is.null(data[['rh']])) {
+      warning("data already has a rh variable. Please revise if there",
+              " is really necessary to recalculate rh")
+      return(data)
+    }
+
+    # STEP 1
+    # Get the values of ta and vpd
+    ta <- data[['ta']]
+    vpd <- data[['vpd']]
+
+    # STEP 2
+    # Calculate the rh from sat_pd and vpd
+    sat_pd <- 0.001 * 611.21 * exp((18.678 - (ta / 234.5)) * ta / (257.14 + ta))
+    rh <- (1 - vpd / sat_pd) * 100
+
+    # 2.1 check for sure that vpd is not negative, and if it is transform to 0
+    rh_checked <- dplyr::case_when(
+      rh > 100 ~ 100,
+      TRUE ~ rh
+    )
+
+    # STEP 3
+    # Build the data res object
+    data[['rh']] <- rh_checked
+
+    # STEP 4
+    # Return the data
+    return(data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_rh',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_rh',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_rh',
                                                         sep = '.'))})
 }
 
