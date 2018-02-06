@@ -1,7 +1,7 @@
 Package: sapfluxnetQC1
 Type: Package
 Title: Package with functions related to sapfluxnet project data
-Version: 0.0.11
+Version: 0.0.12
 Authors@R: c(
     person("Victor", "Granda", email = "v.granda@creaf.uab.cat", role = c("aut", "cre")),
     person("Guillem", "Bagaria", email = "g.bagaria@creaf.uab.cat", role = c("aut")),
