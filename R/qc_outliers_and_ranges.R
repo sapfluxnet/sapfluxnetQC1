@@ -925,16 +925,22 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
     # 2.1 get the sapf and env data and their flags
     sapf_data <- get_sapf(sfn_data)
     sapf_flags <- get_sapf_flags(sfn_data)
-    sapf_data_out_rem <- get_sapf(sfn_data_out_rem)
-    sapf_flags_out_rem <- get_sapf_flags(sfn_data_out_rem)
     env_data <- get_env(sfn_data)
     env_flags <- get_env_flags(sfn_data)
-    env_data_out_rem <- get_env(sfn_data_out_rem)
-    env_flags_out_rem <- get_env_flags(sfn_data_out_rem)
 
     # 2.2 substitute them!
     # 2.2.1 outliers
     if (!is.null(out_to_remove)) {
+
+      # 2.2.1.1 get the outliers substitution values (TIME CONSUMING STEP!!!!)
+      sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
+                                        parent_logger = parent_logger)
+
+      sapf_data_out_rem <- get_sapf(sfn_data_out_rem)
+      sapf_flags_out_rem <- get_sapf_flags(sfn_data_out_rem)
+      env_data_out_rem <- get_env(sfn_data_out_rem)
+      env_flags_out_rem <- get_env_flags(sfn_data_out_rem)
+
       for (i in 1:nrow(out_to_remove)) {
 
         index <- out_to_remove[['index']][i]
@@ -943,14 +949,14 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
         if (variable %in% names(sapf_data)) {
           sapf_data[index, variable] <- sapf_data_out_rem[index, variable]
 
-          # 2.2.1.1 update flags also
+          # 2.2.1.2 update flags also
           sapf_flags[index, variable] <- sapf_flags_out_rem[index, variable]
         }
 
         if (variable %in% names(env_data)) {
           env_data[index, variable] <- env_data_out_rem[index, variable]
 
-          # 2.2.1.1 update flags also
+          # 2.2.1.3 update flags also
           env_flags[index, variable] <- env_flags_out_rem[index, variable]
         }
       }
