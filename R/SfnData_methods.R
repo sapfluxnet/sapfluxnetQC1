@@ -288,6 +288,185 @@ setMethod(
   }
 )
 
+#' plot SfnData method
+#'
+#' @param object SfnData object
+#' @param type what to plot
+#' @param solar use solarTIMESTAMP?
+#'
+#' @export
+setMethod(
+  'plot', c('SfnData', 'missing'),
+  function(x,
+           type = c('sapf', 'env',
+                    'ta', 'rh', 'vpd', 'ppfd_in', 'netrad', 'sw_in', 'ext_rad',
+                    'ws', 'precip', 'swc_shallow', 'swc_deep'),
+           solar = FALSE) {
+    # get the type with match argument
+    type <- match.arg(type)
+
+    # sapf
+    if (type == 'sapf') {
+      data <- get_sapf(x, solar)
+      units_char <- get_plant_md(x)[['pl_sap_units']][1]
+
+      # actual plot
+      res_plot <- data %>%
+        tidyr::gather(Tree, Sapflow, -TIMESTAMP) %>%
+        ggplot(aes(x = TIMESTAMP, y = Sapflow, colour = Tree)) +
+        geom_point(alpha = 0.4) +
+        labs(y = paste0('Sapflow [', units_char, ']')) +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # env
+    if (type == 'env') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        tidyr::gather(Variable, Value, -TIMESTAMP) %>%
+        ggplot(aes(x = TIMESTAMP, y = Value, colour = Variable)) +
+        geom_point(alpha = 0.4) +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # ta
+    if (type == 'ta') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = ta)) +
+        geom_point(alpha = 0.4, colour = '#C0392B') +
+        labs(y = 'Air Temperature [C]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # rh
+    if (type == 'rh') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = rh)) +
+        geom_point(alpha = 0.4, colour = '#6BB9F0') +
+        labs(y = 'Relative Humidity [%]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # vpd
+    if (type == 'vpd') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = vpd)) +
+        geom_point(alpha = 0.4, colour = '#6BB9F0') +
+        labs(y = 'VPD [kPa]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # ppfd_in
+    if (type == 'ppfd_in') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = ppfd_in)) +
+        geom_point(alpha = 0.4, colour = '#D35400') +
+        labs(y = 'PPFD [?]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # sw_in
+    if (type == 'sw_in') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = sw_in)) +
+        geom_point(alpha = 0.4, colour = '#E87E04') +
+        labs(y = 'sw [?]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # netrad
+    if (type == 'netrad') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = netrad)) +
+        geom_point(alpha = 0.4, colour = '#EB9532') +
+        labs(y = 'Net Radiation [?]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # ext_rad
+    if (type == 'ext_rad') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = ext_rad)) +
+        geom_point(alpha = 0.4, colour = '#F89406') +
+        labs(y = 'Extraterrestrial Radiation [?]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # ws
+    if (type == 'ws') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = ws)) +
+        geom_col(alpha = 0.4, colour = '#674172') +
+        labs(y = 'Wind Speed [m/s]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # precip
+    if (type == 'precip') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = precip)) +
+        geom_col(alpha = 0.4, colour = '#67809F') +
+        labs(y = 'Precipitation [?]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # swc_shallow
+    if (type == 'swc_shallow') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = swc_shallow)) +
+        geom_point(alpha = 0.4, colour = '#26A65B') +
+        labs(y = 'SWC Shallow [cm3/cm3]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    # swc_deep
+    if (type == 'swc_deep') {
+      data <- get_env(x, solar)
+
+      # actual plot
+      res_plot <- data %>%
+        ggplot(aes(x = TIMESTAMP, y = swc_deep)) +
+        geom_point(alpha = 0.4, colour = '#019875') +
+        labs(y = 'SWC Deep [cm3/cm3]') +
+        scale_x_datetime(date_breaks = '3 months')
+    }
+
+    return(res_plot)
+  }
+)
+
 #' Replacement methods
 #'
 #' Methods for replacing the slots with new data or metadata
