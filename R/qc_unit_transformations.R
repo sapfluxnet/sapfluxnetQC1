@@ -2027,6 +2027,11 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
       stop('Data provided is not a SfnData object')
     }
 
+    # progress message
+    message(
+      'Unit conversion for ', get_si_code(sfndata)[1]
+    )
+
     # STEP 1
     # Get the transformation list
     transf_list <- qc_transf_list(
@@ -2039,6 +2044,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     # STEP 2
     # Radiation conversion
     if (transf_list['radiation_conversion', 'Available']) {
+
+      # progress message
+      message(
+        'Radiation units'
+      )
+
       env_data <- get_env(sfndata)
       env_modf <- qc_rad_conversion(env_data, parent_logger = parent_logger)
       env_flags <- get_env_flags(sfndata)
@@ -2056,6 +2067,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     # STEP 3
     # VPD
     if (transf_list['VPD_calculation', 'Available']) {
+
+      # progress message
+      message(
+        'VPD'
+      )
+
       env_data <- get_env(sfndata)
       env_modf <- qc_vpd(env_data, parent_logger = parent_logger)
       env_flags <- get_env_flags(sfndata)
@@ -2074,6 +2091,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     # STEP 4
     # rh
     if (transf_list['rh_calculation', 'Available']) {
+
+      # progress message
+      message(
+        'Relative humidity units'
+      )
+
       env_data <- get_env(sfndata)
       env_modf <- qc_rh(env_data, parent_logger = parent_logger)
       env_flags <- get_env_flags(sfndata)
@@ -2092,6 +2115,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
     # STEP 5
     # Solar Time
     if (transf_list['solar_time', 'Available']) {
+
+      # progress message
+      message(
+        'Extraterrestrial radiation and solarTIMESTAMP'
+      )
+
       env_data <- get_env(sfndata)
       site_md <- get_site_md(sfndata)
       env_modf <- qc_ext_radiation(
@@ -2124,6 +2153,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
 
     # 6.2 to plant
     if (transf_list['sapf_units_to_plant', 'Available']) {
+
+      # progress message
+      message(
+        'Sapflow plant level'
+      )
+
       # 6.2.1 get the sapf_modif
       sapf_modf <- get_sapf(sfndata) %>%
         qc_sapw_conversion(
@@ -2151,6 +2186,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
 
     # 6.3 to sapwood
     if (transf_list['sapf_units_to_sapwood', 'Available']) {
+
+      # progress message
+      message(
+        'Sapflow sapwood level'
+      )
+
       # 6.3.1 get the sapf_modif
       sapf_modf <- get_sapf(sfndata) %>%
         qc_sapw_conversion(
@@ -2178,6 +2219,12 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
 
     # 6.4 to leaf
     if (transf_list['sapf_units_to_leaf', 'Available']) {
+
+      # progress message
+      message(
+        'Sapflow leaf level'
+      )
+
       # 6.4.1 get the sapf_modif
       sapf_modf <- get_sapf(sfndata) %>%
         qc_sapw_conversion(

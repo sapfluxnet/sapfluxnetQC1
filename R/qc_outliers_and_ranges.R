@@ -376,6 +376,11 @@ qc_out_remove <- function(sfn_data, k = 25L, t0 = 10L,
       stop('method is not a character')
     }
 
+    # progress message
+    message(
+      'Checking outliers for ', get_si_code(sfn_data)[1]
+    )
+
     # STEP 1
     # get needed data (without timestamp)
     sapf_data <- get_sapf(sfn_data)[,-1]
@@ -804,6 +809,12 @@ qc_out_of_range <- function(SfnData, parent_logger = 'test') {
     if (class(SfnData) != 'SfnData') {
       stop('Object provided is not a valid SfnData class object')
     }
+
+    # progress message
+    message(
+      'Checking ranges for ', get_si_code(SfnData)[1]
+    )
+
 
     # STEP 1
     # Obtaining the needed data from the SfnData object
