@@ -330,3 +330,38 @@ test_that('NAs returns data frame', {
   expect_is(res_w_nas, 'data.frame')
   expect_length(res_w_nas$row_number, 3)
 })
+
+################################################################################
+context('H7. SWC Checks and Fixes')
+
+swc_good <- data.frame(
+  swc_shallow = rnorm(100, 0.5, 0.1),
+  swc_deep = rnorm(100, 0.5, 0.1)
+)
+
+swc_warn <- data.frame(
+  swc_shallow = rnorm(100, 50, 10),
+  swc_deep = rnorm(100, 50, 10)
+)
+
+swc_error <- data.frame(
+  swc_shallow = 0:99,
+  swc_deep = 0:99
+)
+
+test_that('Check works', {
+  expect_equal(qc_swc_check(swc_good[[1]]), 'PASS')
+  expect_equal(qc_swc_check(swc_good[[2]]), 'PASS')
+  expect_equal(qc_swc_check(swc_warn[[1]]), 'WARNING')
+  expect_equal(qc_swc_check(swc_warn[[2]]), 'WARNING')
+  expect_equal(qc_swc_check(swc_error[[1]]), 'ERROR')
+  expect_equal(qc_swc_check(swc_error[[2]]), 'ERROR')
+})
+
+test_that('Fix works', {
+  expect_identical(qc_swc_fix(swc_good), swc_good)
+  expect_identical(qc_swc_fix(swc_error), swc_error)
+  expect_equal(qc_swc_fix(swc_warn), swc_warn/100)
+  expect_equal(qc_swc_check(qc_swc_fix(swc_warn)[[1]]), 'PASS')
+  expect_equal(qc_swc_check(qc_swc_fix(swc_warn)[[2]]), 'PASS')
+})

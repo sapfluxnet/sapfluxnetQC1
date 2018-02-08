@@ -900,3 +900,138 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
                                                         'qc_timestamp_concordance',
                                                         sep = '.'))})
 }
+
+
+################################################################################
+#' Check for correct values of SWC
+#'
+#' This function informs about SWC values correctness
+#'
+#' SWC values sometimes come in percentage instead of cm3/cm3, so this function
+#' checks three assumptions:
+#'
+#' \enumerate{
+#'   \item{All values between 0-2. This situation is ok (it can contain out of range
+#'   values, but in the same order of magnitude)}
+#'   \item{All values between 2-100. This situation occurs usually when values
+#'   are presented in percentage. they can be safely transformed dividing by 100}
+#'   \item{None of the former. This is odd, so big red lights and check manually.}
+#' }
+#'
+#' @family Quality Checks Functions
+#'
+#' @param swc_values vector with the swc data
+#'
+#' @return A character indicating the assumption detected in the data
+#'
+#' @export
+
+# START FUNCTION
+# Function declaration
+qc_swc_check <- function(swc_values, parent_logger = 'test') {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Argument checks
+    if (!is.numeric(swc_values)) {
+      stop('env_data provided is not a numeric vector')
+    }
+
+    # STEP 1
+    # Assumption 1, correct values betwen 0-2
+    if (all(swc_values >= 0 & swc_values < 2)) {
+      return('PASS')
+    } else {
+      if (all(swc_values >= 2 & swc_values <= 100)) {
+        return('WARNING')
+      } else {
+        return('ERROR')
+      }
+    }
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_swc_check',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_swc_check',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_swc_check',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Fix the swc values (if possible)
+#'
+#' This function divides by 100 in the case the swc provided by the contributor
+#' is in percentage
+#'
+#' To detect if the conversion is needed and/or possible,
+#' \code{\link{qc_swc_check}} is used internally
+#'
+#' @family Quality Checks Functions
+#'
+#' @param env_data A dataframe with the environmental data
+#'
+#' @return A dataframe with the environmental data transformed if needed/possible.
+#'   If not, the same input dataframe.
+#'
+#' @export
+
+# START FUNCTION
+# Function declaration
+qc_swc_fix <- function(env_data, parent_logger = 'test') {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+    # STEP 0
+    # Check arguments
+    if (!is.data.frame(env_data)) {
+      stop('env_data provided is not a data.frame')
+    }
+
+    # STEP 1
+    # 1.1 Check shallow
+    if (!is.null(env_data[['swc_shallow']])) {
+      if (qc_swc_check(env_data[['swc_shallow']]) == 'WARNING') {
+        env_data[['swc_shallow']] <- env_data[['swc_shallow']] / 100
+      }
+    }
+
+    # 1.2 Check deep
+    if (!is.null(env_data[['swc_deep']])) {
+      if (qc_swc_check(env_data[['swc_deep']]) == 'WARNING') {
+        env_data[['swc_deep']] <- env_data[['swc_deep']] / 100
+      }
+    }
+
+    # STEP 2
+    # Return the res
+    return(env_data)
+
+    # END FUNCTION
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_swc_fix',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'qc_swc_fix',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'qc_swc_fix',
+                                                        sep = '.'))})
+}
