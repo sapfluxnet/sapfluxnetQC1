@@ -335,6 +335,10 @@ setMethod(
     if (type == 'ta') {
       data <- get_env(x, solar)
 
+      if (is.null(data[['ta']])) {
+        stop('Site has not ta data')
+      }
+
       # actual plot
       res_plot <- data %>%
         ggplot(aes(x = TIMESTAMP, y = ta)) +
@@ -346,6 +350,10 @@ setMethod(
     # rh
     if (type == 'rh') {
       data <- get_env(x, solar)
+
+      if (is.null(data[['rh']])) {
+        stop('Site has not rh data')
+      }
 
       # actual plot
       res_plot <- data %>%
@@ -359,6 +367,10 @@ setMethod(
     if (type == 'vpd') {
       data <- get_env(x, solar)
 
+      if (is.null(data[['vpd']])) {
+        stop('Site has not vpd data')
+      }
+
       # actual plot
       res_plot <- data %>%
         ggplot(aes(x = TIMESTAMP, y = vpd)) +
@@ -370,6 +382,10 @@ setMethod(
     # ppfd_in
     if (type == 'ppfd_in') {
       data <- get_env(x, solar)
+
+      if (is.null(data[['ppfd_in']])) {
+        stop('Site has not ppfd_in data')
+      }
 
       # actual plot
       res_plot <- data %>%
@@ -383,6 +399,10 @@ setMethod(
     if (type == 'sw_in') {
       data <- get_env(x, solar)
 
+      if (is.null(data[['sw_in']])) {
+        stop('Site has not sw_in data')
+      }
+
       # actual plot
       res_plot <- data %>%
         ggplot(aes(x = TIMESTAMP, y = sw_in)) +
@@ -394,6 +414,10 @@ setMethod(
     # netrad
     if (type == 'netrad') {
       data <- get_env(x, solar)
+
+      if (is.null(data[['netrad']])) {
+        stop('Site has not netrad data')
+      }
 
       # actual plot
       res_plot <- data %>%
@@ -407,6 +431,10 @@ setMethod(
     if (type == 'ext_rad') {
       data <- get_env(x, solar)
 
+      if (is.null(data[['ext_rad']])) {
+        stop('Site has not ext_rad data')
+      }
+
       # actual plot
       res_plot <- data %>%
         ggplot(aes(x = TIMESTAMP, y = ext_rad)) +
@@ -419,10 +447,14 @@ setMethod(
     if (type == 'ws') {
       data <- get_env(x, solar)
 
+      if (is.null(data[['ws']])) {
+        stop('Site has not ws data')
+      }
+
       # actual plot
       res_plot <- data %>%
         ggplot(aes(x = TIMESTAMP, y = ws)) +
-        geom_col(alpha = 0.4, colour = '#674172') +
+        geom_col(alpha = 0.4, fill = '#674172') +
         labs(y = 'Wind Speed [m/s]') +
         scale_x_datetime(date_breaks = '3 months')
     }
@@ -431,10 +463,14 @@ setMethod(
     if (type == 'precip') {
       data <- get_env(x, solar)
 
+      if (is.null(data[['precip']])) {
+        stop('Site has not precip data')
+      }
+
       # actual plot
       res_plot <- data %>%
         ggplot(aes(x = TIMESTAMP, y = precip)) +
-        geom_col(alpha = 0.4, colour = '#67809F') +
+        geom_col(alpha = 0.4, fill = '#67809F') +
         labs(y = 'Precipitation [?]') +
         scale_x_datetime(date_breaks = '3 months')
     }
@@ -442,6 +478,10 @@ setMethod(
     # swc_shallow
     if (type == 'swc_shallow') {
       data <- get_env(x, solar)
+
+      if (is.null(data[['swc_shallow']])) {
+        stop('Site has not swc_shallow data')
+      }
 
       # actual plot
       res_plot <- data %>%
@@ -454,6 +494,10 @@ setMethod(
     # swc_deep
     if (type == 'swc_deep') {
       data <- get_env(x, solar)
+
+      if (is.null(data[['swc_deep']])) {
+        stop('Site has not swc_deep data')
+      }
 
       # actual plot
       res_plot <- data %>%

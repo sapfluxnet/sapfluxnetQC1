@@ -206,3 +206,36 @@ test_that('assignation method works', {
   expect_error((get_solar_timestamp(foo_sfndata) <- as.POSIXct('2011-06-23 21:59:59 -03')),
                'dimensions are incorrect')
 })
+
+test_that('plot method produces ggplot objects', {
+
+  load('BAR.RData')
+
+  expect_is(plot(BAR, type = 'sapf'), 'ggplot')
+  expect_is(plot(BAR, type = 'env'), 'ggplot')
+  expect_is(plot(BAR, type = 'ta'), 'ggplot')
+  expect_is(plot(BAR, type = 'rh'), 'ggplot')
+  expect_is(plot(BAR, type = 'vpd'), 'ggplot')
+  expect_is(plot(BAR, type = 'sw_in'), 'ggplot')
+  expect_is(plot(BAR, type = 'ppfd_in'), 'ggplot')
+  expect_error(plot(BAR, type = 'netrad'), 'Site has not netrad data')
+  expect_is(plot(BAR, type = 'ext_rad'), 'ggplot')
+  expect_is(plot(BAR, type = 'ws'), 'ggplot')
+  expect_is(plot(BAR, type = 'precip'), 'ggplot')
+  expect_is(plot(BAR, type = 'swc_shallow'), 'ggplot')
+  expect_error(plot(BAR, type = 'swc_deep'), 'Site has not swc_deep data')
+
+  expect_is(plot(BAR, type = 'sapf', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'env', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'ta', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'rh', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'vpd', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'sw_in', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'ppfd_in', solar = TRUE), 'ggplot')
+  expect_error(plot(BAR, type = 'netrad', solar = TRUE), 'Site has not netrad data')
+  expect_is(plot(BAR, type = 'ext_rad', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'ws', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'precip', solar = TRUE), 'ggplot')
+  expect_is(plot(BAR, type = 'swc_shallow', solar = TRUE), 'ggplot')
+  expect_error(plot(BAR, type = 'swc_deep', solar = TRUE), 'Site has not swc_deep data')
+})
