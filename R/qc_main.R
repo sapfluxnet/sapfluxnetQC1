@@ -614,7 +614,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
                                             targets = c(0, 2)),
                                        list(width = '10%',
                                             targets = 1)),
-                     scrollY = 750, scrollCollapse = TRUE)
+                     scrollY = 750, scrollCollapse = TRUE, scroller = TRUE)
     ) %>%
       DT::formatStyle('Status',
                       backgroundColor = DT::styleEqual(c('PASS', 'INFO',
