@@ -935,8 +935,8 @@ qc_swc_check <- function(swc_values, parent_logger = 'test') {
 
     # STEP 0
     # Argument checks
-    if (!is.numeric(swc_values)) {
-      stop('env_data provided is not a numeric vector')
+    if (is.null(swc_values)) {
+      return('PASS')
     }
 
     # STEP 1
@@ -1001,17 +1001,13 @@ qc_swc_fix <- function(env_data, parent_logger = 'test') {
 
     # STEP 1
     # 1.1 Check shallow
-    if (!is.null(env_data[['swc_shallow']])) {
-      if (qc_swc_check(env_data[['swc_shallow']]) == 'WARNING') {
-        env_data[['swc_shallow']] <- env_data[['swc_shallow']] / 100
-      }
+    if (qc_swc_check(env_data[['swc_shallow']]) == 'WARNING') {
+      env_data[['swc_shallow']] <- env_data[['swc_shallow']] / 100
     }
 
     # 1.2 Check deep
-    if (!is.null(env_data[['swc_deep']])) {
-      if (qc_swc_check(env_data[['swc_deep']]) == 'WARNING') {
-        env_data[['swc_deep']] <- env_data[['swc_deep']] / 100
-      }
+    if (qc_swc_check(env_data[['swc_deep']]) == 'WARNING') {
+      env_data[['swc_deep']] <- env_data[['swc_deep']] / 100
     }
 
     # STEP 2

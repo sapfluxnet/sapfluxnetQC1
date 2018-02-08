@@ -183,10 +183,17 @@ gap_lines_plot <- vis_gap_lines(sapf_gaps_info, env_gaps_info,
                                 qc_time_interval(env_data_fixed),
                                 parent_logger = logger_name)
 
+### swc check
+swc_check_shallow <- qc_swc_check(env_data_fixed[['swc_shallow']])
+swc_check_deep <- qc_swc_check(env_data_fixed[['swc_deep']])
+swc_check <- c(swc_check_shallow, swc_check_deep)
+
+env_data_fixed_swc <- qc_swc_fix(env_data_fixed, parent_logger = logger_name)
+
 ### plots
 #### calendars
 sapf_gaps_cal <- vis_gaps_calendar(sapf_data_fixed, parent_logger = logger_name)
-env_gaps_cal <- vis_gaps_calendar(env_data_fixed, parent_logger = logger_name)
+env_gaps_cal <- vis_gaps_calendar(env_data_fixed_swc, parent_logger = logger_name)
 
 #### plot the gaps coverage
 sapf_gaps_plot <- vis_plot_the_gap(sapf_gaps_info, type = "gap_coverage",
@@ -204,7 +211,7 @@ env_gaps_plot_int <- vis_plot_the_gap(env_gaps_info, type = "gap_interval",
 # create the SfnData object and save it as a RData file for later use
 ## sfndata_object
 sfn_data_object <- sfn_data_constructor(
-  sapf_data = sapf_data_fixed, env_data = env_data_fixed,
+  sapf_data = sapf_data_fixed, env_data = env_data_fixed_swc,
   site_md = site_md_coordfix, stand_md = stand_md, plant_md = plant_md,
   species_md = species_md, env_md = env_md,
   parent_logger = logger_name
@@ -501,11 +508,12 @@ List of remarks provided by the contributor/s
 ```{r qc_data_table, echo=FALSE, message=FALSE, warning=FALSE}
 ################################################################################
 # table
-qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
+qc_data_results_table(sapf_data_fixed, env_data_fixed_swc, timestamp_errors_sapf,
                       timestamp_errors_env, sapw_md,
                       timestamp_concordance, sapf_gaps_info,
                       env_gaps_info, sapf_timestamp_nas, env_timestamp_nas,
-                      transformations_table, parent_logger = logger_name)
+                      swc_check, transformations_table,
+                      parent_logger = logger_name)
 ################################################################################
 ```
 
@@ -527,7 +535,7 @@ timestamp_sapf <- sapf_data_fixed %>%
   mutate(Data = 'Sapflow') %>%
   select(Data, Sample, Range)
 
-timestamp_env <- env_data_fixed %>%
+timestamp_env <- env_data_fixed_swc %>%
   select(TIMESTAMP) %>%
   summarise(Sample = as.character(sample(TIMESTAMP, 1)),
             Range = paste(range(TIMESTAMP), collapse = ' - ')) %>%
@@ -752,7 +760,7 @@ log_sapfluxnet_setup('Logs/sapfluxnet.log',
                      level = 'WARNING')
 # 2.2.6 saving the fixed datasets and the objects created in the level1 folder
 df_accepted_to_lvl1(
-          params$code, sapf_data_fixed, env_data_fixed,
+          params$code, sapf_data_fixed, env_data_fixed_swc,
           site_md_coordfix, stand_md, plant_md, species_md,
           env_md, parent_logger = 'DataFlow'
         )

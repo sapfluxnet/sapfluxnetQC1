@@ -6,8 +6,8 @@
 \usage{
 qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
   timestamp_errors_env, sapw_md, timestamp_concordance, sapf_gaps_info,
-  env_gaps_info, sapf_timestamp_nas, env_timestamp_nas, transformations_table,
-  parent_logger = "test")
+  env_gaps_info, sapf_timestamp_nas, env_timestamp_nas, swc_check,
+  transformations_table, parent_logger = "test")
 }
 \arguments{
 \item{sapf_data_fixed}{}
@@ -29,6 +29,8 @@ qc_data_results_table(sapf_data_fixed, env_data_fixed, timestamp_errors_sapf,
 \item{sapf_timestamp_nas}{}
 
 \item{env_timestamp_nas}{}
+
+\item{swc_check}{}
 
 \item{transformations_table}{}
 }

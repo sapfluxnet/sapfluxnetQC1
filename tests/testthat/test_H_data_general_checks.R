@@ -349,6 +349,10 @@ swc_error <- data.frame(
   swc_deep = 0:99
 )
 
+swc_missing <- data.frame(
+  tururu = 'lalatra'
+)
+
 test_that('Check works', {
   expect_equal(qc_swc_check(swc_good[[1]]), 'PASS')
   expect_equal(qc_swc_check(swc_good[[2]]), 'PASS')
@@ -356,6 +360,8 @@ test_that('Check works', {
   expect_equal(qc_swc_check(swc_warn[[2]]), 'WARNING')
   expect_equal(qc_swc_check(swc_error[[1]]), 'ERROR')
   expect_equal(qc_swc_check(swc_error[[2]]), 'ERROR')
+  expect_equal(qc_swc_check(swc_missing[['swc_shallow']]), 'PASS')
+  expect_equal(qc_swc_check(swc_missing[['swc_deep']]), 'PASS')
 })
 
 test_that('Fix works', {

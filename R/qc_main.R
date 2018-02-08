@@ -395,6 +395,8 @@ qc_md_results_table <- function(md_cols, factor_values,
 #'
 #' @param env_timestamp_nas
 #'
+#' @param swc_check
+#'
 #' @param transformations_table
 #'
 #' @export
@@ -405,7 +407,7 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
                                   timestamp_errors_env, sapw_md,
                                   timestamp_concordance, sapf_gaps_info,
                                   env_gaps_info, sapf_timestamp_nas, env_timestamp_nas,
-                                  transformations_table,
+                                  swc_check, transformations_table,
                                   parent_logger = 'test') {
 
   # Using calling handlers to manage errors
@@ -543,7 +545,44 @@ qc_data_results_table <- function(sapf_data_fixed, env_data_fixed, timestamp_err
       }
     }
 
-    # 2.9 transformation table
+    # 2.9 swc_check
+    if (swc_check[1] == 'PASS') {
+      step <- c(step, "SWC shallow values check")
+      status <- c(status, 'PASS')
+      description <- c(description, 'Values do not need transformation')
+    } else {
+      if (swc_check[1] == 'WARNING') {
+        step <- c(step, "SWC shallow values check")
+        status <- c(status, 'WARNING')
+        description <- c(description, 'Values in %, transformed to 0-1')
+      } else {
+        if (swc_check[1] == 'ERROR') {
+          step <- c(step, "SWC shallow values check")
+          status <- c(status, 'ERROR')
+          description <- c(description, 'Strange SWC values, check manually')
+        }
+      }
+    }
+
+    if (swc_check[2] == 'PASS') {
+      step <- c(step, "SWC deep values check")
+      status <- c(status, 'PASS')
+      description <- c(description, 'Values do not need transformation')
+    } else {
+      if (swc_check[2] == 'WARNING') {
+        step <- c(step, "SWC deep values check")
+        status <- c(status, 'WARNING')
+        description <- c(description, 'Values in %, transformed to 0-1')
+      } else {
+        if (swc_check[2] == 'ERROR') {
+          step <- c(step, "SWC deep values check")
+          status <- c(status, 'ERROR')
+          description <- c(description, 'Strange SWC values, check manually')
+        }
+      }
+    }
+
+    # 2.10 transformation table
     if (any(!transformations_table$Presence)) {
       step <- c(step, 'Data conversion and transformations')
       status <- c(status, 'WARNING')
