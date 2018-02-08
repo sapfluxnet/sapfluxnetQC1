@@ -519,15 +519,15 @@ qc_range_dic <- function(parent_logger = 'test') {
     # env vars
     ta_range <- c(-30, 50) # no strict values, only as indicators,
     # slighty based on Cerveny et al. 2007
-    rh_range <- c(0, 100) # common sense criteria
+    rh_range <- c(10, 100) # common sense criteria. Also min below 10% are strange
     vpd_range <- c(0, 40)
     sw_in_range <- c(0, 1362) # based in the solar constant
     ppfd_in_range <- c(0, 2400) # based in Rafa's comment
-    netrad_range <- c(-280, 280) # based on Nasa maps
+    netrad_range <- c(-300, 2000) # based on Rafa's comment
     ws_range <- c(0, 45) # based on Zhou & Wang, 2016 (Ameriflux)
     precip_range <- c(0, 250) # based on Cerveny et al. 2007
-    swc_shallow_range <- c(0, 1) # cm3/cm3, max only can be 1
-    swc_deep_range <- c(0, 1) # cm3/cm3, max only can be 1
+    swc_shallow_range <- c(0.03, 1) # cm3/cm3, max only can be 1 and min below 3% is strange
+    swc_deep_range <- c(0.03, 1) # cm3/cm3, max only can be 1 and min below 3% is strange
 
     # sapf (we select maximum value as found in Manzoni 2013)
     # also we look for negative fluxes
