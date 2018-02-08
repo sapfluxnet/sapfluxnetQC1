@@ -940,7 +940,10 @@ qc_swc_check <- function(swc_values, parent_logger = 'test') {
     }
 
     # STEP 1
-    # Assumption 1, correct values betwen 0-2
+    # 1.1 remove NAs
+    swc_values <- swc_values[!is.na(swc_values)]
+
+    # 1.2 Assumptions
     if (all(swc_values >= 0 & swc_values < 2)) {
       return('PASS')
     } else {

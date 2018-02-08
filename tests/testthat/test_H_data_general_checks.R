@@ -335,18 +335,18 @@ test_that('NAs returns data frame', {
 context('H7. SWC Checks and Fixes')
 
 swc_good <- data.frame(
-  swc_shallow = rnorm(100, 0.5, 0.1),
-  swc_deep = rnorm(100, 0.5, 0.1)
+  swc_shallow = c(rnorm(100, 0.5, 0.1), NA),
+  swc_deep = c(rnorm(100, 0.5, 0.1), NA)
 )
 
 swc_warn <- data.frame(
-  swc_shallow = rnorm(100, 50, 10),
-  swc_deep = rnorm(100, 50, 10)
+  swc_shallow = c(rnorm(100, 50, 10), NA),
+  swc_deep = c(rnorm(100, 50, 10), NA)
 )
 
 swc_error <- data.frame(
-  swc_shallow = 0:99,
-  swc_deep = 0:99
+  swc_shallow = c(0:99, NA),
+  swc_deep = c(0:99, NA)
 )
 
 swc_missing <- data.frame(
