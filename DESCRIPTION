@@ -65,4 +65,5 @@ Collate:
     'qc_species_functions.R'
     'qc_unit_transformations.R'
     'rep_functions.R'
+    'sm_utils.R'
     'vis_functions.R'
