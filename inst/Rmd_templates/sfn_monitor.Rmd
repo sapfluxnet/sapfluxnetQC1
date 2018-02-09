@@ -4,8 +4,6 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    source_code: embed
-    logo: logo.svg
     favicon: logo.svg
 runtime: shiny
 ---
