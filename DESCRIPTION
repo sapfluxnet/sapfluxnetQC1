@@ -4,6 +4,8 @@ Title: Package with functions related to sapfluxnet project data
 Version: 0.1.1
 Authors@R: c(
     person("Victor", "Granda", email = "v.granda@creaf.uab.cat", role = c("aut", "cre")),
+    person("Rafael", "Poyatos", email = "r.poyatos@creaf.uab.cat", role = c("aut")),
+    person("Victor", "Flo", email = "vflosierra@gmail.com", role = c("aut")),
     person("Guillem", "Bagaria", email = "g.bagaria@creaf.uab.cat", role = c("aut")),
     person("Marie", "Sirot", email = "marie_sirot@hotmail.fr", role = c("ctb")))
 Description: Functions to make easy, reproducible and semiautomatized quality
