@@ -752,7 +752,7 @@ out_confirmation_app <- function(parent_logger = 'test') {
 
         # Reset status button
         observeEvent(
-          eventExpr = input$set_status,
+          eventExpr = input$reset_status,
           handlerExpr = {
             df_reset_data_status(input$site_sel, 'LVL2')
           }

@@ -68,6 +68,8 @@ lapply(data_folders, function(folder) {
 
 log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = 'LEVEL2', level = "DEBUG")
 
+# df_flag_to_lvl2_app()
+
 df_lvl1_to_lvl2(parent_logger = 'LEVEL2')
 
 ########
