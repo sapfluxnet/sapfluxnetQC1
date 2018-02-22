@@ -11,17 +11,87 @@ vignette: >
 
 # Introduction
 
-Data flow starts the moment a contributor send his/her data to the system.
-This vignette aims to document this data flow and the functions of the
-`sapfluxnetQC1` package that make it possible.  
+Data flow starts the moment a contributor send her/his data to the system. This
+vignette documents the data journey through SAPFLUXNET Quality Control Process
+to the final stored data.
 
+## Folder tree
+
+SAPFLUXNET folder tree is designed to allow an easy flow between different
+quality control (QC) levels and easily acces to any intermediate data generated.
 Figure 1 summarises the project folder tree:  
 
-<img src="Project_folders_tree.svg" alt="Fig. 1" style="width: 500px;"/>
+<img src="Project_folders_tree.svg" alt="Fig. 1" style="width: 700px;"/>
 
-## Received_data folder
 
-Each dataset submitted by contributors starts in the `Received_data` folder.
+## SAPFLUXNET QC Process outline 
+
+The main steps involved in the QC Process are summarised in the Figure 2
+
+<img src="QC_summary.svg" alt="Fig. 2" style="width: 700px;"/>
+
+These steps can be automatic (those performed by calling `sapfluxnetQC1` functions)
+or manual (manual intervention or *decision making* processes).
+
+# Received to accepted
+
+Each dataset submitted by the contributors is stored in the `received_data` folder.
+When the QC Process starts, a copy of the data is saved in the
+`Data/SITE_CODE/Accepted` folder and a report with the files copied is generated
+to monitor all data flow.
+
+# QC Process LEVEL 1
+
+Data in the `Accepted` folder is ready to be submitted to the Level 1 quality
+checks. In this level the data and metadata pass through several checks:
+
+  1. Metadata validity checks
+  1. Metadata variables presence/absence
+  1. Metadata and Data concordance
+  1. Data validity checks
+  1. Data time series checks
+  1. Data variables presence
+
+An automatic report is generated in this step. This report is used to decide
+if the dataset can be passed to LEVEL 2 or if manual changes and/or contributor
+feedbak are needed.  
+If everything is ok, data is stored in the `Data/SITE_CODE/Lvl_1` folder and
+status file is updated.
+
+## Manual changes and contributor feedback
+
+If problems are found for the dataset and they can be solved without contributor
+intervention, a manual changes log file is created for the dataset and all the
+changes are documented. If contributor feedback is needed, the report is sent to
+the contributor with the problems found asking for solution. Contributor
+re-submission starts the process from the beginning.  
+All datasets manually changed are previously copied to the `discarde_data` folder
+in order to store the original submission.
+
+## Data ready to LEVEL 2
+
+Data does not load automatically to Level 2 QC, a *decision making* process is needed
+to indicate which datasets are ready to Level 2. Figure 3 shows the shiny app
+developed to perform this:
+
+<img src="df_flag_to_lvl2_app.png" alt="Fig. 3" style="width: 700px;"/>
+
+
+# QC Process LEVEL 2
+
+When a site is ready to Level 2, data is checked for possible outliers and values
+out of range and they are flagged. Data is then copied to the
+`Data/SITE_CODE/Lvl_2/out_warn` folder waiting for the manual inspection of
+these data flaws. Outliers detection is not perfect, and ranges for the data
+(sapflow and environmental) depends on the units provided and site location, so
+a manual process is needed to select those points to substitute or
+remove (Figure 4).
+
+<img src="out_app.png" alt="Fig. 3" style="width: 700px;"/>
+
+## `received_data` folder
+
+Each dataset submitted by contributors starts in the `received_data` folder.
 Here data is stored temporarily until it is moved to the
 `Data/site_code/Accepted` folder by executing `df_received_to_accepted` function
 in the `sapfluxnetQC1` package.
@@ -30,7 +100,7 @@ in the `sapfluxnetQC1` package.
 
 Figure 2 summarises the reasoning behind `df_received_to_accepted` function:
 
-<img src="df_received_to_accepted.svg" alt="Fig. 2" style="width: 500px;"/>
+<img src="df_received_to_accepted.svg" alt="Fig. 2" style="width: 700px;"/>
 
 Site codes are extracted from file names, and the `Data` subfolders specific for
 the sites are created. A warning is raised if folders already exists. If it is
@@ -44,6 +114,12 @@ files in te `Received_data` folders are dropped (with a message) or not
 (with a warning). All the proccess is logged at message level (messages,
 warnings and errors).
 
+## `discarded_data` folder
+
+If manual changes are necessary, old original data is copied to the `discarded_data`
+folder before any change is made. In this way an original copy of the data is
+always preserved.
+
 ## QC process
 
 Once the data is in the accepted folder, data quality checks must be run to
@@ -51,13 +127,13 @@ ensure data suitability.
 QC is started with `qc_start_process`. This function checks all data status
 files, and performs the QC on those without the QC **DONE** flag.  
 
-<img src="qc_start_process.svg" alt="Fig. 3" style="width: 500px;"/>
+<img src="qc_start_process.svg" alt="Fig. 3" style="width: 700px;"/>
 
 Last step in the QC process is data flow to `Lvl_1` folder, indicating that
 the data has been checked. This step is performed by the `df_accepted_to_lvl1`.  
 function:
 
-<img src="df_accepted_to_lvl1.svg" alt="Fig. 2" style="width: 500px;"/>
+<img src="df_accepted_to_lvl1.svg" alt="Fig. 4" style="width: 700px;"/>
 
 Data will stay in `Lvl_1` folder until the report produced is studied. If manual
 or contributor side changes are necessary, those are made and the QC process
