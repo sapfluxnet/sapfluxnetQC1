@@ -79,6 +79,13 @@ developed to perform this:
 
 # QC Process LEVEL 2
 
+The Level 2 QC is comprised by two main steps:
+
+  1. Outliers and out of range checks
+  1. Unit transformations and variables calculation
+
+## Outliers and out of range values
+
 When a site is ready to Level 2, data is checked for possible outliers and values
 out of range and they are flagged. Data is then copied to the
 `Data/SITE_CODE/Lvl_2/out_warn` folder waiting for the manual inspection of
@@ -87,55 +94,47 @@ these data flaws. Outliers detection is not perfect, and ranges for the data
 a manual process is needed to select those points to substitute or
 remove (Figure 4).
 
-<img src="out_app.png" alt="Fig. 3" style="width: 700px;"/>
+<img src="out_app.png" alt="Fig. 4" style="width: 700px;"/>
 
-## `received_data` folder
+Outliers selected in the manual process are substituted by values calculated
+using the *Hampel filter*. Data substituted that way is flagged as `OUT_REMOVE`.  
+Out of range values are removed and converted to `NA`. Data removed that way
+is flagged as `RANGE_REMOVED`.  
+Date ranges can be selected to remove them manually, as data can contains flaws
+not being outliers or out of range values. Data removed that way is flagged as
+`MANUAL_REMOVED`.  
 
-Each dataset submitted by contributors starts in the `received_data` folder.
-Here data is stored temporarily until it is moved to the
-`Data/site_code/Accepted` folder by executing `df_received_to_accepted` function
-in the `sapfluxnetQC1` package.
+This step generates a report ('LVL2_out_report`) with the info about the values
+substituted/removed and the data is finally trasnferred to the
+`Data/SITE_CODE/Lvl_2/out_rem` folder. Also in this step the status file is
+updated again to reflect the new status.
 
-## `df_received_to_accepted`
+### Outliers check
 
-Figure 2 summarises the reasoning behind `df_received_to_accepted` function:
+After the substitution/remove of the problematic data a manual process is needed
+to check if everuthing is ok, as showed in the Figure 5:
 
-<img src="df_received_to_accepted.svg" alt="Fig. 2" style="width: 700px;"/>
+<img src="out_confirmation_app.png" alt="Fig. 4" style="width: 700px;"/>
 
-Site codes are extracted from file names, and the `Data` subfolders specific for
-the sites are created. A warning is raised if folders already exists. If it is
-the case, also the previous existence of the files is checked, and if they
-exist, another warning is raised and the copy proccess is stopped.  
-If files do not exist, they are copied to the `Data/site_code/Accepted` folder,
-and a md5 checksum is made to ensure the integrity of the copies. Again, if
-the checksum fails, a warning is raised and the proccess stops.  
-Finally, depending on the value of the `remove` argument of the function, the
-files in te `Received_data` folders are dropped (with a message) or not
-(with a warning). All the proccess is logged at message level (messages,
-warnings and errors).
+## Unit transformations
 
-## `discarded_data` folder
+If everything was ok in the outliers step, sapflow data is then transformed to
+all available units (plant, sapwood and leaf level).  
+In the same process, environmental variables not provided by the contributors can
+be calculated:
 
-If manual changes are necessary, old original data is copied to the `discarded_data`
-folder before any change is made. In this way an original copy of the data is
-always preserved.
+  1. `ppfd_in` or `sw_in` from `sw_in` or `ppfd_in` respectively.
+  1. `vpd` from `ta` and `rh`.
+  1. `rh` from `vpd` and `ta`.
+  1. `ext_rad` and `solarTIMESTAMP` from site location (latitude, longitude)
 
-## QC process
+All variables calculated this way present the `CALCULATED` flag.
 
-Once the data is in the accepted folder, data quality checks must be run to
-ensure data suitability.
-QC is started with `qc_start_process`. This function checks all data status
-files, and performs the QC on those without the QC **DONE** flag.  
+## Final data storage
 
-<img src="qc_start_process.svg" alt="Fig. 3" style="width: 700px;"/>
+After the units transformation step, data is finally stored in the
+`Data/SITE_CODE/Lvl_2/unit_trans` folder, which can contain several folders:
 
-Last step in the QC process is data flow to `Lvl_1` folder, indicating that
-the data has been checked. This step is performed by the `df_accepted_to_lvl1`.  
-function:
-
-<img src="df_accepted_to_lvl1.svg" alt="Fig. 4" style="width: 700px;"/>
-
-Data will stay in `Lvl_1` folder until the report produced is studied. If manual
-or contributor side changes are necessary, those are made and the QC process
-is re-runned (after changing the flags in the status file). If all is correct,
-data can be moved to `Lvl_2` (yet to do).
+  1. `plant` if the plant level units are available
+  1. `sapwood` if the sapwood level units are available
+  1. `leaf` if the leaf level units are available
