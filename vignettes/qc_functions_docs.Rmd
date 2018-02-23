@@ -9,9 +9,236 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Quality check functions are intended to work together, but each of them has
-its pecualirities. This vignette explain all written functions including
-a diagram with the algorithm used and explanations when needed.
+`sapfluxnetQC1` functions are intended to work together, but each of them has
+its peculiarities.  
+This vignette explain the rationale behind the functions of the `sapfluxnetQC1`
+package. That include a flowchart explaining the function and further explanations
+when needed. For info about the function usage or arguments needed see
+the corresponding function help (`?function_name`).  
+
+## `create_dic`
+
+This function creates dictionaries (named lists) for the specified kind of
+metadata, including the name of the metadata variables as labels and their
+expected class as the value. This provides a reference to check if the class is
+OK with the `qc_md_cols` function. See function help for details about the
+arguments, (`?create_dic`).
+
+<img src="create_dic.svg" alt="create_dic" style="width: 650px;"/>
+
+## `df_accepted_to_lvl1`
+
+This function performs two actions:
+
+1. write csv files with the fixed data in the LVL1 folder.
+
+2. Update the status files to indicate that data is in LVL1 and the date of the
+   move.
+
+See function help for details about arguments, (`?df_accepted_to_lvl1`).  
+
+<img src="df_accepted_to_lvl1.svg" alt="df_accepted_to_lvl1" style="width: 650px;"/>
+
+## `df_copy_templates`
+
+This function copies/updates the templates in the server (Rmd files and R scripts).
+See function help for details about arguments (`?df_copy_templates`).
+
+<img src="df_copy_templates.svg" alt="df_copy_templates" style="width: 400px;"/>
+
+## `df_flag_to_lvl2_app`
+
+This function generates an interactive shiny app to flag those sites ready for
+Level 2.  
+
+<img src="df_flag_to_lvl2_app.png" alt="flag_to_lvl2_app" style="width: 650px;"/>
+
+## `df_folder_structure`
+
+This functions only need to be called once, as it creates the needed folder
+structure to recreate SAPFLUXNET project in any environment.
+See function help for details about the arguments, (`?df_folder_structure`).  
+
+<img src="df_folder_structure.svg" alt="df_folder_structure" style="width: 450px;"/>
+
+## `df_get_data_folders`
+
+This function gets the data folder names to be able to start automatically the
+QC process.
+See function help for details about arguments, (`?df_get_data_folders`).  
+
+<img src="df_get_data_folders.svg" alt="df_get_data_folders" style="width: 200px;"/>
+
+## `df_get_status`
+
+Retrieve the status file info as a list, with the yaml package.
+See the function help for details about the arguments, (`?df_get_status`).  
+
+<img src="df_get_status.svg" alt="df_get_status" style="width: 650px;"/>
+
+## `df_lvl1_to_lvl2`
+
+This function is in charge of check for sites ready to pass to Level 2, create
+the needed folder structure, flag for outliers warnings and saving the final
+SfnData objects in the corresponding folder.
+
+<img src="df_lvl1_to_lvl2.svg" alt="df_lvl1_to_lvl2" style="width: 300px;"/>
+
+## `df_lvl2_folder_structure`
+
+This function takes a site code and build the level 2 folder strucuture for that
+site.
+
+<img src="df_lvl2_folder_structure.svg" alt="df_lvl2_folder_structure" style="width: 450px;"/>
+
+## `df_read_SfnData`
+
+This function loads the specified level SfnData object.
+
+<img src="df_read_SfnData.svg" alt="df_read_SfnData" style="width: 450px;"/>
+
+## `df_received_to_accepted`
+
+This function is in charge of move the data from the received folder to the
+accepted data folder (within the `code` folder).
+See function help for details about arguments, (`?df_received_to_accepted`).  
+
+<img src="df_received_to_accepted_FUNCTION.svg" alt="df_received_to_accepted" style="width: 650px;"/>
+
+## `df_rem_to_units`
+
+This function is in charge of checking the sites ready to pass to out_units,
+performing the available transformations and writing the resulting SfnData in the
+destination folder.
+
+<img src="df_rem_to_units.svg" alt="df_rem_to_units" style="width: 350px;"/>
+
+## `df_report_folder_creation`
+
+Function to create the report subfolder for the site to analyze.
+See function help for details about arguments, (`?df_report_folder_creation`).  
+
+<img src="df_report_folder_creation.svg" alt="df_report_folder_creation" style="width: 450px;"/>
+
+## `df_reset_data_status`
+
+This function allows for resetting the status of a site to the required level.
+For that, the status file is changed accordingly and all stored files for the
+site in the resetted levels are renamed to bak files.
+
+<img src="df_reset_data_status.svg" alt="df_reset_data_status" style="width: 450px;"/>
+
+## `df_set_status`
+
+Change and update status file info using yaml package.
+See function help for details about arguments, (`?df_set_status`).  
+
+<img src="df_set_status.svg" alt="df_set_status" style="width: 650px;"/>
+
+## `df_start_status`
+
+Initialise an empty status file in yaml format, using the `yaml` package.
+See function help for details about arguments, (`?df_start_status`).  
+
+<img src="df_start_status.svg" alt="df_start_status" style="width: 650px;"/>
+
+## `df_warn_to_rem`
+
+This function is in charge of checking the sites ready to pass to out_rem,
+removing the outliers indicated in the accesory files and saving the final
+SfnData object in the corresponding folder.
+
+<img src="df_warn_to_rem.svg" alt="df_warn_to_rem" style="width: 350px;"/>
+
+## `df_whos_ready_to`
+
+This function checks the site status files to list who is ready to move to the
+indicated target (level).
+
+<img src="df_whos_ready_to.svg" alt="df_whos_ready_to" style="width: 450px;"/>
+
+## `df_write_SfnData`
+
+This function writes the SfnData object in the specified level.
+
+<img src="df_write_SfnData.svg" alt="df_write_SfnData" style="width: 550px;"/>
+
+## `dl_data`
+
+This function make use of dplyr, tidyr and readxl packages in order to
+retrieve and format the data. Also, in the case of csv files it uses
+data.table package.
+See function help for details about the arguments, (`?dl_data`).  
+
+<img src="dl_data.svg" alt="dl_data" style="width: 850px;"/>
+
+## `dl_data_col_classes`
+
+Checking and setting data column classes to numeric.
+See function help for details about arguments, (`?dl_data_col_classes`).  
+
+<img src="dl_data_col_classes.svg" alt="dl_data_col_classes" style="width: 400px;"/>
+
+## `dl_dec_char_detect`
+
+Decimal character detection to csv files loading with `data.table::fread`.
+See function help for details about arguments, (`?dl_dec_char_detect`).  
+
+<img src="dl_dec_char_detect.svg" alt="dl_dec_char_detect" style="width: 650px;"/>
+
+## `dl_get_si_code`
+
+Look at the data folder provided and get the code and the names of the files
+with the metadata, sapflow data and environmental data, in order to use them
+as parameters in the automated reports.
+See function help for details about arguments, (`?dl_get_si_code`).  
+
+<img src="dl_get_si_code.svg" alt="dl_get_si_code" style="width: 650px;"/>
+
+## `dl_metadata`
+
+This function make use of dplyr, tidyr and readxl packages in order to
+retrieve and format the metadata. It's intended to be used as first step
+to load the metadata and start the metadata quality check.
+See function help for details about the arguments, (`?dl_metadata`).  
+
+<img src="dl_metadata.svg" alt="dl_metadata" style="width: 650px;"/>
+
+## `dl_na_char_generator`
+
+Generation of a character vector with the possible na characters found in
+csv files in order to load data with `data.table::fread`.
+See function help for details about arguments, (`?dl_na_char_generator`).  
+
+<img src="dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 150px;"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Coordinates checks functions
@@ -22,6 +249,8 @@ check de sign, fix the sign if needed and another checks. Finally, there is
 a wrapper function (`qc_coordinates`) which allow to perform all the checks in
 one step. This makes possible to add any new coordinates checks to the workflow
 without gnereating so much complexity.
+
+
 
 ## `qc_download_maps`
 
@@ -171,16 +400,6 @@ See function help for details about the arguments, (`?qc_mind_the_gap`).
 Functions to perform the quality check in the metadata. They include the five
 kinds of metadata (site, stand, plant, species and environmental) as well as
 the interface between metadata and data (checks that involves both kind of data).
-
-## `create_dic`
-
-This function creates dictionaries (named lists) for the specified kind of
-metadata, including the name of the metadata variables as labels and their
-expected class as the value. This provides a reference to check if the class is
-OK with the `qc_md_cols` function. See function help for details about the
-arguments, (`?create_dic`).
-
-<img src="create_dic.svg" alt="create_dic" style="width: 650px;"/>
 
 ## `qc_site_dics`
 
@@ -408,73 +627,21 @@ See function help for details about the arguments, (`?vis_gap_lines`).
 
 Functions to manage the movement of files between folders in the server tree.
 
-## `df_folder_structure`
 
-This functions only need to be called once, as it creates the needed folder
-structure to recreate SAPFLUXNET project in any environment.
-See function help for details about the arguments, (`?df_folder_structure`).  
 
-<img src="df_folder_structure.svg" alt="df_folder_structure" style="width: 350px;"/>
 
-## `df_received_to_accepted`
 
-This function is in charge of move the data from the received folder to the
-accepted data folder (within the `code` folder).
-See function help for details about arguments, (`?df_received_to_accepted`).  
 
-<img src="df_received_to_accepted_FUNCTION.svg" alt="df_received_to_accepted" style="width: 650px;"/>
 
-## `df_start_status`
 
-Initialise an empty status file in yaml format, using the `yaml` package.
-See function help for details about arguments, (`?df_start_status`).  
 
-<img src="df_start_status.svg" alt="df_start_status" style="width: 650px;"/>
 
-## `df_get_status`
 
-Retrieve the status file info as a list, with the yaml package.
-See the function help for details about the arguments, (`?df_get_status`).  
 
-<img src="df_get_status.svg" alt="df_get_status" style="width: 650px;"/>
 
-## `df_set_status`
 
-Change and update status file info using yaml package.
-See function help for details about arguments, (`?df_set_status`).  
 
-<img src="df_set_status.svg" alt="df_set_status" style="width: 650px;"/>
 
-## `df_report_folder_creation`
-
-Function to create the report subfolder for the site to analyze.
-See function help for details about arguments, (`?df_report_folder_creation`).  
-
-<img src="df_report_folder_creation.svg" alt="df_report_folder_creation" style="width: 650px;"/>
-
-## `df_get_data_folders`
-
-This function gets the data folder names to be able to start automatically the
-QC process.
-See function help for details about arguments, (`?df_get_data_folders`).  
-
-<img src="df_get_data_folders.svg" alt="df_get_data_folders" style="width: 150px;"/>
-
-## `df_accepted_to_lvl1`
-
-This function performs three actions:
-
-1. write csv files with the fixed data in the LVL1 folder.
-
-2. Update the status files to indicate that data is in LVL1 and the date of the
-   move.
-
-3. Save the objects generated in the QC to make easy the creation of dashboards
-   without the need of run all QC tests again.
-
-See function help for details about arguments, (`?df_accepted_to_lvl1`).  
-
-<img src="df_accepted_to_lvl1.svg" alt="df_accepted_to_lvl1" style="width: 650px;"/>
 
 # Data Load functions
 
@@ -489,36 +656,13 @@ See function help for details about arguments, (`?remove_dupcols`).
 
 <img src="remove_dupcols.svg" alt="remove_dupcols" style="width: 500px;"/>
 
-## `dl_na_char_generator`
 
-Generation of a character vector with the possible na characters found in
-csv files in order to load data with `data.table::fread`.
-See function help for details about arguments, (`?dl_na_char_generator`).  
 
-<img src="dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 150px;"/>
 
-## `dl_dec_char_detect`
 
-Decimal character detection to csv files loading with `data.table::fread`.
-See function help for details about arguments, (`?dl_dec_char_detect`).  
 
-<img src="dl_dec_char_detect.svg" alt="dl_dec_char_detect" style="width: 500px;"/>
 
-## `dl_data_col_classes`
 
-Checking and setting data column classes to numeric.
-See function help for details about arguments, (`?dl_data_col_classes`).  
-
-<img src="dl_data_col_classes.svg" alt="dl_data_col_classes" style="width: 400px;"/>
-
-## `dl_metadata`
-
-This function make use of dplyr, tidyr and readxl packages in order to
-retrieve and format the metadata. It's intended to be used as first step
-to load the metadata and start the metadata quality check.
-See function help for details about the arguments, (`?dl_metadata`).  
-
-<img src="dl_metadata.svg" alt="dl_metadata" style="width: 650px;"/>
 
 ## `dl_data`
 
@@ -560,14 +704,7 @@ See function help for details about arguments, (`?log_sapfluxnet_setup`).
 Main functions for starting QC procces, getting si_code and generate results
 tables.
 
-## `dl_get_si_code`
 
-Look at the data folder provided and get the code and the names of the files
-with the metadata, sapflow data and environmental data, in order to use them
-as parameters in the automated reports.
-See function help for details about arguments, (`?dl_get_si_code`).  
-
-<img src="dl_get_si_code.svg" alt="dl_get_si_code" style="width: 650px;"/>
 
 ## `qc_md_results_table`
 

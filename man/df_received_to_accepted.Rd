@@ -8,7 +8,7 @@ df_received_to_accepted(remove = FALSE, parent_logger = "test")
 }
 \arguments{
 \item{remove}{Logical indicating if files in received folder are dropped after
-correct after the file transfer. Default to FALSE.}
+the file transfer. Default to FALSE.}
 }
 \value{
 

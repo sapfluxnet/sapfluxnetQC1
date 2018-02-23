@@ -23,6 +23,5 @@ remove manual values in the \code{\link{df_warn_to_remove}} function.
 }
 \seealso{
 Other apps: \code{\link{df_flag_to_lvl2_app}},
-  \code{\link{df_flag_to_units_app}},
   \code{\link{out_confirmation_app}}
 }
