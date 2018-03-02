@@ -19,7 +19,8 @@ The same data frame with extra columns of mean annual temperature
 }
 \description{
 This function takes a data frame of site metadata, including latitude (si_lat)
-and longitude (si_long) columns, gets climatic data from WorldClim 1.4 and
+and longitude (si_long) columns, gets climatic data from WorldClim 1.4
+using the GSODR package and
 returns the same data frame with extra columns of mean annual temperature
 (si_mat), mean annual precipitation (si_map) and biome (si_biome) according to
 \code{\link{qc_get_biomes_spdf}}.

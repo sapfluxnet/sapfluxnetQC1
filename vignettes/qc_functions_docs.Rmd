@@ -210,7 +210,285 @@ Generation of a character vector with the possible na characters found in
 csv files in order to load data with `data.table::fread`.
 See function help for details about arguments, (`?dl_na_char_generator`).  
 
-<img src="dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 150px;"/>
+<img src="dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 200px;"/>
+
+
+## `get_env` (SfnData get method)
+
+Method to get the environmental data from a SfnData object
+
+<img src="get_env.svg" alt="get_env" style="width: 400px;"/>
+
+## `get_env_flags` (SfnData get method)
+
+Method to get the environmental flags from a SfnData object
+
+<img src="get_env_flags.svg" alt="get_env_flags" style="width: 400px;"/>
+
+## `get_*_md`, `get_timestamp`, `get_solar_timestamp`, `get_si_code`
+
+Methods to get the ancillary metadata objects
+
+<img src="get_methods_md.svg" alt="get_methods_md" style="width: 200px;"/>
+
+## `<- replacement methods` (SfnData replacement method)
+
+Method to set the data or metadata in a SfnData object
+
+<img src="get_env_rep.svg" alt="get_env_rep" style="width: 350px;"/>
+
+## `get_sapf` (SfnData get method)
+
+Method to get the sapflow data from a SfnData object
+
+<img src="get_sapf.svg" alt="get_sapf" style="width: 400px;"/>
+
+## `get_sapf_flags` (SfnData get method)
+
+Method to get the sapflow flags from a SfnData object
+
+<img src="get_sapf_flags.svg" alt="get_sapf_flags" style="width: 400px;"/>
+
+## `log_sapfluxnet_action`
+
+Custom logging handler action for SAPFLUXNET project
+
+<img src="log_sapfluxnet_action.svg" alt="log_sapfluxnet_action" style="width: 350px;"/>
+
+## `log_sapfluxnet_format`
+
+Custom log formatter for SAPFLUXNET Project
+See function help for details about arguments, (`?log_sapfluxnet_format`).  
+
+<img src="log_sapfluxnet_format.svg" alt="log_sapfluxnet_format" style="width: 200px;"/>
+
+## `log_sapfluxnet_setup`
+
+Setting up the SAPFLUXNET Project log handler.
+See function help for details about arguments, (`?log_sapfluxnet_setup`).  
+
+<img src="log_sapfluxnet_setup.svg" alt="log_sapfluxnet_setup" style="width: 350px;"/>
+
+## `out_app`
+
+Shiny app to flag values to remove ranges and flaws and substitute outliers to
+start level 2 QC
+
+## `out_confirmation_app`
+
+Shiny app to confirm the removed/subsituted values in the level 2 process
+
+## `plot` (SfnData plot method)
+
+plot method for SfnData objects. It generates ggplot2 objects instead regular plots
+
+<img src="plot_method.svg" alt="plot_method" style="width: 550px;"/>
+
+## `qc_as_timestamp`
+
+When loading the TIMESTAMP varible, specially from csv files, sometimes results
+in bad formatted TIMESTAMP. This function looks for known bad formats and fix
+them. It uses internally `qc_is_timestamp`, `qc_get_timezone` and `qc_set_timezone`
+to achieve the correct TIMESTAMP format.  
+
+<img src="qc_as_timestamp.svg" alt="qc_as_timestamp" style="width: 750px;"/>
+
+## `qc_check_coordinates`
+
+This function retrieves the coordinates provided fir the site, and check them
+against the country coordinates. It uses `qc_download_maps` internally to
+fecth any map if needed.  
+
+<img src="qc_check_coordinates.svg" alt="qc_check_coordinates" style="width: 500px;"/>
+
+## `qc_cm_cm_h`
+
+Conversion of sap flow units to sapwood level
+(cm³·cm⁻²·h⁻¹), plant level (cm³·h⁻¹) or leaf area level (cm³·cm⁻²·h⁻¹). This
+documentation is valid for this function as well as all other functions for
+unit conversion (`qc_cm_cm_h`, `qc_cm_m_s`, `qc_dm_dm_h`, `qc_dm_dm_s`,
+`qc_mm_mm_s`, `qc_g_m_s`, `qc_kg_m_h`, `qc_kg_m_s`, `qc_cm_s`, `qc_cm_h`,
+`qc_dm_h`, `qc_g_h`, `qc_kg_h`).  
+
+<img src="qc_cm_cm_h.svg" alt="qc_cm_cm_h" style="width: 500px;"/>
+
+## `qc_coordinates`
+
+Wrapper around all the previous functions to perform the coordinates quality
+check in only one step. See function help for more details about the arguments,
+(`?qc_coordinates`).  
+
+<img src="qc_coordinates.svg" alt="qc_coordinates" style="width: 500px;"/>
+
+## `qc_coord_sign_test`
+
+Internal function to establish countries coordinates sign and test if provided
+site coordinates are correct. This function only provides info about the
+possible sign changes, but fix is not made here. See function help for
+more details about the arguments, special_countries step and expected value
+(`?qc_cood_sign_test`).  
+
+<img src="qc_coord_sign_test.svg" alt="qc_coord_sign_test" style="width: 500px;"/>
+
+## `qc_data_results_table`
+
+Data QC codified results in one data frame.
+See function help for details about arguments, (`?qc_data_results_table`).  
+
+<img src="qc_data_results_table.svg" alt="qc_data_results_table" style="width: 650px;"/>
+
+## `qc_download_maps`
+
+This function fecth maps from [gadm](http://www.gadm.org/) if the maps are not
+already downloaded in the maps folder specified. See function help for more
+details in the arguments and expected value (`?qc_download_maps`).  
+
+<img src="qc_download_maps.svg" alt="qc_download_maps" style="width: 500px;"/>
+
+## `qc_email_check`
+
+This function checks if the email provided is a correct formatted email
+direction. See function help for details about arguments, (`?qc_email_check`).  
+
+<img src="qc_email_check.svg" alt="qc_email_check" style="width: 500px;"/>
+
+## `qc_env_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of environmental metadata specified in the arguments.
+See function help for details about the arguments, (`?qc_env_dics`).  
+
+<img src="qc_env_dics.svg" alt="qc_env_dics" style="width: 650px;"/>
+
+## `qc_env_ranges`
+
+Check ranges for environmental variables
+
+<img src="qc_env_ranges.svg" alt="qc_env_ranges" style="width: 650px;"/>
+
+## `qc_env_vars_presence`
+
+This function check the presence in the environmental data of variables
+declared as measured in the environmental metadata. See function help for details
+about arguments, (`?qc_env_vars_presence`)
+
+<img src="qc_env_vars_presence.svg" alt="qc_env_vars_presence" style="width: 650px;"/>
+
+## `qc_ext_radiation`
+
+Calculates the Extraterrestrial Radiation from the TIMESTAMP, and also
+calculates the solar TIMESTAMP
+
+<img src="qc_ext_radiation.svg" alt="qc_ext_radiation" style="width: 650px;"/>
+
+## `qc_factor_values`
+
+This function checks if the values provided for the factor metadata variables are
+allowed values.  
+
+<img src="qc_factor_values.svg" alt="qc_factor_values" style="width: 750px;"/>
+
+## `qc_fix_latlong_errors`
+
+This function fixes several known errors in the coordinates provided for the site.
+It is intended to be modular, being able to add new fixes if needed, as this
+function uses other internal functions as `qc_check_coordinates` and
+`qc_coord_sign_test`.  
+
+<img src="qc_fix_latlong_errors.svg" alt="qc_fix_latlong_errors" style="width: 500px;"/>
+
+## `qc_fix_timestamp`
+
+Wrapper for timestamp functions.  
+
+<img src="qc_fix_timestamp.svg" alt="qc_fix_timestamp" style="width: 500px;"/>
+
+## `qc_get_biome`
+
+Retrieves the mean annual temperature, mena annual precipitation from
+WorldClim 1.4 and calculate the biome based on `qc_get_biomes_spdf`
+
+<img src="qc_get_biome.svg" alt="qc_get_biome" style="width: 500px;"/>
+
+## `qc_get_biomes_spdf`
+
+Creates a SpatialPolygonsDataFrame object of the Whittaker's biomes modified by
+Ricklefs (2008) in function of mean annual temperature (MAT) and mean annual
+precipitation (MAP) (MAT in degree Celsius and MAP in mm).
+
+<img src="qc_get_biomes_spdf.svg" alt="qc_get_biomes_spdf" style="width: 500px;"/>
+
+## `qc_get_sapw_md`
+
+Simple function to retrieve the metadata variables related with sapwood.
+See function help for details about arguments, (`?qc_get_sapw_md`).  
+
+<img src="qc_get_sapw_md.svg" alt="qc_get_sapw_md" style="width: 500px;"/>
+
+## `qc_get_timestep`
+
+Helper function to retrieve the timestep from the from the plant (sapflow) or
+the environmental metadata. This helper function will be used in the
+`qc_timestamp_errors` function.
+
+<img src="qc_get_timestep.svg" alt="qc_get_timestep" style="width: 650px;"/>
+
+## `qc_get_timezone`
+
+Function to transform the provided ISO coded timezone value (`env_time_zone`
+variable) in a character string compatible with `lubridate` package and POSIXct
+format.  
+
+<img src="qc_get_timezone.svg" alt="qc_get_timezone" style="width: 250px;"/>
+
+## `qc_is_timestamp`
+
+This function tests if TIMESTAMP variable is in POSIXct format, as expected.  
+
+<img src="qc_is_timestamp.svg" alt="qc_is_timestamp" style="width: 800px;"/>
+
+## `qc_md_cols`
+
+This functions checks for presence, NAs and classes of the variables provided
+in the different kinds of metadata, buiding a summary data frame as result.
+See function help for details about the arguments, (`?qc_md_cols`).
+
+<img src="qc_md_cols.svg" alt="qc_md_cols" style="width: 750px;"/>
+
+## `qc_md_results_table`
+
+Metadata QC codified results in one data frame.  
+
+<img src="qc_md_results_table.svg" alt="qc_md_results_table" style="width: 600px;"/>
+
+## `qc_mind_the_gap`
+
+This function obtains info about the gaps and display it in a summary data frame.
+See function help for details about the arguments, (`?qc_mind_the_gap`).  
+
+<img src="qc_mind_the_gap.svg" alt="qc_mind_the_gap" style="width: 750px;"/>
+
+## `qc_outliers_process`
+
+This function substitute the outliers based on the *_to_remove files found
+in the out_warn folder for any site
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -252,73 +530,25 @@ without gnereating so much complexity.
 
 
 
-## `qc_download_maps`
-
-This function fecth maps from [gadm](http://www.gadm.org/) if the maps are not
-already downloaded in the maps folder specified. See function help for more
-details in the arguments and expected value (`?qc_download_maps`).  
-
-<img src="qc_download_maps.svg" alt="qc_download_maps" style="width: 500px;"/>
 
 
-## `qc_check_coordinates`
-
-This function retrieves the coordinates provided fir the site, and check them
-against the country coordinates. It uses `qc_download_maps` internally to
-fecth any map if needed. See function help for more details in the
-arguments and expected value (`?qc_check_coordinates`).  
-
-<img src="qc_check_coordinates.svg" alt="qc_check_coordinates" style="width: 500px;"/>
-
-## `qc_coord_sign_test`
-
-Internal function to establish countries coordinates sign and test if provided
-site coordinates are correct. This function only provides info about the
-possible sign changes, but fix is not made here. See function help for
-more details about the arguments, special_countries step and expected value
-(`?qc_cood_sign_test`).  
-
-<img src="qc_coord_sign_test.svg" alt="qc_coord_sign_test" style="width: 500px;"/>
 
 
-## `qc_fix_latlong_errors`
 
-This function fixes several known errors in the coordinates provided for the site.
-It is intended to be modular, being able to add new fixes if needed, as this
-function uses other internal functions as `qc_check_coordinates` and
-`qc_coord_sign_test`. See function help for more details about the arguments,
-(`?qc_fix_latlong_errors`).  
 
-<img src="qc_fix_latlong_errors.svg" alt="qc_fix_latlong_errors" style="width: 500px;"/>
 
-## `qc_coordinates`
 
-Wrapper around all the previous functions to perform the coordinates quality
-check in only one step. See function help for more details about the arguments,
-(`?qc_coordinates`).  
 
-<img src="qc_coordinates.svg" alt="qc_coordinates" style="width: 500px;"/>
+
 
 # Data general checks functions
 
 These functions perform general checks within the data (environmental and
 sapflow). At the moment, most of the checks are related to the TIMESTAMP.
 
-## `qc_is_timestamp`
 
-This function tests if TIMESTAMP variable is in POSIXct format, as expected. See
-function help for more details about the arguments, (`?qc_is_timestamp`).  
 
-<img src="qc_is_timestamp.svg" alt="qc_is_timestamp" style="width: 800px;"/>
 
-## `qc_get_timezone`
-
-Function to transform the provided ISO coded timezone value (`env_time_zone`
-variable) in a character string compatible with `lubridate` package and POSIXct
-format. See function help for more details about the arguments,
-(`?qc_get_timezone`).  
-
-<img src="qc_get_timezone.svg" alt="qc_get_timezone" style="width: 250px;"/>
 
 ## `qc_set_timezone`
 
@@ -328,32 +558,11 @@ See function help for more details about the arguments, (`?qc_set_timezone`).
 
 <img src="qc_set_timezone.svg" alt="qc_set_timezone" style="width: 500px;"/>
 
-## `qc_as_timestamp`
 
-When loading the TIMESTAMP varible, specially from csv files, sometimes results
-in bad formatted TIMESTAMP. This function looks for known bad formats and fix
-them. It uses internally `qc_is_timestamp`, `qc_get_timezone` and `qc_set_timezone`
-to achieve the correct TIMESTAMP format. See function help for more details
-about the arguments, (`?qc_as_timestamp`).  
 
-<img src="qc_as_timestamp.svg" alt="qc_as_timestamp" style="width: 750px;"/>
 
-## `qc_fix_timestamp`
 
-Wrapper for timestamp functions. It uses internally `qc_is_timestamp` and
-`qc_as_timestamp` to check and fix, if possible, the TIMESTAMP. See funtion help
-for more details about arguments, (`?qc_fix_timestamp`).  
 
-<img src="qc_fix_timestamp.svg" alt="qc_fix_timestamp" style="width: 500px;"/>
-
-## `qc_get_timestep`
-
-Helper function to retrieve the timestep from the from the plant (sapflow) or
-the environmental metadata. This helper function will be used in the
-`qc_timestamp_errors` function. See function help for more details about the
-arguments, (`?qc_get_timestep`).
-
-<img src="qc_get_timestep.svg" alt="qc_get_timestep" style="width: 650px;"/>
 
 ## `qc_timestamp_errors`
 
@@ -388,12 +597,7 @@ TO DO
 
 Functions for characterise the gaps (type, length...).
 
-## `qc_mind_the_gap`
 
-This function obtains info about the gaps and display it in a summary data frame.
-See function help for details about the arguments, (`?qc_mind_the_gap`).  
-
-<img src="qc_mind_the_gap.svg" alt="qc_mind_the_gap" style="width: 750px;"/>
 
 # Metadata general checks
 
@@ -433,37 +637,15 @@ help for details about the arguments, (`?qc_plant_dics`).
 
 <img src="qc_plant_dics.svg" alt="qc_plant_dics" style="width: 650px;"/>
 
-## `qc_env_dics`
 
-This function creates a dictionary (character vector) with the allowed values
-for the factor variable of environmental metadata specified in the arguments.
-See function help for details about the arguments, (`?qc_env_dics`).  
 
-<img src="qc_env_dics.svg" alt="qc_env_dics" style="width: 650px;"/>
 
-## `qc_md_cols`
 
-This functions checks for presence, NAs and classes of the variables provided
-in the different kinds of metadata, buiding a summary data frame as result.
-See function help for details about the arguments, (`?qc_md_cols`).
 
-<img src="qc_md_cols.svg" alt="qc_md_cols" style="width: 750px;"/>
 
-## `qc_factor_values`
 
-This function checks if the values provided for the factor metadata variables are
-allowed values. See function help for details about the arguments,
-(`?qc_factor_values`).  
 
-<img src="qc_factor_values.svg" alt="qc_factor_values" style="width: 750px;"/>
 
-## `qc_env_vars_presence`
-
-This function check the presence in the environmental data of variables
-declared as measured in the environmental metadata. See function help for details
-about arguments, (`?qc_env_vars_presence`)
-
-<img src="qc_env_vars_presence.svg" alt="qc_env_vars_presence" style="width: 650px;"/>
 
 ## `qc_pl_treatments`
 
@@ -473,12 +655,7 @@ See function help for details about arguments, (`?qc_pl_treatments`).
 
 <img src="qc_pl_treatments.svg" alt="qc_pl_treatments" style="width: 200px;"/>
 
-## `qc_email_check`
 
-This function checks if the email provided is a correct formatted email
-direction. See function help for details about arguments, (`?qc_email_check`).  
-
-<img src="qc_email_check.svg" alt="qc_email_check" style="width: 500px;"/>
 
 ## `qc_species_names_info`
 
@@ -537,12 +714,7 @@ Family of functions dedicated to extract the sapwood metadata, calculate the
 sapwood area if not provided and convert between units and sapflow measure levels
 (plant, sapwood and leaf area).
 
-## `qc_get_sapw_md`
 
-Simple function to retrieve the metadata variables related with sapwood.
-See function help for details about arguments, (`?qc_get_sapw_md`).  
-
-<img src="qc_get_sapw_md.svg" alt="qc_get_sapw_md" style="width: 500px;"/>
 
 ## `qc_sapw_area_calculator`
 
@@ -678,26 +850,7 @@ See function help for details about the arguments, (`?dl_data`).
 Family of functions dedicated to setup, maintain and configure the logging
 process
 
-## `log_sapfluxnet_format`
 
-Custom log formatter for SAPFLUXNET Project
-See function help for details about arguments, (`?log_sapfluxnet_format`).  
-
-<img src="log_sapfluxnet_format.svg" alt="log_sapfluxnet_format" style="width: 150px;"/>
-
-## `log_sapfluxnet_action`
-
-Custom logging handler action for SAPFLUXNET Project.
-See function help for details about arguments, (`?log_sapfluxnet_action`).  
-
-<img src="log_sapfluxnet_action.svg" alt="log_sapfluxnet_action" style="width: 350px;"/>
-
-## `log_sapfluxnet_setup`
-
-Setting up the SAPFLUXNET Project log handler.
-See function help for details about arguments, (`?log_sapfluxnet_setup`).  
-
-<img src="log_sapfluxnet_setup.svg" alt="log_sapfluxnet_setup" style="width: 250px;"/>
 
 # Main functions
 
@@ -706,19 +859,9 @@ tables.
 
 
 
-## `qc_md_results_table`
 
-Metadata QC codified results in one data frame.
-See function help for details about arguments, (`?qc_md_results_table`).  
 
-<img src="qc_md_results_table.svg" alt="qc_md_results_table" style="width: 600px;"/>
 
-## `qc_data_results_table`
-
-Data QC codified results in one data frame.
-See function help for details about arguments, (`?qc_data_results_table`).  
-
-<img src="qc_data_results_table.svg" alt="qc_data_results_table" style="width: 650px;"/>
 
 ## `qc_start_process`
 

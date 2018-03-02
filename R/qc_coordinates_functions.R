@@ -968,7 +968,8 @@ qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
 #' Get the biome, temperature and precipitation of a site
 #'
 #' This function takes a data frame of site metadata, including latitude (si_lat)
-#' and longitude (si_long) columns, gets climatic data from WorldClim 1.4 and
+#' and longitude (si_long) columns, gets climatic data from WorldClim 1.4
+#' using the GSODR package and
 #' returns the same data frame with extra columns of mean annual temperature
 #' (si_mat), mean annual precipitation (si_map) and biome (si_biome) according to
 #' \code{\link{qc_get_biomes_spdf}}.
@@ -1026,7 +1027,7 @@ qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test') {
                        function (x, y) {
                          st_tmp <- GSODR::nearest_stations(x, y, distance = 50)
                          if (length(st_tmp) < 1) {
-                           st_tmp <- GSODR::nearest_stations(x, y, distance = 50)
+                           st_tmp <- GSODR::nearest_stations(x, y, distance = 100)
                          }
                          st_tmp
                        })
