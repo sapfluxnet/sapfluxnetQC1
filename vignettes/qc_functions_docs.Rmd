@@ -1,10 +1,10 @@
 ---
-title: "Quality Check functions documentation"
+title: "sapfluxnetQC1 functions documentation"
 author: "Victor Granda (Sapfluxnet Team)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Quality Check functions documentation}
+  %\VignetteIndexEntry{sapfluxnetQC1 functions documentation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,13 +16,14 @@ package. That include a flowchart explaining the function and further explanatio
 when needed. For info about the function usage or arguments needed see
 the corresponding function help (`?function_name`).  
 
+# Alphabetical list of functions
+
 ## `create_dic`
 
 This function creates dictionaries (named lists) for the specified kind of
 metadata, including the name of the metadata variables as labels and their
 expected class as the value. This provides a reference to check if the class is
-OK with the `qc_md_cols` function. See function help for details about the
-arguments, (`?create_dic`).
+OK with the `qc_md_cols` function.
 
 <img src="create_dic.svg" alt="create_dic" style="width: 650px;"/>
 
@@ -401,7 +402,7 @@ function uses other internal functions as `qc_check_coordinates` and
 
 Wrapper for timestamp functions.  
 
-<img src="qc_fix_timestamp.svg" alt="qc_fix_timestamp" style="width: 500px;"/>
+<img src="qc_fix_timestamp.svg" alt="qc_fix_timestamp" style="width: 200px;"/>
 
 ## `qc_get_biome`
 
@@ -473,161 +474,44 @@ See function help for details about the arguments, (`?qc_mind_the_gap`).
 This function substitute the outliers based on the *_to_remove files found
 in the out_warn folder for any site
 
+<img src="qc_outliers_process.svg" alt="qc_outliers_process" style="width: 750px;"/>
 
+## `qc_out_hampel_filter`
 
+Detecting and substituting outliers in the environmental and sapflow data using
+a modification fo the Hampel filter
 
+<img src="qc_out_hampel_filter.svg" alt="qc_out_hampel_filter" style="width: 500px;"/>
 
+## `qc_out_median`
 
+Classic Hampel filter
 
+<img src="qc_out_median.svg" alt="qc_out_median" style="width: 350px;"/>
 
+## `qc_out_medianreg`
 
+Hampel filter with median regression
 
+<img src="qc_out_medianreg.svg" alt="qc_out_medianreg" style="width: 350px;"/>
 
+## `qc_out_of_range`
 
+Checking data for out of range values, updating the corresponding data flags
 
+<img src="qc_out_of_range.svg" alt="qc_out_of_range" style="width: 500px;"/>
 
+## `qc_out_remove`
 
+Outliers detection, substitution and annotation for SfnData objects
 
+<img src="qc_out_remove.svg" alt="qc_out_remove" style="width: 400px;"/>
 
+## `qc_out_tukeyline`
 
+Hampel filter with robust fitting
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Coordinates checks functions
-
-These functions are intended to perform a quality check in the site coordinates
-provided by the contributors. They involve downloading the country maps,
-check de sign, fix the sign if needed and another checks. Finally, there is
-a wrapper function (`qc_coordinates`) which allow to perform all the checks in
-one step. This makes possible to add any new coordinates checks to the workflow
-without gnereating so much complexity.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Data general checks functions
-
-These functions perform general checks within the data (environmental and
-sapflow). At the moment, most of the checks are related to the TIMESTAMP.
-
-
-
-
-
-## `qc_set_timezone`
-
-When reading data from csv, TIMESTAMP timezone is settled to `UTC`. This
-function allows setting the TIMESTAMP timezone without changing the variable.
-See function help for more details about the arguments, (`?qc_set_timezone`).  
-
-<img src="qc_set_timezone.svg" alt="qc_set_timezone" style="width: 500px;"/>
-
-
-
-
-
-
-
-## `qc_timestamp_errors`
-
-Function to identify known errors in TIMESTAMP variable. A summary of intervals
-59 seconds away from the declared timestep is presented in order to locate the
-errors. See function help for more details about the arguments,
-(`?qc_timestamp_errors`).
-
-<img src="qc_timestamp_errors.svg" alt="qc_timestamp_errors" style="width: 500px;"/>
-
-## `qc_time_interval`
-
-This function obtains a summary of the inital and final time (t0 and tf) of
-each object in the data (plants or environmental variables). See function help
-for more details about the arguments, (`?qc_time_interval`).
-
-<img src="qc_time_interval.svg" alt="qc_time_interval" style="width: 500px;"/>
-
-## `qc_timestamp_concordance`
-
-Function to retrieve numerical or graphical information about concordance in
-the timestamp for both, environmental and sapflow data. See function help for
-more details about the arguments, (`?qc_timestamp_concordance`).
-
-<img src="qc_timestamp_concordance.svg" alt="qc_timestamp_concordance" style="width: 500px;"/>
-
-## `qc_solar_timestamp`
-
-TO DO
-
-# Gaps functions
-
-Functions for characterise the gaps (type, length...).
-
-
-
-# Metadata general checks
-
-Functions to perform the quality check in the metadata. They include the five
-kinds of metadata (site, stand, plant, species and environmental) as well as
-the interface between metadata and data (checks that involves both kind of data).
-
-## `qc_site_dics`
-
-This function creates a dictionary (character vector) with the allowed values
-for the factor variable of site metadata specified in the arguments. See function
-help for details about the arguments, (`?qc_site_dics`).  
-
-<img src="qc_site_dics.svg" alt="qc_site_dics" style="width: 650px;"/>
-
-## `qc_stand_dics`
-
-This function creates a dictionary (character vector) with the allowed values
-for the factor variable of stand metadata specified in the arguments. See function
-help for details about the arguments, (`?qc_stand_dics`).  
-
-<img src="qc_stand_dics.svg" alt="qc_stand_dics" style="width: 650px;"/>
-
-## `qc_species_dics`
-
-This function creates a dictionary (character vector) with the allowed values
-for the factor variable of species metadata specified in the arguments. See function
-help for details about the arguments, (`?qc_species_dics`).  
-
-<img src="qc_species_dics.svg" alt="qc_species_dics" style="width: 650px;"/>
+<img src="qc_out_tukeyline.svg" alt="qc_out_tukeyline" style="width: 350px;"/>
 
 ## `qc_plant_dics`
 
@@ -637,16 +521,6 @@ help for details about the arguments, (`?qc_plant_dics`).
 
 <img src="qc_plant_dics.svg" alt="qc_plant_dics" style="width: 650px;"/>
 
-
-
-
-
-
-
-
-
-
-
 ## `qc_pl_treatments`
 
 This function summarizes the treatments declared in the plant metadata to look
@@ -655,93 +529,56 @@ See function help for details about arguments, (`?qc_pl_treatments`).
 
 <img src="qc_pl_treatments.svg" alt="qc_pl_treatments" style="width: 200px;"/>
 
+## `qc_rad_conversion`
 
+Transforming radiation units
 
-## `qc_species_names_info`
+<img src="qc_rad_conversion.svg" alt="qc_rad_conversion" style="width: 250px;"/>
 
-This function uses the tpl and tpl_data packages (from github) to obtain
-the correct species names (if any correction is needed). A summary data frame
-is returned to use in `qc_species_names_fix` function.
-See function help for details about arguments, (`?qc_species_names_info`).  
+## `qc_range_dic`
 
-<img src="qc_species_names_info.svg" alt="qc_species_names_info" style="width: 500px;"/>
+Dictionary with range values for all ranges checked
 
-## `qc_species_names_fix`
+<img src="qc_range_dic.svg" alt="qc_range_dic" style="width: 250px;"/>
 
-This function takes the results of `qc_species_names_info` and return the
-tpl names if no NAs has been generated.
-See function help for details about arguments, (`?qc_species_names_fix`).  
+## `qc_rh`
 
-<img src="qc_species_names_fix.svg" alt="qc_species_names_fix" style="width: 300px;"/>
+Calculate the relative humidity from air temperature and vpd
 
-## `qc_species_names`
+<img src="qc_rh.svg" alt="qc_rh" style="width: 250px;"/>
 
-Wrapper for species_names_info and species_names_fix.
-See function help for details about arguments, (`?qc_species_names`).  
+## `qc_sapf_ranges`
 
-<img src="qc_species_names.svg" alt="qc_species_names" style="width: 300px;"/>
+Check ranges for sapflow
 
-## `qc_species_verification`
-
-This function return a summary indicating if the species declared in the
-species metadata are the same that those indicated in the plant metadata.
-See function help for details about arguments, (`?qc_species_verification`).  
-
-<img src="qc_species_verification.svg" alt="qc_species_verification" style="width: 500px;"/>
-
-# Ranges checks
-
-This group of functions check that the provided numerical values are within the
-natural/typical/known ranges. It is a work in progress.
-
-## `qc_suitable_range`
-
-Function to check if the numerical value provided is within the ranges provided.
-It is a wrapper for functions yet to do.
-
-## `qc_sapf_range_check`
-
-Function to make a suitability test in the sap flow values provided. Values
-are tested to be within the ranges for sap flow measures observed in the
-literature. See function help for details about arguments,
-(`?qc_sapf_range_check`).  
-
-<img src="qc_sapf_range_check.svg" alt="qc_sapf_range_check" style="width: 650px;"/>
-
-# Unit transformation functions
-
-Family of functions dedicated to extract the sapwood metadata, calculate the
-sapwood area if not provided and convert between units and sapflow measure levels
-(plant, sapwood and leaf area).
-
-
+<img src="qc_sapf_ranges.svg" alt="qc_sapf_ranges" style="width: 650px;"/>
 
 ## `qc_sapw_area_calculator`
 
-Function to calculate sapwood area from DBH, bark thickness and sapwood depth.
-See function help for details about arguments, (`?qc_sapw_area_calculator`).  
+Calculatez sapwood area from DBH, bark thickness and sapwood depth  
 
 <img src="qc_sapw_area_calculator.svg" alt="qc_sapw_area_calculator" style="width: 500px;"/>
-
-## `qc_cm_cm_h`
-
-Conversion of sap flow units to sapwood level
-(cm³·cm⁻²·h⁻¹), plant level (cm³·h⁻¹) or leaf area level (cm³·cm⁻²·h⁻¹). This
-documentation is valid for this function as well as all other functions for
-unit conversion (`qc_cm_cm_h`, `qc_cm_m_s`, `qc_dm_dm_h`, `qc_dm_dm_s`,
-`qc_mm_mm_s`, `qc_g_m_s`, `qc_kg_m_h`, `qc_kg_m_s`, `qc_cm_s`, `qc_cm_h`,
-`qc_dm_h`, `qc_g_h`, `qc_kg_h`). See function(s) help for details about
-arguments, (`?qc_cm_cm_h`).
-
-<img src="qc_cm_cm_h.svg" alt="qc_cm_cm_h" style="width: 500px;"/>
 
 ## `qc_sapw_conversion`
 
 Wrapper for unit conversion functions, from the units declared in metadata
-to the desired output units.
-See function help for details about arguments, (`?qc_sapw_conversion`).
+to the desired output units.  
 
 <img src="qc_sapw_conversion.svg" alt="qc_sapw_conversion" style="width: 450px;"/>
+
+## `qc_set_timezone`
+
+When reading data from csv, TIMESTAMP timezone is settled to `UTC`. This
+function allows setting the TIMESTAMP timezone without changing the variable.  
+
+<img src="qc_set_timezone.svg" alt="qc_set_timezone" style="width: 500px;"/>
+
+## `qc_site_dics`
+
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of site metadata specified in the arguments.  
+
+<img src="qc_site_dics.svg" alt="qc_site_dics" style="width: 650px;"/>
 
 ## `qc_soil_texture` 
 
@@ -754,114 +591,55 @@ will return this classification. If there is no information about the
 classification, a warning message explains that some information about the soil 
 texture is missing.
 
-<img src="qc_soil_texture.svg" alt="qc_soil_texture" style="width: 500px;"/>
+<img src="qc_soil_texture.svg" alt="qc_soil_texture" style="width: 650px;"/>
 
-# Report functions
+## `qc_species_dics`
 
-Family of functions dedicated to generate the html reports.
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of species metadata specified in the arguments. See function
+help for details about the arguments, (`?qc_species_dics`).  
 
-## `rep_sfn_render`
+<img src="qc_species_dics.svg" alt="qc_species_dics" style="width: 650px;"/>
 
-Wrap around rmarkdown::render function to generate the automatic reports.
-See function help for details about arguments, (`?rep_sfn_render`).  
+## `qc_species_names`
 
-<img src="rep_sfn_render.svg" alt="rep_sfn_render" style="width: 250px;"/>
+Wrapper for species_names_info and species_names_fix.
+See function help for details about arguments, (`?qc_species_names`).  
 
-# Visualization functions
+<img src="qc_species_names.svg" alt="qc_species_names" style="width: 300px;"/>
 
-Functions dedicated to generate plots or visualizations of data and metadata
+## `qc_species_names_fix`
 
-## `vis_gaps_calendar`
+This function takes the results of `qc_species_names_info` and return the
+tpl names if no NAs has been generated.
+See function help for details about arguments, (`?qc_species_names_fix`).  
 
-This function generates a calendar heatmap to visualize the gaps density. Plot
-is generated as a `ggplot` object, so post-modifications are allowed.
-See function help for details about arguments, (`?vis_gaps_calendar`).  
+<img src="qc_species_names_fix.svg" alt="qc_species_names_fix" style="width: 300px;"/>
 
-<img src="vis_gaps_calendar.svg" alt="vis_gaps_calendar" style="width: 200px;"/>
+## `qc_species_names_info`
 
-## `vis_plot_the_gap`
+This function uses the tpl and tpl_data packages (from github) to obtain
+the correct species names (if any correction is needed). A summary data frame
+is returned to use in `qc_species_names_fix` function.
+See function help for details about arguments, (`?qc_species_names_info`).  
 
-This function is a simple wrapper for ggplot + geom_histogram. It produces
-a ggplot object that can be modified adding layers, like any other ggplot
-object.
-See function help for details about arguments, (`?vis_plot_the_gap`).  
+<img src="qc_species_names_info.svg" alt="qc_species_names_info" style="width: 500px;"/>
 
-<img src="vis_plot_the_gap.svg" alt="vis_plot_the_gap" style="width: 650px;"/>
+## `qc_species_verification`
 
-## `vis_gap_lines`
+This function return a summary indicating if the species declared in the
+species metadata are the same that those indicated in the plant metadata.
+See function help for details about arguments, (`?qc_species_verification`).  
 
-TIMESTAMP concordance line plot, with gaps.
-See function help for details about the arguments, (`?vis_gap_lines`).  
+<img src="qc_species_verification.svg" alt="qc_species_verification" style="width: 500px;"/>
 
-<img src="vis_gap_lines.svg" alt="vis_gap_lines" style="width: 650px;"/>
+## `qc_stand_dics`
 
-# Data flow functions
+This function creates a dictionary (character vector) with the allowed values
+for the factor variable of stand metadata specified in the arguments. See function
+help for details about the arguments, (`?qc_stand_dics`).  
 
-Functions to manage the movement of files between folders in the server tree.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Data Load functions
-
-Functions to load data and metadata, as well as helper functions to aid with
-the automatic detection of format of raw data.
-
-## `remove_dupcols`
-
-`remove_dupcols` is an internal function to use inside of the `dl_*`
-functions. It checks for duplicate column names and drop them.
-See function help for details about arguments, (`?remove_dupcols`).  
-
-<img src="remove_dupcols.svg" alt="remove_dupcols" style="width: 500px;"/>
-
-
-
-
-
-
-
-
-
-## `dl_data`
-
-This function make use of dplyr, tidyr and readxl packages in order to
-retrieve and format the data. Also, in the case of csv files it uses
-data.table package.
-See function help for details about the arguments, (`?dl_data`).  
-
-<img src="dl_data.svg" alt="dl_data" style="width: 850px;"/>
-
-# Logging functions
-
-Family of functions dedicated to setup, maintain and configure the logging
-process
-
-
-
-# Main functions
-
-Main functions for starting QC procces, getting si_code and generate results
-tables.
-
-
-
-
-
-
+<img src="qc_stand_dics.svg" alt="qc_stand_dics" style="width: 650px;"/>
 
 ## `qc_start_process`
 
@@ -869,3 +647,130 @@ Start QC process from the site code.
 See function help for details about arguments, (`?qc_start_process`).  
 
 <img src="qc_start_process.svg" alt="qc_start_process" style="width: 500px;"/>
+
+## `qc_swc_check`
+
+Report about correctnees of swc values
+
+<img src="qc_swc_check.svg" alt="qc_swc_check" style="width: 200px;"/>
+
+## `qc_swc_fix`
+
+Fix the swc values if possible
+
+<img src="qc_swc_fix.svg" alt="qc_swc_fix" style="width: 200px;"/>
+
+## `qc_timestamp_concordance`
+
+Function to retrieve numerical or graphical information about concordance in
+the timestamp for both, environmental and sapflow data.
+
+<img src="qc_timestamp_concordance.svg" alt="qc_timestamp_concordance" style="width: 500px;"/>
+
+## `qc_timestamp_errors`
+
+Function to identify known errors in TIMESTAMP variable. A summary of intervals
+59 seconds away from the declared timestep is presented in order to locate the
+errors. See function help for more details about the arguments,
+(`?qc_timestamp_errors`).
+
+<img src="qc_timestamp_errors.svg" alt="qc_timestamp_errors" style="width: 500px;"/>
+
+## `qc_timestamp_nas`
+
+Checking for NAs in the TIMESTAMP
+
+<img src="qc_timestamp_nas.svg" alt="qc_timestamp_nas" style="width: 200px;"/>
+
+## `qc_time_interval`
+
+This function obtains a summary of the inital and final time (t0 and tf) of
+each object in the data (plants or environmental variables).
+
+<img src="qc_time_interval.svg" alt="qc_time_interval" style="width: 500px;"/>
+
+## `qc_transformation_vars`
+
+Summary table of variables needed for unit and any other kind of transformation
+
+<img src="qc_transformation_vars.svg" alt="qc_transformation_vars" style="width: 500px;"/>
+
+## `qc_transf_list`
+
+Show all transformations indicating which ones can be done
+
+<img src="qc_transf_list.svg" alt="qc_transf_list" style="width: 600px;"/>
+
+## `qc_units_process`
+
+Checking for available transformations and perform them if needed.
+
+<img src="qc_units_process.svg" alt="qc_units_process" style="width: 750px;"/>
+
+## `qc_vpd`
+
+Calculates the vpd if needed and possible from other environmental variables
+
+<img src="qc_vpd.svg" alt="qc_vpd" style="width: 250px;"/>
+
+## `remove_dupcols`
+
+`remove_dupcols` is an internal function to use inside of the `dl_*`
+functions. It checks for duplicate column names and drop them.  
+
+<img src="remove_dupcols.svg" alt="remove_dupcols" style="width: 500px;"/>
+
+## `rep_sfn_render`
+
+Wrap around rmarkdown::render function to generate the automatic reports.  
+
+<img src="rep_sfn_render.svg" alt="rep_sfn_render" style="width: 250px;"/>
+
+
+## `theme_sfn`
+
+Custom ggplot2 theme for uniformization of plot visuals
+
+```{r theme_sfn, echo=FALSE, fig.width=8}
+ggplot2::ggplot(iris, ggplot2::aes(x = Petal.Length, y = Petal.Width,
+                                   color = Species)) +
+  ggplot2::geom_point() +
+  sapfluxnetQC1::theme_sfn()
+```
+
+## `vis_biome`
+
+Whitaker diagram for biomes in `ggplot2`
+
+<img src="vis_biome.svg" alt="vis_biome" style="width: 450px;"/>
+
+## `vis_gaps_calendar`
+
+This function generates a calendar heatmap to visualize the gaps density. Plot
+is generated as a `ggplot` object, so post-modifications are allowed.  
+
+<img src="vis_gaps_calendar.svg" alt="vis_gaps_calendar" style="width: 200px;"/>
+
+## `vis_gap_lines`
+
+TIMESTAMP concordance line plot, with gaps.  
+
+<img src="vis_gap_lines.svg" alt="vis_gap_lines" style="width: 650px;"/>
+
+## `vis_location_biome`
+
+Plotting data in a Whitaker diagram using `vis_biome`.
+
+<img src="vis_location_biome.svg" alt="vis_location_biome" style="width: 400px;"/>
+
+## `vis_plot_the_gap`
+
+This function is a simple wrapper for ggplot + geom_histogram. It produces
+a ggplot object that can be modified adding layers, like any other ggplot
+object.  
+
+<img src="vis_plot_the_gap.svg" alt="vis_plot_the_gap" style="width: 650px;"/>
+
+# Appendix A. Legend
+
+<img src="symbols_legend.svg" alt="symbols_legend" style="width: 250px;"/>
