@@ -25,7 +25,7 @@ metadata, including the name of the metadata variables as labels and their
 expected class as the value. This provides a reference to check if the class is
 OK with the `qc_md_cols` function.
 
-<img src="create_dic.svg" alt="create_dic" style="width: 650px;"/>
+<img src="resources/create_dic.svg" alt="create_dic" style="width: 650px;"/>
 
 ## `df_accepted_to_lvl1`
 
@@ -38,21 +38,21 @@ This function performs two actions:
 
 See function help for details about arguments, (`?df_accepted_to_lvl1`).  
 
-<img src="df_accepted_to_lvl1.svg" alt="df_accepted_to_lvl1" style="width: 650px;"/>
+<img src="resources/df_accepted_to_lvl1.svg" alt="df_accepted_to_lvl1" style="width: 650px;"/>
 
 ## `df_copy_templates`
 
 This function copies/updates the templates in the server (Rmd files and R scripts).
 See function help for details about arguments (`?df_copy_templates`).
 
-<img src="df_copy_templates.svg" alt="df_copy_templates" style="width: 400px;"/>
+<img src="resources/df_copy_templates.svg" alt="df_copy_templates" style="width: 400px;"/>
 
 ## `df_flag_to_lvl2_app`
 
 This function generates an interactive shiny app to flag those sites ready for
 Level 2.  
 
-<img src="df_flag_to_lvl2_app.png" alt="flag_to_lvl2_app" style="width: 650px;"/>
+<img src="resources/df_flag_to_lvl2_app.png" alt="flag_to_lvl2_app" style="width: 650px;"/>
 
 ## `df_folder_structure`
 
@@ -60,7 +60,7 @@ This functions only need to be called once, as it creates the needed folder
 structure to recreate SAPFLUXNET project in any environment.
 See function help for details about the arguments, (`?df_folder_structure`).  
 
-<img src="df_folder_structure.svg" alt="df_folder_structure" style="width: 450px;"/>
+<img src="resources/df_folder_structure.svg" alt="df_folder_structure" style="width: 450px;"/>
 
 ## `df_get_data_folders`
 
@@ -68,14 +68,14 @@ This function gets the data folder names to be able to start automatically the
 QC process.
 See function help for details about arguments, (`?df_get_data_folders`).  
 
-<img src="df_get_data_folders.svg" alt="df_get_data_folders" style="width: 200px;"/>
+<img src="resources/df_get_data_folders.svg" alt="df_get_data_folders" style="width: 200px;"/>
 
 ## `df_get_status`
 
 Retrieve the status file info as a list, with the yaml package.
 See the function help for details about the arguments, (`?df_get_status`).  
 
-<img src="df_get_status.svg" alt="df_get_status" style="width: 650px;"/>
+<img src="resources/df_get_status.svg" alt="df_get_status" style="width: 650px;"/>
 
 ## `df_lvl1_to_lvl2`
 
@@ -83,20 +83,20 @@ This function is in charge of check for sites ready to pass to Level 2, create
 the needed folder structure, flag for outliers warnings and saving the final
 SfnData objects in the corresponding folder.
 
-<img src="df_lvl1_to_lvl2.svg" alt="df_lvl1_to_lvl2" style="width: 300px;"/>
+<img src="resources/df_lvl1_to_lvl2.svg" alt="df_lvl1_to_lvl2" style="width: 300px;"/>
 
 ## `df_lvl2_folder_structure`
 
 This function takes a site code and build the level 2 folder strucuture for that
 site.
 
-<img src="df_lvl2_folder_structure.svg" alt="df_lvl2_folder_structure" style="width: 450px;"/>
+<img src="resources/df_lvl2_folder_structure.svg" alt="df_lvl2_folder_structure" style="width: 450px;"/>
 
 ## `df_read_SfnData`
 
 This function loads the specified level SfnData object.
 
-<img src="df_read_SfnData.svg" alt="df_read_SfnData" style="width: 450px;"/>
+<img src="resources/df_read_SfnData.svg" alt="df_read_SfnData" style="width: 450px;"/>
 
 ## `df_received_to_accepted`
 
@@ -104,7 +104,7 @@ This function is in charge of move the data from the received folder to the
 accepted data folder (within the `code` folder).
 See function help for details about arguments, (`?df_received_to_accepted`).  
 
-<img src="df_received_to_accepted_FUNCTION.svg" alt="df_received_to_accepted" style="width: 650px;"/>
+<img src="resources/df_received_to_accepted_FUNCTION.svg" alt="df_received_to_accepted" style="width: 650px;"/>
 
 ## `df_rem_to_units`
 
@@ -112,14 +112,14 @@ This function is in charge of checking the sites ready to pass to out_units,
 performing the available transformations and writing the resulting SfnData in the
 destination folder.
 
-<img src="df_rem_to_units.svg" alt="df_rem_to_units" style="width: 350px;"/>
+<img src="resources/df_rem_to_units.svg" alt="df_rem_to_units" style="width: 350px;"/>
 
 ## `df_report_folder_creation`
 
 Function to create the report subfolder for the site to analyze.
 See function help for details about arguments, (`?df_report_folder_creation`).  
 
-<img src="df_report_folder_creation.svg" alt="df_report_folder_creation" style="width: 450px;"/>
+<img src="resources/df_report_folder_creation.svg" alt="df_report_folder_creation" style="width: 450px;"/>
 
 ## `df_reset_data_status`
 
@@ -127,21 +127,21 @@ This function allows for resetting the status of a site to the required level.
 For that, the status file is changed accordingly and all stored files for the
 site in the resetted levels are renamed to bak files.
 
-<img src="df_reset_data_status.svg" alt="df_reset_data_status" style="width: 450px;"/>
+<img src="resources/df_reset_data_status.svg" alt="df_reset_data_status" style="width: 450px;"/>
 
 ## `df_set_status`
 
 Change and update status file info using yaml package.
 See function help for details about arguments, (`?df_set_status`).  
 
-<img src="df_set_status.svg" alt="df_set_status" style="width: 650px;"/>
+<img src="resources/df_set_status.svg" alt="df_set_status" style="width: 650px;"/>
 
 ## `df_start_status`
 
 Initialise an empty status file in yaml format, using the `yaml` package.
 See function help for details about arguments, (`?df_start_status`).  
 
-<img src="df_start_status.svg" alt="df_start_status" style="width: 650px;"/>
+<img src="resources/df_start_status.svg" alt="df_start_status" style="width: 650px;"/>
 
 ## `df_warn_to_rem`
 
@@ -149,20 +149,20 @@ This function is in charge of checking the sites ready to pass to out_rem,
 removing the outliers indicated in the accesory files and saving the final
 SfnData object in the corresponding folder.
 
-<img src="df_warn_to_rem.svg" alt="df_warn_to_rem" style="width: 350px;"/>
+<img src="resources/df_warn_to_rem.svg" alt="df_warn_to_rem" style="width: 350px;"/>
 
 ## `df_whos_ready_to`
 
 This function checks the site status files to list who is ready to move to the
 indicated target (level).
 
-<img src="df_whos_ready_to.svg" alt="df_whos_ready_to" style="width: 450px;"/>
+<img src="resources/df_whos_ready_to.svg" alt="df_whos_ready_to" style="width: 450px;"/>
 
 ## `df_write_SfnData`
 
 This function writes the SfnData object in the specified level.
 
-<img src="df_write_SfnData.svg" alt="df_write_SfnData" style="width: 550px;"/>
+<img src="resources/df_write_SfnData.svg" alt="df_write_SfnData" style="width: 550px;"/>
 
 ## `dl_data`
 
@@ -171,21 +171,21 @@ retrieve and format the data. Also, in the case of csv files it uses
 data.table package.
 See function help for details about the arguments, (`?dl_data`).  
 
-<img src="dl_data.svg" alt="dl_data" style="width: 850px;"/>
+<img src="resources/dl_data.svg" alt="dl_data" style="width: 850px;"/>
 
 ## `dl_data_col_classes`
 
 Checking and setting data column classes to numeric.
 See function help for details about arguments, (`?dl_data_col_classes`).  
 
-<img src="dl_data_col_classes.svg" alt="dl_data_col_classes" style="width: 400px;"/>
+<img src="resources/dl_data_col_classes.svg" alt="dl_data_col_classes" style="width: 400px;"/>
 
 ## `dl_dec_char_detect`
 
 Decimal character detection to csv files loading with `data.table::fread`.
 See function help for details about arguments, (`?dl_dec_char_detect`).  
 
-<img src="dl_dec_char_detect.svg" alt="dl_dec_char_detect" style="width: 650px;"/>
+<img src="resources/dl_dec_char_detect.svg" alt="dl_dec_char_detect" style="width: 650px;"/>
 
 ## `dl_get_si_code`
 
@@ -194,7 +194,7 @@ with the metadata, sapflow data and environmental data, in order to use them
 as parameters in the automated reports.
 See function help for details about arguments, (`?dl_get_si_code`).  
 
-<img src="dl_get_si_code.svg" alt="dl_get_si_code" style="width: 650px;"/>
+<img src="resources/dl_get_si_code.svg" alt="dl_get_si_code" style="width: 650px;"/>
 
 ## `dl_metadata`
 
@@ -203,7 +203,7 @@ retrieve and format the metadata. It's intended to be used as first step
 to load the metadata and start the metadata quality check.
 See function help for details about the arguments, (`?dl_metadata`).  
 
-<img src="dl_metadata.svg" alt="dl_metadata" style="width: 650px;"/>
+<img src="resources/dl_metadata.svg" alt="dl_metadata" style="width: 650px;"/>
 
 ## `dl_na_char_generator`
 
@@ -211,64 +211,64 @@ Generation of a character vector with the possible na characters found in
 csv files in order to load data with `data.table::fread`.
 See function help for details about arguments, (`?dl_na_char_generator`).  
 
-<img src="dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 200px;"/>
+<img src="resources/dl_na_char_generator.svg" alt="dl_na_char_generator" style="width: 200px;"/>
 
 
 ## `get_env` (SfnData get method)
 
 Method to get the environmental data from a SfnData object
 
-<img src="get_env.svg" alt="get_env" style="width: 400px;"/>
+<img src="resources/get_env.svg" alt="get_env" style="width: 400px;"/>
 
 ## `get_env_flags` (SfnData get method)
 
 Method to get the environmental flags from a SfnData object
 
-<img src="get_env_flags.svg" alt="get_env_flags" style="width: 400px;"/>
+<img src="resources/get_env_flags.svg" alt="get_env_flags" style="width: 400px;"/>
 
 ## `get_*_md`, `get_timestamp`, `get_solar_timestamp`, `get_si_code`
 
 Methods to get the ancillary metadata objects
 
-<img src="get_methods_md.svg" alt="get_methods_md" style="width: 200px;"/>
+<img src="resources/get_methods_md.svg" alt="get_methods_md" style="width: 200px;"/>
 
 ## `<- replacement methods` (SfnData replacement method)
 
 Method to set the data or metadata in a SfnData object
 
-<img src="get_env_rep.svg" alt="get_env_rep" style="width: 350px;"/>
+<img src="resources/get_env_rep.svg" alt="get_env_rep" style="width: 350px;"/>
 
 ## `get_sapf` (SfnData get method)
 
 Method to get the sapflow data from a SfnData object
 
-<img src="get_sapf.svg" alt="get_sapf" style="width: 400px;"/>
+<img src="resources/get_sapf.svg" alt="get_sapf" style="width: 400px;"/>
 
 ## `get_sapf_flags` (SfnData get method)
 
 Method to get the sapflow flags from a SfnData object
 
-<img src="get_sapf_flags.svg" alt="get_sapf_flags" style="width: 400px;"/>
+<img src="resources/get_sapf_flags.svg" alt="get_sapf_flags" style="width: 400px;"/>
 
 ## `log_sapfluxnet_action`
 
 Custom logging handler action for SAPFLUXNET project
 
-<img src="log_sapfluxnet_action.svg" alt="log_sapfluxnet_action" style="width: 350px;"/>
+<img src="resources/log_sapfluxnet_action.svg" alt="log_sapfluxnet_action" style="width: 350px;"/>
 
 ## `log_sapfluxnet_format`
 
 Custom log formatter for SAPFLUXNET Project
 See function help for details about arguments, (`?log_sapfluxnet_format`).  
 
-<img src="log_sapfluxnet_format.svg" alt="log_sapfluxnet_format" style="width: 200px;"/>
+<img src="resources/log_sapfluxnet_format.svg" alt="log_sapfluxnet_format" style="width: 200px;"/>
 
 ## `log_sapfluxnet_setup`
 
 Setting up the SAPFLUXNET Project log handler.
 See function help for details about arguments, (`?log_sapfluxnet_setup`).  
 
-<img src="log_sapfluxnet_setup.svg" alt="log_sapfluxnet_setup" style="width: 350px;"/>
+<img src="resources/log_sapfluxnet_setup.svg" alt="log_sapfluxnet_setup" style="width: 350px;"/>
 
 ## `out_app`
 
@@ -283,7 +283,7 @@ Shiny app to confirm the removed/subsituted values in the level 2 process
 
 plot method for SfnData objects. It generates ggplot2 objects instead regular plots
 
-<img src="plot_method.svg" alt="plot_method" style="width: 550px;"/>
+<img src="resources/plot_method.svg" alt="plot_method" style="width: 550px;"/>
 
 ## `qc_as_timestamp`
 
@@ -292,7 +292,7 @@ in bad formatted TIMESTAMP. This function looks for known bad formats and fix
 them. It uses internally `qc_is_timestamp`, `qc_get_timezone` and `qc_set_timezone`
 to achieve the correct TIMESTAMP format.  
 
-<img src="qc_as_timestamp.svg" alt="qc_as_timestamp" style="width: 750px;"/>
+<img src="resources/qc_as_timestamp.svg" alt="qc_as_timestamp" style="width: 750px;"/>
 
 ## `qc_check_coordinates`
 
@@ -300,7 +300,7 @@ This function retrieves the coordinates provided fir the site, and check them
 against the country coordinates. It uses `qc_download_maps` internally to
 fecth any map if needed.  
 
-<img src="qc_check_coordinates.svg" alt="qc_check_coordinates" style="width: 500px;"/>
+<img src="resources/qc_check_coordinates.svg" alt="qc_check_coordinates" style="width: 500px;"/>
 
 ## `qc_cm_cm_h`
 
@@ -311,7 +311,7 @@ unit conversion (`qc_cm_cm_h`, `qc_cm_m_s`, `qc_dm_dm_h`, `qc_dm_dm_s`,
 `qc_mm_mm_s`, `qc_g_m_s`, `qc_kg_m_h`, `qc_kg_m_s`, `qc_cm_s`, `qc_cm_h`,
 `qc_dm_h`, `qc_g_h`, `qc_kg_h`).  
 
-<img src="qc_cm_cm_h.svg" alt="qc_cm_cm_h" style="width: 500px;"/>
+<img src="resources/qc_cm_cm_h.svg" alt="qc_cm_cm_h" style="width: 500px;"/>
 
 ## `qc_coordinates`
 
@@ -319,7 +319,7 @@ Wrapper around all the previous functions to perform the coordinates quality
 check in only one step. See function help for more details about the arguments,
 (`?qc_coordinates`).  
 
-<img src="qc_coordinates.svg" alt="qc_coordinates" style="width: 500px;"/>
+<img src="resources/qc_coordinates.svg" alt="qc_coordinates" style="width: 500px;"/>
 
 ## `qc_coord_sign_test`
 
@@ -329,14 +329,14 @@ possible sign changes, but fix is not made here. See function help for
 more details about the arguments, special_countries step and expected value
 (`?qc_cood_sign_test`).  
 
-<img src="qc_coord_sign_test.svg" alt="qc_coord_sign_test" style="width: 500px;"/>
+<img src="resources/qc_coord_sign_test.svg" alt="qc_coord_sign_test" style="width: 500px;"/>
 
 ## `qc_data_results_table`
 
 Data QC codified results in one data frame.
 See function help for details about arguments, (`?qc_data_results_table`).  
 
-<img src="qc_data_results_table.svg" alt="qc_data_results_table" style="width: 650px;"/>
+<img src="resources/qc_data_results_table.svg" alt="qc_data_results_table" style="width: 650px;"/>
 
 ## `qc_download_maps`
 
@@ -344,14 +344,14 @@ This function fecth maps from [gadm](http://www.gadm.org/) if the maps are not
 already downloaded in the maps folder specified. See function help for more
 details in the arguments and expected value (`?qc_download_maps`).  
 
-<img src="qc_download_maps.svg" alt="qc_download_maps" style="width: 500px;"/>
+<img src="resources/qc_download_maps.svg" alt="qc_download_maps" style="width: 500px;"/>
 
 ## `qc_email_check`
 
 This function checks if the email provided is a correct formatted email
 direction. See function help for details about arguments, (`?qc_email_check`).  
 
-<img src="qc_email_check.svg" alt="qc_email_check" style="width: 500px;"/>
+<img src="resources/qc_email_check.svg" alt="qc_email_check" style="width: 500px;"/>
 
 ## `qc_env_dics`
 
@@ -359,13 +359,13 @@ This function creates a dictionary (character vector) with the allowed values
 for the factor variable of environmental metadata specified in the arguments.
 See function help for details about the arguments, (`?qc_env_dics`).  
 
-<img src="qc_env_dics.svg" alt="qc_env_dics" style="width: 650px;"/>
+<img src="resources/qc_env_dics.svg" alt="qc_env_dics" style="width: 650px;"/>
 
 ## `qc_env_ranges`
 
 Check ranges for environmental variables
 
-<img src="qc_env_ranges.svg" alt="qc_env_ranges" style="width: 650px;"/>
+<img src="resources/qc_env_ranges.svg" alt="qc_env_ranges" style="width: 650px;"/>
 
 ## `qc_env_vars_presence`
 
@@ -373,21 +373,21 @@ This function check the presence in the environmental data of variables
 declared as measured in the environmental metadata. See function help for details
 about arguments, (`?qc_env_vars_presence`)
 
-<img src="qc_env_vars_presence.svg" alt="qc_env_vars_presence" style="width: 650px;"/>
+<img src="resources/qc_env_vars_presence.svg" alt="qc_env_vars_presence" style="width: 650px;"/>
 
 ## `qc_ext_radiation`
 
 Calculates the Extraterrestrial Radiation from the TIMESTAMP, and also
 calculates the solar TIMESTAMP
 
-<img src="qc_ext_radiation.svg" alt="qc_ext_radiation" style="width: 650px;"/>
+<img src="resources/qc_ext_radiation.svg" alt="qc_ext_radiation" style="width: 650px;"/>
 
 ## `qc_factor_values`
 
 This function checks if the values provided for the factor metadata variables are
 allowed values.  
 
-<img src="qc_factor_values.svg" alt="qc_factor_values" style="width: 750px;"/>
+<img src="resources/qc_factor_values.svg" alt="qc_factor_values" style="width: 750px;"/>
 
 ## `qc_fix_latlong_errors`
 
@@ -396,20 +396,20 @@ It is intended to be modular, being able to add new fixes if needed, as this
 function uses other internal functions as `qc_check_coordinates` and
 `qc_coord_sign_test`.  
 
-<img src="qc_fix_latlong_errors.svg" alt="qc_fix_latlong_errors" style="width: 500px;"/>
+<img src="resources/qc_fix_latlong_errors.svg" alt="qc_fix_latlong_errors" style="width: 500px;"/>
 
 ## `qc_fix_timestamp`
 
 Wrapper for timestamp functions.  
 
-<img src="qc_fix_timestamp.svg" alt="qc_fix_timestamp" style="width: 200px;"/>
+<img src="resources/qc_fix_timestamp.svg" alt="qc_fix_timestamp" style="width: 200px;"/>
 
 ## `qc_get_biome`
 
 Retrieves the mean annual temperature, mena annual precipitation from
 WorldClim 1.4 and calculate the biome based on `qc_get_biomes_spdf`
 
-<img src="qc_get_biome.svg" alt="qc_get_biome" style="width: 500px;"/>
+<img src="resources/qc_get_biome.svg" alt="qc_get_biome" style="width: 500px;"/>
 
 ## `qc_get_biomes_spdf`
 
@@ -417,14 +417,14 @@ Creates a SpatialPolygonsDataFrame object of the Whittaker's biomes modified by
 Ricklefs (2008) in function of mean annual temperature (MAT) and mean annual
 precipitation (MAP) (MAT in degree Celsius and MAP in mm).
 
-<img src="qc_get_biomes_spdf.svg" alt="qc_get_biomes_spdf" style="width: 500px;"/>
+<img src="resources/qc_get_biomes_spdf.svg" alt="qc_get_biomes_spdf" style="width: 500px;"/>
 
 ## `qc_get_sapw_md`
 
 Simple function to retrieve the metadata variables related with sapwood.
 See function help for details about arguments, (`?qc_get_sapw_md`).  
 
-<img src="qc_get_sapw_md.svg" alt="qc_get_sapw_md" style="width: 500px;"/>
+<img src="resources/qc_get_sapw_md.svg" alt="qc_get_sapw_md" style="width: 500px;"/>
 
 ## `qc_get_timestep`
 
@@ -432,7 +432,7 @@ Helper function to retrieve the timestep from the from the plant (sapflow) or
 the environmental metadata. This helper function will be used in the
 `qc_timestamp_errors` function.
 
-<img src="qc_get_timestep.svg" alt="qc_get_timestep" style="width: 650px;"/>
+<img src="resources/qc_get_timestep.svg" alt="qc_get_timestep" style="width: 650px;"/>
 
 ## `qc_get_timezone`
 
@@ -440,13 +440,13 @@ Function to transform the provided ISO coded timezone value (`env_time_zone`
 variable) in a character string compatible with `lubridate` package and POSIXct
 format.  
 
-<img src="qc_get_timezone.svg" alt="qc_get_timezone" style="width: 250px;"/>
+<img src="resources/qc_get_timezone.svg" alt="qc_get_timezone" style="width: 250px;"/>
 
 ## `qc_is_timestamp`
 
 This function tests if TIMESTAMP variable is in POSIXct format, as expected.  
 
-<img src="qc_is_timestamp.svg" alt="qc_is_timestamp" style="width: 800px;"/>
+<img src="resources/qc_is_timestamp.svg" alt="qc_is_timestamp" style="width: 800px;"/>
 
 ## `qc_md_cols`
 
@@ -454,64 +454,64 @@ This functions checks for presence, NAs and classes of the variables provided
 in the different kinds of metadata, buiding a summary data frame as result.
 See function help for details about the arguments, (`?qc_md_cols`).
 
-<img src="qc_md_cols.svg" alt="qc_md_cols" style="width: 750px;"/>
+<img src="resources/qc_md_cols.svg" alt="qc_md_cols" style="width: 750px;"/>
 
 ## `qc_md_results_table`
 
 Metadata QC codified results in one data frame.  
 
-<img src="qc_md_results_table.svg" alt="qc_md_results_table" style="width: 600px;"/>
+<img src="resources/qc_md_results_table.svg" alt="qc_md_results_table" style="width: 600px;"/>
 
 ## `qc_mind_the_gap`
 
 This function obtains info about the gaps and display it in a summary data frame.
 See function help for details about the arguments, (`?qc_mind_the_gap`).  
 
-<img src="qc_mind_the_gap.svg" alt="qc_mind_the_gap" style="width: 750px;"/>
+<img src="resources/qc_mind_the_gap.svg" alt="qc_mind_the_gap" style="width: 750px;"/>
 
 ## `qc_outliers_process`
 
 This function substitute the outliers based on the *_to_remove files found
 in the out_warn folder for any site
 
-<img src="qc_outliers_process.svg" alt="qc_outliers_process" style="width: 750px;"/>
+<img src="resources/qc_outliers_process.svg" alt="qc_outliers_process" style="width: 750px;"/>
 
 ## `qc_out_hampel_filter`
 
 Detecting and substituting outliers in the environmental and sapflow data using
 a modification fo the Hampel filter
 
-<img src="qc_out_hampel_filter.svg" alt="qc_out_hampel_filter" style="width: 500px;"/>
+<img src="resources/qc_out_hampel_filter.svg" alt="qc_out_hampel_filter" style="width: 500px;"/>
 
 ## `qc_out_median`
 
 Classic Hampel filter
 
-<img src="qc_out_median.svg" alt="qc_out_median" style="width: 350px;"/>
+<img src="resources/qc_out_median.svg" alt="qc_out_median" style="width: 350px;"/>
 
 ## `qc_out_medianreg`
 
 Hampel filter with median regression
 
-<img src="qc_out_medianreg.svg" alt="qc_out_medianreg" style="width: 350px;"/>
+<img src="resources/qc_out_medianreg.svg" alt="qc_out_medianreg" style="width: 350px;"/>
 
 ## `qc_out_of_range`
 
 Checking data for out of range values, updating the corresponding data flags
 
-<img src="qc_out_of_range.svg" alt="qc_out_of_range" style="width: 500px;"/>
+<img src="resources/qc_out_of_range.svg" alt="qc_out_of_range" style="width: 500px;"/>
 
 ## `qc_out_remove`
 
 Outliers detection, substitution and annotation for SfnData objects
 
-<img src="qc_out_remove.svg" alt="qc_out_remove" style="width: 400px;"/>
+<img src="resources/qc_out_remove.svg" alt="qc_out_remove" style="width: 400px;"/>
 
 ## `qc_out_tukeyline`
 
 Hampel filter with robust fitting
 
-<img src="qc_out_tukeyline.svg" alt="qc_out_tukeyline" style="width: 350px;"/>
+<img src="resources/qc_out_tukeyline.svg" alt="qc_out_tukeyline" style="width: 350px;"/>
 
 ## `qc_plant_dics`
 
@@ -519,7 +519,7 @@ This function creates a dictionary (character vector) with the allowed values
 for the factor variable of plant metadata specified in the arguments. See function
 help for details about the arguments, (`?qc_plant_dics`).  
 
-<img src="qc_plant_dics.svg" alt="qc_plant_dics" style="width: 650px;"/>
+<img src="resources/qc_plant_dics.svg" alt="qc_plant_dics" style="width: 650px;"/>
 
 ## `qc_pl_treatments`
 
@@ -527,58 +527,58 @@ This function summarizes the treatments declared in the plant metadata to look
 for mispelling and concordance errors. Results are summarised in a data frame.
 See function help for details about arguments, (`?qc_pl_treatments`).  
 
-<img src="qc_pl_treatments.svg" alt="qc_pl_treatments" style="width: 200px;"/>
+<img src="resources/qc_pl_treatments.svg" alt="qc_pl_treatments" style="width: 200px;"/>
 
 ## `qc_rad_conversion`
 
 Transforming radiation units
 
-<img src="qc_rad_conversion.svg" alt="qc_rad_conversion" style="width: 250px;"/>
+<img src="resources/qc_rad_conversion.svg" alt="qc_rad_conversion" style="width: 250px;"/>
 
 ## `qc_range_dic`
 
 Dictionary with range values for all ranges checked
 
-<img src="qc_range_dic.svg" alt="qc_range_dic" style="width: 250px;"/>
+<img src="resources/qc_range_dic.svg" alt="qc_range_dic" style="width: 250px;"/>
 
 ## `qc_rh`
 
 Calculate the relative humidity from air temperature and vpd
 
-<img src="qc_rh.svg" alt="qc_rh" style="width: 250px;"/>
+<img src="resources/qc_rh.svg" alt="qc_rh" style="width: 250px;"/>
 
 ## `qc_sapf_ranges`
 
 Check ranges for sapflow
 
-<img src="qc_sapf_ranges.svg" alt="qc_sapf_ranges" style="width: 650px;"/>
+<img src="resources/qc_sapf_ranges.svg" alt="qc_sapf_ranges" style="width: 650px;"/>
 
 ## `qc_sapw_area_calculator`
 
 Calculatez sapwood area from DBH, bark thickness and sapwood depth  
 
-<img src="qc_sapw_area_calculator.svg" alt="qc_sapw_area_calculator" style="width: 500px;"/>
+<img src="resources/qc_sapw_area_calculator.svg" alt="qc_sapw_area_calculator" style="width: 500px;"/>
 
 ## `qc_sapw_conversion`
 
 Wrapper for unit conversion functions, from the units declared in metadata
 to the desired output units.  
 
-<img src="qc_sapw_conversion.svg" alt="qc_sapw_conversion" style="width: 450px;"/>
+<img src="resources/qc_sapw_conversion.svg" alt="qc_sapw_conversion" style="width: 450px;"/>
 
 ## `qc_set_timezone`
 
 When reading data from csv, TIMESTAMP timezone is settled to `UTC`. This
 function allows setting the TIMESTAMP timezone without changing the variable.  
 
-<img src="qc_set_timezone.svg" alt="qc_set_timezone" style="width: 500px;"/>
+<img src="resources/qc_set_timezone.svg" alt="qc_set_timezone" style="width: 500px;"/>
 
 ## `qc_site_dics`
 
 This function creates a dictionary (character vector) with the allowed values
 for the factor variable of site metadata specified in the arguments.  
 
-<img src="qc_site_dics.svg" alt="qc_site_dics" style="width: 650px;"/>
+<img src="resources/qc_site_dics.svg" alt="qc_site_dics" style="width: 650px;"/>
 
 ## `qc_soil_texture` 
 
@@ -591,7 +591,7 @@ will return this classification. If there is no information about the
 classification, a warning message explains that some information about the soil 
 texture is missing.
 
-<img src="qc_soil_texture.svg" alt="qc_soil_texture" style="width: 650px;"/>
+<img src="resources/qc_soil_texture.svg" alt="qc_soil_texture" style="width: 650px;"/>
 
 ## `qc_species_dics`
 
@@ -599,14 +599,14 @@ This function creates a dictionary (character vector) with the allowed values
 for the factor variable of species metadata specified in the arguments. See function
 help for details about the arguments, (`?qc_species_dics`).  
 
-<img src="qc_species_dics.svg" alt="qc_species_dics" style="width: 650px;"/>
+<img src="resources/qc_species_dics.svg" alt="qc_species_dics" style="width: 650px;"/>
 
 ## `qc_species_names`
 
 Wrapper for species_names_info and species_names_fix.
 See function help for details about arguments, (`?qc_species_names`).  
 
-<img src="qc_species_names.svg" alt="qc_species_names" style="width: 300px;"/>
+<img src="resources/qc_species_names.svg" alt="qc_species_names" style="width: 300px;"/>
 
 ## `qc_species_names_fix`
 
@@ -614,7 +614,7 @@ This function takes the results of `qc_species_names_info` and return the
 tpl names if no NAs has been generated.
 See function help for details about arguments, (`?qc_species_names_fix`).  
 
-<img src="qc_species_names_fix.svg" alt="qc_species_names_fix" style="width: 300px;"/>
+<img src="resources/qc_species_names_fix.svg" alt="qc_species_names_fix" style="width: 300px;"/>
 
 ## `qc_species_names_info`
 
@@ -623,7 +623,7 @@ the correct species names (if any correction is needed). A summary data frame
 is returned to use in `qc_species_names_fix` function.
 See function help for details about arguments, (`?qc_species_names_info`).  
 
-<img src="qc_species_names_info.svg" alt="qc_species_names_info" style="width: 500px;"/>
+<img src="resources/qc_species_names_info.svg" alt="qc_species_names_info" style="width: 500px;"/>
 
 ## `qc_species_verification`
 
@@ -631,7 +631,7 @@ This function return a summary indicating if the species declared in the
 species metadata are the same that those indicated in the plant metadata.
 See function help for details about arguments, (`?qc_species_verification`).  
 
-<img src="qc_species_verification.svg" alt="qc_species_verification" style="width: 500px;"/>
+<img src="resources/qc_species_verification.svg" alt="qc_species_verification" style="width: 500px;"/>
 
 ## `qc_stand_dics`
 
@@ -639,33 +639,33 @@ This function creates a dictionary (character vector) with the allowed values
 for the factor variable of stand metadata specified in the arguments. See function
 help for details about the arguments, (`?qc_stand_dics`).  
 
-<img src="qc_stand_dics.svg" alt="qc_stand_dics" style="width: 650px;"/>
+<img src="resources/qc_stand_dics.svg" alt="qc_stand_dics" style="width: 650px;"/>
 
 ## `qc_start_process`
 
 Start QC process from the site code.
 See function help for details about arguments, (`?qc_start_process`).  
 
-<img src="qc_start_process.svg" alt="qc_start_process" style="width: 500px;"/>
+<img src="resources/qc_start_process.svg" alt="qc_start_process" style="width: 500px;"/>
 
 ## `qc_swc_check`
 
 Report about correctnees of swc values
 
-<img src="qc_swc_check.svg" alt="qc_swc_check" style="width: 200px;"/>
+<img src="resources/qc_swc_check.svg" alt="qc_swc_check" style="width: 200px;"/>
 
 ## `qc_swc_fix`
 
 Fix the swc values if possible
 
-<img src="qc_swc_fix.svg" alt="qc_swc_fix" style="width: 200px;"/>
+<img src="resources/qc_swc_fix.svg" alt="qc_swc_fix" style="width: 200px;"/>
 
 ## `qc_timestamp_concordance`
 
 Function to retrieve numerical or graphical information about concordance in
 the timestamp for both, environmental and sapflow data.
 
-<img src="qc_timestamp_concordance.svg" alt="qc_timestamp_concordance" style="width: 500px;"/>
+<img src="resources/qc_timestamp_concordance.svg" alt="qc_timestamp_concordance" style="width: 500px;"/>
 
 ## `qc_timestamp_errors`
 
@@ -674,57 +674,57 @@ Function to identify known errors in TIMESTAMP variable. A summary of intervals
 errors. See function help for more details about the arguments,
 (`?qc_timestamp_errors`).
 
-<img src="qc_timestamp_errors.svg" alt="qc_timestamp_errors" style="width: 500px;"/>
+<img src="resources/qc_timestamp_errors.svg" alt="qc_timestamp_errors" style="width: 500px;"/>
 
 ## `qc_timestamp_nas`
 
 Checking for NAs in the TIMESTAMP
 
-<img src="qc_timestamp_nas.svg" alt="qc_timestamp_nas" style="width: 200px;"/>
+<img src="resources/qc_timestamp_nas.svg" alt="qc_timestamp_nas" style="width: 200px;"/>
 
 ## `qc_time_interval`
 
 This function obtains a summary of the inital and final time (t0 and tf) of
 each object in the data (plants or environmental variables).
 
-<img src="qc_time_interval.svg" alt="qc_time_interval" style="width: 500px;"/>
+<img src="resources/qc_time_interval.svg" alt="qc_time_interval" style="width: 500px;"/>
 
 ## `qc_transformation_vars`
 
 Summary table of variables needed for unit and any other kind of transformation
 
-<img src="qc_transformation_vars.svg" alt="qc_transformation_vars" style="width: 500px;"/>
+<img src="resources/qc_transformation_vars.svg" alt="qc_transformation_vars" style="width: 500px;"/>
 
 ## `qc_transf_list`
 
 Show all transformations indicating which ones can be done
 
-<img src="qc_transf_list.svg" alt="qc_transf_list" style="width: 600px;"/>
+<img src="resources/qc_transf_list.svg" alt="qc_transf_list" style="width: 600px;"/>
 
 ## `qc_units_process`
 
 Checking for available transformations and perform them if needed.
 
-<img src="qc_units_process.svg" alt="qc_units_process" style="width: 750px;"/>
+<img src="resources/qc_units_process.svg" alt="qc_units_process" style="width: 750px;"/>
 
 ## `qc_vpd`
 
 Calculates the vpd if needed and possible from other environmental variables
 
-<img src="qc_vpd.svg" alt="qc_vpd" style="width: 250px;"/>
+<img src="resources/qc_vpd.svg" alt="qc_vpd" style="width: 250px;"/>
 
 ## `remove_dupcols`
 
 `remove_dupcols` is an internal function to use inside of the `dl_*`
 functions. It checks for duplicate column names and drop them.  
 
-<img src="remove_dupcols.svg" alt="remove_dupcols" style="width: 500px;"/>
+<img src="resources/remove_dupcols.svg" alt="remove_dupcols" style="width: 500px;"/>
 
 ## `rep_sfn_render`
 
 Wrap around rmarkdown::render function to generate the automatic reports.  
 
-<img src="rep_sfn_render.svg" alt="rep_sfn_render" style="width: 250px;"/>
+<img src="resources/rep_sfn_render.svg" alt="rep_sfn_render" style="width: 250px;"/>
 
 
 ## `theme_sfn`
@@ -742,26 +742,26 @@ ggplot2::ggplot(iris, ggplot2::aes(x = Petal.Length, y = Petal.Width,
 
 Whitaker diagram for biomes in `ggplot2`
 
-<img src="vis_biome.svg" alt="vis_biome" style="width: 450px;"/>
+<img src="resources/vis_biome.svg" alt="vis_biome" style="width: 450px;"/>
 
 ## `vis_gaps_calendar`
 
 This function generates a calendar heatmap to visualize the gaps density. Plot
 is generated as a `ggplot` object, so post-modifications are allowed.  
 
-<img src="vis_gaps_calendar.svg" alt="vis_gaps_calendar" style="width: 200px;"/>
+<img src="resources/vis_gaps_calendar.svg" alt="vis_gaps_calendar" style="width: 200px;"/>
 
 ## `vis_gap_lines`
 
 TIMESTAMP concordance line plot, with gaps.  
 
-<img src="vis_gap_lines.svg" alt="vis_gap_lines" style="width: 650px;"/>
+<img src="resources/vis_gap_lines.svg" alt="vis_gap_lines" style="width: 650px;"/>
 
 ## `vis_location_biome`
 
 Plotting data in a Whitaker diagram using `vis_biome`.
 
-<img src="vis_location_biome.svg" alt="vis_location_biome" style="width: 400px;"/>
+<img src="resources/vis_location_biome.svg" alt="vis_location_biome" style="width: 400px;"/>
 
 ## `vis_plot_the_gap`
 
@@ -769,8 +769,8 @@ This function is a simple wrapper for ggplot + geom_histogram. It produces
 a ggplot object that can be modified adding layers, like any other ggplot
 object.  
 
-<img src="vis_plot_the_gap.svg" alt="vis_plot_the_gap" style="width: 650px;"/>
+<img src="resources/vis_plot_the_gap.svg" alt="vis_plot_the_gap" style="width: 650px;"/>
 
 # Appendix A. Legend
 
-<img src="symbols_legend.svg" alt="symbols_legend" style="width: 250px;"/>
+<img src="resources/symbols_legend.svg" alt="symbols_legend" style="width: 250px;"/>
