@@ -91,9 +91,9 @@ Data provided by the contributors is checked for:
 
 ## Report QC1
 
-An automatic report is generated in this step. This report is used to decide
-if the dataset can be passed to LEVEL 2 or if manual changes and/or contributor
-feedbak are needed.  
+Objects produced in the QC1 step are used to generate an automatic report.
+This report is used to decide if the dataset can be passed to LEVEL 2 or if
+manual changes and/or contributor feedback are needed.  
 If everything is ok, data is stored in the `Data/SITE_CODE/Lvl_1` folder and
 status file is updated.
 
@@ -151,9 +151,9 @@ updated again to reflect the new status.
 ### Outliers check
 
 After the substitution/remove of the problematic data a manual process is needed
-to check if everuthing is ok, as showed in the Figure 5:
+to check if everything is ok, as showed in the Figure 5:
 
-<img src="resources/out_confirmation_app.png" alt="Fig. 4" style="width: 700px;"/>
+<img src="resources/out_confirmation_app.png" alt="Fig. 5" style="width: 700px;"/>
 
 ## Unit transformations
 
@@ -177,3 +177,8 @@ After the units transformation step, data is finally stored in the
   1. `plant` if the plant level units are available
   1. `sapwood` if the sapwood level units are available
   1. `leaf` if the leaf level units are available
+
+
+Figure 6 summarises all the QC2 process:
+
+<img src="resources/QC2.svg" alt="Fig. 6" style="width: 700px;"/>
