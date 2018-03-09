@@ -20,6 +20,16 @@
 #' @return Nothing, dirs are created if they do not exist, or a warning is raised
 #'   if they already exist.
 #'
+#' @examples
+#'
+#' \dontrun{
+#' # create folder tree in the working directory
+#' df_folder_structure()
+#'
+#' # create folder tree in a custom directory
+#' df_folder_structure(parent_dir = file.path('route', 'to', 'folder'))
+#' }
+#'
 #' @export
 
 # START
@@ -79,7 +89,18 @@ df_folder_structure <- function(parent_dir = '.', parent_logger = 'test') {
 #' @param remove Logical indicating if files in received folder are dropped after
 #'   the file transfer. Default to FALSE.
 #'
-#' @return
+#' @return Nothing, files are copied to target and a message is raised. In case
+#'   of problems copying the files a warning with detailed info is raised
+#'
+#' @examples
+#' \dontrun{
+#' # move the files from received to accepted
+#' df_received_to_accepted()
+#'
+#' # if files exist, raise a warning
+#' df_received_to_accepted() # raise a warning with sites already moved
+#'
+#' }
 #'
 #' @export
 
@@ -130,8 +151,7 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
         warning('Folder ', path, ' already exists! ',
                 'This means that site is already in the system')
         if (any(file.exists(file_names))) {
-          warning('One or more files already exist. ',
-                  'Not copying any file, manual intervention needed.')
+          warning('One or more files already exist. Not copying any file.')
           next
         } else {
 
@@ -217,6 +237,16 @@ df_received_to_accepted <- function(remove = FALSE, parent_logger = 'test') {
 #' @return Invisible TRUE if no errors were encountered, invisible FALSE if
 #'   there was errors. Also, status file is created in the corresponding folder.
 #'
+#' @examples
+#'
+#' \dontrun{
+#' # create status for foo
+#' df_start_status('foo')
+#'
+#' # check if file is created
+#' file.exists(file.path('Data', 'foo', 'foo_status.yaml')
+#' }
+#'
 #' @export
 
 # START
@@ -300,6 +330,16 @@ df_start_status <- function(si_code, parent_logger = 'test') {
 #'
 #' @return a list object with the info contained in the status file
 #'
+#' @examples
+#'
+#' \dontrun{
+#' # get the status of a site
+#' foo_status <- df_get_status('foo')
+#' class(foo_status) # yaml converted to list in R
+#' # is foo stored in LVL1?
+#' foo_status[['LVL1']][['STORED']]
+#' }
+#'
 #' @export
 
 # START
@@ -377,6 +417,20 @@ df_get_status <- function(si_code, parent_logger = 'test') {
 #' @return Invisible TRUE if changes to status file were correctly made,
 #'   invisble FALSE if changes were not made. Also, the status file for the site
 #'   will be replaced with the new one.
+#'
+#' @examples
+#'
+#' \dontrun{
+#' # see the LVL1 status for foo
+#' df_get_status('foo')[['LVL1']]
+#'
+#' # change the status
+#' df_set_status('foo', LVL1 = list(STORED = TRUE,
+#'                                  DATE = as.character(Sys.Date())))
+#'
+#' # see if changes had effect
+#' df_get_status('foo')[['LVL1']]
+#' }
 #'
 #' @export
 
@@ -471,6 +525,13 @@ df_set_status <- function(si_code,
 #' @return Invisible TRUE if the folder is created correctly, invisible FALSE if
 #'   folder is not created.
 #'
+#' @examples
+#'
+#' \dontrun{
+#' # creating the foo site subfolder in the Reports folder
+#' df_report_folder_creation('foo')
+#' }
+#'
 #' @export
 
 # START
@@ -483,7 +544,7 @@ df_report_folder_creation <- function(si_code, parent_logger = 'test') {
     # STEP 0
     # Argument checks
     # is si_code a character?
-    if(!is.character(si_code)) {
+    if (!is.character(si_code)) {
       stop('si_code provided is not a character')
     }
 
@@ -530,6 +591,14 @@ df_report_folder_creation <- function(si_code, parent_logger = 'test') {
 #' @family Data Flow
 #'
 #' @return a character vector with the folders route
+#'
+#' @examples
+#'
+#' \dontrun{
+#' # get the list of folders in Data
+#' site_list <- df_get_data_folders()
+#' site_list
+#' }
 #'
 #' @export
 
@@ -595,6 +664,12 @@ df_get_data_folders <- function(parent_logger = 'test') {
 #'
 #' @return Nothing
 #'
+#' @examples
+#'
+#' \dontrun{
+#' data(EXM_SIT)
+#' }
+#'
 #' @export
 
 # START
@@ -611,20 +686,20 @@ df_accepted_to_lvl1 <- function(si_code, sapf_data = NULL, env_data = NULL,
     # Argument checks
     # if any of the data is NULL (does not exists), stop and report, except
     # for the different sapflow unit conversions, as they can be missing
-    if(any(is.null(sapf_data), is.null(env_data), is.null(site_md),
+    if (any(is.null(sapf_data), is.null(env_data), is.null(site_md),
            is.null(stand_md), is.null(plant_md), is.null(species_md),
            is.null(env_md))) {
       stop('One or more datasets were not provided')
     }
     # are datasets dataframes?
-    if(any(!is.data.frame(sapf_data), !is.data.frame(env_data),
+    if (any(!is.data.frame(sapf_data), !is.data.frame(env_data),
            !is.data.frame(site_md), !is.data.frame(stand_md),
            !is.data.frame(plant_md), !is.data.frame(species_md),
            !is.data.frame(env_md))) {
       stop('One or more datasets provided are not data frames')
     }
     # is si_code a character string?
-    if(!is.character(si_code)) {
+    if (!is.character(si_code)) {
       stop('site code provided is not a character string')
     }
     # if files exist before the function execution, stop and inform

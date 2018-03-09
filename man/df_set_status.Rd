@@ -31,6 +31,21 @@ of \code{LVL1} and \code{LVL2} a list with two elements, \code{STORED} and
 \code{DATE}. \code{DONE} and \code{STORED} are logicals, whereas \code{DATE}
 is always a character or NULL.
 }
+\examples{
+
+\dontrun{
+# see the LVL1 status for foo
+df_get_status('foo')[['LVL1']]
+
+# change the status
+df_set_status('foo', LVL1 = list(STORED = TRUE,
+                                 DATE = as.character(Sys.Date())))
+
+# see if changes had effect
+df_get_status('foo')[['LVL1']]
+}
+
+}
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_copy_templates}},

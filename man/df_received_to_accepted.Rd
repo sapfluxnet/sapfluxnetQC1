@@ -11,7 +11,8 @@ df_received_to_accepted(remove = FALSE, parent_logger = "test")
 the file transfer. Default to FALSE.}
 }
 \value{
-
+Nothing, files are copied to target and a message is raised. In case
+  of problems copying the files a warning with detailed info is raised
 }
 \description{
 Check if data file/s already exists and create the folder structure needed to
@@ -20,6 +21,17 @@ store them.
 \details{
 The first step after receiving a data set is to move it from received folder
 to accepted folder (\code{Data/site_code/site_code_accepted/}).
+}
+\examples{
+\dontrun{
+# move the files from received to accepted
+df_received_to_accepted()
+
+# if files exist, raise a warning
+df_received_to_accepted() # raise a warning with sites already moved
+
+}
+
 }
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},

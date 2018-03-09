@@ -20,6 +20,17 @@ Initialise an empty status file in yaml format, using the yaml package
 Before creating an empty file, \code{df_start_status} checks if an status
 file already exists, in order to avoid accidental rewriting of the file.
 }
+\examples{
+
+\dontrun{
+# create status for foo
+df_start_status('foo')
+
+# check if file is created
+file.exists(file.path('Data', 'foo', 'foo_status.yaml')
+}
+
+}
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_copy_templates}},

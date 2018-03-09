@@ -18,6 +18,17 @@ Retrieve the status file info as a list, with the yaml package
 \details{
 \code{yaml} file is parsed by yaml.load_file and a list object is returned.
 }
+\examples{
+
+\dontrun{
+# get the status of a site
+foo_status <- df_get_status('foo')
+class(foo_status) # yaml converted to list in R
+# is foo stored in LVL1?
+foo_status[['LVL1']][['STORED']]
+}
+
+}
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_copy_templates}},

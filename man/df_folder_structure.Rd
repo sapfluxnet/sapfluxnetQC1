@@ -21,6 +21,17 @@ Create the folder tree skeleton for SAPFLUXNET project
 This functions only need to be called once, as it creates the needed folder
 structure to recreate SAPFLUXNET project in any environment.
 }
+\examples{
+
+\dontrun{
+# create folder tree in the working directory
+df_folder_structure()
+
+# create folder tree in a custom directory
+df_folder_structure(parent_dir = file.path('route', 'to', 'folder'))
+}
+
+}
 \seealso{
 Other Data Flow: \code{\link{df_accepted_to_lvl1}},
   \code{\link{df_copy_templates}},
