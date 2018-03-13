@@ -1524,6 +1524,12 @@ qc_ext_radiation <- function(data, site_md, add_solar_ts = FALSE,
     # 2.2 Mean Solar Time
     mst <- solaR::local2Solar(timestamp, long)
 
+    # 2.2.1 warning if solartimestamp has repeated values (due to rounding)
+    if (length(mst) != length(unique(mst))) {
+      warning('solar mean time generates repeated timestamps. ',
+              'Please revise the original timestamp for repeated values.')
+    }
+
     # STEP 3
     # Calculating Apparent Solar Time (Mean Solar Time + Equation of Time)
     # 2.1 Equation of time
