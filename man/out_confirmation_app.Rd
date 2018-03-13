@@ -15,5 +15,5 @@ values and other modifications
 }
 \seealso{
 Other apps: \code{\link{df_flag_to_lvl2_app}},
-  \code{\link{df_flag_to_units_app}}, \code{\link{out_app}}
+  \code{\link{out_app}}
 }

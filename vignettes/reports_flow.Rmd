@@ -27,7 +27,7 @@ as any warning or error raised during the process of moving the files.
 
 ### Flow diagram of received_to_accepted.Rmd document
 
-<img src="rmd_received_to_accepted.svg" alt="rmd_received_to_accepted" style="width: 500px;"/>
+<img src="resources/rmd_received_to_accepted.svg" alt="rmd_received_to_accepted" style="width: 500px;"/>
 
 ## QC report
 
@@ -40,4 +40,4 @@ level 1 data folder.
 
 ### Flow diagram of QC_report.Rmd document
 
-<img src="rmd_QC_report.svg" alt="QC_report" style="width: 850px;"/>
+<img src="resources/rmd_QC_report.svg" alt="QC_report" style="width: 850px;"/>

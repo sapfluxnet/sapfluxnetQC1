@@ -16,6 +16,24 @@ library(sapfluxnetQC1)
 # END server preparation
 ################################################################################
 
+################################################################################
+# server management run when necessary
+################################################################################
+
+# log_sapfluxnet_setup('Logs/sapfluxnet.log',
+#                      logger = 'Server_Management',
+#                      level = "WARNING")
+#
+# df_get_data_folders() %>%
+#   stringr::str_sub(6, -1) %>%
+#   purrr::walk(sm_status_updater, parent_logger = 'Server_Management') %>%
+#   purrr::walk(sm_solarTIMESTAMP_adder, parent_logger = 'Server_Management')
+
+################################################################################
+# END server management
+################################################################################
+
+
 # setup logs
 log_sapfluxnet_setup('Logs/sapfluxnet.log',
                      logger = 'DataFlow',
@@ -49,6 +67,8 @@ lapply(data_folders, function(folder) {
 # LEVEL 2
 
 log_sapfluxnet_setup('Logs/sapfluxnet.log', logger = 'LEVEL2', level = "DEBUG")
+
+# df_flag_to_lvl2_app()
 
 df_lvl1_to_lvl2(parent_logger = 'LEVEL2')
 

@@ -917,8 +917,8 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
     sfn_data <- df_read_SfnData(site, 'out_warn', parent_logger = parent_logger)
 
     # 1.3 get the outliers substitution values (TIME CONSUMING STEP!!!!)
-    sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
-                                      parent_logger = parent_logger)
+    # sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
+    #                                   parent_logger = parent_logger)
 
     # STEP 2
     # Substitutes Time!!!
