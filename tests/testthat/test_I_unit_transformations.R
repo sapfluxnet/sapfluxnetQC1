@@ -203,6 +203,51 @@ test_that('conversion fails when there is NAs in leaf area or sapwood', {
                'sapwood area values are missing')
 })
 
+test_simple_conversions_sapwood <-  data.frame(
+  pl_code = c('pl_cm_cm_h', 'pl_cm_m_s', 'pl_dm_dm_h',
+              'pl_dm_dm_s', 'pl_mm_mm_s', 'pl_g_m_s',
+              'pl_kg_m_h', 'pl_kg_m_s', 'pl_cm_s',
+              'pl_cm_h', 'pl_dm_h', 'pl_g_h', 'pl_kg_h'),
+  pl_sapw_area = rep(NA, 13),
+  pl_leaf_area = rep(14, 13),
+  pl_sap_units = c('“cm3 cm-2 h-1”', '“cm3 m-2 s-1”',
+                   '“dm3 dm-2 h-1”', '“dm3 dm-2 s-1”',
+                   '“mm3 mm-2 s-1”', '“g m-2 s-1”',
+                   '“kg m-2 h-1”', '“kg m-2 s-1”',
+                   '“cm3 cm-2 h-1”', '“cm3 m-2 s-1”',
+                   '“dm3 dm-2 h-1”', '“dm3 dm-2 s-1”',
+                   '“mm3 mm-2 s-1”')
+)
+
+test_simple_conversions_plant <-  data.frame(
+  pl_code = c('pl_cm_cm_h', 'pl_cm_m_s', 'pl_dm_dm_h',
+              'pl_dm_dm_s', 'pl_mm_mm_s', 'pl_g_m_s',
+              'pl_kg_m_h', 'pl_kg_m_s', 'pl_cm_s',
+              'pl_cm_h', 'pl_dm_h', 'pl_g_h', 'pl_kg_h'),
+  pl_sapw_area = rep(NA, 13),
+  pl_leaf_area = rep(14, 13),
+  pl_sap_units = c('“cm3 s-1”', '“cm3 h-1”', '“dm3 h-1”',
+                   '“g h-1”', '“kg h-1”', '“cm3 s-1”', '“cm3 h-1”', '“dm3 h-1”',
+                   '“g h-1”', '“kg h-1”',
+                   '“cm3 s-1”', '“cm3 h-1”', '“dm3 h-1”')
+)
+
+test_that('simple conversions (sapw2sapw or plant2plant) work without sapw_area', {
+
+  expect_is(qc_sapw_conversion(test_data, test_simple_conversions_plant,
+                               output_units = 'plant'), 'data.frame')
+  expect_error(qc_sapw_conversion(test_data, test_simple_conversions_plant,
+                                  output_units = 'sapwood'),
+               'sapwood area values are missing')
+
+  expect_is(qc_sapw_conversion(test_data, test_simple_conversions_sapwood,
+                               output_units = 'sapwood'), 'data.frame')
+  expect_error(qc_sapw_conversion(test_data, test_simple_conversions_sapwood,
+                                  output_units = 'plant'),
+               'sapwood area values are missing')
+
+})
+
 ################################################################################
 context('I4. Radiation unit conversion')
 
