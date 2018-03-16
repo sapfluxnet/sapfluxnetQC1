@@ -13,7 +13,7 @@ qc_outliers_process(site, parent_logger = "test")
 an SfnData with the outliers and ranges substituted
 }
 \description{
-This function substitute the outliers based on the *_to_remove files found
+This function remove the outliers based on the *_to_remove files found
 in the out_warn folder for any site.
 }
 \seealso{

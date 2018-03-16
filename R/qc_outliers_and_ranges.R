@@ -860,7 +860,7 @@ qc_out_of_range <- function(SfnData, parent_logger = 'test') {
 ################################################################################
 #' Outliers process
 #'
-#' This function substitute the outliers based on the *_to_remove files found
+#' This function remove the outliers based on the *_to_remove files found
 #' in the out_warn folder for any site.
 #'
 #' @family Quality Checks Functions
@@ -932,14 +932,34 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
     # 2.2.1 outliers
     if (!is.null(out_to_remove)) {
 
-      # 2.2.1.1 get the outliers substitution values (TIME CONSUMING STEP!!!!)
-      sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
-                                        parent_logger = parent_logger)
-
-      sapf_data_out_rem <- get_sapf(sfn_data_out_rem)
-      sapf_flags_out_rem <- get_sapf_flags(sfn_data_out_rem)
-      env_data_out_rem <- get_env(sfn_data_out_rem)
-      env_flags_out_rem <- get_env_flags(sfn_data_out_rem)
+      # # 2.2.1.1 get the outliers substitution values (TIME CONSUMING STEP!!!!)
+      # sfn_data_out_rem <- qc_out_remove(sfn_data, substitute = TRUE,
+      #                                   parent_logger = parent_logger)
+      #
+      # sapf_data_out_rem <- get_sapf(sfn_data_out_rem)
+      # sapf_flags_out_rem <- get_sapf_flags(sfn_data_out_rem)
+      # env_data_out_rem <- get_env(sfn_data_out_rem)
+      # env_flags_out_rem <- get_env_flags(sfn_data_out_rem)
+      #
+      # for (i in 1:nrow(out_to_remove)) {
+      #
+      #   index <- out_to_remove[['index']][i]
+      #   variable <- out_to_remove[['variable']][i]
+      #
+      #   if (variable %in% names(sapf_data)) {
+      #     sapf_data[index, variable] <- sapf_data_out_rem[index, variable]
+      #
+      #     # 2.2.1.2 update flags also
+      #     sapf_flags[index, variable] <- sapf_flags_out_rem[index, variable]
+      #   }
+      #
+      #   if (variable %in% names(env_data)) {
+      #     env_data[index, variable] <- env_data_out_rem[index, variable]
+      #
+      #     # 2.2.1.3 update flags also
+      #     env_flags[index, variable] <- env_flags_out_rem[index, variable]
+      #   }
+      # }
 
       for (i in 1:nrow(out_to_remove)) {
 
@@ -947,19 +967,30 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
         variable <- out_to_remove[['variable']][i]
 
         if (variable %in% names(sapf_data)) {
-          sapf_data[index, variable] <- sapf_data_out_rem[index, variable]
+          sapf_data[index, variable] <- NA
 
-          # 2.2.1.2 update flags also
-          sapf_flags[index, variable] <- sapf_flags_out_rem[index, variable]
+          # 2.2.2.1 update flags also
+          if (sapf_flags[index, variable] == '') {
+            sapf_flags[index, variable] <- 'OUT_REMOVED'
+          } else {
+            sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
+                                                 '; OUT_REMOVED')
+          }
         }
 
         if (variable %in% names(env_data)) {
-          env_data[index, variable] <- env_data_out_rem[index, variable]
+          env_data[index, variable] <- NA
 
-          # 2.2.1.3 update flags also
-          env_flags[index, variable] <- env_flags_out_rem[index, variable]
+          # 2.2.2.1 update flags also
+          if (env_flags[index, variable] == '') {
+            env_flags[index, variable] <- 'OUT_REMOVED'
+          } else {
+            env_flags[index, variable] <- paste(env_flags[index, variable],
+                                                '; OUT_REMOVED')
+          }
         }
       }
+
     }
 
 
@@ -975,10 +1006,10 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
 
           # 2.2.2.1 update flags also
           if (sapf_flags[index, variable] == '') {
-            sapf_flags[index, variable] <- 'RANGE_REMOVE'
+            sapf_flags[index, variable] <- 'RANGE_REMOVED'
           } else {
             sapf_flags[index, variable] <- paste(sapf_flags[index, variable],
-                                                 '; RANGE_REMOVE')
+                                                 '; RANGE_REMOVED')
           }
         }
 
@@ -987,10 +1018,10 @@ qc_outliers_process <- function(site, parent_logger = 'test') {
 
           # 2.2.2.1 update flags also
           if (env_flags[index, variable] == '') {
-            env_flags[index, variable] <- 'RANGE_REMOVE'
+            env_flags[index, variable] <- 'RANGE_REMOVED'
           } else {
             env_flags[index, variable] <- paste(env_flags[index, variable],
-                                                '; RANGE_REMOVE')
+                                                '; RANGE_REMOVED')
           }
         }
       }

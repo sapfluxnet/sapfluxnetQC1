@@ -91,17 +91,17 @@ test_that('fake flags values have changed correctly', {
   env_flags_res <- get_env_flags(res)
   sapf_flags_res <- get_sapf_flags(res)
 
-  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REPLACED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REPLACED')))
-  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
+  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REMOVED')))
+  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REMOVED')))
+  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
+  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
   expect_true(all(stringr::str_detect(sapf_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
   expect_true(all(stringr::str_detect(env_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
   expect_false(any(stringr::str_detect(env_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
   expect_false(any(stringr::str_detect(sapf_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
 })
 
@@ -111,8 +111,8 @@ test_that('values are substituted', {
 
   expect_true(all(is.na(env_data_res[20006:20015, -1])))
   expect_true(all(is.na(sapf_data_res[20006:20015, -1])))
-  expect_false(any(env_data_res[20001:20005, -1] == env_data[20001:20005, -1]))
-  expect_false(any(sapf_data_res[20001:20005, -1] == sapf_data[20001:20005, -1]))
+  expect_true(all(is.na(env_data_res[20001:20005, -1])))
+  expect_true(all(is.na(sapf_data_res[20001:20005, -1])))
 })
 
 df_set_status(
@@ -146,17 +146,17 @@ test_that('fake flags values have changed correctly', {
   env_flags_res <- get_env_flags(res)
   sapf_flags_res <- get_sapf_flags(res)
 
-  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REPLACED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REPLACED')))
-  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVE')))
+  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REMOVED')))
+  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REMOVED')))
+  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
+  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
   expect_false(any(stringr::str_detect(sapf_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
   expect_false(any(stringr::str_detect(env_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
+  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
   expect_false(any(stringr::str_detect(env_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REPLACED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVE')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
+  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
   expect_false(any(stringr::str_detect(sapf_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
 })
 
@@ -168,8 +168,8 @@ test_that('values are substituted', {
   expect_true(all(is.na(sapf_data_res[20006:20010, -1])))
   expect_false(any(is.na(env_data_res[20011:20015, -1])))
   expect_false(any(is.na(sapf_data_res[20011:20015, -1])))
-  expect_false(any(env_data_res[20001:20005, -1] == env_data[20001:20005, -1]))
-  expect_false(any(sapf_data_res[20001:20005, -1] == sapf_data[20001:20005, -1]))
+  expect_true(all(is.na(env_data_res[20001:20005, -1])))
+  expect_true(all(is.na(sapf_data_res[20001:20005, -1])))
 })
 
 ################################################################################
@@ -192,12 +192,12 @@ test_that('files are written correctly', {
   sapf_data_pre <- get_sapf(df_read_SfnData('FOO', 'out_warn'))[20001:20010, -1]
   sapf_data_post <- get_sapf(df_read_SfnData('FOO', 'out_rem'))[20001:20010, -1]
 
-  expect_true(all(is.na(env_data_post[6:10,])))
-  expect_true(all(is.na(sapf_data_post[6:10,])))
-  expect_false(all(is.na(env_data_pre[6:10,])))
-  expect_false(all(is.na(sapf_data_pre[6:10,])))
-  expect_false(any(env_data_pre[1:5,] == env_data_post[1:5,]))
-  expect_false(any(sapf_data_pre[1:5,] == sapf_data_post[1:5,]))
+  expect_true(all(is.na(env_data_post)))
+  expect_true(all(is.na(sapf_data_post)))
+  expect_false(all(is.na(env_data_pre)))
+  expect_false(all(is.na(sapf_data_pre)))
+  # expect_false(any(env_data_pre[1:5,] == env_data_post[1:5,]))
+  # expect_false(any(sapf_data_pre[1:5,] == sapf_data_post[1:5,]))
 })
 
 test_that('status file is updated', {
