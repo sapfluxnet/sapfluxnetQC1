@@ -1808,14 +1808,16 @@ qc_transformation_vars <- function(sfndata, parent_logger = 'test') {
     )
 
     # STEP 3
-    # Sapflow unit transformations
-    sfu_vars <- c('pl_sap_units', 'pl_sapw_area', 'pl_leaf_area')
-    sfu_loc <- rep('plant_md', length(sfu_vars))
+    # Sapflow unit transformations. Here we have to add units info
+    sfu_vars <- c('pl_sap_units', 'pl_sapw_area', 'pl_leaf_area', 'pl_sap_units')
+    sfu_loc <- c(rep('plant_md', length(sfu_vars) - 1),
+                 unique(get_plant_md(sfndata)$pl_sap_units))
     sfu_transf <- rep('sapf_units', length(sfu_vars))
     sfu_presence <- c(
       !all(is.na(get_plant_md(sfndata)$pl_sap_units)),
       !all(is.na(get_plant_md(sfndata)$pl_sapw_area)),
-      !all(is.na(get_plant_md(sfndata)$pl_leaf_area))
+      !all(is.na(get_plant_md(sfndata)$pl_leaf_area)),
+      NA
     )
 
     # STEP 4
@@ -1927,20 +1929,66 @@ qc_transf_list <- function(transf_info, parent_logger = 'test') {
     sfu_info <- transf_info %>%
       dplyr::filter(Transformation == 'sapf_units')
 
+    # 3.0 get the units for plant and the units for sapwood
+    sapwood_level_units <- c(
+      '“cm3 cm-2 h-1”',
+      '“cm3 m-2 s-1”',
+      '“dm3 dm-2 h-1”',
+      '“dm3 dm-2 s-1”',
+      '“mm3 mm-2 s-1”',
+      '“g m-2 s-1”',
+      '“kg m-2 h-1”',
+      '“kg m-2 s-1”'
+    )
+
+    plant_level_units <- c(
+      '“cm3 s-1”',
+      '“cm3 h-1”',
+      '“dm3 h-1”',
+      '“g h-1”',
+      '“kg h-1”'
+    )
+
     # 3.1 plant level
-    sfu_info_plant <- sfu_info %>%
-      dplyr::filter(Variable != 'pl_leaf_area')
-    sfu_plant_trasnf <- 'sapf_units_to_plant'
-    sfu_plant_avail <- all(sfu_info_plant$Presence)
+    # 3.1.1 if origin units are plant level,
+    #       automatically the conversion is available
+    if (sfu_info[4, 'Location'] %in% plant_level_units) {
+      sfu_plant_avail <- TRUE
+    } else {
+      sfu_plant_avail <- all(sfu_info$Presence[1:2])
+    }
+    sfu_plant_transf <- 'sapf_units_to_plant'
+
+    # sfu_info_plant <- sfu_info %>%
+    #   dplyr::filter(Variable != 'pl_leaf_area')
+    # sfu_plant_trasnf <- 'sapf_units_to_plant'
+    # sfu_plant_avail <- all(sfu_info_plant$Presence)
 
     # 3.2 sapwood level (is the same that for plant)
-    sfu_sapw_trasnf <- 'sapf_units_to_sapwood'
-    sfu_sapw_avail <- all(sfu_info_plant$Presence)
+    # 3.2.1 if origin units are sapwood level,
+    #       automatically the conversion is available
+    if (sfu_info[4, 'Location'] %in% sapwood_level_units) {
+      sfu_sapw_avail <- TRUE
+    } else {
+      sfu_sapw_avail <- all(sfu_info$Presence[1:2])
+    }
+    sfu_sapw_transf <- 'sapf_units_to_sapwood'
+
+    # sfu_sapw_trasnf <- 'sapf_units_to_sapwood'
+    # sfu_sapw_avail <- all(sfu_info_plant$Presence)
 
     # 3.3 leaf area level
-    sfu_info_leaf <- sfu_info
+    # 3.3.1 depending on the origin units level we need one or another
+    if (sfu_info[4, 'Presence'] %in% plant_level_units) {
+      sfu_leaf_avail <- all(sfu_info$Presence[c(1,3)])
+    } else {
+      sfu_leaf_avail <- all(sfu_info$Presence[c(1:3)])
+    }
     sfu_leaf_transf <- 'sapf_units_to_leaf_area'
-    sfu_leaf_avail <- all(sfu_info_leaf$Presence)
+
+    # sfu_info_leaf <- sfu_info
+    # sfu_leaf_transf <- 'sapf_units_to_leaf_area'
+    # sfu_leaf_avail <- all(sfu_info_leaf$Presence)
 
     # STEP 4
     # VPD calculation
@@ -1975,8 +2023,8 @@ qc_transf_list <- function(transf_info, parent_logger = 'test') {
 
     # STEP n
     # build res data frame and return it
-    transf <- c(rad_transf, exr_trasnf, vpd_transf, rh_transf, sfu_plant_trasnf,
-                sfu_sapw_trasnf, sfu_leaf_transf)
+    transf <- c(rad_transf, exr_trasnf, vpd_transf, rh_transf, sfu_plant_transf,
+                sfu_sapw_transf, sfu_leaf_transf)
     avail <- c(rad_avail, exr_avail, vpd_avail, rh_avail, sfu_plant_avail,
                sfu_sapw_avail, sfu_leaf_avail)
 

@@ -639,7 +639,7 @@ test_that('results are ok', {
   expect_is(transf_vars_info, 'data.frame')
   expect_false(transf_vars_info$Presence[1])
   expect_false(transf_vars_info$Presence[11])
-  expect_equal(sum(transf_vars_info$Presence), 9)
+  expect_equal(sum(transf_vars_info$Presence, na.rm = TRUE), 9)
 
   get_plant_md(FOO)$pl_sap_units <- NA
   transf_vars_info <- qc_transformation_vars(FOO)
@@ -648,7 +648,7 @@ test_that('results are ok', {
   expect_false(transf_vars_info$Presence[1])
   expect_false(transf_vars_info$Presence[9])
   expect_false(transf_vars_info$Presence[11])
-  expect_equal(sum(transf_vars_info$Presence), 8)
+  expect_equal(sum(transf_vars_info$Presence, na.rm = TRUE), 8)
 
   get_plant_md(FOO)$pl_sapw_area <- c(77.06, NA, 391.30)
   transf_vars_info <- qc_transformation_vars(FOO)
@@ -658,7 +658,7 @@ test_that('results are ok', {
   expect_false(transf_vars_info$Presence[9])
   expect_false(transf_vars_info$Presence[11])
   expect_true(transf_vars_info$Presence[10])
-  expect_equal(sum(transf_vars_info$Presence), 8)
+  expect_equal(sum(transf_vars_info$Presence, na.rm = TRUE), 8)
 
   expect_true(all(
     transf_vars_info$Transformation %in% c('radiation_conversion', 'solar_time',
@@ -699,6 +699,7 @@ test_that('argument checks work', {
 
 load('FOO.RData')
 BAR <- FOO
+BAZ <- FOO
 foo_env_vpd <- get_env(FOO)
 foo_env_vpd[['vpd']] <- NULL
 get_env(FOO) <- foo_env_vpd
@@ -832,6 +833,31 @@ test_that('function works as intended with rh', {
       'Data', 'BAR', 'Lvl_2', 'lvl_2_unit_trans', 'leaf', 'BAR.RData'
     ))
   )
+
+})
+
+# no sapwood data, sfu transformations
+
+
+BAZ_plant_md <- get_plant_md(BAZ)
+BAZ_plant_md[['pl_sapw_area']] <- NA
+BAZ_plant_md[['pl_sapw_depth']] <- NA
+get_plant_md(BAZ) <- BAZ_plant_md
+get_si_code(BAZ) <- rep('BAZ', length(get_timestamp(BAZ)))
+dir.create(file.path('Data', 'BAZ', 'Lvl_2'), recursive = TRUE)
+df_lvl2_folder_structure('BAZ')
+df_start_status('BAZ')
+
+test_that('function works as intended with no sapw md', {
+
+  qc_units_process(BAZ)
+
+  expect_false(file.exists(file.path(
+    'Data', 'BAZ', 'Lvl_2', 'lvl_2_unit_trans', 'plant', 'BAZ.RData'
+  )))
+  expect_true(file.exists(file.path(
+    'Data', 'BAZ', 'Lvl_2', 'lvl_2_unit_trans', 'sapwood', 'BAZ.RData'
+  )))
 
 })
 
