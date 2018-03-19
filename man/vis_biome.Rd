@@ -20,7 +20,8 @@ using a SpatialPolygonsDataFrame object obtained with
 \code{\link{qc_get_biomes_spdf}}
 }
 \seealso{
-Other Visualization Functions: \code{\link{vis_gap_lines}},
+Other Visualization Functions: \code{\link{vis_environmental_responses}},
+  \code{\link{vis_gap_lines}},
   \code{\link{vis_location_biome}},
   \code{\link{vis_plot_the_gap}}
 }

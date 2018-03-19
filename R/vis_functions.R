@@ -565,10 +565,97 @@ vis_location_biome <- function(data, merge_deserts = FALSE,
 
   # handlers
   warning = function(w){logging::logwarn(w$message,
-                                         logger = paste(parent_logger, 'vis_location_biome', sep = '.'))},
+                                         logger = paste(parent_logger,
+                                                        'vis_location_biome',
+                                                        sep = '.'))},
   error = function(e){logging::logerror(e$message,
-                                        logger = paste(parent_logger, 'vis_location_biome', sep = '.'))},
+                                        logger = paste(parent_logger,
+                                                       'vis_location_biome',
+                                                       sep = '.'))},
   message = function(m){logging::loginfo(m$message,
-                                         logger = paste(parent_logger, 'vis_location_biome', sep = '.'))})
+                                         logger = paste(parent_logger,
+                                                        'vis_location_biome',
+                                                        sep = '.'))})
 
+}
+
+################################################################################
+#' Environmental responses plot
+#'
+#' Plot the desired environmental funcion \emph{vs.} spaflow values
+#'
+#' @family Visualization Functions
+#'
+#' @param SfnData SfnData object
+#'
+#' @param env_var Character indicating the nameof the environmental variable to
+#'   plot
+#'
+#' @param solar Use solarTIMESTAMP?
+#'
+#' @return a \code{ggplot} object with the desired plot
+#'
+#' @export
+
+vis_environmental_responses <- function(
+  SfnData,
+  env_var = 'vpd',
+  solar = FALSE,
+  parent_logger = 'test'
+) {
+
+  # Using calling handlers to manage errors
+  withCallingHandlers({
+
+    # STEP 0
+    # Checking arguments
+    if (!is(SfnData, 'SfnData')) {
+      stop('vis_environmental_responses needs an SfnData object as argument')
+    }
+
+    # STEP 1
+    # Get the data
+    env_data <- get_env(SfnData, solar)
+
+    # 1.1 check for timestamp (if solar = TRUE and no solarTimestamp can be a
+    #     memory problem)
+    if (all(is.na(env_data[['TIMESTAMP']]))) {
+      stop('TIMESTAMP is all NA, can not produce the plot')
+    }
+
+    # 1.2 plot data
+    plot_data <- env_data %>%
+      dplyr::select(TIMESTAMP, !!env_var) %>%
+      dplyr::full_join(get_sapf(SfnData, solar), .) %>%
+      tidyr::gather(Tree, Value, -TIMESTAMP, -(!!env_var))
+
+    units_char <- get_plant_md(SfnData)[['pl_sap_units']][1]
+
+    # STEP 2
+    # Build the plot
+    env_res_plot <- plot_data %>%
+      ggplot(aes_(x = as.name(env_var), y = ~Value, colour = ~Tree)) +
+      geom_point(alpha = 0.2) +
+      labs(y = paste0('Sapflow [', units_char, ']')) +
+      facet_wrap('Tree', ncol = 3)
+
+    # STEP 3
+    # Return the plot
+    return(env_res_plot)
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'vis_environmental_responses',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'vis_environmental_responses',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'vis_environmental_responses',
+                                                        sep = '.'))})
 }
