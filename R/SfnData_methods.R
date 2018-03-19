@@ -316,7 +316,8 @@ setMethod(
         ggplot(aes(x = TIMESTAMP, y = Sapflow, colour = Tree)) +
         geom_point(alpha = 0.4) +
         labs(y = paste0('Sapflow [', units_char, ']')) +
-        scale_x_datetime()
+        scale_x_datetime() +
+        facet_wrap('Tree', ncol = 3, scale = 'fixed')
     }
 
     # env
