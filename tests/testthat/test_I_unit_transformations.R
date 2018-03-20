@@ -195,12 +195,11 @@ test_bad2_sapw_md <- data.frame(pl_code = c('pl_cm_cm_h', 'pl_cm_m_s', 'pl_dm_dm
                                                 '“g h-1”', '“kg h-1”'))
 
 test_that('conversion fails when there is NAs in leaf area or sapwood', {
-  expect_error(qc_sapw_conversion(test_data, test_bad_sapw_md,
-                                  output_units = 'leaf'),
-               'leaf area values are missing')
-  expect_error(qc_sapw_conversion(test_data, test_bad2_sapw_md,
-                                  output_units = 'sapwood'),
-               'sapwood area values are missing')
+  expect_true(all(is.na(qc_sapw_conversion(test_data, test_bad_sapw_md,
+                                           output_units = 'leaf')[,2])))
+
+  expect_true(all(is.na(qc_sapw_conversion(test_data, test_bad2_sapw_md,
+                                           output_units = 'sapwood')[,10])))
 })
 
 test_simple_conversions_sapwood <-  data.frame(
@@ -236,15 +235,13 @@ test_that('simple conversions (sapw2sapw or plant2plant) work without sapw_area'
 
   expect_is(qc_sapw_conversion(test_data, test_simple_conversions_plant,
                                output_units = 'plant'), 'data.frame')
-  expect_error(qc_sapw_conversion(test_data, test_simple_conversions_plant,
-                                  output_units = 'sapwood'),
-               'sapwood area values are missing')
+  expect_true(all(is.na(qc_sapw_conversion(test_data, test_simple_conversions_plant,
+                                           output_units = 'sapwood')[,2])))
 
   expect_is(qc_sapw_conversion(test_data, test_simple_conversions_sapwood,
                                output_units = 'sapwood'), 'data.frame')
-  expect_error(qc_sapw_conversion(test_data, test_simple_conversions_sapwood,
-                                  output_units = 'plant'),
-               'sapwood area values are missing')
+  expect_true(all(is.na(qc_sapw_conversion(test_data, test_simple_conversions_sapwood,
+                                           output_units = 'plant')[,2])))
 
 })
 

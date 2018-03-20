@@ -1024,13 +1024,28 @@ qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test') {
     # Get the nearest stations from the site coordinates. We look at 50 km radius,
     # if not stations are found, rise the radius to 100 km
     sts <- purrr::map2(data$si_lat, data$si_long,
-                       function (x, y) {
+                       function(x, y) {
                          st_tmp <- GSODR::nearest_stations(x, y, distance = 50)
                          if (length(st_tmp) < 1) {
                            st_tmp <- GSODR::nearest_stations(x, y, distance = 100)
                          }
-                         st_tmp
+                         if (length(st_tmp) < 1) {
+                           return(NA)
+                         } else {
+                           return(st_tmp)
+                         }
+
                        })
+
+    # 1.1 If no nearest stations, return the data and a warning
+    if (all(is.na(sts))) {
+      data$si_mat <- NA
+      data$si_map <- NA
+      data$si_biome <- 'Unknown'
+
+      warning('No nearest statiosn found to calculate the biome')
+      return(data)
+    }
 
     # STEP 2
     # Calculate MAT and MAP values

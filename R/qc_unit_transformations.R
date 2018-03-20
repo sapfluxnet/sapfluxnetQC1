@@ -220,9 +220,6 @@ qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area
         return(res)
       } else {
@@ -230,9 +227,6 @@ qc_cm_cm_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area)/(leaf_area*10000)
           return(res)
         }
@@ -289,9 +283,6 @@ qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*0.36
         return(res)
       } else {
@@ -299,9 +290,6 @@ qc_cm_m_s <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*1e-4*0.36)/(leaf_area)
           return(res)
         }
@@ -358,9 +346,6 @@ qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*10
         return(res)
       } else {
@@ -368,9 +353,6 @@ qc_dm_dm_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*1e-3)/(leaf_area)
           return(res)
         }
@@ -427,9 +409,6 @@ qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*36000
         return(res)
       } else {
@@ -437,9 +416,6 @@ qc_dm_dm_s <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*3.6)/(leaf_area)
           return(res)
         }
@@ -496,9 +472,6 @@ qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*360
         return(res)
       } else {
@@ -506,9 +479,6 @@ qc_mm_mm_s <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*0.036)/(leaf_area)
           return(res)
         }
@@ -565,9 +535,6 @@ qc_g_m_s <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*0.36
         return(res)
       } else {
@@ -575,9 +542,6 @@ qc_g_m_s <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*0.36*1e-4)/(leaf_area)
           return(res)
         }
@@ -634,9 +598,6 @@ qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*1e-1
         return(res)
       } else {
@@ -644,9 +605,6 @@ qc_kg_m_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*1e-5)/(leaf_area)
           return(res)
         }
@@ -703,9 +661,6 @@ qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units,
       # STEP 2
       # Plant
       if (output_units == 'plant') {
-        if (all(is.na(sapw_area))) {
-          stop('sapwood area values are missing')
-        }
         res <- x*sapw_area*360
         return(res)
       } else {
@@ -713,9 +668,6 @@ qc_kg_m_s <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area)) | all(is.na(sapw_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*sapw_area*0.036)/(leaf_area)
           return(res)
         }
@@ -765,9 +717,6 @@ qc_cm_h <- function(x, sapw_area, leaf_area, output_units,
     # STEP 1
     # Sapwood
     if (output_units == 'sapwood') {
-      if (all(is.na(sapw_area))) {
-        stop('sapwood area values are missing')
-      }
       res <- x/sapw_area
       return(res)
     } else {
@@ -782,9 +731,6 @@ qc_cm_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*1e-4)/leaf_area
           return(res)
         }
@@ -834,9 +780,6 @@ qc_dm_h <- function(x, sapw_area, leaf_area, output_units,
     # STEP 1
     # Sapwood
     if (output_units == 'sapwood') {
-      if (all(is.na(sapw_area))) {
-        stop('sapwood area values are missing')
-      }
       res <- (x*1e3)/sapw_area
       return(res)
     } else {
@@ -851,9 +794,6 @@ qc_dm_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*1e-1)/leaf_area
           return(res)
         }
@@ -903,9 +843,6 @@ qc_cm_s <- function(x, sapw_area, leaf_area, output_units,
     # STEP 1
     # Sapwood
     if (output_units == 'sapwood') {
-      if (all(is.na(sapw_area))) {
-        stop('sapwood area values are missing')
-      }
       res <- (x*3600)/sapw_area
       return(res)
     } else {
@@ -920,9 +857,6 @@ qc_cm_s <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*0.36)/leaf_area
           return(res)
         }
@@ -972,9 +906,6 @@ qc_g_h <- function(x, sapw_area, leaf_area, output_units,
     # STEP 1
     # Sapwood
     if (output_units == 'sapwood') {
-      if (all(is.na(sapw_area))) {
-        stop('sapwood area values are missing')
-      }
       res <- x/sapw_area
       return(res)
     } else {
@@ -989,9 +920,6 @@ qc_g_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*1e-4)/leaf_area
           return(res)
         }
@@ -1041,9 +969,6 @@ qc_kg_h <- function(x, sapw_area, leaf_area, output_units,
     # STEP 1
     # Sapwood
     if (output_units == 'sapwood') {
-      if (all(is.na(sapw_area))) {
-        stop('sapwood area values are missing')
-      }
       res <- (x*1e3)/sapw_area
       return(res)
     } else {
@@ -1058,9 +983,6 @@ qc_kg_h <- function(x, sapw_area, leaf_area, output_units,
         # STEP 3
         # Leaf area
         if (output_units == 'leaf') {
-          if (all(is.na(leaf_area))) {
-            stop('leaf area values are missing')
-          }
           res <- (x*1e-1)/leaf_area
           return(res)
         }
