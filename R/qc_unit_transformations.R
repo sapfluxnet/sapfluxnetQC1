@@ -2217,7 +2217,7 @@ qc_units_process <- function(sfndata, parent_logger = 'test') {
         dplyr::select(-TIMESTAMP) %>%
         as.data.frame(stringsAsFactors = FALSE)
 
-      get_plant_md(sfndata_plant) <- plant_md %>%
+      get_plant_md(sfndata_leaf) <- plant_md %>%
         dplyr::mutate(pl_sap_units_orig = pl_sap_units,
                       pl_sap_units = "“cm3 cm-2 h-1”")
 
