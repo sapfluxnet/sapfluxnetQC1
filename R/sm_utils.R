@@ -170,3 +170,132 @@ sm_solarTIMESTAMP_adder <- function(si_code, parent_logger = 'test') {
                                                         'sm_solarTIMESTAMP_adder',
                                                         sep = '.'))})
 }
+
+################################################################################
+#' SfnData to sfn_data conversion
+#'
+#' This function converts an SfnData to sfn_data object
+#'
+#' Things that this funcion do:
+#'   List of thing to do when passing from SfnData to sfn_data:
+#'   1. pl_name in plant metadata must be set to character in all sites.
+#'   2. si_biome convert ot character (is factor)
+#'   3. tz of solarTIMESTAMP to UTC fixed
+#'   4. get rid of ascii characters in pl_sap_units and pl_sap_units_orig
+#'   5. leaf data has not pl_sap_units_orig and pl_sap_units does not match
+#'      due to bug in qc_sapw_conversion function
+
+# START FUNCTION
+# Function declaration
+as_sfn_data <- function(SfnData) {
+
+  withCallingHandlers({
+
+    print(paste0('plant_md for ', get_si_code(SfnData)[1]))
+    plant_md <- slot(SfnData, 'plant_md') %>%
+      mutate(
+        # 1. pl_name in plant metadata must be set to character in all sites.
+        pl_name = as.character(pl_name),
+
+        # 4. get rid of ascii characters in pl_sap_units and pl_sap_units_orig
+        # 5. leaf data has not pl_sap_units_orig and pl_sap_units does not match
+        #    due to bug in qc_sapw_conversion function
+        old_sap_units = pl_sap_units,
+        pl_sap_units = if (
+          is.null(.[['pl_sap_units_orig']])
+        ) {
+          'cm3 cm-2 h-1'
+        } else {
+          stringr::str_replace_all(pl_sap_units, "[“”]", '')
+        },
+        pl_sap_units_orig = if (
+          is.null(.[['pl_sap_units_orig']])
+        ) {
+          stringr::str_replace_all(old_sap_units, "[“”]", '')
+        } else { stringr::str_replace_all(pl_sap_units_orig, "[“”]", '') }
+      ) %>%
+      select(-old_sap_units)
+
+    print(paste0('site_md for ', get_si_code(SfnData)[1]))
+    site_md <- slot(SfnData, 'site_md') %>%
+      mutate(
+        # 2. si_biome convert ot character (is factor)
+        si_biome = if (is.null(.[['si_biome']])) {NA} else {as.character(.[['si_biome']])}
+      )
+
+    # 3. tz of solarTIMESTAMP to UTC fixed
+    print(paste0('solar TIMESTAMP for ', get_si_code(SfnData)[1]))
+    solar_timestamp <- slot(SfnData, 'solar_timestamp') %>%
+      lubridate::with_tz('UTC')
+
+
+    res <- sapfluxnetr::sfn_data(
+      sapf_data = slot(SfnData, 'sapf_data'),
+      sapf_flags = slot(SfnData, 'sapf_flags'),
+      env_data = slot(SfnData, 'env_data'),
+      env_flags = slot(SfnData, 'env_flags'),
+      si_code = slot(SfnData, 'si_code')[1],
+      timestamp = slot(SfnData, 'timestamp'),
+      solar_timestamp = solar_timestamp,
+      site_md = site_md,
+      stand_md = slot(SfnData, 'stand_md'),
+      species_md = slot(SfnData, 'species_md'),
+      plant_md = plant_md,
+      env_md = slot(SfnData, 'env_md')
+    )
+
+    return(res)
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'as_sfn_data',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'as_sfn_data',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'as_sfn_data',
+                                                        sep = '.'))})
+}
+
+################################################################################
+#' Function to save the sfn_data created
+#'
+#' This function saves the RData files with the sfn_data objects
+
+# START FUNCTION
+# Funtion declaration
+write_sfn_data <- function(sfn_data, folder) {
+
+  # using calling handlers to manage errors
+  withCallingHandlers({
+
+    si_code <- sapfluxnetr::get_si_code(sfn_data)
+    path <- file.path(folder, paste0(si_code, '.RData'))
+
+    print(paste0('Writing ', si_code))
+
+    assign(si_code, sfn_data)
+    save(list = si_code, file = path)
+
+  },
+
+  # handlers
+  warning = function(w){logging::logwarn(w$message,
+                                         logger = paste(parent_logger,
+                                                        'write_sfn_data',
+                                                        sep = '.'))},
+  error = function(e){logging::logerror(e$message,
+                                        logger = paste(parent_logger,
+                                                       'write_sfn_data',
+                                                       sep = '.'))},
+  message = function(m){logging::loginfo(m$message,
+                                         logger = paste(parent_logger,
+                                                        'write_sfn_data',
+                                                        sep = '.'))})
+}
