@@ -1187,7 +1187,7 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
 
 # START
 # Function declaration
-df_whos_ready_to <- function(level = c('lvl2', 'rem', 'units'),
+df_whos_ready_to <- function(level = c('lvl2', 'rem', 'units', 'lvl3'),
                              filter = c('all', 'ready', 'freeze', 'done'),
                              parent_logger = 'test') {
 
@@ -1200,7 +1200,8 @@ df_whos_ready_to <- function(level = c('lvl2', 'rem', 'units'),
     level <- switch(level,
                     lvl2 = c('LVL1', 'TO_LVL2'),
                     rem = c('LVL2', 'TO_REM'),
-                    units = c('LVL2', 'TO_UNITS'))
+                    units = c('LVL2', 'TO_UNITS'),
+                    lvl3 = c('LVL2', 'TO_LVL3'))
 
     filter <- match.arg(filter)
     filter <- switch(filter,

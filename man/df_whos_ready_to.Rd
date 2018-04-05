@@ -4,8 +4,8 @@
 \alias{df_whos_ready_to}
 \title{Who is ready the desired level?}
 \usage{
-df_whos_ready_to(level = c("lvl2", "rem", "units"), filter = c("all",
-  "ready", "freeze", "done"), parent_logger = "test")
+df_whos_ready_to(level = c("lvl2", "rem", "units", "lvl3"),
+  filter = c("all", "ready", "freeze", "done"), parent_logger = "test")
 }
 \arguments{
 \item{level}{string indicating the level to check. Accepted values are

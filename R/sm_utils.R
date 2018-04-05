@@ -184,10 +184,12 @@ sm_solarTIMESTAMP_adder <- function(si_code, parent_logger = 'test') {
 #'   4. get rid of ascii characters in pl_sap_units and pl_sap_units_orig
 #'   5. leaf data has not pl_sap_units_orig and pl_sap_units does not match
 #'      due to bug in qc_sapw_conversion function
+#'
+#' @export
 
 # START FUNCTION
 # Function declaration
-as_sfn_data <- function(SfnData) {
+as_sfn_data <- function(SfnData, parent_logger = 'test') {
 
   withCallingHandlers({
 
@@ -267,10 +269,12 @@ as_sfn_data <- function(SfnData) {
 #' Function to save the sfn_data created
 #'
 #' This function saves the RData files with the sfn_data objects
+#'
+#' @export
 
 # START FUNCTION
 # Funtion declaration
-write_sfn_data <- function(sfn_data, folder) {
+write_sfn_data <- function(sfn_data, folder, parent_logger = 'test') {
 
   # using calling handlers to manage errors
   withCallingHandlers({
@@ -298,4 +302,56 @@ write_sfn_data <- function(sfn_data, folder) {
                                          logger = paste(parent_logger,
                                                         'write_sfn_data',
                                                         sep = '.'))})
+}
+
+################################################################################
+#' QC3 function, cleaning a little
+#'
+#' Function to final clean the data and generate the sapfluxnetr::sfn_data
+#' objects
+#'
+#' This function looks for LVL2 completed data at the three levels and performs
+#' the last cleaning and the sfn_data construction. See as_sfn_data for more
+#' details
+#'
+#' @export
+
+lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
+
+  # get the sites ready to lvl3
+  sites <- sapfluxnetQC1::df_whos_ready_to('lvl3', 'ready')
+
+  # big loop
+  for (site in sites) {
+
+    folder_plant <- file.path('Data', 'sapfluxnet_database', version, 'plant')
+    folder_sapwood <- file.path('Data', 'sapfluxnet_database', version, 'sapwood')
+    folder_leaf <- file.path('Data', 'sapfluxnet_database', version, 'leaf')
+
+    # plant level
+    df_read_SfnData(
+      site, 'unit_trans', 'plant', parent_logger = parent_logger
+    ) %>%
+      as_sfn_data(parent_logger = parent_logger) %>%
+      write_sfn_data(folder = folder_plant)
+
+    # sapwood level
+    df_read_SfnData(
+      site, 'unit_trans', 'sapwood', parent_logger = parent_logger
+    ) %>%
+      as_sfn_data(parent_logger = parent_logger) %>%
+      write_sfn_data(folder = folder_sapwood)
+
+    # leaf level
+    df_read_SfnData(
+      site, 'unit_trans', 'leaf', parent_logger = parent_logger
+    ) %>%
+      as_sfn_data(parent_logger = parent_logger) %>%
+      write_sfn_data(folder = folder_leaf)
+
+    # set status
+    df_set_status(site, LVL2 = list(TO_LVL3 = 'DONE'))
+
+  }
+
 }
