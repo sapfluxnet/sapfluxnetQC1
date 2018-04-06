@@ -520,7 +520,7 @@ qc_range_dic <- function(parent_logger = 'test') {
     ta_range <- c(-30, 50) # no strict values, only as indicators,
     # slighty based on Cerveny et al. 2007
     rh_range <- c(10, 100) # common sense criteria. Also min below 10% are strange
-    vpd_range <- c(0, 40)
+    vpd_range <- c(0, 10)
     sw_in_range <- c(0, 1362) # based in the solar constant
     ppfd_in_range <- c(0, 2400) # based in Rafa's comment
     netrad_range <- c(-300, 2000) # based on Rafa's comment
