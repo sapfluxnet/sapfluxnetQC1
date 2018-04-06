@@ -195,7 +195,7 @@ as_sfn_data <- function(SfnData, parent_logger = 'test') {
 
     print(paste0('plant_md for ', get_si_code(SfnData)[1]))
     plant_md <- slot(SfnData, 'plant_md') %>%
-      mutate(
+      dplyr::mutate(
         # 1. pl_name in plant metadata must be set to character in all sites.
         pl_name = as.character(pl_name),
 
@@ -216,11 +216,11 @@ as_sfn_data <- function(SfnData, parent_logger = 'test') {
           stringr::str_replace_all(old_sap_units, "[“”]", '')
         } else { stringr::str_replace_all(pl_sap_units_orig, "[“”]", '') }
       ) %>%
-      select(-old_sap_units)
+      dplyr::select(-old_sap_units)
 
     print(paste0('site_md for ', get_si_code(SfnData)[1]))
     site_md <- slot(SfnData, 'site_md') %>%
-      mutate(
+      dplyr::mutate(
         # 2. si_biome convert ot character (is factor)
         si_biome = if (is.null(.[['si_biome']])) {NA} else {as.character(.[['si_biome']])}
       )
