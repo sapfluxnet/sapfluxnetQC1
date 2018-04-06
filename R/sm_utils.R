@@ -321,33 +321,44 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
   # get the sites ready to lvl3
   sites <- sapfluxnetQC1::df_whos_ready_to('lvl3', 'ready')
 
+  # folders
+  folder_plant <- file.path('..', 'sapfluxnet_db', version, 'plant')
+  folder_sapwood <- file.path('..', 'sapfluxnet_db', version, 'sapwood')
+  folder_leaf <- file.path('..', 'sapfluxnet_db', version, 'leaf')
+
   # big loop
   for (site in sites) {
 
-    folder_plant <- file.path('Data', 'sapfluxnet_database', version, 'plant')
-    folder_sapwood <- file.path('Data', 'sapfluxnet_database', version, 'sapwood')
-    folder_leaf <- file.path('Data', 'sapfluxnet_database', version, 'leaf')
-
     # plant level
-    df_read_SfnData(
-      site, 'unit_trans', 'plant', parent_logger = parent_logger
-    ) %>%
-      as_sfn_data(parent_logger = parent_logger) %>%
-      write_sfn_data(folder = folder_plant)
+    if ('plant' %in% df_get_status(site)[['LVL2']][['AVAIL']]) {
+
+      df_read_SfnData(
+        site, 'unit_trans', 'plant', parent_logger = parent_logger
+      ) %>%
+        as_sfn_data(parent_logger = parent_logger) %>%
+        write_sfn_data(folder = folder_plant)
+
+    }
 
     # sapwood level
-    df_read_SfnData(
-      site, 'unit_trans', 'sapwood', parent_logger = parent_logger
-    ) %>%
-      as_sfn_data(parent_logger = parent_logger) %>%
-      write_sfn_data(folder = folder_sapwood)
+    if ('sapwood' %in% df_get_status(site)[['LVL2']][['AVAIL']]) {
+
+      df_read_SfnData(
+        site, 'unit_trans', 'sapwood', parent_logger = parent_logger
+      ) %>%
+        as_sfn_data(parent_logger = parent_logger) %>%
+        write_sfn_data(folder = folder_sapwood)
+
+    }
 
     # leaf level
-    df_read_SfnData(
-      site, 'unit_trans', 'leaf', parent_logger = parent_logger
-    ) %>%
-      as_sfn_data(parent_logger = parent_logger) %>%
-      write_sfn_data(folder = folder_leaf)
+    if ('leaf' %in% df_get_status(site)[['LVL2']][['AVAIL']]) {
+      df_read_SfnData(
+        site, 'unit_trans', 'leaf', parent_logger = parent_logger
+      ) %>%
+        as_sfn_data(parent_logger = parent_logger) %>%
+        write_sfn_data(folder = folder_leaf)
+    }
 
     # set status
     df_set_status(site, LVL2 = list(TO_LVL3 = 'DONE'))
