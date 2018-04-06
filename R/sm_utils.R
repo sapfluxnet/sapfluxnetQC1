@@ -319,7 +319,7 @@ write_sfn_data <- function(sfn_data, folder, parent_logger = 'test') {
 lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
 
   # get the sites ready to lvl3
-  sites <- sapfluxnetQC1::df_whos_ready_to('lvl3', 'ready')
+  sites <- names(sapfluxnetQC1::df_whos_ready_to('lvl3', 'ready'))
 
   # folders
   folder_plant <- file.path('..', 'sapfluxnet_db', version, 'plant')
