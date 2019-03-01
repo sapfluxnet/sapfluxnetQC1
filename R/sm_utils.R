@@ -322,9 +322,9 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
   sites <- names(sapfluxnetQC1::df_whos_ready_to('lvl3', 'ready'))
 
   # folders
-  folder_plant <- file.path('..', 'sapfluxnet_db', version, 'plant')
-  folder_sapwood <- file.path('..', 'sapfluxnet_db', version, 'sapwood')
-  folder_leaf <- file.path('..', 'sapfluxnet_db', version, 'leaf')
+  folder_plant <- file.path('..', 'sapfluxnet_db', version, 'RData', 'plant')
+  folder_sapwood <- file.path('..', 'sapfluxnet_db', version, 'RData', 'sapwood')
+  folder_leaf <- file.path('..', 'sapfluxnet_db', version, 'RData', 'leaf')
 
   # big loop
   for (site in sites) {
