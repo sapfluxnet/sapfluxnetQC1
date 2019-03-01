@@ -391,7 +391,7 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         as_sfn_data(parent_logger = parent_logger) -> plant_sfn_data
 
       write_sfn_data(plant_sfn_data, folder = folder_plant)
-      sfn_data2csv(plant_sfn_data, folder = csv_folder_plant)
+      sfn_data2csv(plant_sfn_data, csv_folder = csv_folder_plant)
 
     }
 
@@ -404,7 +404,7 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         as_sfn_data(parent_logger = parent_logger) -> sapwood_sfn_data
 
       write_sfn_data(sapwood_sfn_data, folder = folder_sapwood)
-      sfn_data2csv(sapwood_sfn_data, folder = csv_folder_sapwood)
+      sfn_data2csv(sapwood_sfn_data, csv_folder = csv_folder_sapwood)
 
     }
 
@@ -417,7 +417,7 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         as_sfn_data(parent_logger = parent_logger) -> leaf_sfn_data
 
       write_sfn_data(leaf_sfn_data, folder = folder_leaf)
-      sfn_data2csv(leaf_sfn_data, folder = csv_folder_leaf)
+      sfn_data2csv(leaf_sfn_data, csv_folder = csv_folder_leaf)
 
     }
 
