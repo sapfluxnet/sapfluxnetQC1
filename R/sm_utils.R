@@ -389,7 +389,7 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         site, 'unit_trans', 'plant', parent_logger = parent_logger
       ) %>%
         as_sfn_data(parent_logger = parent_logger) %>%
-        purrr::walk(write_sfn_data(folder = folder_plant)) %>%
+        purrr::walk(~ write_sfn_data(., folder = folder_plant)) %>%
         sfn_data2csv(folder = csv_folder_plant)
 
     }
@@ -401,7 +401,7 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         site, 'unit_trans', 'sapwood', parent_logger = parent_logger
       ) %>%
         as_sfn_data(parent_logger = parent_logger) %>%
-        purrr::walk(write_sfn_data(folder = folder_sapwood)) %>%
+        purrr::walk(~ write_sfn_data(., folder = folder_sapwood)) %>%
         sfn_data2csv(folder = csv_folder_sapwood)
 
     }
@@ -412,7 +412,7 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         site, 'unit_trans', 'leaf', parent_logger = parent_logger
       ) %>%
         as_sfn_data(parent_logger = parent_logger) %>%
-        purrr::walk(write_sfn_data(folder = folder_leaf)) %>%
+        purrr::walk(~ write_sfn_data(., folder = folder_leaf)) %>%
         sfn_data2csv(folder = csv_folder_leaf)
     }
 
