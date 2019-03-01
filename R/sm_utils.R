@@ -388,9 +388,10 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
       df_read_SfnData(
         site, 'unit_trans', 'plant', parent_logger = parent_logger
       ) %>%
-        as_sfn_data(parent_logger = parent_logger) %>%
-        purrr::walk(~ write_sfn_data(., folder = folder_plant)) %>%
-        sfn_data2csv(folder = csv_folder_plant)
+        as_sfn_data(parent_logger = parent_logger) -> plant_sfn_data
+
+      write_sfn_data(plant_sfn_data, folder = folder_plant)
+      sfn_data2csv(plant_sfn_data, folder = csv_folder_plant)
 
     }
 
@@ -400,20 +401,24 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
       df_read_SfnData(
         site, 'unit_trans', 'sapwood', parent_logger = parent_logger
       ) %>%
-        as_sfn_data(parent_logger = parent_logger) %>%
-        purrr::walk(~ write_sfn_data(., folder = folder_sapwood)) %>%
-        sfn_data2csv(folder = csv_folder_sapwood)
+        as_sfn_data(parent_logger = parent_logger) -> sapwood_sfn_data
+
+      write_sfn_data(sapwood_sfn_data, folder = folder_sapwood)
+      sfn_data2csv(sapwood_sfn_data, folder = csv_folder_sapwood)
 
     }
 
     # leaf level
     if ('leaf' %in% df_get_status(site)[['LVL2']][['AVAIL']]) {
+
       df_read_SfnData(
         site, 'unit_trans', 'leaf', parent_logger = parent_logger
       ) %>%
-        as_sfn_data(parent_logger = parent_logger) %>%
-        purrr::walk(~ write_sfn_data(., folder = folder_leaf)) %>%
-        sfn_data2csv(folder = csv_folder_leaf)
+        as_sfn_data(parent_logger = parent_logger) -> leaf_sfn_data
+
+      write_sfn_data(leaf_sfn_data, folder = folder_leaf)
+      sfn_data2csv(leaf_sfn_data, folder = csv_folder_leaf)
+
     }
 
     # set status
