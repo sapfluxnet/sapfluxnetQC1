@@ -332,6 +332,7 @@ sfn_data2csv <- function(sfn_data, csv_folder) {
   species_md <- sapfluxnetr::get_species_md(sfn_data)
   plant_md <- sapfluxnetr::get_plant_md(sfn_data)
   env_md <- sapfluxnetr::get_env_md(sfn_data)
+  si_code <- sapfluxnetr::get_si_code(sfn_data)
 
   sapf_data_name <- file.path(csv_folder, paste0(si_code, '_sapf_data.csv'))
   env_data_name <- file.path(csv_folder, paste0(si_code, '_env_data.csv'))
