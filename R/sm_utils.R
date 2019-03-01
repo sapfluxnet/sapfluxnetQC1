@@ -305,6 +305,56 @@ write_sfn_data <- function(sfn_data, folder, parent_logger = 'test') {
 }
 
 ################################################################################
+#' sfn_data2csv function
+#'
+#' This function is used in lvl3_process to write the csv files for each sfn_data objet
+#' slots in the corresponding folder of the database tree
+#'
+#' @export
+sfn_data2csv <- function(sfn_data, csv_folder) {
+
+  # get the slots and store them. In the case of data and flags, add the solar timestamp
+  # also
+  sapf_data <- sapfluxnetr::get_sapf_data(sfn_data) %>%
+    dplyr::mutate(solar_TIMESTAMP = sapfluxnetr::get_solar_timestamp(sfn_data)) %>%
+    dplyr::select(TIMESTAMP, solar_TIMESTAMP, dplyr::everything())
+  sapf_flags <- sapfluxnetr::get_sapf_flags(sfn_data) %>%
+    dplyr::mutate(solar_TIMESTAMP = sapfluxnetr::get_solar_timestamp(sfn_data)) %>%
+    dplyr::select(TIMESTAMP, solar_TIMESTAMP, dplyr::everything())
+  env_data <- sapfluxnetr::get_env_data(sfn_data) %>%
+    dplyr::mutate(solar_TIMESTAMP = sapfluxnetr::get_solar_timestamp(sfn_data)) %>%
+    dplyr::select(TIMESTAMP, solar_TIMESTAMP, dplyr::everything())
+  env_flags <- sapfluxnetr::get_env_flags(sfn_data) %>%
+    dplyr::mutate(solar_TIMESTAMP = sapfluxnetr::get_solar_timestamp(sfn_data)) %>%
+    dplyr::select(TIMESTAMP, solar_TIMESTAMP, dplyr::everything())
+  site_md <- sapfluxnetr::get_site_md(sfn_data)
+  stand_md <- sapfluxnetr::get_stand_md(sfn_data)
+  species_md <- sapfluxnetr::get_species_md(sfn_data)
+  plant_md <- sapfluxnetr::get_plant_md(sfn_data)
+  env_md <- sapfluxnetr::get_env_md(sfn_data)
+
+  sapf_data_name <- file.path(csv_folder, paste0(si_code, '_sapf_data.csv'))
+  env_data_name <- file.path(csv_folder, paste0(si_code, '_env_data.csv'))
+  sapf_flags_name <- file.path(csv_folder, paste0(si_code, '_sapf_flags.csv'))
+  env_flags_name <- file.path(csv_folder, paste0(si_code, '_env_flags.csv'))
+  site_md_name <- file.path(csv_folder, paste0(si_code, '_site_md.csv'))
+  stand_md_name <- file.path(csv_folder, paste0(si_code, '_stand_md.csv'))
+  species_md_name <- file.path(csv_folder, paste0(si_code, '_species_md.csv'))
+  plant_md_name <- file.path(csv_folder, paste0(si_code, '_plant_md.csv'))
+  env_md_name <- file.path(csv_folder, paste0(si_code, '_env_md.csv'))
+
+  readr::write_csv(sapf_data, sapf_data_name)
+  readr::write_csv(env_data, env_data_name)
+  readr::write_csv(sapf_flags, sapf_flags_name)
+  readr::write_csv(env_flags, env_flags_name)
+  readr::write_csv(site_md, site_md_name)
+  readr::write_csv(stand_md, stand_md_name)
+  readr::write_csv(species_md, species_md_name)
+  readr::write_csv(plant_md, plant_md_name)
+  readr::write_csv(env_md, env_md_name)
+}
+
+################################################################################
 #' QC3 function, cleaning a little
 #'
 #' Function to final clean the data and generate the sapfluxnetr::sfn_data
@@ -325,6 +375,9 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
   folder_plant <- file.path('..', 'sapfluxnet_db', version, 'RData', 'plant')
   folder_sapwood <- file.path('..', 'sapfluxnet_db', version, 'RData', 'sapwood')
   folder_leaf <- file.path('..', 'sapfluxnet_db', version, 'RData', 'leaf')
+  csv_folder_plant <- file.path('..', 'sapfluxnet_db', version, 'csv', 'plant')
+  csv_folder_sapwood <- file.path('..', 'sapfluxnet_db', version, 'csv', 'sapwood')
+  csv_folder_leaf <- file.path('..', 'sapfluxnet_db', version, 'csv', 'leaf')
 
   # big loop
   for (site in sites) {
@@ -336,7 +389,8 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         site, 'unit_trans', 'plant', parent_logger = parent_logger
       ) %>%
         as_sfn_data(parent_logger = parent_logger) %>%
-        write_sfn_data(folder = folder_plant)
+        purrr::walk(write_sfn_data(folder = folder_plant)) %>%
+        sfn_data2csv(folder = csv_folder_plant)
 
     }
 
@@ -347,7 +401,8 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         site, 'unit_trans', 'sapwood', parent_logger = parent_logger
       ) %>%
         as_sfn_data(parent_logger = parent_logger) %>%
-        write_sfn_data(folder = folder_sapwood)
+        purrr::walk(write_sfn_data(folder = folder_sapwood)) %>%
+        sfn_data2csv(folder = csv_folder_sapwood)
 
     }
 
@@ -357,7 +412,8 @@ lvl3_process <- function(version = '0.0.1', parent_logger = 'test') {
         site, 'unit_trans', 'leaf', parent_logger = parent_logger
       ) %>%
         as_sfn_data(parent_logger = parent_logger) %>%
-        write_sfn_data(folder = folder_leaf)
+        purrr::walk(write_sfn_data(folder = folder_leaf)) %>%
+        sfn_data2csv(folder = csv_folder_leaf)
     }
 
     # set status
