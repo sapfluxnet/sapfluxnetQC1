@@ -11,7 +11,7 @@ dl_data_col_classes(data, parent_logger = "test")
 }
 \value{
 A data frame exactly as the data provided with the variables
-  changed to numeric if needed
+changed to numeric if needed
 }
 \description{
 Checking and setting data column classes to numeric

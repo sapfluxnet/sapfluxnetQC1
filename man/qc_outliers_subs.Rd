@@ -21,7 +21,7 @@ details.}
 }
 \value{
 a vector of the same lengh of y with the outlier values substituted
-  by the calculated value
+by the calculated value
 }
 \description{
 Outlier substitution by different methods
@@ -41,17 +41,17 @@ calculation. The window is formed by the range \code{y[i] - k : y[i] + k}.
 }}
 \section{out_tukeyline}{
 
-  \code{out_tukeyline} performs a robust fitting with the \code{line} function
+\code{out_tukeyline} performs a robust fitting with the \code{line} function
 }
 
 \section{out_medianreg}{
 
-  \code{out_medianreg} performs a regression of medians with the quantreg package
+\code{out_medianreg} performs a regression of medians with the quantreg package
 }
 
 \section{out_median}{
 
-  \code{out_median} performs a classic median outlier detection
+\code{out_median} performs a classic median outlier detection
 }
 
 \seealso{

@@ -29,7 +29,7 @@ console.}
 }
 \value{
 The data frame used as input with a new variable, is_inside_country,
-  a logical variable indicating if the site has wrong coordinates
+a logical variable indicating if the site has wrong coordinates
 }
 \description{
 \code{qc_check_coordinates} verifies if provided coordinates are within

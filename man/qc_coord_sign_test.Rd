@@ -25,8 +25,8 @@ countries having positive and negative coordinates must be used. See
 }
 \value{
 Same data frame provided, with a two new columns, \code{lat_changed}
-  and \code{long_changed}, two logicals indicating if the coordinates are
-  sign exchanged
+and \code{long_changed}, two logicals indicating if the coordinates are
+sign exchanged
 }
 \description{
 \code{qc_coord_sign_test} is an internal function to test if site coordinates

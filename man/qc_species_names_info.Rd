@@ -11,11 +11,11 @@ qc_species_names_info(species, conservatism = 0.9, parent_logger = "test")
 
 \item{conservatism}{Numerical value between 0 and 1 indicating the
 conservatism level of the tpl spelling check algorithm. Default to
-0.9}
+0.9. Not used anymore, maintained for compatibility.}
 }
 \value{
 A data frame summarizing the species names declared, the species
-  names obtained after tpl and the concordance and NAs info
+names obtained after WCVP and the concordance and NAs info
 }
 \description{
 Summary of species names spelling info

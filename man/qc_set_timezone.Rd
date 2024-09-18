@@ -15,7 +15,7 @@ one provided by the \code{\link{qc_get_timezone}} function.}
 }
 \value{
 A data frame as the \code{data} provided, with the TIMESTAMP variable
-  associated to the timezone specified
+associated to the timezone specified
 }
 \description{
 Brute force convert of timezone

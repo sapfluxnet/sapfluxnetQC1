@@ -42,8 +42,8 @@
 }
 \value{
 The same SfnData object with the corresponding slot changed to the
-  value provided. An error if the value provided generates an invalid
-  SfnData object.
+value provided. An error if the value provided generates an invalid
+SfnData object.
 }
 \description{
 Methods for replacing the slots with new data or metadata

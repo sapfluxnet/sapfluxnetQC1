@@ -15,7 +15,7 @@ a file}
 }
 \value{
 Invisible TRUE if all the process is ok, and invisible FALSE if there
-  was some error in the process
+was some error in the process
 }
 \description{
 Start QC process from the site code.

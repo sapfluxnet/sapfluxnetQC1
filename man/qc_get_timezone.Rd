@@ -12,7 +12,7 @@ qc_get_timezone(tz, parent_logger = "test")
 }
 \value{
 A character vector with the timezone code compatible with lubridate
-  and as.POSIXct
+and as.POSIXct
 }
 \description{
 Tranforms timezone ISO code to character vector compatible with lubridate and

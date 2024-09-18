@@ -20,11 +20,11 @@ SWC values sometimes come in percentage instead of cm3/cm3, so this function
 checks three assumptions:
 
 \enumerate{
-  \item{All values between 0-2. This situation is ok (it can contain out of range
-  values, but in the same order of magnitude)}
-  \item{All values between 2-100. This situation occurs usually when values
-  are presented in percentage. they can be safely transformed dividing by 100}
-  \item{None of the former. This is odd, so big red lights and check manually.}
+\item{All values between 0-2. This situation is ok (it can contain out of range
+values, but in the same order of magnitude)}
+\item{All values between 2-100. This situation occurs usually when values
+are presented in percentage. they can be safely transformed dividing by 100}
+\item{None of the former. This is odd, so big red lights and check manually.}
 }
 }
 \seealso{

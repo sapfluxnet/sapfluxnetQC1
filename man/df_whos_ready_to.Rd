@@ -20,7 +20,7 @@ been filtered. Accepted values are "all" (default), "ready", "freeze" or "done"
 }
 \value{
 A list with length equal to the number of sites containing the
-  \code{TO_[level]} flag of the status files.
+\code{TO_[level]} flag of the status files.
 }
 \description{
 Check the site status files to list who is ready to move to target
@@ -30,12 +30,12 @@ This function check the status files of all sites and list the status
 for the desired level.
 \code{filter} parameter can be used to filter the results by any status:
 
-  \itemize{
-    \item{\code{all} retrieves all the statuses}
-    \item{\code{ready} retrieves only those sites marked to pass to level 2}
-    \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
-    \item{\code{done} retrieves only those sites already passed to level 2}
-  }
+\itemize{
+\item{\code{all} retrieves all the statuses}
+\item{\code{ready} retrieves only those sites marked to pass to level 2}
+\item{\code{freeze} retrieves only those sites freezed in level 1 yet}
+\item{\code{done} retrieves only those sites already passed to level 2}
+}
 }
 \seealso{
 Other Data Flow: 

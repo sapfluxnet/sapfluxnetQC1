@@ -12,7 +12,7 @@ vector (e.g. \code{'sp_leaf_habit'}).}
 }
 \value{
 A character vector containing the valid values for the provided
-  variable
+variable
 }
 \description{
 \code{qc_species_dics} function creates a dictionary for the selected variable

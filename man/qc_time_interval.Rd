@@ -13,7 +13,7 @@ in the dataset}
 }
 \value{
 A data frame summarising the time intervals for each object(trees or
-  environmental variables)
+environmental variables)
 }
 \description{
 Summary of \eqn{t_0} and \eqn{t_f} for each tree or for each environmental

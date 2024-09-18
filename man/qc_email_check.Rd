@@ -24,13 +24,13 @@ the characteristics of email directions
 }
 \section{Regex}{
 
-  Email directions can be divided in three components, \code{username},
-  \code{@} and \code{domain}. \code{username} component can contain
-  any letter, number, underscores, dots and hyphens. \code{domain} component
-  can be also any letter, number, underscores dots and hyphens, followed by
-  a dot and from two to six letters and/or dots. So, the regex expression
-  to match a email direction is as follows:
-  \code{"^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"}
+Email directions can be divided in three components, \code{username},
+\code{@} and \code{domain}. \code{username} component can contain
+any letter, number, underscores, dots and hyphens. \code{domain} component
+can be also any letter, number, underscores dots and hyphens, followed by
+a dot and from two to six letters and/or dots. So, the regex expression
+to match a email direction is as follows:
+\code{"^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"}
 }
 
 \concept{Quality Checks functions}

@@ -11,7 +11,7 @@ df_report_folder_creation(si_code, parent_logger = "test")
 }
 \value{
 Invisible TRUE if the folder is created correctly, invisible FALSE if
-  folder is not created.
+folder is not created.
 }
 \description{
 Function to create the report subfolder for the site to analyze

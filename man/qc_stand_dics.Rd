@@ -12,7 +12,7 @@ vector (e.g. \code{'st_aspect'}).}
 }
 \value{
 A character vector containing the valid values for the provided
-  variable
+variable
 }
 \description{
 \code{qc_stand_dics} function creates a dictionary for the selected variable

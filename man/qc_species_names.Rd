@@ -11,12 +11,12 @@ qc_species_names(species, conservatism = 0.9, parent_logger = "test")
 
 \item{conservatism}{Numerical value between 0 and 1 indicating the
 conservatism level of the tpl spelling check algorithm. Default to
-0.9}
+0.9. Not used anymore, maintained for compatibility.}
 }
 \value{
 a vector with the fixed names of the species if fix is possible or
-  needed, or a vector with the original names of the species if the fix is not
-  possible or they are correct
+needed, or a vector with the original names of the species if the fix is not
+possible or they are correct
 }
 \description{
 Wrapper for \code{\link{qc_species_names_info}} and \code{\link{qc_species_names_fix}}

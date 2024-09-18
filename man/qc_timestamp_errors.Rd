@@ -14,7 +14,7 @@ must have a \code{TIMESTAMP} variable.}
 }
 \value{
 A data frame summarizing the errors found, indicating the interval
-  and its duration (in seconds).
+and its duration (in seconds).
 }
 \description{
 Function to pinpoint errors in the timestamp

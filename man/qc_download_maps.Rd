@@ -16,7 +16,7 @@ it must end \bold{without} \code{/}.}
 }
 \value{
 Maps are downloaded (if needed) and a summary is returned indicating
-  number of maps downloaded and number of maps present in the map folder.
+number of maps downloaded and number of maps present in the map folder.
 }
 \description{
 \code{qc_download_maps} fetch maps from \url{http://www.gadm.org/}.

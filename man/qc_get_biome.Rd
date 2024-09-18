@@ -15,7 +15,7 @@ in a single biome. By default, deserts are not merged.}
 }
 \value{
 The same data frame with extra columns of mean annual temperature
-   (si_mat), mean annual precipitation (si_map) and biome (si_biome)
+(si_mat), mean annual precipitation (si_map) and biome (si_biome)
 }
 \description{
 This function takes a data frame of site metadata, including latitude (si_lat)

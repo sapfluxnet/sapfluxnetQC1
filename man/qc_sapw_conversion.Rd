@@ -30,14 +30,14 @@ Sap flow accepted units can be of two kinds, \code{per sapwood area} and
 must be done to allow data integration and analysis.
 This function can return three kind of units:
 \describe{
-  \item{\bold{Per sapwood  area}}{
-  In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
+\item{\bold{Per sapwood  area}}{
+In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
   }
   \item{\bold{Per plant}}{
-  In this case, units returned are \eqn{cm³·h⁻¹}
+In this case, units returned are \eqn{cm³·h⁻¹}
   }
   \item{\bold{Per leaf area unit}}{
-  In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
+In this case, units returned are \eqn{cm³·cm⁻²·h⁻¹}
   }
 }
 }

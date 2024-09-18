@@ -35,7 +35,7 @@ Default to FALSE.}
 }
 \value{
 a SfnData object as the one provided with the oulier values
-  substituted and the flags slot updated.
+substituted and the flags slot updated.
 }
 \description{
 Outliers detection, substitution and annotation for SfnData objects

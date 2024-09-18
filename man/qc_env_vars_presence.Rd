@@ -13,7 +13,7 @@ qc_env_vars_presence(data, metadata, parent_logger = "test")
 }
 \value{
 A data frame with four columns: Variable name, Presence in metadata,
-  Presence in data and Concordance.
+Presence in data and Concordance.
 }
 \description{
 \code{qc_env_vars_presence} function checks if environmental variables stated

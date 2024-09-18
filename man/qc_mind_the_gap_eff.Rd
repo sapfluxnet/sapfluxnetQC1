@@ -15,14 +15,14 @@ Default to FALSE.}
 }
 \value{
 A data frame with info about gaps:
-  \itemize{
-      \item gap_start: Gap start TIMESTAMP
-      \item gap_end: Gap end TIMESTAMP
-      \item gap_interval: Gap interval in minutes
-      \item gap_coverage: Gap coverage in percentage
-      \item timestamp_start: Absolute timestamp start
-      \item timestamp_end: Absolute timestamp end
-  }
+\itemize{
+\item gap_start: Gap start TIMESTAMP
+\item gap_end: Gap end TIMESTAMP
+\item gap_interval: Gap interval in minutes
+\item gap_coverage: Gap coverage in percentage
+\item timestamp_start: Absolute timestamp start
+\item timestamp_end: Absolute timestamp end
+}
 }
 \description{
 Information about gaps

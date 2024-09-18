@@ -11,7 +11,7 @@ sm_solarTIMESTAMP_adder(si_code, parent_logger = "test")
 }
 \value{
 Invisible TRUE if solarTIMESTAMP was succesfully added to all levels
-  in si_code site
+in si_code site
 }
 \description{
 Add solarTIMESTAMP slot to SfnData objects

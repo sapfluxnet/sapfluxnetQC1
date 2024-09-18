@@ -15,7 +15,7 @@ character guessing.}
 }
 \value{
 A character vector containing the decimal character, to use in the
-  fread order to load the data.
+fread order to load the data.
 }
 \description{
 Decimal character detection to csv files loading with data.table::fread
@@ -32,12 +32,12 @@ automatize data loading proccess.
 
 The process to determine the decimal character is as follows:
 \enumerate{
-  \item 1000 rows and 4 variables are sampled from the data.
-  \item For each variable, number of dots (\code{.}) and commas (\code{,})
-  are calculated.
-  \item If the number of dots is larger than the commas, dot is selected as
-  decimal character. If the number of commas is larger than the dots, comma
-  is selected as decimal character.
+\item 1000 rows and 4 variables are sampled from the data.
+\item For each variable, number of dots (\code{.}) and commas (\code{,})
+are calculated.
+\item If the number of dots is larger than the commas, dot is selected as
+decimal character. If the number of commas is larger than the dots, comma
+is selected as decimal character.
 }
 }
 

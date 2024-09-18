@@ -11,7 +11,7 @@ sm_status_updater(si_code, parent_logger = "test")
 }
 \value{
 Invisible TRUE if no problem was found. Invisible FALSE if the site
-  was not updated.
+was not updated.
 }
 \description{
 Quick update for status files to update them to the new sapfluxnetQC1 library

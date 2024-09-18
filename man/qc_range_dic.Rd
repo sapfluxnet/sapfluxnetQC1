@@ -8,7 +8,7 @@ qc_range_dic(parent_logger = "test")
 }
 \value{
 A list containing the variable name as the element label and the
-  range value as the element value.
+range value as the element value.
 }
 \description{
 Values for all ranges checked as a list

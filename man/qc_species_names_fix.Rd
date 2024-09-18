@@ -13,9 +13,9 @@ qc_species_names_fix(data, parent_logger = "test")
 A character vector with species fixed in spelling and correctness.
 }
 \description{
-\code{qc_species_names} uses \code{tpl} package
-(\code{\link{https://github.com/gustavobio/tpl}}) to verify the species
-introduced by the contributors and fix spelling errors.
+\code{\link[=qc_species_names]{qc_species_names()}} uses
+(\href{https://matildabrown.github.io/rWCVP/index.html}{\code{rWCVP}}) package to
+verify the species introduced by the contributors and fix spelling errors.
 }
 \details{
 This function takes a vector of species names and check if they are right
@@ -24,11 +24,11 @@ order to have the same name for the same species.
 }
 \section{GitHub package}{
 
-\code{tpl} and \code{tpldata} are GitHub packages, and they are not available
+\code{rWCVP} needs the companion \code{rWCVPdata} package, wich is a GitHub package.
+It is not available
 for install in the ususal way. In order to achieve that
 \code{qc_species_verification} works as expected, manual installation of
-those two packages must be done previously:
-\code{devtools::install_github("gustavobio/tpldata")}
-\code{devtools::install_github("gustavobio/tpl")}
+this package must be done previously:
+\code{devtools::install_github("matildabrown/rWCVPdata")}
 }
 

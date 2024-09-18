@@ -11,7 +11,7 @@ qc_rh(data, parent_logger = "test")
 }
 \value{
 a Data frame of the environmental data with the new rh variable
-  calculated
+calculated
 }
 \description{
 Calculate the rh if needed from other environmental variables

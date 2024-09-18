@@ -11,7 +11,7 @@ qc_swc_fix(env_data, parent_logger = "test")
 }
 \value{
 A dataframe with the environmental data transformed if needed/possible.
-  If not, the same input dataframe.
+If not, the same input dataframe.
 }
 \description{
 This function divides by 100 in the case the swc provided by the contributor

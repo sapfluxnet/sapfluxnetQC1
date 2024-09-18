@@ -31,8 +31,8 @@ Default to blank.}
 }
 \value{
 \code{dl_data} returns sapflow or environmental data in wide format,
-  ready to pipe it in the quality checks for raw data. If \code{long = TRUE}
-  data is returned in long format, ready for plotting.
+ready to pipe it in the quality checks for raw data. If \code{long = TRUE}
+data is returned in long format, ready for plotting.
 }
 \description{
 Detecting file type and load data from files.

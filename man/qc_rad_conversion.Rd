@@ -18,11 +18,11 @@ and \code{shortwave incoming radiation}. Unit conversion must be done to allow d
 integration and analysis.
 This function converts between:
 \describe{
-  \item{\bold{Incoming photosynthetic photon flux density}}{
-  In this case, units returned are \eqn{{\mu}mol·m⁻²·s⁻¹}
+\item{\bold{Incoming photosynthetic photon flux density}}{
+In this case, units returned are \eqn{{\mu}mol·m⁻²·s⁻¹}
   }
   \item{\bold{Shortwave incoming radiation}}{
-  In this case, units returned are \eqn{W·m⁻²}
+In this case, units returned are \eqn{W·m⁻²}
   }
 }
 }

@@ -11,7 +11,7 @@ qc_vpd(data, parent_logger = "test")
 }
 \value{
 a Data frame of the environmental data with the new VPD variable
-  calculated
+calculated
 }
 \description{
 Calculate the VPD if needed from other environmental variables

@@ -15,9 +15,9 @@ to obtain the timezone information}
 }
 \value{
 An object of the same type of input (data frame or vector) with the
-  fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
-  appears and none fix is made, returning data as entered.
-  If TIMESTAMP can not be fixed, an error is raised.
+fixed values of TIMESTAMP. If TIMESTAMP is already in format, a message
+appears and none fix is made, returning data as entered.
+If TIMESTAMP can not be fixed, an error is raised.
 }
 \description{
 Converting known bad TIMESTAMP formats to POSIXt and setting the correct

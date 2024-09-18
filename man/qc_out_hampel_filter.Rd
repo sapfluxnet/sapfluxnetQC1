@@ -31,11 +31,11 @@ done. Default to TRUE.}
 }
 \value{
 A list with two elements:
-  \itemize{
-    \item{res: A vector of the same length as y with the ouliers value
-    substituted by the estimation}
-    \item{index: A vector indicating which TIMESTAMPS have been modified}
-  }
+\itemize{
+\item{res: A vector of the same length as y with the ouliers value
+substituted by the estimation}
+\item{index: A vector indicating which TIMESTAMPS have been modified}
+}
 }
 \description{
 Hampel filter for detecting and substituting outliers in the environmental

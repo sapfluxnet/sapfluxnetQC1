@@ -17,8 +17,8 @@ the environmental data frame.}
 }
 \value{
 A data frame exactly as \code{data}, but with an additional column
-  containing the extraterrestrial radiation in W/m2, and optionally another
-  column containing apparent solar timestamp.
+containing the extraterrestrial radiation in W/m2, and optionally another
+column containing apparent solar timestamp.
 }
 \description{
 Calculate the Extraterrestrial Radiation from the TIMESTAMP

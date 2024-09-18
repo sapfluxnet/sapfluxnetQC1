@@ -17,8 +17,8 @@ inside another function, is recommended to set \code{verbose = FALSE}.}
 }
 \value{
 A message/warning indicating if TIMESTAMP is correct or not. Also
-  an invisible logical object is returned, indicating success (TRUE) or
-  failure (FALSE).
+an invisible logical object is returned, indicating success (TRUE) or
+failure (FALSE).
 }
 \description{
 Function to check if the format of the timestamp is the correct one

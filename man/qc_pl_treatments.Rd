@@ -11,7 +11,7 @@ qc_pl_treatments(plant_md, parent_logger = "test")
 }
 \value{
 A data frame with the information about the different treatments if
-  any.
+any.
 }
 \description{
 \code{qc_pl_treatments} function looks for spelling errors in treatments

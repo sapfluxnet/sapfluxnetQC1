@@ -11,8 +11,8 @@ qc_get_sapw_md(pl_metadata, parent_logger = "test")
 }
 \value{
 A data frame with extracted plant metadata variables as columns and
-  individual plants as rows. Also a new variable \code{pl_sapw_area_est} is
-  created as an empty numeric vector.
+individual plants as rows. Also a new variable \code{pl_sapw_area_est} is
+created as an empty numeric vector.
 }
 \description{
 \code{qc_get_sapw_md} allows to extract all necessary variables from plant

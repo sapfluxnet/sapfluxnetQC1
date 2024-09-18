@@ -8,7 +8,7 @@ dl_na_char_generator(parent_logger = "test")
 }
 \value{
 A character vector with the text strings to be converted to NAs, in
-  order to use it in data.table::fread function.
+order to use it in data.table::fread function.
 }
 \description{
 Generation of a character vector with the possible na characters found in

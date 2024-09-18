@@ -19,8 +19,8 @@ to check.}
 }
 \value{
 A data frame with variable names, check result and NA presence as
-  columns, as well as a column (Metadata) indicating the kind of metadata
-  variables checked.
+columns, as well as a column (Metadata) indicating the kind of metadata
+variables checked.
 }
 \description{
 \code{qc_factor_values} function checks in the provided metadata if the

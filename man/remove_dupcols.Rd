@@ -11,7 +11,7 @@ remove_dupcols(data, parent_logger = "test")
 }
 \value{
 \code{remove_dupcols} returns the loaded data with duplicate columns
-  and wmpty rows removed, if any.
+and wmpty rows removed, if any.
 }
 \description{
 \code{remove_dupcols} is an internal function to use inside of the \code{dl_*}

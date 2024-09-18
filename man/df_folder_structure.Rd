@@ -12,7 +12,7 @@ the structure must be built. Default to current directory.}
 }
 \value{
 Nothing, dirs are created if they do not exist, or a warning is raised
-  if they already exist.
+if they already exist.
 }
 \description{
 Create the folder tree skeleton for SAPFLUXNET project

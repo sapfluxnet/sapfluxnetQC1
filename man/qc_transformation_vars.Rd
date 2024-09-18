@@ -12,12 +12,12 @@ qc_transformation_vars(sfndata, parent_logger = "test")
 \value{
 A data frame with the following columns:
 
-  \itemize{
-    \item{Variable: Variable name}
-    \item{Location: Variable location (i.e. env_data or env_md)}
-    \item{Trasformation: Tranformation/Conversion for whihc the variable is needed}
-    \item{Presence: Logical indicating if the variable is present}
-  }
+\itemize{
+\item{Variable: Variable name}
+\item{Location: Variable location (i.e. env_data or env_md)}
+\item{Trasformation: Tranformation/Conversion for whihc the variable is needed}
+\item{Presence: Logical indicating if the variable is present}
+}
 }
 \description{
 Summary table for variables needed for unit and any other kind of conversions

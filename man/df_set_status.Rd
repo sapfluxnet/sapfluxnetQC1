@@ -23,8 +23,8 @@ df_set_status(
 }
 \value{
 Invisible TRUE if changes to status file were correctly made,
-  invisble FALSE if changes were not made. Also, the status file for the site
-  will be replaced with the new one.
+invisble FALSE if changes were not made. Also, the status file for the site
+will be replaced with the new one.
 }
 \description{
 Change and update status file info using yaml package

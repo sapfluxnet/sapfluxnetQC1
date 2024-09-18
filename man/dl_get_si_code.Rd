@@ -12,8 +12,8 @@ retrieve}
 }
 \value{
 A list. The first element is the site code, the second one the
-  metadata file route, the third the sapflow data file route and finally, the
-  fourth the environmental data file route.
+metadata file route, the third the sapflow data file route and finally, the
+fourth the environmental data file route.
 }
 \description{
 Look at the data folder provided and get the code and the names of the files

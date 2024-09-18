@@ -11,7 +11,7 @@ df_start_status(si_code, parent_logger = "test")
 }
 \value{
 Invisible TRUE if no errors were encountered, invisible FALSE if
-  there was errors. Also, status file is created in the corresponding folder.
+there was errors. Also, status file is created in the corresponding folder.
 }
 \description{
 Initialise an empty status file in yaml format, using the yaml package

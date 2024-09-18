@@ -12,7 +12,7 @@ of \code{\link{qc_get_sapw_md}}.}
 }
 \value{
 A data frame, exactly as returned by \code{\link{qc_get_sapw_md}},
-  but with the variable pl_sapw_area_est filled with the estimated values.
+but with the variable pl_sapw_area_est filled with the estimated values.
 }
 \description{
 Function to calculate sapwood area from DBH, bark thickness and sapwood depth
@@ -27,9 +27,9 @@ revised as, depending on the species, error in the estimates can be large.
 \section{Ring area formula}{
 
 The area of a ring is \eqn{\pi(R² - r²)}, where \code{R} is the radius
-  including the ring and \code{r} is the radius till the ring. Thus,
-  \eqn{R = (dbh / 2) - bark_thickness} and
-  \eqn{r = (dbh / 2) - bark_thickness - sapwood_depth}.
+including the ring and \code{r} is the radius till the ring. Thus,
+\eqn{R = (dbh / 2) - bark_thickness} and
+\eqn{r = (dbh / 2) - bark_thickness - sapwood_depth}.
 }
 
 \seealso{

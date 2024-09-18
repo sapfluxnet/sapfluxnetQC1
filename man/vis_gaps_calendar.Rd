@@ -13,7 +13,7 @@ trees}
 }
 \value{
 Plot is printed and a ggplot2 object is created if there is
-  assignation
+assignation
 }
 \description{
 Heatmap calendar to visualize gaps density

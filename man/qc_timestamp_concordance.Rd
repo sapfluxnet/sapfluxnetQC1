@@ -38,9 +38,9 @@ Are the sapflow and environmental TIMESTAMPS in concordance?
 This function uses \code{\link{qc_time_interval}} internally to perform
 operations with time intervals. There is two ways of using this function:
 \enumerate{
-  \item Directly from sapflow and environmental data, providing both datasets
-  \item From the results obtained from \code{\link{qc_time_interval}},
-        providing both data frames with the results.
+\item Directly from sapflow and environmental data, providing both datasets
+\item From the results obtained from \code{\link{qc_time_interval}},
+providing both data frames with the results.
 }
 }
 \seealso{

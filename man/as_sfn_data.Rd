@@ -11,11 +11,13 @@ This function converts an SfnData to sfn_data object
 }
 \details{
 Things that this funcion do:
-  List of thing to do when passing from SfnData to sfn_data:
-  1. pl_name in plant metadata must be set to character in all sites.
-  2. si_biome convert ot character (is factor)
-  3. tz of solarTIMESTAMP to UTC fixed
-  4. get rid of ascii characters in pl_sap_units and pl_sap_units_orig
-  5. leaf data has not pl_sap_units_orig and pl_sap_units does not match
-     due to bug in qc_sapw_conversion function
+List of thing to do when passing from SfnData to sfn_data:
+\enumerate{
+\item pl_name in plant metadata must be set to character in all sites.
+\item si_biome convert ot character (is factor)
+\item tz of solarTIMESTAMP to UTC fixed
+\item get rid of ascii characters in pl_sap_units and pl_sap_units_orig
+\item leaf data has not pl_sap_units_orig and pl_sap_units does not match
+due to bug in qc_sapw_conversion function
+}
 }

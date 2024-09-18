@@ -24,7 +24,7 @@ be located in the Templates folder of the project}
 }
 \value{
 Nothing, report is generated in the Report folder (default) or the
-  specified Report subfolder
+specified Report subfolder
 }
 \description{
 Wrap around rmarkdown::render function to generate the automatic reports

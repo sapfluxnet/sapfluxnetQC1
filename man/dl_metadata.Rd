@@ -20,9 +20,9 @@ to \code{NULL}, as the first metadata to load must be the site metadata.}
 }
 \value{
 The function returns a data_frame with the corresponding metadata
-  (site, stand, species, plant or environmental) in "wide" format, with
-  metadata variables as columns, ready to be feeded to quality check
-  functions.
+(site, stand, species, plant or environmental) in "wide" format, with
+metadata variables as columns, ready to be feeded to quality check
+functions.
 }
 \description{
 \code{dl_metadata} function loads the metadata sheets from xls/xlsx file.

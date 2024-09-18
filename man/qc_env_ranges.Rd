@@ -13,7 +13,7 @@ qc_env_ranges(env_data, env_flags, parent_logger = "test")
 }
 \value{
 A data frame containing the new flags in case any value is out of
-  range.
+range.
 }
 \description{
 Check ranges for environmental variables

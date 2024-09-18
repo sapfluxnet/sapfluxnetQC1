@@ -16,7 +16,7 @@ one of the following: \code{'stand_md'}, \code{'site_md'},
 }
 \value{
 A data frame with variable names in one column and result of the
-  checks in teh following columns
+checks in teh following columns
 }
 \description{
 \code{qc_md_cols} checks if the columns of the provided metadata return the

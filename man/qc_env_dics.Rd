@@ -12,7 +12,7 @@ vector (e.g. \code{'env_vpd'}).}
 }
 \value{
 A character vector containing the valid values for the provided
-  variable
+variable
 }
 \description{
 \code{qc_env_dics} function creates a dictionary for the selected variable
