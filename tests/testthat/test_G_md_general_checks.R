@@ -155,10 +155,10 @@ test_that('trimming works', {
   expect_equal(good_info$data_names, species)
   expect_equal(good_info$tpl_names, species)
   expect_true(all(good_info$Concordance))
-  expect_equal(bad_info$data_names, c('Oleae eurpea', 'Pino pinaster',
-                                      'Pinu alepensis', 'Euclaiptus gobulus',
-                                      'Fagus silvatica'))
-  expect_equal(bad_info$tpl_names, c(NA, NA, 'Pinus alepensis', NA,
+  expect_equal(bad_info$data_names, c('Oldeae furpea', 'Pino piñonero',
+                                      'Pinu alepensis',
+                                      'euncalplyctus blogulusss', 'Fagus silvatica'))
+  expect_equal(bad_info$tpl_names, c(NA, NA, 'Pinus halepensis', NA,
                                      'Fagus sylvatica'))
   expect_false(all(bad_info$Concordance))
   expect_equal(not_so_bad_info$data_names, c('Olea europaee', 'Pinus pinaster',
