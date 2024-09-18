@@ -923,23 +923,22 @@ qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
     }
 
     # STEP 3
-    browser()
     # Create SpatialPolygonsDataFrame object
     list_pol <- sapply(as.character(unique(biomes_df$biome)),
                        function(id_biome,df)
-                         sp::Polygon(cbind(df$map[df$biome == id_biome],
-                                           df$mat[df$biome == id_biome])),
-                       df=biomes_df, USE.NAMES = TRUE)
+                         {terra::vect(cbind(df$map[df$biome == id_biome],
+                                           df$mat[df$biome == id_biome]),
+                                      type = "polygons")},
+                          # sp::Polygon(cbind(df$map[df$biome == id_biome],
+                          #                  df$mat[df$biome == id_biome]))
+                       df = biomes_df, USE.NAMES = TRUE)
+    
 
-    sp_biomes <- sp::SpatialPolygons(
-      lapply(1:length(list_pol),
-             function(i, x) {sp::Polygons(list(x[[i]]),
-                                          names(x)[i])},
-             x = list_pol)
-    )
+    spdf_biomes <- terra::vect(list_pol)
+    spdf_biomes$biome <- names(list_pol)
 
-    spdf_biomes <- sp::SpatialPolygonsDataFrame(sp_biomes, data.frame(biome = names(list_pol)),
-                                                match.ID = 'biome')
+    # spdf_biomes <- sp::SpatialPolygonsDataFrame(sp_biomes, data.frame(biome = names(list_pol)),
+    #                                             match.ID = 'biome')
 
     # STEP 4
     # Return SpatialPolygonsDataFrame object
@@ -1015,55 +1014,55 @@ qc_get_biome <- function(data, merge_deserts = FALSE, parent_logger = 'test') {
     }
 
     # STEP 1
-    # Get the nearest stations from the site coordinates. We look at 50 km radius,
-    # if not stations are found, rise the radius to 100 km
-    sts <- purrr::map2(data$si_lat, data$si_long,
-                       function(x, y) {
-                         st_tmp <- GSODR::nearest_stations(x, y, distance = 50)
-                         if (length(st_tmp) < 1) {
-                           st_tmp <- GSODR::nearest_stations(x, y, distance = 100)
-                         }
-                         if (length(st_tmp) < 1) {
-                           return(NA)
-                         } else {
-                           return(st_tmp)
-                         }
+    # Get WorldClim data (MAT and MAP) for sites
+    temp_dir <- tempdir()
+    t_site <- purrr::map2(
+      data$si_long, data$si_lat,
+      \(lon, lat) {
+        bio_raster <- geodata::worldclim_tile(
+          "bio", lon = lon, lat = lat, path = temp_dir
+        )
 
-                       })
+        terra::extract(
+          bio_raster,
+          terra::vect(data.frame(lon = lon, lat = lat), crs = "epsg:4326")
+        )[2] |> as.numeric()
 
-    # 1.1 If no nearest stations, return the data and a warning
-    if (all(is.na(sts))) {
-      data$si_mat <- NA
-      data$si_map <- NA
-      data$si_biome <- 'Unknown'
+      }
+    ) |>
+      purrr::list_c()
+    p_site <- purrr::map2(
+      data$si_long, data$si_lat,
+      \(lon, lat) {
+        bio_raster <- geodata::worldclim_tile(
+          "bio", lon = lon, lat = lat, path = temp_dir
+        )
 
-      warning('No nearest statiosn found to calculate the biome')
-      return(data)
-    }
+        terra::extract(
+          bio_raster,
+          terra::vect(data.frame(lon = lon, lat = lat), crs = "epsg:4326")
+        )[5] |> as.numeric()
+
+      }
+    ) |>
+      purrr::list_c()
 
     # STEP 2
-    # Calculate MAT and MAP values
-    data("WorldClim_Bio", package = 'GSODRdata')
-    t_site <- purrr::map_dbl(
-      sts, ~ round(mean(WorldClim_Bio[WorldClim_Bio$STNID %in% .x, c('bio1')]), 1)
-    )
-    t_site <- t_site/10
-
-    p_site <- purrr::map_dbl(
-      sts, ~ round(mean(WorldClim_Bio[WorldClim_Bio$STNID %in% .x, c('bio12')]), 1)
-    )
-
-    # STEP 3
     # Obtain biome
-    clim_point <- sp::SpatialPoints(data.frame(x = p_site, y = t_site))
-    biome <- sp::over(clim_point, qc_get_biomes_spdf(merge_deserts = merge_deserts))[[1]]
+    site_points <- terra::vect(
+      cbind(p_site, t_site)
+    )
+    biome <- terra::extract(
+      qc_get_biomes_spdf(merge_deserts = merge_deserts),
+      site_points
+    )$biome
 
     # STEP 4
     # Append new variables and return the data frame
     # 3.1 Append MAT, MAP and biome to data
     data$si_mat <- t_site
     data$si_map <- p_site
-    data$si_biome <- droplevels(biome)
+    data$si_biome <- biome
 
     # 3.2 Return data with the new variable
     return(data)

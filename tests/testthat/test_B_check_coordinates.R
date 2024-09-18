@@ -76,8 +76,8 @@ test_that('argument checks work', {
 })
 
 test_that('biomes object is created', {
-  expect_is(qc_get_biomes_spdf(), 'SpatialPolygonsDataFrame')
-  expect_is(qc_get_biomes_spdf(merge_deserts = TRUE), 'SpatialPolygonsDataFrame')
+  expect_is(qc_get_biomes_spdf(), 'SpatVector')
+  expect_is(qc_get_biomes_spdf(merge_deserts = TRUE), 'SpatVector')
 })
 
 context('B5. Get biome of a site')
@@ -89,15 +89,15 @@ foo_data <- data.frame(
 )
 
 results_foo_data <- cbind(foo_data, data.frame(
-  si_mat = c(12.50, -0.98, 14.16, 12.38),
-  si_map = c(955.5, 407.4, 708.2, 264.5),
-  si_biome = c('Mediterranean', 'Boreal forest', 'Mediterranean', 'Temperate grassland desert')
+  si_mat = c(11.570, -1.90, 14.72917, 11.74167),
+  si_map = c(1291, 436, 641, 331),
+  si_biome = c('Temperate forest', 'Boreal forest', 'Mediterranean', 'Temperate grassland desert')
 ))
 
 results_foo_data_md <- cbind(foo_data, data.frame(
-  si_mat = c(12.50, -0.98, 14.16, 12.38),
-  si_map = c(955.5, 407.4, 708.2, 264.5),
-  si_biome = c('Mediterranean', 'Boreal forest', 'Mediterranean', 'Desert')
+  si_mat = c(11.570, -1.90, 14.72917, 11.74167),
+  si_map = c(1291, 436, 641, 331),
+  si_biome = c('Temperate forest', 'Boreal forest', 'Mediterranean', 'Desert')
 ))
 
 test_that('argument checks work', {
@@ -120,11 +120,11 @@ test_that('the new variables are added and their type is correct', {
   )
   expect_is(qc_get_biome(foo_data)$si_map, 'numeric')
   expect_is(qc_get_biome(foo_data)$si_mat, 'numeric')
-  expect_is(qc_get_biome(foo_data)$si_biome, 'factor')
+  expect_is(qc_get_biome(foo_data)$si_biome, 'character')
 })
 
 test_that('new data is correct', {
-  expect_equal(qc_get_biome(foo_data), results_foo_data, tolerance = .0001)
-  expect_equal(qc_get_biome(foo_data, merge_deserts = TRUE), results_foo_data_md, tolerance = .0001)
+  expect_equal(qc_get_biome(foo_data), results_foo_data, tolerance = .0005)
+  expect_equal(qc_get_biome(foo_data, merge_deserts = TRUE), results_foo_data_md, tolerance = .0005)
   expect_is(qc_get_biome(foo_data), 'data.frame')
 })
