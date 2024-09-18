@@ -135,8 +135,8 @@ context('G4. Species names checks')
 species <- c('Olea europaea', 'Pinus pinaster', 'Pinus halepensis',
              'Eucalyptus globulus', 'Fagus sylvatica')
 
-species_bad <- c('Oleae eurpea', 'Pino pinaster ', ' Pinu alepensis',
-                 'Euclaiptus gobulus', 'Fagus silvatica')
+species_bad <- c('Oldeae furpea', 'Pino piñonero ', ' Pinu alepensis',
+                 'euncalplyctus blogulusss', 'Fagus silvatica')
 
 species_not_so_bad <- c('Olea europaee', 'Pinus pinaster', 'Pinus halepensis',
                         'Eucaliptus globulus ', ' Fagos sylvatica')

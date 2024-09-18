@@ -1,27 +1,25 @@
 ################################################################################
 #' Verify provided species names (spelling and correctness)
-#'
-#' \code{qc_species_names} uses \code{tpl} package
-#' (\code{\link{https://github.com/gustavobio/tpl}}) to verify the species
-#' introduced by the contributors and fix spelling errors.
+#' 
+#' [qc_species_names()] uses
+#' ([`rWCVP`](https://matildabrown.github.io/rWCVP/index.html)) package to
+#' verify the species introduced by the contributors and fix spelling errors.
 #'
 #' This function takes a vector of species names and check if they are right
 #' spelled. Also, if a synonym is used, the function changes it automatically in
 #' order to have the same name for the same species.
 #'
 #' @section GitHub package:
-#' \code{tpl} and \code{tpldata} are GitHub packages, and they are not available
+#' \code{rWCVP} needs the companion `rWCVPdata` package, wich is a GitHub package.
+#' It is not available
 #' for install in the ususal way. In order to achieve that
 #' \code{qc_species_verification} works as expected, manual installation of
-#' those two packages must be done previously:
-#' \code{devtools::install_github("gustavobio/tpldata")}
-#' \code{devtools::install_github("gustavobio/tpl")}
+#' this package must be done previously:
+#' \code{devtools::install_github("matildabrown/rWCVPdata")}
 #'
 #' @param data Data frame as the obtained from \code{\link{qc_species_names_info}}
 #'
 #' @return A character vector with species fixed in spelling and correctness.
-#'
-#' @import tpl
 #'
 #' @export
 
@@ -48,7 +46,7 @@ qc_species_names_fix <- function(data, parent_logger = 'test') {
     # STEP 1
     # If tpl generated NAs, return the original species with a warning
     if (any(data$IsNA)) {
-      warning('NAs have been generated, please try again with a lower value of conservatism')
+      warning('NAs have been generated, please check manually species names')
       return(data$data_names)
 
       # STEP 2
@@ -81,10 +79,10 @@ qc_species_names_fix <- function(data, parent_logger = 'test') {
 #'
 #' @param conservatism Numerical value between 0 and 1 indicating the
 #'   conservatism level of the tpl spelling check algorithm. Default to
-#'   0.9
+#'   0.9. Not used anymore, maintained for compatibility.
 #'
 #' @return A data frame summarizing the species names declared, the species
-#'   names obtained after tpl and the concordance and NAs info
+#'   names obtained after WCVP and the concordance and NAs info
 #'
 #' @export
 
@@ -113,10 +111,15 @@ qc_species_names_info <- function(species, conservatism = 0.9,
     species <- stringr::str_trim(species, 'both')
 
     # STEP 2
-    # Obtaining tpl info
-    tpl_df <- tpl::tpl.get(species, replace.synonyms = FALSE,
-                           suggestion.distance = conservatism)
-    species_tpl <- tpl_df$name
+    # Obtaining WCVP info
+    tpl_df <- rWCVP::wcvp_match_names(
+      names_df = data.frame(species_sapf = species, stringsAsFactors = FALSE),
+      name_col = "species_sapf",
+      fuzzy = TRUE, progress_bar = FALSE
+    )
+    # tpl_df <- tpl::tpl.get(species, replace.synonyms = FALSE,
+    #                        suggestion.distance = conservatism)
+    species_tpl <- tpl_df$wcvp_name
 
     # 2.1 Checking for concordance taking into account that species_tpl maybe
     #     is NA
@@ -163,7 +166,7 @@ qc_species_names_info <- function(species, conservatism = 0.9,
 #'
 #' @param conservatism Numerical value between 0 and 1 indicating the
 #'   conservatism level of the tpl spelling check algorithm. Default to
-#'   0.9
+#'   0.9. Not used anymore, maintained for compatibility.
 #'
 #' @return a vector with the fixed names of the species if fix is possible or
 #'   needed, or a vector with the original names of the species if the fix is not
@@ -183,7 +186,7 @@ qc_species_names <- function(species, conservatism = 0.9,
     # No needed as the checks are already made in the internal functions
 
     # STEP 1
-    # Get names and tpl info
+    # Get names and WCVP info
     info <- qc_species_names_info(species, conservatism, parent_logger)
 
     # STEP 2
