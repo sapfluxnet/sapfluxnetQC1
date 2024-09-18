@@ -40,7 +40,9 @@ Imports:
     soiltexture,
     solaR,
     zoo,
-    geodata
+    geodata,
+    terra,
+    tidyterra
 Suggests:
     knitr,
     testthat,
