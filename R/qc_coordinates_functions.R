@@ -195,7 +195,6 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
 
     # STEP 1
     # Downlaod maps, if already not downloaded
-    browser()
     qc_download_maps(data = data, folder = maps_folder,
                      parent_logger = parent_logger)
 
@@ -206,10 +205,9 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
     # STEP 3
     # Begin the for loop and read the map file
     for (i in 1:length(data[,1])) {
-      browser()
-
-      file_name <- paste(data$si_country[i], '_adm0.rds', sep = '')
-      map_data <- readRDS(file.path(maps_folder, file_name))
+      file_name <- paste("gadm41_", data$si_country[i], '_0_pk.rds', sep = '')
+      map_data <- readRDS(file.path(paste0(maps_folder, "/gadm"), file_name)) |>
+        terra::unwrap()
 
       # 2.1 message to indicate status of loop, to avoid confussion if it takes
       #     a long time
@@ -218,14 +216,19 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
 
       # STEP 3
       # Get coordinates and transform them in SpatialPoints object
-      sp_points <- sp::SpatialPoints(
-        data[i, c('si_long', 'si_lat')],
-        proj4string = sp::CRS(sp::proj4string(map_data))
+      sp_points <- terra::vect(
+        data[i, c('si_long', 'si_lat')], geom = c("si_long", "si_lat"),
+        crs = "epsg:4326"
       )
+      # sp_points <- sp::SpatialPoints(
+      #   data[i, c('si_long', 'si_lat')],
+      #   proj4string = sp::CRS(sp::proj4string(map_data))
+      # )
 
       # STEP 4
       # Update results object, including the output of rgeos::gContains
-      res_tmp <- rgeos::gContains(map_data, sp_points)
+      res_tmp <- terra::is.related(map_data, sp_points, "contains")
+      # res_tmp <- rgeos::gContains(map_data, sp_points)
 
       results <- c(results, res_tmp)
 
@@ -233,19 +236,15 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
       # Create and saving the plot if plot = TRUE and is_inside_country = FALSE
 
       if (plot && !res_tmp) {
-        # 5.1 map data in adequate format to be able to plot
-        plot_data <- broom::tidy(map_data)
-        # 5.2 ggplot2 object
-        plot_map <- ggplot(plot_data, aes(x = long, y = lat)) +
-          geom_polygon(aes(group = group)) +
-          geom_point(aes(x = si_long, y = si_lat),
-                     data = data[i,], size = 2, color = 'red', alpha = 0.7) +
-          coord_map() +
+        # 5.1 ggplot2 object
+        plot_map <- ggplot() +
+          tidyterra::geom_spatvector(data = map_data) +
+          tidyterra::geom_spatvector(data = sp_points, size = 2, color = "red", alpha = 0.7) +
           labs(title = paste(data[i, c('si_country')],
                              data[i, c('si_name')], sep = ' - '))
-        # 5.3 see plot
+        # 5.2 see plot
         print(plot_map)
-        # 5.4 save plot in working directory
+        # 5.3 save plot in working directory
         ggsave(filename = paste(data[i, c('si_country')], '_',
                                 data[i, c('si_name')], '.pdf', sep = ''),
                plot = plot_map, width = 6, height = 4, units = 'cm')
@@ -924,6 +923,7 @@ qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
     }
 
     # STEP 3
+    browser()
     # Create SpatialPolygonsDataFrame object
     list_pol <- sapply(as.character(unique(biomes_df$biome)),
                        function(id_biome,df)
