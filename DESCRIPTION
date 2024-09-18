@@ -39,7 +39,8 @@ Imports:
     GSODR,
     soiltexture,
     solaR,
-    zoo
+    zoo,
+    geodata
 Suggests:
     knitr,
     testthat,

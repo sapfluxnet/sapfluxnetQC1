@@ -47,7 +47,7 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 
     # STEP 0.a
     # Initialise maps count and download count
-    existent_maps <- length(list.files(folder, pattern = '.rds'))
+    existent_maps <- length(list.files(paste0(folder, "/gadm"), pattern = '.rds'))
     downloaded_maps <- 0
 
     # STEP 1
@@ -58,25 +58,17 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 
         # STEP 2
         # Create file name
-        file_name <- paste(code, '_adm0.rds', sep = '')
+        file_name <- paste("gadm41_", code, '_0_pk.rds', sep = '')
 
         # STEP 3
         # Check if file exists, and if it exists, don't download the map
-        if (!file_name %in% list.files(path = folder, pattern = '.rds')) {
+        if (!file_name %in% list.files(path = paste0(folder, "/gadm"), pattern = '.rds')) {
 
           # STEP 4
-          # Create url name
-          url_name <- paste('http://biogeo.ucdavis.edu/data/gadm2.8/rds/',
-                            file_name,
-                            sep = '')
-
-          # STEP 5
           # Dowload file (In case of download error, indicate it and
           # try to skip to the next country)
           possibleError <- tryCatch({
-            download.file(url_name,
-                          file.path(folder, file_name),
-                          cacheOK = FALSE, quiet = TRUE)
+            geodata::gadm(code, level = 0, path = folder, resolution = 1)
             # STEP 5.a
             # Update downloaded maps count
             downloaded_maps <- downloaded_maps + 1
@@ -106,9 +98,9 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
     # Return a summary of downloaded maps and existent maps
     message(existent_maps, ' maps already downloaded and saved in ', folder)
     message(downloaded_maps, ' new maps downloaded')
-    message(length(list.files(folder, pattern = '.rds')) - (existent_maps + downloaded_maps),
+    message(length(list.files(paste0(folder, "/gadm"), pattern = '.rds')) - (existent_maps + downloaded_maps),
             ' empty maps created due to download error')
-    message(length(list.files(folder, pattern = '.rds')),
+    message(length(list.files(paste0(folder, "/gadm"), pattern = '.rds')),
             ' maps now in ', folder)
 
     # END function
@@ -203,6 +195,7 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
 
     # STEP 1
     # Downlaod maps, if already not downloaded
+    browser()
     qc_download_maps(data = data, folder = maps_folder,
                      parent_logger = parent_logger)
 
@@ -213,6 +206,7 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
     # STEP 3
     # Begin the for loop and read the map file
     for (i in 1:length(data[,1])) {
+      browser()
 
       file_name <- paste(data$si_country[i], '_adm0.rds', sep = '')
       map_data <- readRDS(file.path(maps_folder, file_name))
