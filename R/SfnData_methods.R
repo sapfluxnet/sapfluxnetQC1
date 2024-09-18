@@ -246,7 +246,7 @@ setMethod(
 #' @export
 setMethod(
   "[", signature(x = "SfnData", i = "numeric", j = "ANY", drop = "missing"),
-  function(x, i, j, k) {
+  function(x, i, j, k, drop) {
 
     # subsetting the slots for subset
     .sapf <- slot(x, "sapf_data")[i, j]
