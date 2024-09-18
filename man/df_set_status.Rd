@@ -4,8 +4,13 @@
 \alias{df_set_status}
 \title{Set the status file info}
 \usage{
-df_set_status(si_code, QC = NULL, LVL1 = NULL, LVL2 = NULL,
-  parent_logger = "test")
+df_set_status(
+  si_code,
+  QC = NULL,
+  LVL1 = NULL,
+  LVL2 = NULL,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{si_code}{Character vector indicating the site code}
@@ -32,21 +37,23 @@ of \code{LVL1} and \code{LVL2} a list with two elements, \code{STORED} and
 is always a character or NULL.
 }
 \seealso{
-Other Data Flow: \code{\link{df_accepted_to_lvl1}},
-  \code{\link{df_copy_templates}},
-  \code{\link{df_folder_structure}},
-  \code{\link{df_get_data_folders}},
-  \code{\link{df_get_status}},
-  \code{\link{df_lvl1_to_lvl2}},
-  \code{\link{df_lvl2_folder_structure}},
-  \code{\link{df_read_SfnData}},
-  \code{\link{df_received_to_accepted}},
-  \code{\link{df_rem_to_units}},
-  \code{\link{df_report_folder_creation}},
-  \code{\link{df_reset_data_status}},
-  \code{\link{df_start_status}},
-  \code{\link{df_warn_to_rem}},
-  \code{\link{df_whos_ready_to}},
-  \code{\link{df_write_SfnData}},
-  \code{\link{sfn_data_constructor}}
+Other Data Flow: 
+\code{\link{df_accepted_to_lvl1}()},
+\code{\link{df_copy_templates}()},
+\code{\link{df_folder_structure}()},
+\code{\link{df_get_data_folders}()},
+\code{\link{df_get_status}()},
+\code{\link{df_lvl1_to_lvl2}()},
+\code{\link{df_lvl2_folder_structure}()},
+\code{\link{df_read_SfnData}()},
+\code{\link{df_received_to_accepted}()},
+\code{\link{df_rem_to_units}()},
+\code{\link{df_report_folder_creation}()},
+\code{\link{df_reset_data_status}()},
+\code{\link{df_start_status}()},
+\code{\link{df_warn_to_rem}()},
+\code{\link{df_whos_ready_to}()},
+\code{\link{df_write_SfnData}()},
+\code{\link{sfn_data_constructor}()}
 }
+\concept{Data Flow}

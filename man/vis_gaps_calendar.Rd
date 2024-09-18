@@ -18,3 +18,4 @@ Plot is printed and a ggplot2 object is created if there is
 \description{
 Heatmap calendar to visualize gaps density
 }
+\concept{Visualization functions}

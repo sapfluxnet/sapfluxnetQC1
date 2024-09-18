@@ -13,6 +13,8 @@ An interactive app to flag datasets as ready to move to level 2
 Shiny app to flag data sets as ready to move to level 2
 }
 \seealso{
-Other apps: \code{\link{out_app}},
-  \code{\link{out_confirmation_app}}
+Other apps: 
+\code{\link{out_app}()},
+\code{\link{out_confirmation_app}()}
 }
+\concept{apps}

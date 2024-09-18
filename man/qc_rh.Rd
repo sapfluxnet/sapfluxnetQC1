@@ -23,8 +23,11 @@ factor that corrects for the slight departure of the behaviour of water in
 air from that of a pure gas is NOT implemented
 }
 \seealso{
-Other Unit conversion: \code{\link{qc_cm_cm_h}},
-  \code{\link{qc_transf_list}},
-  \code{\link{qc_transformation_vars}},
-  \code{\link{qc_units_process}}, \code{\link{qc_vpd}}
+Other Unit conversion: 
+\code{\link{qc_cm_cm_h}()},
+\code{\link{qc_transf_list}()},
+\code{\link{qc_transformation_vars}()},
+\code{\link{qc_units_process}()},
+\code{\link{qc_vpd}()}
 }
+\concept{Unit conversion}

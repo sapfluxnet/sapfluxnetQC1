@@ -4,8 +4,11 @@
 \alias{df_whos_ready_to}
 \title{Who is ready the desired level?}
 \usage{
-df_whos_ready_to(level = c("lvl2", "rem", "units", "lvl3"),
-  filter = c("all", "ready", "freeze", "done"), parent_logger = "test")
+df_whos_ready_to(
+  level = c("lvl2", "rem", "units", "lvl3"),
+  filter = c("all", "ready", "freeze", "done"),
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{level}{string indicating the level to check. Accepted values are
@@ -27,7 +30,7 @@ This function check the status files of all sites and list the status
 for the desired level.
 \code{filter} parameter can be used to filter the results by any status:
 
-\itemize{
+  \itemize{
     \item{\code{all} retrieves all the statuses}
     \item{\code{ready} retrieves only those sites marked to pass to level 2}
     \item{\code{freeze} retrieves only those sites freezed in level 1 yet}
@@ -35,21 +38,23 @@ for the desired level.
   }
 }
 \seealso{
-Other Data Flow: \code{\link{df_accepted_to_lvl1}},
-  \code{\link{df_copy_templates}},
-  \code{\link{df_folder_structure}},
-  \code{\link{df_get_data_folders}},
-  \code{\link{df_get_status}},
-  \code{\link{df_lvl1_to_lvl2}},
-  \code{\link{df_lvl2_folder_structure}},
-  \code{\link{df_read_SfnData}},
-  \code{\link{df_received_to_accepted}},
-  \code{\link{df_rem_to_units}},
-  \code{\link{df_report_folder_creation}},
-  \code{\link{df_reset_data_status}},
-  \code{\link{df_set_status}},
-  \code{\link{df_start_status}},
-  \code{\link{df_warn_to_rem}},
-  \code{\link{df_write_SfnData}},
-  \code{\link{sfn_data_constructor}}
+Other Data Flow: 
+\code{\link{df_accepted_to_lvl1}()},
+\code{\link{df_copy_templates}()},
+\code{\link{df_folder_structure}()},
+\code{\link{df_get_data_folders}()},
+\code{\link{df_get_status}()},
+\code{\link{df_lvl1_to_lvl2}()},
+\code{\link{df_lvl2_folder_structure}()},
+\code{\link{df_read_SfnData}()},
+\code{\link{df_received_to_accepted}()},
+\code{\link{df_rem_to_units}()},
+\code{\link{df_report_folder_creation}()},
+\code{\link{df_reset_data_status}()},
+\code{\link{df_set_status}()},
+\code{\link{df_start_status}()},
+\code{\link{df_warn_to_rem}()},
+\code{\link{df_write_SfnData}()},
+\code{\link{sfn_data_constructor}()}
 }
+\concept{Data Flow}

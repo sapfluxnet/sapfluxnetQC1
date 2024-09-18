@@ -28,7 +28,11 @@ presence of the variables needed for unit, radiation, solar time and others
 data transformations/conversions.
 }
 \seealso{
-Other Unit conversion: \code{\link{qc_cm_cm_h}},
-  \code{\link{qc_rh}}, \code{\link{qc_transf_list}},
-  \code{\link{qc_units_process}}, \code{\link{qc_vpd}}
+Other Unit conversion: 
+\code{\link{qc_cm_cm_h}()},
+\code{\link{qc_rh}()},
+\code{\link{qc_transf_list}()},
+\code{\link{qc_units_process}()},
+\code{\link{qc_vpd}()}
 }
+\concept{Unit conversion}

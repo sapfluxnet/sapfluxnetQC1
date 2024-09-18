@@ -61,34 +61,37 @@ Conversion of sap flow units to sapwood level
 }
 \section{Functions}{
 \itemize{
-\item \code{qc_cm_m_s}: Conversion of sap flow units from cm³·m⁻²·h⁻¹
+\item \code{qc_cm_m_s()}: Conversion of sap flow units from cm³·m⁻²·h⁻¹
 
-\item \code{qc_dm_dm_h}: Conversion of sap flow units from dm³·dm⁻²·h⁻¹
+\item \code{qc_dm_dm_h()}: Conversion of sap flow units from dm³·dm⁻²·h⁻¹
 
-\item \code{qc_dm_dm_s}: Conversion of sap flow units from dm³·dm⁻²·s⁻¹
+\item \code{qc_dm_dm_s()}: Conversion of sap flow units from dm³·dm⁻²·s⁻¹
 
-\item \code{qc_mm_mm_s}: Conversion of sap flow units from mm³·mm⁻²·s⁻¹
+\item \code{qc_mm_mm_s()}: Conversion of sap flow units from mm³·mm⁻²·s⁻¹
 
-\item \code{qc_g_m_s}: Conversion of sap flow units from g·m⁻²·s⁻¹
+\item \code{qc_g_m_s()}: Conversion of sap flow units from g·m⁻²·s⁻¹
 
-\item \code{qc_kg_m_h}: Conversion of sap flow units from kg·m⁻²·h⁻¹
+\item \code{qc_kg_m_h()}: Conversion of sap flow units from kg·m⁻²·h⁻¹
 
-\item \code{qc_kg_m_s}: Conversion of sap flow units from kg·m⁻²·s⁻¹
+\item \code{qc_kg_m_s()}: Conversion of sap flow units from kg·m⁻²·s⁻¹
 
-\item \code{qc_cm_h}: Conversion of sap flow units from cm³·h⁻¹
+\item \code{qc_cm_h()}: Conversion of sap flow units from cm³·h⁻¹
 
-\item \code{qc_dm_h}: Conversion of sap flow units from dm³·h⁻¹
+\item \code{qc_dm_h()}: Conversion of sap flow units from dm³·h⁻¹
 
-\item \code{qc_cm_s}: Conversion of sap flow units from cm³·s⁻¹
+\item \code{qc_cm_s()}: Conversion of sap flow units from cm³·s⁻¹
 
-\item \code{qc_g_h}: Conversion of sap flow units from g·h⁻¹
+\item \code{qc_g_h()}: Conversion of sap flow units from g·h⁻¹
 
-\item \code{qc_kg_h}: Conversion of sap flow units from kg·h⁻¹
+\item \code{qc_kg_h()}: Conversion of sap flow units from kg·h⁻¹
+
 }}
-
 \seealso{
-Other Unit conversion: \code{\link{qc_rh}},
-  \code{\link{qc_transf_list}},
-  \code{\link{qc_transformation_vars}},
-  \code{\link{qc_units_process}}, \code{\link{qc_vpd}}
+Other Unit conversion: 
+\code{\link{qc_rh}()},
+\code{\link{qc_transf_list}()},
+\code{\link{qc_transformation_vars}()},
+\code{\link{qc_units_process}()},
+\code{\link{qc_vpd}()}
 }
+\concept{Unit conversion}

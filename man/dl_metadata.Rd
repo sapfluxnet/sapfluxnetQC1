@@ -4,8 +4,7 @@
 \alias{dl_metadata}
 \title{Loading metadata from xls/xlsx}
 \usage{
-dl_metadata(file_name, sheet_name, si_code_loc = NULL,
-  parent_logger = "test")
+dl_metadata(file_name, sheet_name, si_code_loc = NULL, parent_logger = "test")
 }
 \arguments{
 \item{file_name}{Character vector indicating the name of the xls/xlsx file
@@ -34,10 +33,13 @@ retrieve and format the metadata. It's intended to be used as first step
 to load the metadata and start the metadata quality check.
 }
 \seealso{
-Other Data Loading Functions: \code{\link{dl_data_col_classes}},
-  \code{\link{dl_data}}, \code{\link{dl_dec_char_detect}},
-  \code{\link{dl_get_si_code}},
-  \code{\link{dl_na_char_generator}},
-  \code{\link{qc_as_timestamp}},
-  \code{\link{remove_dupcols}}
+Other Data Loading Functions: 
+\code{\link{dl_data}()},
+\code{\link{dl_data_col_classes}()},
+\code{\link{dl_dec_char_detect}()},
+\code{\link{dl_get_si_code}()},
+\code{\link{dl_na_char_generator}()},
+\code{\link{qc_as_timestamp}()},
+\code{\link{remove_dupcols}()}
 }
+\concept{Data Loading Functions}

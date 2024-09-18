@@ -33,8 +33,10 @@ The factor variables in environmental_md are \code{env_time_zone},
 }
 
 \seealso{
-Other Dictionaries: \code{\link{qc_plant_dics}},
-  \code{\link{qc_site_dics}},
-  \code{\link{qc_species_dics}},
-  \code{\link{qc_stand_dics}}
+Other Dictionaries: 
+\code{\link{qc_plant_dics}()},
+\code{\link{qc_site_dics}()},
+\code{\link{qc_species_dics}()},
+\code{\link{qc_stand_dics}()}
 }
+\concept{Dictionaries}

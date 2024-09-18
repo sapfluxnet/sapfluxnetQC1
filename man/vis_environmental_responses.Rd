@@ -4,8 +4,12 @@
 \alias{vis_environmental_responses}
 \title{Environmental responses plot}
 \usage{
-vis_environmental_responses(SfnData, env_var = "vpd", solar = FALSE,
-  parent_logger = "test")
+vis_environmental_responses(
+  SfnData,
+  env_var = "vpd",
+  solar = FALSE,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{SfnData}{SfnData object}
@@ -22,8 +26,10 @@ a \code{ggplot} object with the desired plot
 Plot the desired environmental funcion \emph{vs.} spaflow values
 }
 \seealso{
-Other Visualization Functions: \code{\link{vis_biome}},
-  \code{\link{vis_gap_lines}},
-  \code{\link{vis_location_biome}},
-  \code{\link{vis_plot_the_gap}}
+Other Visualization Functions: 
+\code{\link{vis_biome}()},
+\code{\link{vis_gap_lines}()},
+\code{\link{vis_location_biome}()},
+\code{\link{vis_plot_the_gap}()}
 }
+\concept{Visualization Functions}

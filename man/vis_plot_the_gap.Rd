@@ -4,8 +4,12 @@
 \alias{vis_plot_the_gap}
 \title{Plotting an histogram for gaps intervals/gaps coverage}
 \usage{
-vis_plot_the_gap(gaps_info, type = "gap_interval", binwidth = NULL,
-  parent_logger = "test")
+vis_plot_the_gap(
+  gaps_info,
+  type = "gap_interval",
+  binwidth = NULL,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{gaps_info}{Data frame as obtained from \code{\link{qc_mind_the_gap}}}
@@ -29,8 +33,10 @@ a ggplot object that can be modified adding layers, like any other ggplot
 object.
 }
 \seealso{
-Other Visualization Functions: \code{\link{vis_biome}},
-  \code{\link{vis_environmental_responses}},
-  \code{\link{vis_gap_lines}},
-  \code{\link{vis_location_biome}}
+Other Visualization Functions: 
+\code{\link{vis_biome}()},
+\code{\link{vis_environmental_responses}()},
+\code{\link{vis_gap_lines}()},
+\code{\link{vis_location_biome}()}
 }
+\concept{Visualization Functions}

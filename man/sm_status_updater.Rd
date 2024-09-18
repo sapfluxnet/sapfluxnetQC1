@@ -23,5 +23,7 @@ one and use the old to update the new one. Use it to generate updated
 status files for the sites after updating the QC package
 }
 \seealso{
-Other Server Management: \code{\link{sm_solarTIMESTAMP_adder}}
+Other Server Management: 
+\code{\link{sm_solarTIMESTAMP_adder}()}
 }
+\concept{Server Management}

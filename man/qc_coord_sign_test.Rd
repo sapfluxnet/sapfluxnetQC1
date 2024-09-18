@@ -4,8 +4,12 @@
 \alias{qc_coord_sign_test}
 \title{Coordinates sign test}
 \usage{
-qc_coord_sign_test(data, maps_folder = getwd(), special_countries = FALSE,
-  parent_logger = "test")
+qc_coord_sign_test(
+  data,
+  maps_folder = getwd(),
+  special_countries = FALSE,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{qc_check_coordinates}}
@@ -48,7 +52,9 @@ as the correct option can not be assured.
 }
 
 \seealso{
-Other Quality Check Functions: \code{\link{qc_check_coordinates}},
-  \code{\link{qc_download_maps}},
-  \code{\link{qc_fix_latlong_errors}}
+Other Quality Check Functions: 
+\code{\link{qc_check_coordinates}()},
+\code{\link{qc_download_maps}()},
+\code{\link{qc_fix_latlong_errors}()}
 }
+\concept{Quality Check Functions}

@@ -33,3 +33,4 @@ the characteristics of email directions
   \code{"^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"}
 }
 
+\concept{Quality Checks functions}

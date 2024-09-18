@@ -14,6 +14,8 @@ Interactive app to confirm the data after removing outliers, out of range
 values and other modifications
 }
 \seealso{
-Other apps: \code{\link{df_flag_to_lvl2_app}},
-  \code{\link{out_app}}
+Other apps: 
+\code{\link{df_flag_to_lvl2_app}()},
+\code{\link{out_app}()}
 }
+\concept{apps}

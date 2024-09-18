@@ -31,7 +31,10 @@ The factor variables in stand_md are \code{st_growth_condition},
 }
 
 \seealso{
-Other Dictionaries: \code{\link{qc_env_dics}},
-  \code{\link{qc_plant_dics}}, \code{\link{qc_site_dics}},
-  \code{\link{qc_species_dics}}
+Other Dictionaries: 
+\code{\link{qc_env_dics}()},
+\code{\link{qc_plant_dics}()},
+\code{\link{qc_site_dics}()},
+\code{\link{qc_species_dics}()}
 }
+\concept{Dictionaries}

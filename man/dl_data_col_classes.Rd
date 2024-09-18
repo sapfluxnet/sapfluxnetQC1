@@ -22,10 +22,13 @@ spreaded here and there in the data columns. This function checks for this
 problem and tries to fix it
 }
 \seealso{
-Other Data Loading Functions: \code{\link{dl_data}},
-  \code{\link{dl_dec_char_detect}},
-  \code{\link{dl_get_si_code}}, \code{\link{dl_metadata}},
-  \code{\link{dl_na_char_generator}},
-  \code{\link{qc_as_timestamp}},
-  \code{\link{remove_dupcols}}
+Other Data Loading Functions: 
+\code{\link{dl_data}()},
+\code{\link{dl_dec_char_detect}()},
+\code{\link{dl_get_si_code}()},
+\code{\link{dl_metadata}()},
+\code{\link{dl_na_char_generator}()},
+\code{\link{qc_as_timestamp}()},
+\code{\link{remove_dupcols}()}
 }
+\concept{Data Loading Functions}

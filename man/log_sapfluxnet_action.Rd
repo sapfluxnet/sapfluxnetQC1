@@ -15,6 +15,8 @@ log_sapfluxnet_action(msg, handler, ...)
 Custom logging handler action for SAPFLUXNET Project
 }
 \seealso{
-Other Logging Functions: \code{\link{log_sapfluxnet_format}},
-  \code{\link{log_sapfluxnet_setup}}
+Other Logging Functions: 
+\code{\link{log_sapfluxnet_format}()},
+\code{\link{log_sapfluxnet_setup}()}
 }
+\concept{Logging Functions}

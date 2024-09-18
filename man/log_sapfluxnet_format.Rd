@@ -16,6 +16,8 @@ Formatted message for log-record
 Custom log formatter for SAPFLUXNET Project
 }
 \seealso{
-Other Logging Functions: \code{\link{log_sapfluxnet_action}},
-  \code{\link{log_sapfluxnet_setup}}
+Other Logging Functions: 
+\code{\link{log_sapfluxnet_action}()},
+\code{\link{log_sapfluxnet_setup}()}
 }
+\concept{Logging Functions}

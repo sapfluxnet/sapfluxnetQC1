@@ -4,8 +4,14 @@
 \alias{dl_data}
 \title{Loading data from xls/xlsx ann csv files}
 \usage{
-dl_data(file_name, sheet_name, long = FALSE, n = 1000, na = "",
-  parent_logger = "test")
+dl_data(
+  file_name,
+  sheet_name,
+  long = FALSE,
+  n = 1000,
+  na = "",
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{file_name}{Character vector indicating the name of the file
@@ -37,10 +43,13 @@ retrieve and format the data. Also, in the case of csv files it uses
 data.table package.
 }
 \seealso{
-Other Data Loading Functions: \code{\link{dl_data_col_classes}},
-  \code{\link{dl_dec_char_detect}},
-  \code{\link{dl_get_si_code}}, \code{\link{dl_metadata}},
-  \code{\link{dl_na_char_generator}},
-  \code{\link{qc_as_timestamp}},
-  \code{\link{remove_dupcols}}
+Other Data Loading Functions: 
+\code{\link{dl_data_col_classes}()},
+\code{\link{dl_dec_char_detect}()},
+\code{\link{dl_get_si_code}()},
+\code{\link{dl_metadata}()},
+\code{\link{dl_na_char_generator}()},
+\code{\link{qc_as_timestamp}()},
+\code{\link{remove_dupcols}()}
 }
+\concept{Data Loading Functions}

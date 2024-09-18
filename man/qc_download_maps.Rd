@@ -26,7 +26,9 @@ This function fetch maps from \url{http://www.gadm.org/} if the map is not
 already present in the maps folder (by default, the working directory).
 }
 \seealso{
-Other Quality Check Functions: \code{\link{qc_check_coordinates}},
-  \code{\link{qc_coord_sign_test}},
-  \code{\link{qc_fix_latlong_errors}}
+Other Quality Check Functions: 
+\code{\link{qc_check_coordinates}()},
+\code{\link{qc_coord_sign_test}()},
+\code{\link{qc_fix_latlong_errors}()}
 }
+\concept{Quality Check Functions}

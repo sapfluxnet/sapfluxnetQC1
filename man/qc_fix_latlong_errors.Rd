@@ -4,8 +4,13 @@
 \alias{qc_fix_latlong_errors}
 \title{Fixing sign errors in coordinates}
 \usage{
-qc_fix_latlong_errors(data, maps_folder = getwd(), sign_errors = TRUE,
-  special_countries = FALSE, parent_logger = "test")
+qc_fix_latlong_errors(
+  data,
+  maps_folder = getwd(),
+  sign_errors = TRUE,
+  special_countries = FALSE,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{data}{Data frame with data coming from \code{\link{qc_check_coordinates}}
@@ -60,7 +65,9 @@ as the correct option can not be assured.
 }
 
 \seealso{
-Other Quality Check Functions: \code{\link{qc_check_coordinates}},
-  \code{\link{qc_coord_sign_test}},
-  \code{\link{qc_download_maps}}
+Other Quality Check Functions: 
+\code{\link{qc_check_coordinates}()},
+\code{\link{qc_coord_sign_test}()},
+\code{\link{qc_download_maps}()}
 }
+\concept{Quality Check Functions}

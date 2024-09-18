@@ -18,6 +18,8 @@ log_sapfluxnet_setup(file_name, logger, level = "DEBUG")
 Setting up the SAPFLUXNET Project log handler
 }
 \seealso{
-Other Logging Functions: \code{\link{log_sapfluxnet_action}},
-  \code{\link{log_sapfluxnet_format}}
+Other Logging Functions: 
+\code{\link{log_sapfluxnet_action}()},
+\code{\link{log_sapfluxnet_format}()}
 }
+\concept{Logging Functions}

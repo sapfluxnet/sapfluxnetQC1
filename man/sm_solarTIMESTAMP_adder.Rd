@@ -22,5 +22,7 @@ pre-solarTIMESTAMP version lacks this slot, which will cause problems in the
 data flow. This function looks for level 1 SfnData object and update it.
 }
 \seealso{
-Other Server Management: \code{\link{sm_status_updater}}
+Other Server Management: 
+\code{\link{sm_status_updater}()}
 }
+\concept{Server Management}

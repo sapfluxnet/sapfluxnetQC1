@@ -4,8 +4,13 @@
 \alias{rep_sfn_render}
 \title{Render the report}
 \usage{
-rep_sfn_render(template, output_file = NULL, output_dir = NULL,
-  parent_logger = "test", ...)
+rep_sfn_render(
+  template,
+  output_file = NULL,
+  output_dir = NULL,
+  parent_logger = "test",
+  ...
+)
 }
 \arguments{
 \item{template}{Character vector indicating the name of the template. It must
@@ -24,3 +29,4 @@ Nothing, report is generated in the Report folder (default) or the
 \description{
 Wrap around rmarkdown::render function to generate the automatic reports
 }
+\concept{Report Functions}

@@ -4,8 +4,13 @@
 \alias{qc_check_coordinates}
 \title{Site coordinates checking}
 \usage{
-qc_check_coordinates(data, maps_folder = getwd(), plot = FALSE,
-  text_report = TRUE, parent_logger = "test")
+qc_check_coordinates(
+  data,
+  maps_folder = getwd(),
+  plot = FALSE,
+  text_report = TRUE,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{data}{Data frame with data. At least, longitude, latitude, country and
@@ -37,7 +42,9 @@ within the country limits. It only creates a data frame containing country,
 site and a logical variable indicating if coordinates are correct.
 }
 \seealso{
-Other Quality Check Functions: \code{\link{qc_coord_sign_test}},
-  \code{\link{qc_download_maps}},
-  \code{\link{qc_fix_latlong_errors}}
+Other Quality Check Functions: 
+\code{\link{qc_coord_sign_test}()},
+\code{\link{qc_download_maps}()},
+\code{\link{qc_fix_latlong_errors}()}
 }
+\concept{Quality Check Functions}

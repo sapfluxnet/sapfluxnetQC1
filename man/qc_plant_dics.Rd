@@ -32,8 +32,10 @@ The factor variables in plant_md are \code{pl_social}, \code{pl_sens_meth},
 }
 
 \seealso{
-Other Dictionaries: \code{\link{qc_env_dics}},
-  \code{\link{qc_site_dics}},
-  \code{\link{qc_species_dics}},
-  \code{\link{qc_stand_dics}}
+Other Dictionaries: 
+\code{\link{qc_env_dics}()},
+\code{\link{qc_site_dics}()},
+\code{\link{qc_species_dics}()},
+\code{\link{qc_stand_dics}()}
 }
+\concept{Dictionaries}

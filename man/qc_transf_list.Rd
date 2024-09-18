@@ -28,8 +28,11 @@ level, allowing automatized transformations depending on the available
 variables.
 }
 \seealso{
-Other Unit conversion: \code{\link{qc_cm_cm_h}},
-  \code{\link{qc_rh}},
-  \code{\link{qc_transformation_vars}},
-  \code{\link{qc_units_process}}, \code{\link{qc_vpd}}
+Other Unit conversion: 
+\code{\link{qc_cm_cm_h}()},
+\code{\link{qc_rh}()},
+\code{\link{qc_transformation_vars}()},
+\code{\link{qc_units_process}()},
+\code{\link{qc_vpd}()}
 }
+\concept{Unit conversion}

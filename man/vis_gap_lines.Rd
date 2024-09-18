@@ -4,8 +4,13 @@
 \alias{vis_gap_lines}
 \title{TIMESTAMP with gaps visualization}
 \usage{
-vis_gap_lines(sapf_gaps = NULL, env_gaps = NULL, sapf_intervals = NULL,
-  env_intervals = NULL, parent_logger = "test")
+vis_gap_lines(
+  sapf_gaps = NULL,
+  env_gaps = NULL,
+  sapf_intervals = NULL,
+  env_intervals = NULL,
+  parent_logger = "test"
+)
 }
 \arguments{
 \item{sapf_gaps}{Data frame with the sapflow gap info as obtained from
@@ -27,8 +32,10 @@ A ggplot object with the basic lines plot, no themes added.
 Concordance lines plot with gaps
 }
 \seealso{
-Other Visualization Functions: \code{\link{vis_biome}},
-  \code{\link{vis_environmental_responses}},
-  \code{\link{vis_location_biome}},
-  \code{\link{vis_plot_the_gap}}
+Other Visualization Functions: 
+\code{\link{vis_biome}()},
+\code{\link{vis_environmental_responses}()},
+\code{\link{vis_location_biome}()},
+\code{\link{vis_plot_the_gap}()}
 }
+\concept{Visualization Functions}
