@@ -54,7 +54,8 @@ qc_mind_the_gap_eff <- function(data, trim = FALSE, parent_logger = 'test') {
     gap_points_func <- function(var) {
       # temp data for each variable
       temp_data <- data %>%
-        dplyr::select_('TIMESTAMP', var)
+        # dplyr::select_('TIMESTAMP', var)
+        dplyr::select(dplyr::all_of(c('TIMESTAMP', var)))
 
       # start value (with vapply)
       start_vec <- vapply(1:length(temp_data[[2]]), function(i) {

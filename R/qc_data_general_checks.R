@@ -682,8 +682,8 @@ qc_timestamp_errors <- function(data, timestep = 15,
 
     # STEP 2
     # Create the results object
-    res <- dplyr::data_frame(Interval = lubridate::int_diff(data$TIMESTAMP),
-                             Int_length = lubridate::int_length(Interval)) %>%
+    res <- dplyr::tibble(Interval = lubridate::int_diff(data$TIMESTAMP),
+                         Int_length = lubridate::int_length(Interval)) %>%
       # step neede to maintain the interval format
       dplyr::mutate(Interval = as.character(Interval)) %>%
       # drop the length values equal to the timestep plus/minus 59 seconds
@@ -761,12 +761,14 @@ qc_time_interval <- function(data, parent_logger = 'test') {
       res <- dplyr::bind_rows(
         res,
         {data %>%
-            dplyr::select_('TIMESTAMP', var) %>%
+            # dplyr::select_('TIMESTAMP', var) %>%
+            dplyr::select(dplyr::all_of(c('TIMESTAMP', var))) %>%
             # 2.1 Filter to avoid NAs
-            dplyr::filter_(.dots = dots) %>%
+            # dplyr::filter_(.dots = dots) %>%
+            dplyr::filter(!is.na(.data[[var]])) %>%
             # 2.2 Summarise to obtain the first and last value od TIMESTAMP
-            dplyr::summarise(t0 = first(TIMESTAMP),
-                             tf = last(TIMESTAMP)) %>%
+            dplyr::summarise(t0 = dplyr::first(TIMESTAMP),
+                             tf = dplyr::last(TIMESTAMP)) %>%
             # 2.3 Add the object name
             dplyr::mutate(Object = var) %>%
             # 2.4 Reorder variables
@@ -865,7 +867,7 @@ qc_timestamp_concordance <- function(sapf_data = NULL, env_data = NULL,
         dplyr::mutate(Object = factor(Object, levels = rev(unique(Object)))) %>%
         dplyr::group_by(Object, Time_point) %>%
         ggplot(aes(x = Value, y = Object, colour = Object)) +
-        geom_line(size = 2) +
+        geom_line(linewidth = 2) +
         scale_colour_manual(values = c(rep('darkgreen',
                                            length(env_intervals$Object)),
                                        rep('steelblue',

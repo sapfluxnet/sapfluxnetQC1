@@ -49,6 +49,7 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
     # Initialise maps count and download count
     existent_maps <- length(list.files(paste0(folder, "/gadm"), pattern = '.rds'))
     downloaded_maps <- 0
+    errored_maps <- 0
 
     # STEP 1
     # Begin for loop, and check if country code is NA, and if it is, don't do
@@ -68,27 +69,27 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
           # Dowload file (In case of download error, indicate it and
           # try to skip to the next country)
           possibleError <- tryCatch({
-            geodata::gadm(code, level = 0, path = folder, resolution = 1)
-            # STEP 5.a
-            # Update downloaded maps count
-            downloaded_maps <- downloaded_maps + 1
+            # STEP 5
+            # Download the file
+            geodata::gadm(code, level = 0, path = folder, resolution = 1)            
           },
           error = function(e) {
             message('Download for ', file_name,
-                    ' failed, check if ISO code are correct and/or if',
-                    ' network connection is active. ',
-                    'An empty file has been created with the bad iso code.')
+                    ' failed, check if ISO codes are correct and/or if',
+                    ' network connection is active. ')
           },
           warning = function(e) {
             message('Download for ', file_name,
-                    ' failed, check if ISO code are correct and/or if ',
-                    'network connection is active. ',
-                    'An empty file has been created with the bad iso code.')
+                    ' failed, check if ISO codes are correct and/or if ',
+                    'network connection is active. ')
           }
             )
 
-          if (inherits(possibleError, "error")) {
+          if (is.null(possibleError)) {
+            errored_maps <- errored_maps + 1
             next
+          } else {
+            downloaded_maps <- downloaded_maps + 1
           }
         }
     }
@@ -98,8 +99,9 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
     # Return a summary of downloaded maps and existent maps
     message(existent_maps, ' maps already downloaded and saved in ', folder)
     message(downloaded_maps, ' new maps downloaded')
-    message(length(list.files(paste0(folder, "/gadm"), pattern = '.rds')) - (existent_maps + downloaded_maps),
-            ' empty maps created due to download error')
+    message(errored_maps, ' maps errors (not downloaded)')
+    # message(length(list.files(paste0(folder, "/gadm"), pattern = '.rds')) - (existent_maps + downloaded_maps),
+    #         ' empty maps created due to download error')
     message(length(list.files(paste0(folder, "/gadm"), pattern = '.rds')),
             ' maps now in ', folder)
 
@@ -376,10 +378,14 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
       # STEP 2
       # Check if is_inside_country is FALSE, and if it is, read the map data
       if (!data$is_inside_country[i]) {
-        file_name <- paste(data$si_country[i], '_adm0.rds', sep = '')
+        file_name <- paste("gadm41_", data$si_country[i], '_0_pk.rds', sep = '')
 
         # 2.1 map data is read and transformed to tidy format, to easy check signs
-        country_map <- broom::tidy(readRDS(file.path(maps_folder, file_name)))
+        country_map <- readRDS(file.path(maps_folder, "gadm", file_name)) |>
+          terra::unwrap() |>
+          terra::geom() |>
+          as.data.frame() |>
+          dplyr::rename(long = x, lat = y)
 
         # STEP 3
         # Establish the main sign of country latitude and longitude
@@ -410,7 +416,7 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
         # Testing if provided coordinates are sign exchanged
 
         # 4.1 latitude
-        if ( data$si_lat[i] < 0) {
+        if (data$si_lat[i] < 0) {
           if (country_lat == 'positive') {
             lat_changed <- c(lat_changed, TRUE)
           }

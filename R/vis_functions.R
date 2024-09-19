@@ -141,7 +141,7 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
     if (type == 'gap_coverage') {
       res_plot <- gaps_info %>%
         dplyr::mutate(gap_coverage = gap_coverage * 100) %>%
-        ggplot(aes_string(x = type)) +
+        ggplot(aes(x = .data[[type]])) +
         geom_histogram(binwidth = 5,
                        fill = viridis::viridis(1)) +
         scale_x_continuous(limits = c(NA, 105)) +
@@ -150,7 +150,7 @@ vis_plot_the_gap <- function(gaps_info, type = 'gap_interval', binwidth = NULL,
     } else {
 
       # 1.2 gap_interval special effects
-      res_plot <- ggplot(gaps_info, aes_string(x = type)) +
+      res_plot <- ggplot(gaps_info, aes(x = .data[[type]])) +
         geom_histogram(binwidth = binwidth,
                        fill = viridis::viridis(1)) +
         labs(x = 'Gap interval (minutes)', y = 'Count') +
@@ -329,10 +329,10 @@ vis_gap_lines <- function(sapf_gaps = NULL, env_gaps = NULL,
 
 theme_sfn <- function(base_size = 10, base_family = "Lato") {
   half_line <- base_size/2
-  theme(line = element_line(colour = "black", size = 1,
+  theme(line = element_line(colour = "black", linewidth = 1,
                             linetype = 1, lineend = "butt"),
         rect = element_rect(fill = NA, colour = "black",
-                            size = 1, linetype = 1),
+                            linewidth = 1, linetype = 1),
         text = element_text(family = base_family, face = "plain",
                             colour = "black", size = base_size,
                             lineheight = 0.9, hjust = 0.5,
@@ -346,7 +346,7 @@ theme_sfn <- function(base_size = 10, base_family = "Lato") {
                                    vjust = 1),
         axis.text.y = element_text(margin = margin(r = 0.8 * half_line*2),
                                    hjust = 1),
-        axis.ticks = element_line(colour = "black", size = 0.5),
+        axis.ticks = element_line(colour = "black", linewidth = 0.5),
         axis.ticks.length = unit(-half_line, "pt"),
         axis.title.x = element_text(margin = margin(t = 0.8 * half_line,
                                                     b = 0.8 * half_line/2)),
@@ -362,7 +362,7 @@ theme_sfn <- function(base_size = 10, base_family = "Lato") {
         legend.text = element_text(size = rel(0.8)),
         legend.text.align = NULL,
         legend.title = element_text(hjust = 0.5),
-        legend.title.align = 0,
+        # legend.title.align = 0,
         legend.position = "right",
         legend.direction = NULL,
         legend.justification = "top",
@@ -378,7 +378,7 @@ theme_sfn <- function(base_size = 10, base_family = "Lato") {
         panel.spacing.x = NULL,
         panel.spacing.y = NULL,
         panel.ontop = TRUE,
-        strip.background = element_rect(size = rel(0.3)),
+        strip.background = element_rect(linewidth = rel(0.3)),
         strip.text = element_text(colour = "grey10", size = rel(0.8)),
         strip.text.x = element_text(margin = margin(t = half_line,
                                                     b = half_line)),

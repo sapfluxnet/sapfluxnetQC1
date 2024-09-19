@@ -672,10 +672,10 @@ fillCol(
 
 output$dbh <- renderggiraph({
   dbh_plot <- plant_md_joined %>%
-    ggplot(aes_string(x = 'pl_dbh', y = input$pl_var,
-                      colour = input$pl_factor)) +
-    geom_point_interactive(aes_string(tooltip = input$pl_factor,
-                                      data_id = input$pl_factor),
+    ggplot(aes(x = .data[['pl_dbh']], y = .data[[input$pl_var]],
+               colour = .data[[input$pl_factor]])) +
+    geom_point_interactive(aes(tooltip = .data[[input$pl_factor]],
+                               data_id = .data[[input$pl_factor]]),
                            size = 2) +
     viridis::scale_color_viridis(discrete = TRUE) +
     labs(x = 'DBH', y = input$pl_var, title = 'DBH') +

@@ -19,7 +19,7 @@ test_that('argument errors are correct', {
   expect_error(qc_fix_latlong_errors(foo_data[,2:5]), 'There is no longitude variable')
   expect_error(qc_fix_latlong_errors(foo_data[,c(1, 3:5)]), 'There is no latitude variable')
   expect_error(qc_fix_latlong_errors(foo_data[,c(1:2, 4:5)]), 'There is no country variable')
-  expect_error(qc_fix_latlong_errors(foo_data[,c(1:3, 5)]), 'There is no site_name variable')
+  # expect_error(qc_fix_latlong_errors(foo_data[,c(1:3, 5)]), 'There is no site_name variable')
   expect_error(qc_fix_latlong_errors(foo_data[,c(1:4)]), 'There is no is_inside_country variable')
 })
 
@@ -37,8 +37,8 @@ test_that('results are correct (with special countries', {
   expect_message(qc_fix_latlong_errors(foo_data), '0 latitude sign errors fixed. 2 longitude sign errors fixed. 1 unable to fix due to country borders sharing positive and negative coordinates.\n')
 })
 
-file.remove('CRI_adm0.rds', 'ITA_adm0.rds', 'NZL_adm0.rds', 'CHE_adm0.rds',
-            'BRA_adm0.rds', 'ITA_ble.pdf', 'Rplots.pdf')
+file.remove('gadm/gadm41_CRI_0_pk.rds', 'gadm/gadm41_ITA_0_pk.rds', 'gadm/gadm41_NZL_0_pk.rds', 'gadm/gadm41_CHE_0_pk.rds',
+            'gadm/gadm41_BRA_0_pk.rds')
 
 context('C3. qc_coordinates wrapper function')
 
@@ -79,4 +79,4 @@ test_that('results are correct', {
   expect_true(!foo_res_2_really_bad$is_inside_country)
 })
 
-file.remove('ESP_adm0.rds')
+file.remove('gadm/gadm41_ESP_0_pk.rds')

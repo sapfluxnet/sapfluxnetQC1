@@ -8,3 +8,5 @@ tests/testthat/test.log
 tests/testthat/main_test.log
 inst/diagrams_docs
 gadm/
+test.log
+*.pdf

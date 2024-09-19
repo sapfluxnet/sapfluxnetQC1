@@ -200,9 +200,12 @@ out_app <- function(parent_logger = 'test') {
           outliers_tab <- get_sapf_flags(sfndata) %>%
             dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
             dplyr::mutate(index = rownames(.)) %>%
-            dplyr::select_('index', 'TIMESTAMP', variable) %>%
-            dplyr::filter_(lazyeval::interp(quote(stringr::str_detect(x, 'OUT_WARN') | stringr::str_detect(x, 'RANGE_WARN')),
-                                            x = as.name(variable)))
+            # dplyr::select_('index', 'TIMESTAMP', variable) %>%
+            dplyr::select(dplyr::all_of(c('index', 'TIMESTAMP', variable))) %>%
+            # dplyr::filter_(lazyeval::interp(quote(stringr::str_detect(x, 'OUT_WARN') | stringr::str_detect(x, 'RANGE_WARN')),
+            #                                 x = as.name(variable)))            
+            dplyr::filter(lazyeval::interp(quote(stringr::str_detect(x, 'OUT_WARN') | stringr::str_detect(x, 'RANGE_WARN')),
+                                           x = as.name(variable)))
           outliers_tab
         })
 
@@ -211,7 +214,8 @@ out_app <- function(parent_logger = 'test') {
           selected <- input$out_table_rows_selected
           variable <- input$tree_env
           indexes <- out_table_gen() %>%
-            dplyr::select_('index') %>%
+            # dplyr::select_('index') %>%
+            dplyr::select(dplyr::all_of(c('index'))) %>%
             unlist()
 
           if (length(selected)) {
@@ -321,7 +325,8 @@ out_app <- function(parent_logger = 'test') {
                          paste0(input$tree_env, '_out'),
                          paste0(input$tree_env, '_range'))
           data_dg %>%
-            dplyr::select_(var_names[1], var_names[2], var_names[3]) %>%
+            # dplyr::select_(var_names[1], var_names[2], var_names[3]) %>%
+            dplyr::select(dplyr::all_of(c(var_names[1], var_names[2], var_names[3]))) %>%
             xts::xts(order.by = data_dg$TIMESTAMP,
                      tz = attr(data_dg$TIMESTAMP, 'tzone')) %>%
             dygraphs::dygraph('Time Series') %>%
@@ -728,7 +733,8 @@ out_confirmation_app <- function(parent_logger = 'test') {
                          paste0(input$tree_env, '_out'),
                          paste0(input$tree_env, '_range'))
           data_dg %>%
-            dplyr::select_(var_names[1], var_names[2], var_names[3]) %>%
+            # dplyr::select_(var_names[1], var_names[2], var_names[3]) %>%
+            dplyr::select(dplyr::all_of(c(var_names[1], var_names[2], var_names[3]))) %>%
             xts::xts(order.by = data_dg$TIMESTAMP,
                      tz = attr(data_dg$TIMESTAMP, 'tzone')) %>%
             dygraphs::dygraph('time_series') %>%

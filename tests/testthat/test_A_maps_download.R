@@ -29,12 +29,10 @@ test_that('download works', {
                          si_country = c(rep('IRE', 2), rep('IRL', 3)))
 
   expect_message(qc_download_maps(foo_data), '1 new maps downloaded')
-  file.remove('IRE_adm0.rds')
-  file.remove('IRL_adm0.rds')
+  file.remove('./gadm/gadm41_IRL_0_pk.rds')
 
-  expect_message(qc_download_maps(foo_data), '1 empty maps created due to download error')
-  expect_true(file_test("-f", 'IRE_adm0.rds'))
-  expect_true(file_test("-f", 'IRL_adm0.rds'))
-  file.remove('IRE_adm0.rds')
-  file.remove('IRL_adm0.rds')
+  expect_message(qc_download_maps(foo_data), 'not downloaded')
+  expect_false(file_test("-f", './gadm/gadm41_IRE_0_pk.rds'))
+  expect_true(file_test("-f", './gadm/gadm41_IRL_0_pk.rds'))
+  file.remove('./gadm/gadm41_IRL_0_pk.rds')
 })

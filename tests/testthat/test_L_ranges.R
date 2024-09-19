@@ -91,18 +91,42 @@ test_that('fake flags values have changed correctly', {
   env_flags_res <- get_env_flags(res)
   sapf_flags_res <- get_sapf_flags(res)
 
-  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REMOVED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REMOVED')))
-  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
-  expect_true(all(stringr::str_detect(env_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[20001:20005, -1])), 'OUT_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[20001:20005, -1])), 'OUT_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[20006:20010, -1])), 'RANGE_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[20006:20010, -1])), 'RANGE_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[20011:20015, -1])), 'MANUAL_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[20011:20015, -1])), 'MANUAL_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[-c(20001:20005), -1])), 'OUT_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[-c(20006:20010), -1])), 'RANGE_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[-c(20011:20015), -1])), 'MANUAL_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[-c(20001:20005), -1])), 'OUT_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[-c(20006:20010), -1])), 'RANGE_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[-c(20011:20015), -1])), 'MANUAL_REMOVED'))
+  )
 })
 
 test_that('values are substituted', {
@@ -146,18 +170,42 @@ test_that('fake flags values have changed correctly', {
   env_flags_res <- get_env_flags(res)
   sapf_flags_res <- get_sapf_flags(res)
 
-  expect_true(all(stringr::str_detect(env_flags_res[20001:20005, -1], 'OUT_REMOVED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20001:20005, -1], 'OUT_REMOVED')))
-  expect_true(all(stringr::str_detect(env_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
-  expect_true(all(stringr::str_detect(sapf_flags_res[20006:20010, -1], 'RANGE_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[20011:20015, -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
-  expect_false(any(stringr::str_detect(env_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20001:20005), -1], 'OUT_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20006:20010), -1], 'RANGE_REMOVED')))
-  expect_false(any(stringr::str_detect(sapf_flags_res[-c(20011:20015), -1], 'MANUAL_REMOVED')))
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[20001:20005, -1])), 'OUT_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[20001:20005, -1])), 'OUT_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[20006:20010, -1])), 'RANGE_REMOVED'))
+  )
+  expect_true(all(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[20006:20010, -1])), 'RANGE_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[20011:20015, -1])), 'MANUAL_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[20011:20015, -1])), 'MANUAL_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[-c(20001:20005), -1])), 'OUT_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[-c(20006:20010), -1])), 'RANGE_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(env_flags_res[-c(20011:20015), -1])), 'MANUAL_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[-c(20001:20005), -1])), 'OUT_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[-c(20006:20010), -1])), 'RANGE_REMOVED'))
+  )
+  expect_false(any(stringr::str_detect(
+    as.vector(as.matrix(sapf_flags_res[-c(20011:20015), -1])), 'MANUAL_REMOVED'))
+  )
 })
 
 test_that('values are substituted', {

@@ -1091,24 +1091,24 @@ sfn_data_constructor <- function(sapf_data = NULL, env_data = NULL,
     .sapf_flags <- sapf_data[,-1] %>%
       is.na() %>%
       tibble::as_tibble() %>%
-      dplyr::mutate_all(dplyr::funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
-      dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
+      dplyr::mutate_all(list(~ replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      dplyr::mutate_all(list(~ replace(., which(. == FALSE), ""))) %>%
       dplyr::mutate(TIMESTAMP = sapf_data$TIMESTAMP) %>%
       dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
       dplyr::arrange(TIMESTAMP) %>%
       dplyr::select(-TIMESTAMP) %>%
-      dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
+      dplyr::mutate_all(list(~ replace(., which(is.na(.)), "NA_ADDED")))
 
     .env_flags <- env_data[,-1] %>%
       is.na() %>%
       tibble::as_tibble() %>%
-      dplyr::mutate_all(dplyr::funs(replace(., which(. == TRUE), "NA_PRESENT"))) %>%
-      dplyr::mutate_all(dplyr::funs(replace(., which(. == FALSE), ""))) %>%
+      dplyr::mutate_all(list(~ replace(., which(. == TRUE), "NA_PRESENT"))) %>%
+      dplyr::mutate_all(list(~ replace(., which(. == FALSE), ""))) %>%
       dplyr::mutate(TIMESTAMP = env_data$TIMESTAMP) %>%
       dplyr::full_join(timestamp_join, "TIMESTAMP") %>%
       dplyr::arrange(TIMESTAMP) %>%
       dplyr::select(-TIMESTAMP) %>%
-      dplyr::mutate_all(dplyr::funs(replace(., which(is.na(.)), "NA_ADDED")))
+      dplyr::mutate_all(list(~ replace(., which(is.na(.)), "NA_ADDED")))
 
     timestamp_join <- timestamp_join %>% dplyr::arrange(TIMESTAMP)
 

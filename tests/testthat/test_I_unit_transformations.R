@@ -249,7 +249,7 @@ test_that('simple conversions (sapw2sapw or plant2plant) work without sapw_area'
 context('I4. Radiation unit conversion')
 
 env_hd <- suppressWarnings(suppressMessages(dl_data('foo_env.csv','environmental_hd')))
-ppfd_in <- LakeMetabolizer::sw.to.par.base(env_hd$sw_in)
+ppfd_in <- env_hd$sw_in * 2.114
 
 test_that('argument checks work', {
   expect_error(qc_rad_conversion('not a data frame'),
@@ -377,6 +377,7 @@ results_df <- data.frame(
               268.21702, 395.35217, 519.61563, 638.88085, 751.10679, 854.37289, 946.91193,
               1027.14026)
 )
+attr(results_df$solarTIMESTAMP, "tzone") <- "UTC"
 
 test_that('conversion is made correctly', {
   expect_equal(

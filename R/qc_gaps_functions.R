@@ -65,7 +65,8 @@ qc_mind_the_gap <- function(data, trim = FALSE, parent_logger = 'test') {
     # 2.1 for each variable
     for (var in names(data[,-1])) {
       temp_data <- data %>%
-        dplyr::select_('TIMESTAMP', var)
+        # dplyr::select_('TIMESTAMP', var)
+        dplyr::select(dplyr::all_of(c('TIMESTAMP', var)))
 
       # 2.2 for each value
       for (i in 1:length(temp_data[[2]])) {

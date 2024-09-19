@@ -94,7 +94,8 @@ dl_na_char_generator <- function(parent_logger = 'test') {
       # Excel errors (castilian)
       "#\xadVALOR!", "#\xadDIV/0!", "#\xa1DIV/0!", "VERDADERO", 'FALSO', '#\xadREF!',
       # Excel errors (english)
-      '#VALUE!', '#DIV/0!', 'TRUE', 'FALSE', '#REF!',
+      '#VALUE!', '#DIV/0!', '#REF!',
+      # "TRUE", "FALSE",
       # Excel errors (generic and rare characters)
       '#�DIV/0!',
       # strange, really strange things
