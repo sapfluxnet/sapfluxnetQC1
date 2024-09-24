@@ -355,7 +355,7 @@ dl_metadata <- function(file_name, sheet_name,
     # 1.1 If sheet is site_md we have to skip first line
     if (sheet_name == 'site_md') {
       # read the sheet
-      res <- readxl::read_excel(file_name, sheet_name, skip = 1) %>%
+      res <- suppressMessages(readxl::read_excel(file_name, sheet_name, skip = 1)) %>%
         # check for duplicate columns
         remove_dupcols() %>%
         # select only the name and the value of the variables
@@ -372,7 +372,7 @@ dl_metadata <- function(file_name, sheet_name,
     # 1.2 If sheet is stand or environmental, load as it is
     if (any(sheet_name == 'stand_md', sheet_name == 'environmental_md')) {
       # read the sheet
-      res <- readxl::read_excel(file_name, sheet_name) %>%
+      res <- suppressMessages(readxl::read_excel(file_name, sheet_name)) %>%
         # check for duplicate columns
         remove_dupcols() %>%
         # select only the name and the value of the variables
@@ -391,7 +391,7 @@ dl_metadata <- function(file_name, sheet_name,
     # 1.3 If sheet is plant_md we need to take extra steps to tidy the data
     if (sheet_name == 'plant_md') {
       # read the sheet
-      res <- readxl::read_excel(file_name, sheet_name) %>%
+      res <- suppressMessages(readxl::read_excel(file_name, sheet_name)) %>%
         # check for duplicate columns
         remove_dupcols() %>%
         # select only the name and the value of the variables
@@ -418,7 +418,7 @@ dl_metadata <- function(file_name, sheet_name,
     #     but with different final filter
     if (sheet_name == 'species_md') {
       # read the sheet
-      res <- readxl::read_excel(file_name, sheet_name) %>%
+      res <- suppressMessages(readxl::read_excel(file_name, sheet_name)) %>%
         # check for duplicate columns
         remove_dupcols() %>%
         # select only the name and the value of the variables

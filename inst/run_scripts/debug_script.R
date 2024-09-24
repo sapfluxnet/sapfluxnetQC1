@@ -5,9 +5,9 @@ library(DT)
 
 params <- list(
   wd = '../',
-  md_file = 'foo.xlsx',
-  sapf_data_file = 'foo.xlsx',
-  env_data_file = 'foo.xlsx',
+  md_file = 'tests/testthat/foo.xlsx',
+  sapf_data_file = 'tests/testthat/foo.xlsx',
+  env_data_file = 'tests/testthat/foo.xlsx',
   code = 'foo'
 )
 

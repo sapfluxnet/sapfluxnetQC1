@@ -1,6 +1,6 @@
 ################################################################################
 #' Verify provided species names (spelling and correctness)
-#' 
+#'
 #' [qc_species_names()] uses
 #' ([`rWCVP`](https://matildabrown.github.io/rWCVP/index.html)) package to
 #' verify the species introduced by the contributors and fix spelling errors.
@@ -88,7 +88,7 @@ qc_species_names_fix <- function(data, parent_logger = 'test') {
 
 # START
 # Function declaration
-qc_species_names_info <- function(species, conservatism = 0.9,
+qc_species_names_info <- function(species, #conservatism = 0.9,
                                   parent_logger = 'test') {
 
   # Using calling handlers to manage errors
@@ -99,12 +99,12 @@ qc_species_names_info <- function(species, conservatism = 0.9,
     if (!is.vector(species, 'character')) {
       stop('species object is not a character vector, please verify data object')
     }
-    # Warning if conservatism is under 0.75
-    if (conservatism < 0.75) {
-      message('Conservatism value for spelling algorithm is under 0.75',
-              ' and this can be cause of species name changes.',
-              ' Maybe manual fix of some species should be done')
-    }
+    # # Warning if conservatism is under 0.75
+    # if (conservatism < 0.75) {
+    #   message('Conservatism value for spelling algorithm is under 0.75',
+    #           ' and this can be cause of species name changes.',
+    #           ' Maybe manual fix of some species should be done')
+    # }
 
     # STEP 1
     # Trimming blank spaces in both sides
@@ -117,6 +117,14 @@ qc_species_names_info <- function(species, conservatism = 0.9,
       name_col = "species_sapf",
       fuzzy = TRUE, progress_bar = FALSE
     )
+
+    # Filter Accepted status
+    if (nrow(tpl_df)>1 & any(tpl_df$wcvp_status %in% 'Accepted')){
+      tpl_df <- tpl_df %>% filter(wcvp_status == "Accepted")
+    }else{
+      tpl_df <- tpl_df[1,]
+    }
+
     # tpl_df <- tpl::tpl.get(species, replace.synonyms = FALSE,
     #                        suggestion.distance = conservatism)
     species_tpl <- tpl_df$wcvp_name
@@ -187,7 +195,7 @@ qc_species_names <- function(species, conservatism = 0.9,
 
     # STEP 1
     # Get names and WCVP info
-    info <- qc_species_names_info(species, conservatism, parent_logger)
+    info <- qc_species_names_info(species, parent_logger)
 
     # STEP 2
     # Return the names

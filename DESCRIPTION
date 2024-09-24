@@ -42,11 +42,15 @@ Imports:
     zoo,
     geodata,
     terra,
-    tidyterra
+    tidyterra,
+    rWCVP,
+    rWCVPdata
 Suggests:
     knitr,
     testthat,
     rmarkdown
+Remotes:
+    github::matildabrown/rWCVPdata
 VignetteBuilder: knitr
 Collate: 
     'SfnData_class.R'
