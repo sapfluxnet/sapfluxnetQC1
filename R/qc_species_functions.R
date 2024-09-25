@@ -118,12 +118,26 @@ qc_species_names_info <- function(species, #conservatism = 0.9,
       fuzzy = TRUE, progress_bar = FALSE
     )
 
-    # Filter Accepted status
-    if (nrow(tpl_df)>1 & any(tpl_df$wcvp_status %in% 'Accepted')){
-      tpl_df <- tpl_df %>% filter(wcvp_status == "Accepted")
-    }else{
-      tpl_df <- tpl_df[1,]
-    }
+    # Filter Accepted status or first row in case there is more than one option for species
+    tpl_df <- tpl_df %>%
+      # Step 1: Add a column for the original row index
+      mutate(original_row = row_number()) %>%
+      # Step 2: Group by species and apply your logic
+      group_by(species_sapf) %>%
+      group_modify(~ {
+        tpl_df <- .x
+        if (nrow(tpl_df) > 1 & any(tpl_df$wcvp_status %in% 'Accepted')) {
+          tpl_df <- tpl_df %>% filter(wcvp_status == "Accepted")
+        } else {
+          tpl_df <- tpl_df[1, ]
+        }
+        tpl_df
+      }) %>%
+      ungroup() %>%
+      # Step 3: Restore the original order
+      arrange(original_row) %>%
+      # Step 4: Remove the temporary row index column
+      select(-original_row)
 
     # tpl_df <- tpl::tpl.get(species, replace.synonyms = FALSE,
     #                        suggestion.distance = conservatism)
