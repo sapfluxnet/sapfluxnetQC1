@@ -432,7 +432,9 @@ vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test') {
     # STEP 1
     # Get biomes SpatialPointsDataFrame object
     suppressMessages(
-      biomes_df <- fortify(qc_get_biomes_spdf(merge_deserts = merge_deserts))
+      biomes_df <- tidyterra::fortify(qc_get_biomes_spdf(
+        merge_deserts = merge_deserts)
+        )
     )
 
     # STEP 2
@@ -449,11 +451,28 @@ vis_biome <- function(merge_deserts = FALSE, parent_logger = 'test') {
     }
 
     # 2.2 Make the plot object
+    # Explode the polygons into individual points and extract coordinates
+    biomes_df_coords <- biomes_df %>%
+      sf::st_cast("POLYGON") %>%     # Ensure geometries are polygons
+      sf::st_cast("MULTILINESTRING") %>%  # Convert polygons to multilinestrings
+      sf::st_cast("LINESTRING") %>%       # Convert multilinestrings to linestrings
+      sf::st_cast("POINT") %>%            # Convert linestrings to points
+      dplyr::mutate(coord_id = dplyr::row_number()) %>%  # Add a unique identifier for each point
+      cbind(sf::st_coordinates(.))            # Extract coordinates and combine with data
+
     plot <- ggplot() +
-      ggiraph::geom_polygon_interactive(data = biomes_df,
-                                        aes(tooltip = id, data_id = id,
-                                            x = long, y = lat, group = id,
-                                            fill = id)) +
+      ggiraph::geom_polygon_interactive(
+        data = biomes_df_coords,
+        aes(
+          x = X,
+          y = Y,
+          group = biome,  # Ensure proper grouping of polygons
+          fill = biome,
+          tooltip = biome,
+          data_id = biome
+        ),
+        color = "white"
+      ) +
       scale_fill_manual('Biomes', values = pal) +
       xlab('Mean annual precipitation (mm)') +
       ylab('Mean annual temperature (ºC)')
