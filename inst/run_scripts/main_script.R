@@ -74,10 +74,10 @@ df_lvl1_to_lvl2(parent_logger = 'LEVEL2')
 
 ########
 
-# out_app()
+out_app()
 
 df_warn_to_rem()
 
-# out_confirmation_app()
+out_confirmation_app()
 
 df_rem_to_units()
