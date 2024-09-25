@@ -5,9 +5,9 @@ library(DT)
 
 params <- list(
   wd = '../',
-  md_file = 'tests/testthat/foo.xlsx',
-  sapf_data_file = 'tests/testthat/foo.xlsx',
-  env_data_file = 'tests/testthat/foo.xlsx',
+  md_file = 'foo.xlsx',
+  sapf_data_file = 'foo.xlsx',
+  env_data_file = 'foo.xlsx',
   code = 'foo'
 )
 
@@ -34,11 +34,11 @@ env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md,
                       parent_logger = logger_name)
 
 ## sapf_data
-sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, na = '',
+sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 40000, na = '',
                      parent_logger = logger_name)
 
 ## env_data
-env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = '',
+env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 40000, na = '',
                     parent_logger = logger_name)
 
 ################################################################################
@@ -129,22 +129,29 @@ timestamp_concordance <- qc_timestamp_concordance(
   sapf_data_fixed, env_data_fixed,
   plot = FALSE, parent_logger = logger_name
 )
-timestamp_concordance_plot <- qc_timestamp_concordance(
-  sapf_data_fixed, env_data_fixed,
-  plot = TRUE, parent_logger = logger_name
-)
-
-### concordance and gaps info
-gap_lines_plot <- vis_gap_lines(sapf_data_fixed, env_data_fixed,
-                                parent_logger = logger_name)
+# timestamp_concordance_plot <- qc_timestamp_concordance(
+#   sapf_data_fixed, env_data_fixed,
+#   plot = TRUE, parent_logger = logger_name
+# )
 
 ## Gaps
 sapf_gaps_info <- qc_mind_the_gap(
   sapf_data_fixed, parent_logger = logger_name
 )
+# sapf_gaps_info1 <- qc_mind_the_gap2(
+#   sapf_data_fixed, parent_logger = logger_name
+# )
 env_gaps_info <- qc_mind_the_gap(
   env_data_fixed, parent_logger = logger_name
 )
+
+
+### concordance and gaps info
+gap_lines_plot <- vis_gap_lines(sapf_gaps_info, env_gaps_info,
+                                qc_time_interval(sapf_data_fixed),
+                                qc_time_interval(env_data_fixed),
+                                parent_logger = logger_name)
+
 
 ### plots
 #### calendars
