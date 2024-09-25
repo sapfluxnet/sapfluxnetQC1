@@ -197,15 +197,15 @@ out_app <- function(parent_logger = 'test') {
         out_table_gen <- reactive({
           sfndata <- sfndataInput()
           variable <- input$tree_env
+          variable_sym <- sym(variable)
           outliers_tab <- get_sapf_flags(sfndata) %>%
             dplyr::full_join(get_env_flags(sfndata), by = 'TIMESTAMP') %>%
             dplyr::mutate(index = rownames(.)) %>%
-            # dplyr::select_('index', 'TIMESTAMP', variable) %>%
-            dplyr::select(dplyr::all_of(c('index', 'TIMESTAMP', variable))) %>%
-            # dplyr::filter_(lazyeval::interp(quote(stringr::str_detect(x, 'OUT_WARN') | stringr::str_detect(x, 'RANGE_WARN')),
-            #                                 x = as.name(variable)))            
-            dplyr::filter(lazyeval::interp(quote(stringr::str_detect(x, 'OUT_WARN') | stringr::str_detect(x, 'RANGE_WARN')),
-                                           x = as.name(variable)))
+            dplyr::select(all_of(c('index', 'TIMESTAMP', variable))) %>%
+            dplyr::filter(
+              stringr::str_detect(!!variable_sym, 'OUT_WARN') |
+                stringr::str_detect(!!variable_sym, 'RANGE_WARN')
+            )
           outliers_tab
         })
 
