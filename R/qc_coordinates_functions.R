@@ -151,6 +151,7 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 #'   on land and false if they are over water bodies.
 #'
 #' @import ggplot2
+#' @import sf
 #'
 #' @export
 
@@ -203,7 +204,7 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
                      parent_logger = parent_logger)
 
     # Load high-resolution land polygons
-    land <- ne_download(scale = "large", type = "land",
+    land <- rnaturalearth::ne_download(scale = "large", type = "land",
                         category = "physical", returnclass = "sf")
 
     # STEP 2
