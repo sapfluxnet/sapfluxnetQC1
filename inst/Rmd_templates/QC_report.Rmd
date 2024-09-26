@@ -680,6 +680,67 @@ TIMESTAMP concordance between sapflow and environmental data
 gap_lines_plot
 ```
 
+
+Potential errors in TIMESTAMP using average radiation
+
+```{r timestamp_radiation_averages, fig.width=12}
+# Function to check column presence
+has_column <- function(df, col_name) {
+  col_name %in% names(df)
+}
+
+if (has_column(env_data_fixed, "sw_in")){
+  env_data_fixed %>%
+  mutate(hour = lubridate::hour(TIMESTAMP)) %>%
+  group_by(hour) %>%
+  summarise(
+    avg_radiation = mean(sw_in, na.rm = TRUE),
+    .groups = 'drop'
+  ) %>%
+  ggplot(aes(x = hour, y = avg_radiation)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "red", size = 2) +
+  geom_vline(xintercept = 12, color = "red3")+
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Hourly Average Radiation",
+    x = "Hour of the Day",
+    y = "Average sw_in"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+}else{
+    env_data_fixed %>%
+  mutate(hour = lubridate::hour(TIMESTAMP)) %>%
+  group_by(hour) %>%
+  summarise(
+    avg_radiation = mean(ppfd_in, na.rm = TRUE),
+    .groups = 'drop'
+  ) %>%
+  ggplot(aes(x = hour, y = avg_radiation)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "red", size = 2) +
+  geom_vline(xintercept = 12, color = "red3")+
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Hourly Average Radiation",
+    x = "Hour of the Day",
+    y = "Average ppfd_in"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+}
+
+
+```
+
+
 ***
 
 ## Time series gaps
