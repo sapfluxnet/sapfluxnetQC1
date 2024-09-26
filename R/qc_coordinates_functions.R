@@ -324,8 +324,8 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
         #   units = "cm"
         # )
 
+      }
     }
-
     # STEP 7
     # Create a console report with message if text_report is TRUE
 
@@ -356,7 +356,7 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
     # 7.1 Return data with the new variables
     return(data)
 
-    }
+
     # END FUNCTION
   },
 
