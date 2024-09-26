@@ -66,11 +66,11 @@ env_md <- dl_metadata(params$md_file, 'environmental_md', si_code_loc = site_md,
                       parent_logger = logger_name)
 
 ## sapf_data
-sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 2000, na = '',
+sapf_data <- dl_data(params$sapf_data_file, 'sapflow_hd', n = 40000, na = '',
                      parent_logger = logger_name)
 
 ## env_data
-env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 2000, na = '',
+env_data <- dl_data(params$env_data_file, 'environmental_hd', n = 40000, na = '',
                     parent_logger = logger_name)
 
 ################################################################################
@@ -94,9 +94,12 @@ factor_values <- qc_factor_values(site_md, stand_md, species_md,
 email_check <- qc_email_check(site_md, parent_logger = logger_name)
 
 ## coordinates and biome
-site_md_coordfix <- qc_coordinates(site_md, parent_logger = logger_name)
+site_md_coordfix <- qc_coordinates(site_md, plot = TRUE,
+                                   parent_logger = logger_name)
 
-site_md_coordfix <- qc_get_biome(site_md_coordfix, merge_deserts = FALSE,
+site_md_coordfix <- qc_get_biome(site_md_coordfix,
+                                 plot= FALSE,
+                                 merge_deserts = FALSE,
                                  parent_logger = logger_name)
 
 ## soil_texture
@@ -358,6 +361,32 @@ site_md_coordfix %>%
                            scroller = TRUE,
                            scrollY = 450, scrollCollapse = TRUE)) %>%
   formatStyle('is_inside_country',
+              backgroundColor = styleEqual(c('FALSE', 'TRUE'),
+                                           c('#d91e18', 'transparent')))
+```
+
+***
+
+## Coordinates on land
+
+Information about site coordinates provided
+
+```{r coordinates_on_land, echo=FALSE}
+site_md_coordfix %>%
+  dplyr::select(si_name, si_lat, si_long, is_on_land) %>%
+  mutate(is_on_land = as.character(is_on_land)) %>%
+  datatable(class = 'display compact', rownames = FALSE, filter = 'none',
+            extensions = c('Scroller'),
+            caption = 'On land',
+            options = list(dom = 'ti',
+                           columnDefs = list(list(className = 'dt-center',
+                                                  targets = 1:3,
+                                                  width = '100px'),
+                                             list(className = 'dt-right',
+                                                  targets = 0)),
+                           scroller = TRUE,
+                           scrollY = 450, scrollCollapse = TRUE)) %>%
+  formatStyle('is_on_land',
               backgroundColor = styleEqual(c('FALSE', 'TRUE'),
                                            c('#d91e18', 'transparent')))
 ```

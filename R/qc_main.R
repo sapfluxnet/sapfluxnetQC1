@@ -247,6 +247,17 @@ qc_md_results_table <- function(md_cols, factor_values,
       description <- c(description, 'Site provided correct or fixable coordinates')
     }
 
+    # Coordinates on land
+    if (!site_md_coordfix$is_on_land) {
+      step <- c(step, 'Site on land?')
+      status <- c(status, 'WARNING')
+      description <- c(description, 'Site provided coordinates are potentially over a body of water')
+    } else {
+      step <- c(step, 'Site on land?')
+      status <- c(status, 'PASS')
+      description <- c(description, 'Site provided on land')
+    }
+
     # STEP 6
     # Species names
     # 6.1 species md

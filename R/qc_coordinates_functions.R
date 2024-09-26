@@ -71,7 +71,7 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
           possibleError <- tryCatch({
             # STEP 5
             # Download the file
-            geodata::gadm(code, level = 0, path = folder, resolution = 1)            
+            geodata::gadm(code, level = 0, path = folder, resolution = 1)
           },
           error = function(e) {
             message('Download for ', file_name,
@@ -146,7 +146,9 @@ qc_download_maps <- function(data, folder = getwd(), parent_logger = 'test') {
 #'   console.
 #'
 #' @return The data frame used as input with a new variable, is_inside_country,
-#'   a logical variable indicating if the site has wrong coordinates
+#'   a logical variable indicating if the site has wrong coordinates, and another
+#'   new variable is_on_land, a logical variable with TRUE if the coordinates are
+#'   on land and false if they are over water bodies.
 #'
 #' @import ggplot2
 #'
@@ -200,6 +202,10 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
     qc_download_maps(data = data, folder = maps_folder,
                      parent_logger = parent_logger)
 
+    # Load high-resolution land polygons
+    land <- ne_download(scale = "large", type = "land",
+                        category = "physical", returnclass = "sf")
+
     # STEP 2
     # Initialise results object
     results <- vector()
@@ -234,6 +240,18 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
 
       results <- c(results, res_tmp)
 
+      # Is over water?
+      # Convert to sf object
+      points_sf <- sf::st_as_sf(data[i, c('si_long', 'si_lat')],
+                            coords = c("si_long", "si_lat"), crs = 4326)
+      # Perform spatial join
+      on_land <- st_join(points_sf, land, left = TRUE, join = st_within)
+
+      # Add a new column indicating if the point is on land
+      on_land$on_land <- !is.na(on_land$scalerank)  # scalerank is a field in land polygons
+
+
+
       # STEP 5
       # Create and saving the plot if plot = TRUE and is_inside_country = FALSE
 
@@ -247,35 +265,98 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
         # 5.2 see plot
         print(plot_map)
         # 5.3 save plot in working directory
-        ggsave(filename = paste(data[i, c('si_country')], '_',
-                                data[i, c('si_name')], '.pdf', sep = ''),
-               plot = plot_map, width = 6, height = 4, units = 'cm')
+        # ggsave(filename = paste(data[i, c('si_country')], '_',
+        #                         data[i, c('si_name')], '.pdf', sep = ''),
+        #        plot = plot_map, width = 6, height = 4, units = 'cm')
       }
+
+      if (plot && !on_land$on_land) {
+        # 6.1 Extract longitude and latitude
+        lon <- data$si_long[i]
+        lat <- data$si_lat[i]
+
+        # 6.2 Define buffer size for zoom (in degrees). Adjust as needed.
+        buffer_deg <- 1  # degrees
+
+        # 6.3 Define the zoomed-in extent with a buffer around the point
+        extent_zoom <- terra::ext(lon - buffer_deg, lon + buffer_deg,
+                                  lat - buffer_deg, lat + buffer_deg)
+
+        # 6.4 Transform to SpatVector
+        map_data <- terra::vect(land)
+
+        # 6.5 Crop land data to the zoomed-in extent
+        land_zoom <- terra::crop(map_data, extent_zoom)
+
+        # 6.6 ggplot2 object
+        plot_map <- ggplot() +
+          tidyterra::geom_spatvector(data = land_zoom, fill = "forestgreen",
+                                     color = "black", alpha = 0.5) +
+          tidyterra::geom_spatvector(data = sp_points, size = 2, color = "red",
+                                     alpha = 0.7) +
+          coord_sf(xlim = c(extent_zoom$xmin, extent_zoom$xmax),
+                   ylim = c(extent_zoom$ymin, extent_zoom$ymax),
+                   expand = FALSE) +
+          labs(
+            title = paste(paste(data$si_country[i], data$si_name[i], sep = " - "),
+                          "is potentially over a water body"),
+            x = "Longitude",
+            y = "Latitude"
+          ) +
+          theme_minimal()
+
+        # 6.7 Display the plot
+        print(plot_map)
+
+        # 6.8 Save the plot in the working directory
+        # Sanitize file names to avoid illegal characters
+        # sanitized_country <- gsub("[^A-Za-z0-9_]", "_", data$si_country[i])
+        # sanitized_name <- gsub("[^A-Za-z0-9_]", "_", data$si_name[i])
+        # plot_filename <- paste0(sanitized_country, "_", sanitized_name,
+        #                         "_over_water.pdf")
+        # plot_filepath <- file.path(getwd(),, plot_filename)
+        #
+        # ggsave(
+        #   filename = plot_filepath,
+        #   plot = plot_map,
+        #   width = 20,
+        #   height = 18,
+        #   units = "cm"
+        # )
+
     }
 
-    # STEP 6
+    # STEP 7
     # Create a console report with message if text_report is TRUE
 
     if (text_report) {
 
-      # 6.1 Sum of wrong, correct and total coordinates checked
+      # 7.1 Sum of wrong, correct and total coordinates checked
       wrong_coordinates <- sum(!results, na.rm = TRUE)
       correct_coordinates <- sum(results, na.rm = TRUE)
       total_coordinates <- wrong_coordinates + correct_coordinates
 
+      over_water_coordinates <- sum(!on_land$on_land, na.rm = TRUE)
+      on_land_coordinates <- sum(on_land$on_land, na.rm = TRUE)
+
       # 6.2 messages
       message(wrong_coordinates, ' wrong coordinates in data')
       message(correct_coordinates, ' correct coordinates in data')
+      message(over_water_coordinates, ' coordinates over water in data')
+      message(on_land_coordinates, ' coordinates on land in data')
       message(total_coordinates, ' coordinates checked')
     }
 
     # STEP 7
-    # Create a new variable in data with the results of the checks
+    # Create a new variables in data with the results of the checks
     data$is_inside_country <- results
 
-    # 7.1 Return data with the new variable
+    data$is_on_land <- on_land$on_land
+
+    # 7.1 Return data with the new variables
     return(data)
 
+    }
     # END FUNCTION
   },
 
@@ -335,6 +416,7 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
 
 qc_coord_sign_test <- function(data, maps_folder = getwd(),
                             special_countries = FALSE,
+                            plot = FALSE,
                             parent_logger = 'test') {
 
   # Using calling handlers to logging
@@ -689,6 +771,7 @@ qc_coord_sign_test <- function(data, maps_folder = getwd(),
 qc_fix_latlong_errors <- function(data, maps_folder = getwd(),
                                   sign_errors = TRUE,
                                   special_countries = FALSE,
+                                  plot= FALSE,
                                   parent_logger = 'test') {
 
   # Using calling handlers to logging
@@ -736,7 +819,7 @@ qc_fix_latlong_errors <- function(data, maps_folder = getwd(),
     if(sign_errors) {
 
       # 2.1 Are signs interchanged?
-      sign_test_data <- qc_coord_sign_test(data, maps_folder,
+      sign_test_data <- qc_coord_sign_test(data, maps_folder, plot = FALSE,
                                            special_countries = special_countries)
 
       # 2.2 Fix them if they are (multiply by -1)
@@ -826,7 +909,8 @@ qc_coordinates <- function(data, maps_folder = getwd(), plot = FALSE,
 
     # STEP 1
     # Check coordinates
-    check_coord_data <- qc_check_coordinates(as.data.frame(data), maps_folder,
+    check_coord_data <- qc_check_coordinates(as.data.frame(data),
+                                             maps_folder, plot = plot,
                                              parent_logger = parent_logger)
 
     # 1.1, check if it is correct
@@ -839,6 +923,7 @@ qc_coordinates <- function(data, maps_folder = getwd(), plot = FALSE,
       # 1.2 if not, try to fixit
     } else {
       fixed_coord_data <- qc_fix_latlong_errors(check_coord_data, maps_folder,
+                                                plot = FALSE,
                                                 sign_errors, special_countries,
                                                 parent_logger)
 
@@ -938,7 +1023,7 @@ qc_get_biomes_spdf <- function(merge_deserts = FALSE, parent_logger = 'test') {
                           # sp::Polygon(cbind(df$map[df$biome == id_biome],
                           #                  df$mat[df$biome == id_biome]))
                        df = biomes_df, USE.NAMES = TRUE)
-    
+
 
     spdf_biomes <- terra::vect(list_pol)
     spdf_biomes$biome <- names(list_pol)
