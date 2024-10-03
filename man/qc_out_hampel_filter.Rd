@@ -65,6 +65,7 @@ Other Quality Checks Functions:
 \code{\link{qc_md_cols}()},
 \code{\link{qc_md_results_table}()},
 \code{\link{qc_mind_the_gap}()},
+\code{\link{qc_mind_the_gap_deprecated}()},
 \code{\link{qc_mind_the_gap_eff}()},
 \code{\link{qc_out_of_range}()},
 \code{\link{qc_out_remove}()},

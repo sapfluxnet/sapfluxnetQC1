@@ -4,7 +4,7 @@
 \alias{qc_species_names_info}
 \title{Info of species names spelling}
 \usage{
-qc_species_names_info(species, conservatism = 0.9, parent_logger = "test")
+qc_species_names_info(species, parent_logger = "test")
 }
 \arguments{
 \item{species}{Character vector containing the species names to verify}
@@ -39,6 +39,7 @@ Other Quality Checks Functions:
 \code{\link{qc_md_cols}()},
 \code{\link{qc_md_results_table}()},
 \code{\link{qc_mind_the_gap}()},
+\code{\link{qc_mind_the_gap_deprecated}()},
 \code{\link{qc_mind_the_gap_eff}()},
 \code{\link{qc_out_hampel_filter}()},
 \code{\link{qc_out_of_range}()},

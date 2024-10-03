@@ -29,7 +29,9 @@ console.}
 }
 \value{
 The data frame used as input with a new variable, is_inside_country,
-a logical variable indicating if the site has wrong coordinates
+a logical variable indicating if the site has wrong coordinates, and another
+new variable is_on_land, a logical variable with TRUE if the coordinates are
+on land and false if they are over water bodies.
 }
 \description{
 \code{qc_check_coordinates} verifies if provided coordinates are within

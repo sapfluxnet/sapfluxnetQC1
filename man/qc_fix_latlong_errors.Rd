@@ -9,6 +9,7 @@ qc_fix_latlong_errors(
   maps_folder = getwd(),
   sign_errors = TRUE,
   special_countries = FALSE,
+  plot = FALSE,
   parent_logger = "test"
 )
 }

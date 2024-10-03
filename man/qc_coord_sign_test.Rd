@@ -8,6 +8,7 @@ qc_coord_sign_test(
   data,
   maps_folder = getwd(),
   special_countries = FALSE,
+  plot = FALSE,
   parent_logger = "test"
 )
 }

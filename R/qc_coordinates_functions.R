@@ -246,7 +246,7 @@ qc_check_coordinates <- function(data, maps_folder = getwd(),
       points_sf <- sf::st_as_sf(data[i, c('si_long', 'si_lat')],
                             coords = c("si_long", "si_lat"), crs = 4326)
       # Perform spatial join
-      on_land <- st_join(points_sf, land, left = TRUE, join = st_within)
+      on_land <- sf::st_join(points_sf, land, left = TRUE, join = st_within)
 
       # Add a new column indicating if the point is on land
       on_land$on_land <- !is.na(on_land$scalerank)  # scalerank is a field in land polygons

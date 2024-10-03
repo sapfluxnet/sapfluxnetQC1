@@ -52,6 +52,7 @@ Other Quality Checks Functions:
 \code{\link{qc_is_timestamp}()},
 \code{\link{qc_md_cols}()},
 \code{\link{qc_md_results_table}()},
+\code{\link{qc_mind_the_gap_deprecated}()},
 \code{\link{qc_mind_the_gap_eff}()},
 \code{\link{qc_out_hampel_filter}()},
 \code{\link{qc_out_of_range}()},
